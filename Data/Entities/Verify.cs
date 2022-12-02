@@ -8,5 +8,16 @@ namespace Data.Entities
 {
     public class Verify
     {
+        public int Id { get; set; } 
+
+        public string? FaceImage { get; set; }  
+
+        public string? FrontID { get; set; }
+
+        public string? BackID { get; set; }
+
+        public User User { get; set; }
+
+
     }
 }
