@@ -1,4 +1,5 @@
 
+using Application.System.ContractorPost;
 using Constants;
 using Data.DataContext;
 using Data.Entities;
@@ -17,6 +18,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<BuildingConstructDbContext>(options => options.
            UseSqlServer(builder.Configuration.GetConnectionString(SystemsConstant.MainConnectionString)));
 builder.Services.AddIdentity<User, Role>().AddEntityFrameworkStores<BuildingConstructDbContext>().AddDefaultTokenProviders();
+
+builder.Services.AddScoped<IContractorPostService, ContractorPostService>();
 
 var app = builder.Build();
 
