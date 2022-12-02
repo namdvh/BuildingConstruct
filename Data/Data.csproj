@@ -21,10 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\" />
     <Folder Include="DataContext\" />
     <Folder Include="Configuration\" />
-    <Folder Include="Enum\" />
   </ItemGroup>
 
 </Project>
