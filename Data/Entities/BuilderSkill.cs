@@ -3,7 +3,7 @@
     public class BuilderSkill
     {
         public Builder Builder { get; set; }
-        public Skills Skill { get; set; }
+        public Skill Skill { get; set; }
 
         public int BuilderSkillID { get; set; }
 

@@ -2,7 +2,7 @@
 
 namespace Data.Entities
 {
-    public class Builder
+    public class Builder:BaseEntity
     {
         public int Id { get; set; }
 

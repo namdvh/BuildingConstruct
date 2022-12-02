@@ -1,6 +1,6 @@
 ﻿namespace Data.Entities
 {
-    public class MaterialStore
+    public class MaterialStore:BaseEntity
     {
         public int Id { get; set; }
 

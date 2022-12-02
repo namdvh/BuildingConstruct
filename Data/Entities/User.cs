@@ -7,7 +7,7 @@ namespace Data.Entities
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string? Address { get; set; }
-        public Gender Gender { get; set; }
+        public Gender? Gender { get; set; }
         public DateTime? DOB { get; set; }
         public string? Avatar { get; set; }
         public Status Status { get; set; }

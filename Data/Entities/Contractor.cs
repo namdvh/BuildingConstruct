@@ -1,6 +1,6 @@
 ﻿namespace Data.Entities
 {
-    public class Contractor
+    public class Contractor:BaseEntity
     {
         public int Id { get; set; }
 
@@ -12,6 +12,6 @@
 
         public User User { get; set; }
 
-        public List<ContractorPost> Posts { get; set; }
+        public List<ContractorPost> ContractorPosts { get; set; }
     }
 }

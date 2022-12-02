@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Data.Entities
 {
-    public class Verify
+    public class Verify:BaseEntity
     {
         public int Id { get; set; } 
 
