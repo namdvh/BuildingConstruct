@@ -132,7 +132,7 @@ namespace Application.System.ContractorPosts
                 response = new()
                 {
                     Code = BaseCode.SUCCESS,
-                    Message = BaseCode.EMPTY_MESSAGE,
+                    Message = BaseCode.SUCCESS_MESSAGE,
                     Data = MapListDTO(result),
                     Pagination = pagination
                 };
@@ -175,7 +175,7 @@ namespace Application.System.ContractorPosts
                 response = new()
                 {
                     Code = BaseCode.SUCCESS,
-                    Message = BaseCode.EMPTY_MESSAGE,
+                    Message = BaseCode.SUCCESS_MESSAGE,
                     Data = MapListDTO(result),
                     Pagination = pagination
                 };

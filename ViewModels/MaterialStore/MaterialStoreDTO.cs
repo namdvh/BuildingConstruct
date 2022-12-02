@@ -20,3 +20,4 @@ namespace ViewModels.MaterialStore
 
         public string Avatar { get; set; }
     }
+}

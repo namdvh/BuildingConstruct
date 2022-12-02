@@ -96,7 +96,7 @@ namespace Application.System.MaterialStores
                 response = new()
                 {
                     Code = BaseCode.SUCCESS,
-                    Message = BaseCode.EMPTY_MESSAGE,
+                    Message = BaseCode.SUCCESS_MESSAGE,
                     Data = MapListDTO(result),
                     Pagination = pagination
                 };
@@ -104,9 +104,9 @@ namespace Application.System.MaterialStores
             return response;
         }
 
-        public Task<BasePagination<List<MaterialStoreDTO>>> Search(PaginationFilter filter, string keyword)
+        public async Task<BasePagination<List<MaterialStoreDTO>>> Search(PaginationFilter filter, string keyword)
         {
-            BasePagination<List<ContractorPostDTO>> response;
+            BasePagination<List<MaterialStoreDTO>> response;
 
             var result = await _context.MaterialStores.Include(x => x.User).Where(x => x.User.LastName.Contains(keyword)).ToListAsync();
             var totalRecord = result.Count;
@@ -139,7 +139,7 @@ namespace Application.System.MaterialStores
                 response = new()
                 {
                     Code = BaseCode.SUCCESS,
-                    Message = BaseCode.EMPTY_MESSAGE,
+                    Message = BaseCode.SUCCESS_MESSAGE,
                     Data = MapListDTO(result),
                     Pagination = pagination
                 };
