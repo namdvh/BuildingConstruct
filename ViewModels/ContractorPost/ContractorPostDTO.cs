@@ -12,11 +12,11 @@ namespace ViewModels.ContractorPost
     {
         public int Id { get; set; }
 
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
-        public string ProjectName { get; set; }
+        public string? ProjectName { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         public DateTime StarDate { get; set; }
 
@@ -35,6 +35,8 @@ namespace ViewModels.ContractorPost
         public int ContractorID { get; set; }
 
         public string? Avatar { get; set; }
+
+        public DateTime LastModifiedAt { get; set; }
 
     }
 }

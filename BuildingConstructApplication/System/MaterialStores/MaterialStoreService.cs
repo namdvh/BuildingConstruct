@@ -2,26 +2,27 @@
 using Data.Entities;
 using Data.Enum;
 using Gridify;
-using Microsoft.EntityFrameworkCore;
-using System.Linq.Dynamic.Core;
 using System.Text;
-using ViewModels.ContractorPost;
+using ViewModels.MaterialStore;
+using System.Linq.Dynamic.Core;
 using ViewModels.Pagination;
+using Microsoft.EntityFrameworkCore;
+using ViewModels.ContractorPost;
 
-namespace Application.System.ContractorPosts
+namespace Application.System.MaterialStores
 {
-    public class ContractorPostService : IContractorPostService
+    public class MaterialStoreService : IMaterialStoreService
     {
         private readonly BuildingConstructDbContext _context;
 
-        public ContractorPostService(BuildingConstructDbContext context)
+        public MaterialStoreService(BuildingConstructDbContext context)
         {
             _context = context;
         }
 
-        public async Task<BasePagination<List<ContractorPostDTO>>> GetPost(PaginationFilter filter)
+        public async Task<BasePagination<List<MaterialStoreDTO>>> GetList(PaginationFilter filter)
         {
-            BasePagination<List<ContractorPostDTO>> response;
+            BasePagination<List<MaterialStoreDTO>> response;
             var orderBy = filter._orderBy.ToString();
             int totalRecord;
             orderBy = orderBy switch
@@ -31,28 +32,11 @@ namespace Application.System.ContractorPosts
                 _ => orderBy
             };
 
-            IQueryable<ContractorPost> query = _context.ContractorPosts;
-            StringBuilder SalariesSearch = new();
+            IQueryable<MaterialStore> query = _context.MaterialStores;
             StringBuilder PlaceSearch = new();
-            StringBuilder CategoriesSearch = new();
 
             if (filter.FilterRequest != null)
             {
-                if (filter.FilterRequest.Salary.Any())
-                {
-                    var count = filter.FilterRequest.Salary.Count;
-                    for (int i = 0; i < count; i++)
-                    {
-                        if (i == count - 1)
-                        {
-                            SalariesSearch.Append("Salaries=*" + filter.FilterRequest.Salary[i] + "|");
-                            break;
-                        }
-                        SalariesSearch.Append("Salaries=*" + filter.FilterRequest.Salary[i]);
-                        query = query.ApplyFiltering(SalariesSearch.ToString());
-                    }
-                }
-
                 if (filter.FilterRequest.Places.Any())
                 {
                     var count = filter.FilterRequest.Places.Count;
@@ -66,26 +50,6 @@ namespace Application.System.ContractorPosts
                         PlaceSearch.Append("Place=" + filter.FilterRequest.Places[i]);
                         query = query.ApplyFiltering(PlaceSearch.ToString());
                     }
-                }
-
-                if (filter.FilterRequest.Categories.Any())
-                {
-                    var count = filter.FilterRequest.Categories.Count;
-                    for (int i = 0; i < count; i++)
-                    {
-                        if (i == count - 1)
-                        {
-                            PlaceSearch.Append("PostCategories=" + filter.FilterRequest.Categories[i] + "|");
-                            break;
-                        }
-                        PlaceSearch.Append("PostCategories=" + filter.FilterRequest.Categories[i]);
-                        query = query.ApplyFiltering(CategoriesSearch.ToString());
-                    }
-                }
-
-                if (filter.FilterRequest.Participant.HasValue)
-                {
-                    query = query.Where(x => x.NumberPeople == filter.FilterRequest.Participant);
                 }
             }
 
@@ -140,11 +104,11 @@ namespace Application.System.ContractorPosts
             return response;
         }
 
-        public async Task<BasePagination<List<ContractorPostDTO>>> SearchPost(PaginationFilter filter, string keyword)
+        public Task<BasePagination<List<MaterialStoreDTO>>> Search(PaginationFilter filter, string keyword)
         {
             BasePagination<List<ContractorPostDTO>> response;
 
-            var result = await _context.ContractorPosts.Include(x => x.Contractor).Where(x => x.Title.Contains(keyword) || x.Contractor.CompanyName.Contains(keyword)).ToListAsync();
+            var result = await _context.MaterialStores.Include(x => x.User).Where(x => x.User.LastName.Contains(keyword)).ToListAsync();
             var totalRecord = result.Count;
 
             if (!result.Any())
@@ -183,30 +147,25 @@ namespace Application.System.ContractorPosts
             return response;
         }
 
-        private List<ContractorPostDTO> MapListDTO(List<ContractorPost> list)
+        private List<MaterialStoreDTO> MapListDTO(List<MaterialStore> list)
         {
-            List<ContractorPostDTO> result = new();
+            List<MaterialStoreDTO> result = new();
 
             foreach (var item in list)
             {
-                var user = _context.Users.Where(x => x.ContractorId == item.ContractorID).FirstOrDefault();
+                var user = _context.Users.Where(x => x.MaterialStoreID == item.Id).FirstOrDefault();
 
-                ContractorPostDTO dto = new()
+                MaterialStoreDTO dto = new()
                 {
                     Avatar = user.Avatar,
-                    ContractorID = item.ContractorID,
                     Description = item.Description,
-                    EndDate = item.EndDate,
                     Id = item.Id,
-                    NumberPeople = item.NumberPeople,
                     Place = item.Place,
-                    PostCategories = item.PostCategories,
-                    ProjectName = item.ProjectName,
-                    Salaries = item.Salaries,
-                    StarDate = item.StarDate,
-                    Title = item.Title,
-                    ViewCount = item.ViewCount,
-                    LastModifiedAt = item.LastModifiedAt,
+                    Experience= item.Experience,
+                    Image= item.Image,
+                    TaxCode=item.TaxCode,
+                    Webstie = item.Webstie  
+                    
                 };
                 result.Add(dto);
             }

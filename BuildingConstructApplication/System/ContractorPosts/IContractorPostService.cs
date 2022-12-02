@@ -11,5 +11,7 @@ namespace Application.System.ContractorPosts
     public interface IContractorPostService
     {
         Task<BasePagination<List<ContractorPostDTO>>> GetPost(PaginationFilter filter);
+
+        Task<BasePagination<List<ContractorPostDTO>>> SearchPost(PaginationFilter filter, string keyword);
     }
 }

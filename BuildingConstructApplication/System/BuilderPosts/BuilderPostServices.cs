@@ -5,25 +5,26 @@ using Gridify;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 using System.Text;
-using ViewModels.ContractorPost;
+using ViewModels.BuilderPosts;
 using ViewModels.Pagination;
 
-namespace Application.System.ContractorPosts
+namespace Application.System.BuilderPosts
 {
-    public class ContractorPostService : IContractorPostService
+    public class BuilderPostServices : IBuilderPostService
     {
         private readonly BuildingConstructDbContext _context;
 
-        public ContractorPostService(BuildingConstructDbContext context)
+        public BuilderPostServices(BuildingConstructDbContext context)
         {
             _context = context;
         }
 
-        public async Task<BasePagination<List<ContractorPostDTO>>> GetPost(PaginationFilter filter)
+        public async Task<BasePagination<List<BuilderPostDTO>>> GetPost(PaginationFilter filter)
         {
-            BasePagination<List<ContractorPostDTO>> response;
+            BasePagination<List<BuilderPostDTO>> response;
             var orderBy = filter._orderBy.ToString();
             int totalRecord;
+
             orderBy = orderBy switch
             {
                 "1" => "ascending",
@@ -31,28 +32,12 @@ namespace Application.System.ContractorPosts
                 _ => orderBy
             };
 
-            IQueryable<ContractorPost> query = _context.ContractorPosts;
-            StringBuilder SalariesSearch = new();
+            IQueryable<BuilderPost> query = _context.BuilderPosts;
             StringBuilder PlaceSearch = new();
             StringBuilder CategoriesSearch = new();
 
             if (filter.FilterRequest != null)
             {
-                if (filter.FilterRequest.Salary.Any())
-                {
-                    var count = filter.FilterRequest.Salary.Count;
-                    for (int i = 0; i < count; i++)
-                    {
-                        if (i == count - 1)
-                        {
-                            SalariesSearch.Append("Salaries=*" + filter.FilterRequest.Salary[i] + "|");
-                            break;
-                        }
-                        SalariesSearch.Append("Salaries=*" + filter.FilterRequest.Salary[i]);
-                        query = query.ApplyFiltering(SalariesSearch.ToString());
-                    }
-                }
-
                 if (filter.FilterRequest.Places.Any())
                 {
                     var count = filter.FilterRequest.Places.Count;
@@ -82,11 +67,6 @@ namespace Application.System.ContractorPosts
                         query = query.ApplyFiltering(CategoriesSearch.ToString());
                     }
                 }
-
-                if (filter.FilterRequest.Participant.HasValue)
-                {
-                    query = query.Where(x => x.NumberPeople == filter.FilterRequest.Participant);
-                }
             }
 
             var result = await query
@@ -101,7 +81,7 @@ namespace Application.System.ContractorPosts
             }
             else
             {
-                totalRecord = await _context.ContractorPosts.CountAsync();
+                totalRecord = await _context.BuilderPosts.CountAsync();
             }
 
             if (!result.Any())
@@ -140,11 +120,11 @@ namespace Application.System.ContractorPosts
             return response;
         }
 
-        public async Task<BasePagination<List<ContractorPostDTO>>> SearchPost(PaginationFilter filter, string keyword)
+        public async Task<BasePagination<List<BuilderPostDTO>>> SearchPost(PaginationFilter filter, string keyword)
         {
-            BasePagination<List<ContractorPostDTO>> response;
+            BasePagination<List<BuilderPostDTO>> response;
 
-            var result = await _context.ContractorPosts.Include(x => x.Contractor).Where(x => x.Title.Contains(keyword) || x.Contractor.CompanyName.Contains(keyword)).ToListAsync();
+            var result = await _context.BuilderPosts.Where(x => x.Title.Contains(keyword)).ToListAsync();
             var totalRecord = result.Count;
 
             if (!result.Any())
@@ -183,30 +163,25 @@ namespace Application.System.ContractorPosts
             return response;
         }
 
-        private List<ContractorPostDTO> MapListDTO(List<ContractorPost> list)
+        private List<BuilderPostDTO> MapListDTO(List<BuilderPost> list)
         {
-            List<ContractorPostDTO> result = new();
+            List<BuilderPostDTO> result = new();
 
             foreach (var item in list)
             {
-                var user = _context.Users.Where(x => x.ContractorId == item.ContractorID).FirstOrDefault();
+                var user = _context.Users.Where(x => x.BuilderId == item.BuilderID).FirstOrDefault();
 
-                ContractorPostDTO dto = new()
+                BuilderPostDTO dto = new()
                 {
                     Avatar = user.Avatar,
-                    ContractorID = item.ContractorID,
                     Description = item.Description,
-                    EndDate = item.EndDate,
                     Id = item.Id,
-                    NumberPeople = item.NumberPeople,
                     Place = item.Place,
                     PostCategories = item.PostCategories,
-                    ProjectName = item.ProjectName,
-                    Salaries = item.Salaries,
-                    StarDate = item.StarDate,
                     Title = item.Title,
-                    ViewCount = item.ViewCount,
                     LastModifiedAt = item.LastModifiedAt,
+                    BuilderID = item.BuilderID,
+                    Field = item.Field,
                 };
                 result.Add(dto);
             }
