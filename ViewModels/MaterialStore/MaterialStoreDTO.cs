@@ -1,8 +1,8 @@
 ﻿using Data.Enum;
 
-namespace Data.Entities
+namespace ViewModels.MaterialStore
 {
-    public class MaterialStore:BaseEntity
+    public class MaterialStoreDTO
     {
         public int Id { get; set; }
 
@@ -16,8 +16,8 @@ namespace Data.Entities
 
         public string? Image { get; set; }
 
-        public Place Place { get; set; }    
+        public Place Place { get; set; }
 
-        public User User { get; set; }
+        public string Avatar { get; set; }
     }
 }

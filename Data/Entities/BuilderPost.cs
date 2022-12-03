@@ -12,6 +12,8 @@ namespace Data.Entities
         public string Description { get; set; }
         public string Field { get; set; }
 
+        public int Views { get; set; }
+
         public int BuilderID { get; set; }
         public Builder Builder { get; set; }
     }
