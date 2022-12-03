@@ -53,6 +53,7 @@ namespace Data.Migrations
                     TaxCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Experience = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Place = table.Column<int>(type: "int", nullable: false),
                     LastModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getutcdate()"),
                     CreateBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -187,6 +188,7 @@ namespace Data.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Field = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Views = table.Column<int>(type: "int", nullable: false),
                     BuilderID = table.Column<int>(type: "int", nullable: false),
                     LastModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreateBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false)

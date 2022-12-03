@@ -82,6 +82,9 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Views")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BuilderID");
@@ -235,6 +238,9 @@ namespace Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getutcdate()");
+
+                    b.Property<int>("Place")
+                        .HasColumnType("int");
 
                     b.Property<string>("TaxCode")
                         .HasColumnType("nvarchar(max)");
