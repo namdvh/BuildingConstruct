@@ -23,12 +23,23 @@ namespace ViewModels.Pagination
             _sortBy = "LastModifiedAt";
             _orderBy = -1;
         }
+
         public PaginationFilter(int pageNumber, int pageSize, string sortBy, int orderBy)
         {
             PageNumber = pageNumber < 1 ? 1 : pageNumber;
             PageSize = pageSize > 25 ? 25 : pageSize;
             _sortBy = string.IsNullOrEmpty(sortBy) ? "LastModifiedAt" : sortBy;
             _orderBy = orderBy > 0 ? 1 : orderBy;
+        }
+
+
+        public PaginationFilter(int pageNumber, int pageSize, string sortBy, int orderBy,FilterRequest request)
+        {
+            PageNumber = pageNumber < 1 ? 1 : pageNumber;
+            PageSize = pageSize > 25 ? 25 : pageSize;
+            _sortBy = string.IsNullOrEmpty(sortBy) ? "LastModifiedAt" : sortBy;
+            _orderBy = orderBy > 0 ? 1 : orderBy;
+            FilterRequest = request;
         }
 
 
