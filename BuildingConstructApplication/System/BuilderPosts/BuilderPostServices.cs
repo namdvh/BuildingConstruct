@@ -45,12 +45,12 @@ namespace Application.System.BuilderPosts
                     {
                         if (i == count - 1)
                         {
-                            PlaceSearch.Append("Place=" + filter.FilterRequest.Places[i] + "|");
+                            PlaceSearch.Append("Place=" + filter.FilterRequest.Places[i]);
                             break;
                         }
-                        PlaceSearch.Append("Place=" + filter.FilterRequest.Places[i]);
-                        query = query.ApplyFiltering(PlaceSearch.ToString());
+                        PlaceSearch.Append("Place=" + filter.FilterRequest.Places[i] + "|");
                     }
+                    query = query.ApplyFiltering(PlaceSearch.ToString());
                 }
 
                 if (filter.FilterRequest.Categories.Any())
@@ -60,12 +60,12 @@ namespace Application.System.BuilderPosts
                     {
                         if (i == count - 1)
                         {
-                            PlaceSearch.Append("PostCategories=" + filter.FilterRequest.Categories[i] + "|");
+                            CategoriesSearch.Append("PostCategories=" + filter.FilterRequest.Categories[i]);
                             break;
                         }
-                        PlaceSearch.Append("PostCategories=" + filter.FilterRequest.Categories[i]);
-                        query = query.ApplyFiltering(CategoriesSearch.ToString());
+                        CategoriesSearch.Append("PostCategories=" + filter.FilterRequest.Categories[i] + "|");
                     }
+                    query = query.ApplyFiltering(CategoriesSearch.ToString());
                 }
             }
 
@@ -173,7 +173,7 @@ namespace Application.System.BuilderPosts
 
                 BuilderPostDTO dto = new()
                 {
-                    Avatar = user.Avatar,
+                    //Avatar = user.Avatar,
                     Description = item.Description,
                     Id = item.Id,
                     Place = item.Place,

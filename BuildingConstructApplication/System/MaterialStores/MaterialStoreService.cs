@@ -44,12 +44,12 @@ namespace Application.System.MaterialStores
                     {
                         if (i == count - 1)
                         {
-                            PlaceSearch.Append("Place=" + filter.FilterRequest.Places[i] + "|");
+                            PlaceSearch.Append("Place=" + filter.FilterRequest.Places[i]);
                             break;
                         }
-                        PlaceSearch.Append("Place=" + filter.FilterRequest.Places[i]);
-                        query = query.ApplyFiltering(PlaceSearch.ToString());
+                        PlaceSearch.Append("Place=" + filter.FilterRequest.Places[i] + "|");
                     }
+                    query = query.ApplyFiltering(PlaceSearch.ToString());
                 }
             }
 
@@ -65,7 +65,7 @@ namespace Application.System.MaterialStores
             }
             else
             {
-                totalRecord = await _context.ContractorPosts.CountAsync();
+                totalRecord = await _context.MaterialStores.CountAsync();
             }
 
             if (!result.Any())
@@ -157,15 +157,15 @@ namespace Application.System.MaterialStores
 
                 MaterialStoreDTO dto = new()
                 {
-                    Avatar = user.Avatar,
+                    //Avatar = user.Avatar,
                     Description = item.Description,
                     Id = item.Id,
                     Place = item.Place,
-                    Experience= item.Experience,
-                    Image= item.Image,
-                    TaxCode=item.TaxCode,
-                    Webstie = item.Webstie  
-                    
+                    Experience = item.Experience,
+                    Image = item.Image,
+                    TaxCode = item.TaxCode,
+                    Webstie = item.Webstie
+
                 };
                 result.Add(dto);
             }

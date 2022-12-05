@@ -45,12 +45,12 @@ namespace Application.System.ContractorPosts
                     {
                         if (i == count - 1)
                         {
-                            SalariesSearch.Append("Salaries=*" + filter.FilterRequest.Salary[i] + "|");
+                            SalariesSearch.Append("Salaries=*" + filter.FilterRequest.Salary[i]);
                             break;
                         }
-                        SalariesSearch.Append("Salaries=*" + filter.FilterRequest.Salary[i]);
-                        query = query.ApplyFiltering(SalariesSearch.ToString());
+                        SalariesSearch.Append("Salaries=*" + filter.FilterRequest.Salary[i] + "|");
                     }
+                    query = query.ApplyFiltering(SalariesSearch.ToString());
                 }
 
                 if (filter.FilterRequest.Places.Any())
@@ -60,12 +60,12 @@ namespace Application.System.ContractorPosts
                     {
                         if (i == count - 1)
                         {
-                            PlaceSearch.Append("Place=" + filter.FilterRequest.Places[i] + "|");
+                            PlaceSearch.Append("Place=" + filter.FilterRequest.Places[i]);
                             break;
                         }
-                        PlaceSearch.Append("Place=" + filter.FilterRequest.Places[i]);
-                        query = query.ApplyFiltering(PlaceSearch.ToString());
+                        PlaceSearch.Append("Place=" + filter.FilterRequest.Places[i] + "|");
                     }
+                    query = query.ApplyFiltering(PlaceSearch.ToString());
                 }
 
                 if (filter.FilterRequest.Categories.Any())
@@ -75,12 +75,12 @@ namespace Application.System.ContractorPosts
                     {
                         if (i == count - 1)
                         {
-                            PlaceSearch.Append("PostCategories=" + filter.FilterRequest.Categories[i] + "|");
+                            CategoriesSearch.Append("PostCategories=" + filter.FilterRequest.Categories[i]);
                             break;
                         }
-                        PlaceSearch.Append("PostCategories=" + filter.FilterRequest.Categories[i]);
-                        query = query.ApplyFiltering(CategoriesSearch.ToString());
+                        CategoriesSearch.Append("PostCategories=" + filter.FilterRequest.Categories[i] + "|");
                     }
+                    query = query.ApplyFiltering(CategoriesSearch.ToString());
                 }
 
                 if (filter.FilterRequest.Participant.HasValue)
@@ -193,7 +193,7 @@ namespace Application.System.ContractorPosts
 
                 ContractorPostDTO dto = new()
                 {
-                    Avatar = user.Avatar,
+                    //Avatar = user.Avatar,
                     ContractorID = item.ContractorID,
                     Description = item.Description,
                     EndDate = item.EndDate,
