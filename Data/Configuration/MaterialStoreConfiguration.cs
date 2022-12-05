@@ -22,7 +22,7 @@ namespace Data.Configuration
 
             builder
                    .HasOne(x => x.User)
-                   .WithOne(x => x.MaterialStore).HasForeignKey<User>(x => x.MaterialStoreID);
+                   .WithOne(x => x.MaterialStore).HasForeignKey<User>(x => x.MaterialStoreID).IsRequired(false);
 
         }
     }

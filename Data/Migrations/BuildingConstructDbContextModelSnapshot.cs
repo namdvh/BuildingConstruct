@@ -82,6 +82,9 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Views")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BuilderID");
@@ -236,6 +239,9 @@ namespace Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getutcdate()");
 
+                    b.Property<int>("Place")
+                        .HasColumnType("int");
+
                     b.Property<string>("TaxCode")
                         .HasColumnType("nvarchar(max)");
 
@@ -311,7 +317,6 @@ namespace Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ContractorId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<Guid>("CreateBy")
@@ -321,7 +326,6 @@ namespace Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -351,7 +355,6 @@ namespace Data.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<int?>("MaterialStoreID")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("NormalizedEmail")
@@ -389,7 +392,7 @@ namespace Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("VerifyID")
+                    b.Property<int?>("VerifyID")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -399,13 +402,16 @@ namespace Data.Migrations
                         .HasFilter("[BuilderId] IS NOT NULL");
 
                     b.HasIndex("ContractorId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[ContractorId] IS NOT NULL");
 
                     b.HasIndex("MaterialStoreID")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[MaterialStoreID] IS NOT NULL");
 
                     b.HasIndex("VerifyID")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[VerifyID] IS NOT NULL");
 
                     b.ToTable("Users", (string)null);
                 });
@@ -605,21 +611,15 @@ namespace Data.Migrations
 
                     b.HasOne("Data.Entities.Contractor", "Contractor")
                         .WithOne("User")
-                        .HasForeignKey("Data.Entities.User", "ContractorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Data.Entities.User", "ContractorId");
 
                     b.HasOne("Data.Entities.MaterialStore", "MaterialStore")
                         .WithOne("User")
-                        .HasForeignKey("Data.Entities.User", "MaterialStoreID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Data.Entities.User", "MaterialStoreID");
 
                     b.HasOne("Data.Entities.Verify", "Verify")
                         .WithOne("User")
-                        .HasForeignKey("Data.Entities.User", "VerifyID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Data.Entities.User", "VerifyID");
 
                     b.Navigation("Builder");
 
@@ -636,16 +636,14 @@ namespace Data.Migrations
 
                     b.Navigation("Posts");
 
-                    b.Navigation("User")
-                        .IsRequired();
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Data.Entities.Contractor", b =>
                 {
                     b.Navigation("ContractorPosts");
 
-                    b.Navigation("User")
-                        .IsRequired();
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Data.Entities.ContractorPost", b =>
@@ -655,8 +653,7 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.MaterialStore", b =>
                 {
-                    b.Navigation("User")
-                        .IsRequired();
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Data.Entities.Skill", b =>
@@ -668,8 +665,7 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.Verify", b =>
                 {
-                    b.Navigation("User")
-                        .IsRequired();
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

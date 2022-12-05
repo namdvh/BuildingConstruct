@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Data.Migrations
 {
-    public partial class v1 : Migration
+    public partial class updatedb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -53,6 +53,7 @@ namespace Data.Migrations
                     TaxCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Experience = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Place = table.Column<int>(type: "int", nullable: false),
                     LastModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getutcdate()"),
                     CreateBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -187,6 +188,7 @@ namespace Data.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Field = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Views = table.Column<int>(type: "int", nullable: false),
                     BuilderID = table.Column<int>(type: "int", nullable: false),
                     LastModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreateBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
@@ -265,6 +267,7 @@ namespace Data.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Gender = table.Column<int>(type: "int", nullable: true),
                     DOB = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -273,14 +276,13 @@ namespace Data.Migrations
                     Token = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getutcdate()"),
                     CreateBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    VerifyID = table.Column<int>(type: "int", nullable: false),
+                    VerifyID = table.Column<int>(type: "int", nullable: true),
                     RefreshTokenExpiryTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ContractorId = table.Column<int>(type: "int", nullable: false),
+                    ContractorId = table.Column<int>(type: "int", nullable: true),
                     BuilderId = table.Column<int>(type: "int", nullable: true),
-                    MaterialStoreID = table.Column<int>(type: "int", nullable: false),
+                    MaterialStoreID = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     NormalizedEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -305,20 +307,17 @@ namespace Data.Migrations
                         name: "FK_Users_Contractors_ContractorId",
                         column: x => x.ContractorId,
                         principalTable: "Contractors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Users_MaterialStores_MaterialStoreID",
                         column: x => x.MaterialStoreID,
                         principalTable: "MaterialStores",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Users_Verifies_VerifyID",
                         column: x => x.VerifyID,
                         principalTable: "Verifies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -376,19 +375,22 @@ namespace Data.Migrations
                 name: "IX_Users_ContractorId",
                 table: "Users",
                 column: "ContractorId",
-                unique: true);
+                unique: true,
+                filter: "[ContractorId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_MaterialStoreID",
                 table: "Users",
                 column: "MaterialStoreID",
-                unique: true);
+                unique: true,
+                filter: "[MaterialStoreID] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_VerifyID",
                 table: "Users",
                 column: "VerifyID",
-                unique: true);
+                unique: true,
+                filter: "[VerifyID] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

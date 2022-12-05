@@ -18,6 +18,6 @@ namespace Data.Entities
 
         public Place Place { get; set; }    
 
-        public User User { get; set; }
+        public User? User { get; set; }
     }
 }

@@ -10,7 +10,7 @@
 
         public string? Website { get; set; }
 
-        public User User { get; set; }
+        public User? User { get; set; }
 
         public List<ContractorPost> ContractorPosts { get; set; }
     }

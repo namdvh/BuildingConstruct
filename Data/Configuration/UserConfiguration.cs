@@ -19,7 +19,8 @@ namespace Data.Configuration
             builder.Property(x => x.UserName).IsRequired().HasMaxLength(50);
             builder.Property(x => x.Status).IsRequired();
             builder.Property(x => x.LastModifiedAt).HasDefaultValueSql("getutcdate()");
-
+            builder.Property(x => x.Email).IsRequired(false);
+            //builder.Property(x=>x.ContractorId)
 
         }
     }
