@@ -13,6 +13,8 @@ namespace Application.Users
     {
         public Task<BaseResponse<UserModels>> Login(LoginRequestDTO request);
         Task<RegisterResponseDTO> Register(RegisterRequestDTO request);
-        public Task<Token> GenerateToken(UserModels request);
+        public Task<BaseResponse<Token>> GenerateToken(UserModels request);
+        Task<BaseResponse<string>> RefreshToken(RefreshTokenResponse refreshToken);
+
     }
 }

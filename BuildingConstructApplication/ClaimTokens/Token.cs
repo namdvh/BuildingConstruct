@@ -13,21 +13,11 @@ namespace Application.ClaimTokens
         public string RefreshToken { get; set; }
         public DateTime? RefreshTokenExpiryTime { get; set; }
 
-        public UserModels User { get; set; }
-        public string? Code { get; set; }
-        public string? Message { get; set; }
-        public Token(string code, string msg)
-        {
-            Code = code;
-            Message = msg;
-        }
-        public Token(string accessToken, string refreshToken, UserModels user, string code, string message, DateTime refreshTokenExpiryTime)
+
+        public Token(string accessToken, string refreshToken, DateTime refreshTokenExpiryTime)
         {
             AccessToken = accessToken;
             RefreshToken = refreshToken;
-            User = user;
-            Code = code;
-            Message = message;
             RefreshTokenExpiryTime = refreshTokenExpiryTime;
         }
 

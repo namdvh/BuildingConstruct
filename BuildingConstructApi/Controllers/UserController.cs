@@ -1,4 +1,5 @@
-﻿using Application.Users;
+﻿using Application.ClaimTokens;
+using Application.Users;
 using Data.Entities;
 using Data.Enum;
 using Microsoft.AspNetCore.Authentication;
@@ -16,7 +17,9 @@ using ViewModels.Users;
 
 namespace BuildingConstructApi.Controllers
 {
-    public class UserController : Controller
+    [Route("api/users")]
+    [ApiController]
+    public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
         private readonly IConfiguration _configuration;
@@ -35,7 +38,7 @@ namespace BuildingConstructApi.Controllers
                 return BadRequest(ModelState);
             }
             var rs = await _userService.Login(request);
-            if (rs == null)
+            if (rs.Data == null)
             {
                 return Ok(new
                 {
@@ -50,7 +53,7 @@ namespace BuildingConstructApi.Controllers
                 {
                     try
                     {
-                        var userPrincipalac = this.ValidateToken(token.AccessToken);
+                        var userPrincipalac = this.ValidateToken(token.Data.AccessToken);
                         var authProperties = new AuthenticationProperties
                         {
                             ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(60),
@@ -62,11 +65,20 @@ namespace BuildingConstructApi.Controllers
                     catch (Exception)
                     {
                     }
+                    token.Message = "Login Success";
+                    token.Code = BaseCode.SUCCESS;
 
                 }
                 return Ok(token);
 
             }
+        }
+        [HttpPost("refresh")]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenResponse refreshToken)
+        {
+            var rs = await _userService.RefreshToken(refreshToken);
+
+            return Ok(rs);
         }
         private UserModels MapToDto(User user, string roleName)
         {
