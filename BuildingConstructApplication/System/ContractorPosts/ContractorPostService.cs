@@ -110,7 +110,7 @@ namespace Application.System.ContractorPosts
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.EMPTY_MESSAGE,
-                    Data = null,
+                    Data = new(),
                     Pagination = null
                 };
             }
@@ -153,7 +153,7 @@ namespace Application.System.ContractorPosts
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.EMPTY_MESSAGE,
-                    Data = null,
+                    Data = new(),
                     Pagination = null
                 };
             }

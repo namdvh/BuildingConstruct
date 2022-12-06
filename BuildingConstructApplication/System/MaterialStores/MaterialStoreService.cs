@@ -74,7 +74,7 @@ namespace Application.System.MaterialStores
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.EMPTY_MESSAGE,
-                    Data = null,
+                    Data = new(),
                     Pagination = null
                 };
             }
@@ -117,7 +117,7 @@ namespace Application.System.MaterialStores
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.EMPTY_MESSAGE,
-                    Data = null,
+                    Data = new(),
                     Pagination = null
                 };
             }

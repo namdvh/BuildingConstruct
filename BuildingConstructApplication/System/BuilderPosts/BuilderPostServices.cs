@@ -90,7 +90,7 @@ namespace Application.System.BuilderPosts
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.EMPTY_MESSAGE,
-                    Data = null,
+                    Data = new List<BuilderPostDTO>(),
                     Pagination = null
                 };
             }
@@ -133,7 +133,7 @@ namespace Application.System.BuilderPosts
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.EMPTY_MESSAGE,
-                    Data = null,
+                    Data = new(),
                     Pagination = null
                 };
             }

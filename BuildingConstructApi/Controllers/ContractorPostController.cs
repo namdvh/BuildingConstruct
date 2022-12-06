@@ -6,7 +6,7 @@ using ViewModels.Pagination;
 
 namespace BuildingConstructApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/contractorpost")]
     [ApiController]
     public class ContractorPostController : ControllerBase
     {
@@ -35,8 +35,8 @@ namespace BuildingConstructApi.Controllers
             return Ok(result);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Search([FromQuery] string keyword, [FromQuery] PaginationFilter request)
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] string keyword="", [FromQuery] PaginationFilter request)
         {
             var validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
             var result = await _contractorPostService.SearchPost(validFilter, keyword);
