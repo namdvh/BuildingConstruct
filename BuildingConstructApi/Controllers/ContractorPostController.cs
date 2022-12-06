@@ -36,7 +36,7 @@ namespace BuildingConstructApi.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<IActionResult> Search([FromQuery] string keyword="", [FromQuery] PaginationFilter request)
+        public async Task<IActionResult> Search( [FromQuery] PaginationFilter request, [FromQuery] string keyword = "")
         {
             var validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
             var result = await _contractorPostService.SearchPost(validFilter, keyword);
