@@ -68,6 +68,11 @@ namespace Application.System.BuilderPosts
                     }
                     query = query.ApplyFiltering(categoriesSearch.ToString());
                 }
+
+                if (string.IsNullOrEmpty(filter.FilterRequest.Title))
+                {
+                    query = query.Where(x => x.Title.Contains(filter.FilterRequest.Title));
+                }
             }
 
             var result = await query

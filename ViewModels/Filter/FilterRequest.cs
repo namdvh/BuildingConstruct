@@ -9,6 +9,8 @@ namespace ViewModels.Filter
 {
     public class FilterRequest
     {
+        public string? Title { get; set; }
+
         public List<string>? Salary { get; set; }
 
         public List<Place>? Places { get; set; }

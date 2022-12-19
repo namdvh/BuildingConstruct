@@ -42,5 +42,13 @@ namespace BuildingConstructApi.Controllers
             var result = await _contractorPostService.SearchPost(validFilter, keyword);
             return Ok(result);
         }
+
+        [HttpGet("views")]
+        public async Task<IActionResult> GetListByViews([FromQuery] PaginationFilter request)
+        {
+            var validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
+            var result = await _contractorPostService.GetPostByViews(validFilter);
+            return Ok(result);
+        }
     }
 }

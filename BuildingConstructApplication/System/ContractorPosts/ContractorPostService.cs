@@ -3,6 +3,7 @@ using Data.Entities;
 using Data.Enum;
 using Gridify;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Text;
 using ViewModels.BuilderPosts;
@@ -39,6 +40,10 @@ namespace Application.System.ContractorPosts
 
             if (filter.FilterRequest != null)
             {
+
+
+
+
                 if (filter.FilterRequest.Salary.Any())
                 {
                     var count = filter.FilterRequest.Salary.Count;
@@ -87,6 +92,11 @@ namespace Application.System.ContractorPosts
                 if (filter.FilterRequest.Participant.HasValue)
                 {
                     query = query.Where(x => x.NumberPeople == filter.FilterRequest.Participant);
+                }
+
+                if (string.IsNullOrEmpty(filter.FilterRequest.Title))
+                {
+                    query = query.Include(x => x.Contractor).Where(x => x.Title.Contains(filter.FilterRequest.Title) || x.Contractor.CompanyName.Contains(filter.FilterRequest.Title));
                 }
             }
 
