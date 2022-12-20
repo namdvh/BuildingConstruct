@@ -14,7 +14,7 @@ namespace Data.Configuration
 
             builder
                    .HasOne(x => x.User)
-                   .WithOne(x => x.Verify).HasForeignKey<User>(x => x.VerifyID);
+                   .WithOne(x => x.Verify).HasForeignKey<User>(x => x.VerifyID).IsRequired(false);
         }
     }
 }

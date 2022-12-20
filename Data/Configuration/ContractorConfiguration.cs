@@ -19,7 +19,7 @@ namespace Data.Configuration
 
             builder
                    .HasOne(x => x.User)
-                   .WithOne(x => x.Contractor).HasForeignKey<User>(x => x.ContractorId);
+                   .WithOne(x => x.Contractor).HasForeignKey<User>(x => x.ContractorId).IsRequired(false);
         }
     }
 }

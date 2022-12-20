@@ -12,7 +12,7 @@ namespace Data.Entities
 
         public List<BuilderSkill>? BuilderSkills { get; set; }
 
-        public User User { get; set; }
+        public User? User { get; set; }
 
         public List<BuilderPost> Posts { get; set; }
     }

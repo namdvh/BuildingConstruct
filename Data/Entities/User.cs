@@ -6,6 +6,7 @@ namespace Data.Entities
     {
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
+        public string? Email { get; set; }
         public string? Address { get; set; }
         public Gender? Gender { get; set; }
         public DateTime? DOB { get; set; }
@@ -17,7 +18,7 @@ namespace Data.Entities
 
         public Guid CreateBy { get; set; }
 
-        public int VerifyID { get; set; }
+        public int? VerifyID { get; set; }
 
         public Verify? Verify { get; set; }
 

@@ -16,7 +16,7 @@ namespace Data.Entities
 
         public string? BackID { get; set; }
 
-        public User User { get; set; }
+        public User? User { get; set; }
 
 
     }
