@@ -144,7 +144,7 @@ namespace Application.Systems.Users
             {
                 var user = new User()
                 {
-                    UserName = "",
+                    UserName = request.Phone,
                     PhoneNumber = request.Phone,
                     Status = Data.Enum.Status.Level1
                 };
