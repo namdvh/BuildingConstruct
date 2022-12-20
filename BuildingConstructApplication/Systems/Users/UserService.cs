@@ -197,7 +197,7 @@ namespace Application.Systems.Users
             var claims = new[]
             {
                 new Claim("UserID",request.Id.ToString()),
-                new Claim(ClaimTypes.MobilePhone,request.Phone),
+                new Claim(ClaimTypes.Name,request.Phone),
                 new Claim(ClaimTypes.Role,string.Join(";",request.Role))
             };
 
