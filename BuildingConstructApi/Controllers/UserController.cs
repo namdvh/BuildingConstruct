@@ -1,5 +1,5 @@
 ﻿using Application.ClaimTokens;
-using Application.Users;
+using Application.System.Users;
 using Data.Entities;
 using Data.Enum;
 using Microsoft.AspNetCore.Authentication;

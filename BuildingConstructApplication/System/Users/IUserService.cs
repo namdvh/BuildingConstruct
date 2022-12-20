@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using ViewModels.Response;
 using ViewModels.Users;
 
-namespace Application.Users
+namespace Application.System.Users
 {
     public interface IUserService
     {

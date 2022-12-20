@@ -1,5 +1,4 @@
 ﻿using Application.ClaimTokens;
-using Application.Users;
 using Data.DataContext;
 using Data.Entities;
 using Data.Enum;
@@ -16,7 +15,7 @@ using System.Text;
 using ViewModels.Response;
 using ViewModels.Users;
 
-namespace Application.Systems.Users
+namespace Application.System.Users
 {
     public class UserService : IUserService
     {
@@ -144,11 +143,11 @@ namespace Application.Systems.Users
             {
                 var user = new User()
                 {
-                    FirstName=request.FirstName,
-                    LastName=request.LastName,
+                    FirstName = request.FirstName,
+                    LastName = request.LastName,
                     UserName = request.Phone,
                     PhoneNumber = request.Phone,
-                    Status = Data.Enum.Status.Level1
+                    Status = Status.Level1
                 };
 
                 var rs = await _userService.CreateAsync(user, request.Password);
