@@ -4,10 +4,13 @@ using Data.DataContext;
 using Data.Entities;
 using Data.Enum;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 using ViewModels.Response;
@@ -80,7 +83,7 @@ namespace Application.Systems.Users
                 var user = await _userService.FindByNameAsync(request.UserName);
                 if (user == null)
                 {
-               
+
                     return response;
                 }
                 var roleName = (from usr in _context.Users
@@ -141,7 +144,7 @@ namespace Application.Systems.Users
             {
                 var user = new User()
                 {
-                    UserName = request.UserName,
+                    UserName = "",
                     PhoneNumber = request.Phone,
                     Status = Data.Enum.Status.Level1
                 };
@@ -191,8 +194,8 @@ namespace Application.Systems.Users
             var token = new Token();
             var claims = new[]
             {
-
-                new Claim(ClaimTypes.Name,request.UserName),
+                new Claim("UserID",request.Id.ToString()),
+                new Claim(ClaimTypes.MobilePhone,request.Phone),
                 new Claim(ClaimTypes.Role,string.Join(";",request.Role))
             };
 

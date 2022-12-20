@@ -127,7 +127,13 @@ builder.Services.AddAuthentication(opt =>
 });
 builder.Services.AddDbContext<BuildingConstructDbContext>(options => options.
            UseSqlServer(builder.Configuration.GetConnectionString(SystemsConstant.MainConnectionString)));
-builder.Services.AddIdentity<User, Role>().AddEntityFrameworkStores<BuildingConstructDbContext>().AddDefaultTokenProviders();
+builder.Services.AddIdentity<User, Role>(
+    options => { options.Password.RequireUppercase = false;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireDigit = false;
+    }
+    ).AddEntityFrameworkStores<BuildingConstructDbContext>().AddDefaultTokenProviders();
 builder.Services.AddScoped<UserManager<User>, UserManager<User>>();
 builder.Services.AddScoped<SignInManager<User>, SignInManager<User>>();
 builder.Services.AddScoped<RoleManager<Role>, RoleManager<Role>>();

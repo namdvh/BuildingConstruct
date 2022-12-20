@@ -16,5 +16,6 @@ namespace Application.Users
         public Task<BaseResponse<Token>> GenerateToken(UserModels request);
         Task<BaseResponse<string>> RefreshToken(RefreshTokenResponse refreshToken);
 
+
     }
 }

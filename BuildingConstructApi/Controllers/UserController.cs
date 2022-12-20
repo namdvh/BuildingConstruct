@@ -4,25 +4,27 @@ using Data.Entities;
 using Data.Enum;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq.Dynamic.Core.Tokenizer;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
-using ViewModels.Response;
 using ViewModels.Users;
 
 namespace BuildingConstructApi.Controllers
 {
     [Route("api/users")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Bearer")]
+
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
         private readonly IConfiguration _configuration;
+        private Task<AuthenticationState> authenticationStateTask { get; set; }
         public UserController(IConfiguration configuration, IUserService userService)
         {
             _configuration = configuration;
@@ -129,5 +131,14 @@ namespace BuildingConstructApi.Controllers
             RegisterResponseDTO rs = await _userService.Register(request);
             return Ok(rs);
         }
+        [HttpGet("getUserID")]
+        public async Task<IActionResult> Validate()
+        {
+            var rs = User.FindFirst("UserID").Value;
+            //or if u want the list of claims
+            var claims = User.Claims;
+            return Ok(rs);
+        }
+
     }
 }
