@@ -404,8 +404,8 @@ namespace Data.Migrations
                     b.Property<int>("PostID")
                         .HasColumnType("int");
 
-                    b.Property<int>("BuilderID")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("CommitmentID")
                         .HasColumnType("int");
@@ -416,13 +416,13 @@ namespace Data.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.HasKey("PostID", "BuilderID", "CommitmentID");
-
-                    b.HasIndex("BuilderID");
+                    b.HasKey("PostID", "UserID", "CommitmentID");
 
                     b.HasIndex("CommitmentID");
 
                     b.HasIndex("GroupID");
+
+                    b.HasIndex("UserID");
 
                     b.ToTable("PostCommitment", (string)null);
                 });
@@ -933,12 +933,6 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.PostCommitment", b =>
                 {
-                    b.HasOne("Data.Entities.Builder", "Builder")
-                        .WithMany("PostCommitments")
-                        .HasForeignKey("BuilderID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Data.Entities.Commitment", "Commitment")
                         .WithMany("PostCommitments")
                         .HasForeignKey("CommitmentID")
@@ -955,13 +949,19 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Builder");
+                    b.HasOne("Data.Entities.User", "User")
+                        .WithMany("PostCommitments")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Commitment");
 
                     b.Navigation("ContractorPosts");
 
                     b.Navigation("Group");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Data.Entities.ProductCategories", b =>
@@ -1026,8 +1026,6 @@ namespace Data.Migrations
                     b.Navigation("BuilderSkills");
 
                     b.Navigation("Groups");
-
-                    b.Navigation("PostCommitments");
 
                     b.Navigation("Posts");
 
@@ -1095,6 +1093,11 @@ namespace Data.Migrations
             modelBuilder.Entity("Data.Entities.Type", b =>
                 {
                     b.Navigation("Builder");
+                });
+
+            modelBuilder.Entity("Data.Entities.User", b =>
+                {
+                    b.Navigation("PostCommitments");
                 });
 
             modelBuilder.Entity("Data.Entities.Verify", b =>

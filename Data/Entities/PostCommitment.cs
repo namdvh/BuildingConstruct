@@ -12,7 +12,7 @@ namespace Data.Entities
     {
         public int PostID { get; set; }
 
-        public int BuilderID { get; set; }
+        public Guid UserID { get; set; }
 
         public int CommitmentID { get; set; }
 
@@ -24,7 +24,7 @@ namespace Data.Entities
 
         public Commitment Commitment { get; set; }
 
-        public Builder Builder { get; set; }
+        public User User { get; set; }
 
         public Status Status { get; set; }
 

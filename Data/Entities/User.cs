@@ -35,5 +35,7 @@ namespace Data.Entities
         public int? MaterialStoreID { get; set; }
 
         public MaterialStore MaterialStore { get; set; }
+
+        public List<PostCommitment>? PostCommitments { get; set; }
     }
 }

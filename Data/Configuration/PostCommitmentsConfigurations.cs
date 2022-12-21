@@ -15,11 +15,11 @@ namespace Data.Configuration
         {
             builder.ToTable("PostCommitment");
 
-            builder.HasKey(x => new { x.PostID, x.BuilderID,x.CommitmentID });
+            builder.HasKey(x => new { x.PostID, x.UserID,x.CommitmentID });
 
 
 
-            builder.HasOne(x => x.Builder).WithMany(x => x.PostCommitments).HasForeignKey(x => x.BuilderID);
+            builder.HasOne(x => x.User).WithMany(x => x.PostCommitments).HasForeignKey(x => x.UserID);
             builder.HasOne(x => x.ContractorPosts).WithMany(x => x.PostCommitments).HasForeignKey(x => x.PostID);
             builder.HasOne(x => x.Commitment).WithMany(x => x.PostCommitments).HasForeignKey(x => x.CommitmentID);
             builder.HasOne(x => x.Group).WithMany(x => x.PostCommitments).HasForeignKey(x => x.GroupID).IsRequired(false);

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Data.Migrations
 {
-    public partial class v2 : Migration
+    public partial class v1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -551,20 +551,14 @@ namespace Data.Migrations
                 columns: table => new
                 {
                     PostID = table.Column<int>(type: "int", nullable: false),
-                    BuilderID = table.Column<int>(type: "int", nullable: false),
+                    UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CommitmentID = table.Column<int>(type: "int", nullable: false),
                     GroupID = table.Column<int>(type: "int", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PostCommitment", x => new { x.PostID, x.BuilderID, x.CommitmentID });
-                    table.ForeignKey(
-                        name: "FK_PostCommitment_Builders_BuilderID",
-                        column: x => x.BuilderID,
-                        principalTable: "Builders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                    table.PrimaryKey("PK_PostCommitment", x => new { x.PostID, x.UserID, x.CommitmentID });
                     table.ForeignKey(
                         name: "FK_PostCommitment_Commitment_CommitmentID",
                         column: x => x.CommitmentID,
@@ -582,6 +576,12 @@ namespace Data.Migrations
                         column: x => x.GroupID,
                         principalTable: "Group",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_PostCommitment_Users_UserID",
+                        column: x => x.UserID,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -640,11 +640,6 @@ namespace Data.Migrations
                 column: "TypeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PostCommitment_BuilderID",
-                table: "PostCommitment",
-                column: "BuilderID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_PostCommitment_CommitmentID",
                 table: "PostCommitment",
                 column: "CommitmentID");
@@ -653,6 +648,11 @@ namespace Data.Migrations
                 name: "IX_PostCommitment_GroupID",
                 table: "PostCommitment",
                 column: "GroupID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PostCommitment_UserID",
+                table: "PostCommitment",
+                column: "UserID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductCategories_CategoriesID",
@@ -735,9 +735,6 @@ namespace Data.Migrations
                 name: "UserRoles");
 
             migrationBuilder.DropTable(
-                name: "Users");
-
-            migrationBuilder.DropTable(
                 name: "UserTokens");
 
             migrationBuilder.DropTable(
@@ -753,19 +750,22 @@ namespace Data.Migrations
                 name: "Group");
 
             migrationBuilder.DropTable(
+                name: "Users");
+
+            migrationBuilder.DropTable(
                 name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Verifies");
+                name: "Builders");
 
             migrationBuilder.DropTable(
                 name: "Contractors");
 
             migrationBuilder.DropTable(
-                name: "Builders");
+                name: "Verifies");
 
             migrationBuilder.DropTable(
                 name: "MaterialStores");
