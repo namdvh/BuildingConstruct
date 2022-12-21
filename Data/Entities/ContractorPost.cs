@@ -12,9 +12,15 @@ namespace Data.Entities
         public string Description { get; set; }
 
         public List<ContractorPostSkill> PostSkills { get; set; }
+        public List<ContractorPostProduct>? ContractorPostProducts { get; set; }
+        public List<PostCommitment>? PostCommitments { get; set; }
+        public List<AppliedPost>? AppliedPosts { get; set; }
+
 
         public DateTime StarDate { get; set; }
         public DateTime EndDate { get; set; }
+
+        public Status Status { get; set; }    
 
         public Place Place { get; set; }
 
@@ -31,5 +37,6 @@ namespace Data.Entities
         public int ContractorID { get; set; }
 
         public Contractor Contractor { get; set; }
+
     }
 }

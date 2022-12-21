@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace Data.Enum
 {
-    public enum Status
-    { 
-        Level1,
-        Level2,
-        Level3,
-        SUCCESS,
-        DECLINED
+    public enum Type
+    {
+        FROM,
+        MATERIAL,
+        SHAPE
     }
 }

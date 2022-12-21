@@ -31,6 +31,15 @@ namespace Data.DataContext
             modelBuilder.ApplyConfiguration(new BuilderSkillConfiguration());
             modelBuilder.ApplyConfiguration(new ContractorPostSkillConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new TypeConfiguration());
+            modelBuilder.ApplyConfiguration(new GroupConfiguration());
+            modelBuilder.ApplyConfiguration(new GroupMemberConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductConfiguration());
+            modelBuilder.ApplyConfiguration(new ContractorPostProductsConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductCategoriesConfiguration());
+            modelBuilder.ApplyConfiguration(new AppliedPostConfiguration());
+            modelBuilder.ApplyConfiguration(new CommitmentConfiguration());
+            modelBuilder.ApplyConfiguration(new PostCommitmentsConfigurations());
 
             modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("UserLogins").HasKey(x => x.UserId);
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("UserRoles").HasKey(x => new { x.UserId, x.RoleId });
@@ -46,5 +55,15 @@ namespace Data.DataContext
         public DbSet<Contractor> Contractors { get; set; }
         public DbSet<ContractorPost> ContractorPosts { get; set; }
         public DbSet<ContractorPostSkill> ContractorPostSkills { get; set; }
+        public DbSet<Entities.Type> Types { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<Products> Products { get; set; }
+        public DbSet<GroupMember> GroupMembers { get; set; }    
+        public DbSet<ContractorPostProduct> ContractorPostProducts { get; set; }    
+        public DbSet<Categories> Categories { get; set; }    
+        public DbSet<ProductCategories> ProductCategories { get; set; }    
+        public DbSet<AppliedPost> AppliedPosts { get; set; }    
+        public DbSet<PostCommitment> PostCommitments { get; set; }    
+        public DbSet<Commitment> Commitments { get; set; }    
     }
 }

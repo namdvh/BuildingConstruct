@@ -24,6 +24,9 @@ namespace Data.Configuration
                    .HasOne(x => x.User)
                    .WithOne(x => x.Builder).HasForeignKey<User>(x => x.BuilderId).IsRequired(false);
 
+            builder.HasOne(x => x.Type).WithMany(x => x.Builder).HasForeignKey(x => x.TypeID);
+
+
         }
     }
 }
