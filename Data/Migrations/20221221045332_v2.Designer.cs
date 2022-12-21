@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(BuildingConstructDbContext))]
-    [Migration("20221221044634_v2")]
+    [Migration("20221221045332_v2")]
     partial class v2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,7 +32,7 @@ namespace Data.Migrations
                     b.Property<int>("BuilderID")
                         .HasColumnType("int");
 
-                    b.Property<int>("GroupID")
+                    b.Property<int?>("GroupID")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")

@@ -14,7 +14,7 @@ namespace Data.Entities
 
         public int BuilderID { get; set; }
 
-        public int GroupID { get; set; }
+        public int? GroupID { get; set; }
 
         public Group Group { get; set; }    
 

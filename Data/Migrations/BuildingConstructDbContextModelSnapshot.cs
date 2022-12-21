@@ -30,7 +30,7 @@ namespace Data.Migrations
                     b.Property<int>("BuilderID")
                         .HasColumnType("int");
 
-                    b.Property<int>("GroupID")
+                    b.Property<int?>("GroupID")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")

@@ -493,7 +493,7 @@ namespace Data.Migrations
                 {
                     PostID = table.Column<int>(type: "int", nullable: false),
                     BuilderID = table.Column<int>(type: "int", nullable: false),
-                    GroupID = table.Column<int>(type: "int", nullable: false),
+                    GroupID = table.Column<int>(type: "int", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
