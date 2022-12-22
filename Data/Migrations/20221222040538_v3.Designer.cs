@@ -4,6 +4,7 @@ using Data.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(BuildingConstructDbContext))]
-    partial class BuildingConstructDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221222040538_v3")]
+    partial class v3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -118,36 +120,6 @@ namespace Data.Migrations
                     b.HasIndex("BuilderID");
 
                     b.ToTable("BuilderPosts");
-                });
-
-            modelBuilder.Entity("Data.Entities.BuilderPostSkill", b =>
-                {
-                    b.Property<int>("SkillID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BuilderPostID")
-                        .HasColumnType("int");
-
-                    b.HasKey("SkillID", "BuilderPostID");
-
-                    b.HasIndex("BuilderPostID");
-
-                    b.ToTable("BuilderPostSkill", (string)null);
-                });
-
-            modelBuilder.Entity("Data.Entities.BuilderPostType", b =>
-                {
-                    b.Property<int>("TypeID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BuilderPostID")
-                        .HasColumnType("int");
-
-                    b.HasKey("TypeID", "BuilderPostID");
-
-                    b.HasIndex("BuilderPostID");
-
-                    b.ToTable("BuilderPostType", (string)null);
                 });
 
             modelBuilder.Entity("Data.Entities.BuilderSkill", b =>
@@ -333,21 +305,6 @@ namespace Data.Migrations
                     b.HasIndex("ContractorPostID");
 
                     b.ToTable("ContractorPostSkills", (string)null);
-                });
-
-            modelBuilder.Entity("Data.Entities.ContractorPostType", b =>
-                {
-                    b.Property<int>("TypeID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ContractorPostID")
-                        .HasColumnType("int");
-
-                    b.HasKey("TypeID", "ContractorPostID");
-
-                    b.HasIndex("ContractorPostID");
-
-                    b.ToTable("ContractorPostType", (string)null);
                 });
 
             modelBuilder.Entity("Data.Entities.Group", b =>
@@ -888,44 +845,6 @@ namespace Data.Migrations
                     b.Navigation("Builder");
                 });
 
-            modelBuilder.Entity("Data.Entities.BuilderPostSkill", b =>
-                {
-                    b.HasOne("Data.Entities.BuilderPost", "BuilderPost")
-                        .WithMany("BuilderPostSkills")
-                        .HasForeignKey("BuilderPostID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Entities.Skill", "Skills")
-                        .WithMany("BuilderPostSkills")
-                        .HasForeignKey("SkillID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("BuilderPost");
-
-                    b.Navigation("Skills");
-                });
-
-            modelBuilder.Entity("Data.Entities.BuilderPostType", b =>
-                {
-                    b.HasOne("Data.Entities.BuilderPost", "BuilderPosts")
-                        .WithMany("BuilderPostTypes")
-                        .HasForeignKey("BuilderPostID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Entities.Type", "Types")
-                        .WithMany("BuilderPostTypes")
-                        .HasForeignKey("TypeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("BuilderPosts");
-
-                    b.Navigation("Types");
-                });
-
             modelBuilder.Entity("Data.Entities.BuilderSkill", b =>
                 {
                     b.HasOne("Data.Entities.Builder", "Builder")
@@ -992,25 +911,6 @@ namespace Data.Migrations
                     b.Navigation("ContractorPost");
 
                     b.Navigation("Skills");
-                });
-
-            modelBuilder.Entity("Data.Entities.ContractorPostType", b =>
-                {
-                    b.HasOne("Data.Entities.ContractorPost", "ContractorPost")
-                        .WithMany("ContractorPostTypes")
-                        .HasForeignKey("ContractorPostID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Entities.Type", "Type")
-                        .WithMany("ContractorPostTypes")
-                        .HasForeignKey("TypeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ContractorPost");
-
-                    b.Navigation("Type");
                 });
 
             modelBuilder.Entity("Data.Entities.Group", b =>
@@ -1140,13 +1040,6 @@ namespace Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Data.Entities.BuilderPost", b =>
-                {
-                    b.Navigation("BuilderPostSkills");
-
-                    b.Navigation("BuilderPostTypes");
-                });
-
             modelBuilder.Entity("Data.Entities.Categories", b =>
                 {
                     b.Navigation("ProductCategories");
@@ -1169,8 +1062,6 @@ namespace Data.Migrations
                     b.Navigation("AppliedPosts");
 
                     b.Navigation("ContractorPostProducts");
-
-                    b.Navigation("ContractorPostTypes");
 
                     b.Navigation("PostCommitments");
 
@@ -1202,8 +1093,6 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.Skill", b =>
                 {
-                    b.Navigation("BuilderPostSkills");
-
                     b.Navigation("BuilderSkills");
 
                     b.Navigation("ContractorPostSkills");
@@ -1212,10 +1101,6 @@ namespace Data.Migrations
             modelBuilder.Entity("Data.Entities.Type", b =>
                 {
                     b.Navigation("Builder");
-
-                    b.Navigation("BuilderPostTypes");
-
-                    b.Navigation("ContractorPostTypes");
                 });
 
             modelBuilder.Entity("Data.Entities.User", b =>

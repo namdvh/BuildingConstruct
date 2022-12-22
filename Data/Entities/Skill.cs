@@ -8,8 +8,8 @@
 
         public bool FromSystem { get; set; }
 
-        public List<BuilderSkill> BuilderSkills { get; set; }
-        public List<ContractorPostSkill> ContractorPostSkills { get; set; }
-
+        public List<BuilderSkill>? BuilderSkills { get; set; }
+        public List<ContractorPostSkill>? ContractorPostSkills { get; set; }
+        public List<BuilderPostSkill>? BuilderPostSkills { get; set; }
     }
 }

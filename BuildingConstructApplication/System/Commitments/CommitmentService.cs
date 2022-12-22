@@ -33,15 +33,15 @@ namespace Application.System.Commitments
                 _ => orderBy
             };
             var result = await _context.PostCommitments
-                .Include(x=>x.ContractorPosts)
-                .Include(x=>x.Commitment)
+                .Include(x => x.ContractorPosts)
+                .Include(x => x.Commitment)
                 .Where(x => x.UserID.Equals(UserID))
                 .OrderBy(filter._orderBy + " " + orderBy)
                 .Skip((filter.PageNumber - 1) * filter.PageSize)
                 .Take(filter.PageSize)
                 .ToListAsync();
 
-            totalRecord = await _context.PostCommitments.Where(x=>x.UserID.Equals(UserID)).CountAsync();
+            totalRecord = await _context.PostCommitments.Where(x => x.UserID.Equals(UserID)).CountAsync();
 
 
             if (!result.Any())
@@ -89,20 +89,20 @@ namespace Application.System.Commitments
             var result = await _context.PostCommitments
                 .Include(x => x.ContractorPosts)
                 .Include(x => x.Commitment)
-                .Where(x => x.CommitmentID ==commitmenntID)
+                .Where(x => x.CommitmentID == commitmenntID)
                 .ToListAsync();
 
-            var authorID = result.Where(x=>x.IsAuthor==true).Select(x=>x.UserID).FirstOrDefault();
-            var builderID = result.Where(x=>x.IsAuthor==false).Select(x => x.UserID).FirstOrDefault();
+            var authorID = result.Where(x => x.IsAuthor == true).Select(x => x.UserID).FirstOrDefault();
+            var builderID = result.Where(x => x.IsAuthor == false).Select(x => x.UserID).FirstOrDefault();
 
             var author = await _context.Users.Where(x => x.Id.Equals(authorID)).FirstOrDefaultAsync();
             var builder = await _context.Users.Where(x => x.Id.Equals(builderID)).FirstOrDefaultAsync();
 
 
-            var flag =await  _context.Groups.Where(x => x.BuilderID==builder.BuilderId && x.PostID == result.First().PostID).FirstOrDefaultAsync();
+            var flag = await _context.Groups.Where(x => x.BuilderID == builder.BuilderId && x.PostID == result.First().PostID).FirstOrDefaultAsync();
 
             //Không có trong group thì mapToDTO bình thường 
-            if(flag == null)
+            if (flag == null)
             {
                 response = new()
                 {
@@ -114,12 +114,12 @@ namespace Application.System.Commitments
             //MapToDTO có group 
             else
             {
-                var groups = await _context.GroupMembers.Where(x=>x.GroupId==flag.Id).ToListAsync();
+                var groups = await _context.GroupMembers.Where(x => x.GroupId == flag.Id).ToListAsync();
                 response = new()
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = MapToDetailGroupDTO(result.First(), author, builder,groups),
+                    Data = MapToDetailGroupDTO(result.First(), author, builder, groups),
                 };
             }
             return response;
@@ -133,13 +133,13 @@ namespace Application.System.Commitments
             {
                 CommitmentDTO dto = new()
                 {
-                  CommitmentId=item.CommitmentID,
-                  EndDate=item.Commitment.EndDate,
-                  OptionalTerm=item.Commitment.OptionalTerm,
-                  ProjectName=item.ContractorPosts.ProjectName,
-                  StartDate=item.Commitment.StartDate,
-                  Status=item.Commitment.Status,
-                  Title=item.ContractorPosts.Title
+                    CommitmentId = item.CommitmentID,
+                    EndDate = item.Commitment.EndDate,
+                    OptionalTerm = item.Commitment.OptionalTerm,
+                    ProjectName = item.ContractorPosts.ProjectName,
+                    StartDate = item.Commitment.StartDate,
+                    Status = item.Commitment.Status,
+                    Title = item.ContractorPosts.Title
                 };
                 result.Add(dto);
             }
@@ -147,7 +147,7 @@ namespace Application.System.Commitments
         }
 
 
-        private DetailCommitmentDTO MapToDetailDTO(PostCommitment postCommitment,User author , User builder)
+        private DetailCommitmentDTO MapToDetailDTO(PostCommitment postCommitment, User author, User builder)
         {
             DetailCommitmentDTO result = new()
             {
@@ -176,7 +176,7 @@ namespace Application.System.Commitments
 
         }
 
-        private DetailCommitmentDTO MapToDetailGroupDTO(PostCommitment postCommitment, User author, User builder,List<GroupMember> groupMember)
+        private DetailCommitmentDTO MapToDetailGroupDTO(PostCommitment postCommitment, User author, User builder, List<GroupMember> groupMember)
         {
             DetailCommitmentDTO result = new()
             {
@@ -200,8 +200,8 @@ namespace Application.System.Commitments
                     IDNumber = builder.IdNumber
                 },
                 Group = MapGroup(groupMember)
-               
-                
+
+
 
             };
             return result;
@@ -225,6 +225,43 @@ namespace Application.System.Commitments
             }
             return result;
 
+        }
+
+        public async Task<BaseResponse<string>> UpdateCommitment(Guid userID, int commitmenntID)
+        {
+            BaseResponse<string> response;
+            var postCommitment = await _context.PostCommitments.Where(x => x.UserID.Equals(userID) && commitmenntID == commitmenntID).FirstOrDefaultAsync();
+
+            if (postCommitment == null)
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.NOTFOUND_MESSAGE,
+                    Data = null
+                };
+                return response;
+            }
+
+            postCommitment.Status = Status.SUCCESS;
+            _context.PostCommitments.Add(postCommitment);
+            _context.SaveChanges();
+
+            var count = _context.PostCommitments.Where(x => x.PostID == postCommitment.PostID && x.Status.Equals(Status.SUCCESS)).Count();
+            if (count == 2)
+            {
+                var commitment = await _context.Commitments.Where(x => x.Id == commitmenntID).FirstOrDefaultAsync();
+                commitment.Status = Status.SUCCESS;
+                await _context.Commitments.AddAsync(commitment);
+                await _context.SaveChangesAsync();
+            }
+
+            response = new()
+            {
+                Code = BaseCode.SUCCESS,
+                Message = BaseCode.SUCCESS_MESSAGE
+            };
+            return response;
         }
     }
 }

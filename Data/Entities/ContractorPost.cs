@@ -13,6 +13,8 @@ namespace Data.Entities
 
         public List<ContractorPostSkill> PostSkills { get; set; }
         public List<ContractorPostProduct>? ContractorPostProducts { get; set; }
+        public List<ContractorPostType>? ContractorPostTypes { get; set; }
+
         public List<PostCommitment>? PostCommitments { get; set; }
         public List<AppliedPost>? AppliedPosts { get; set; }
 

@@ -40,6 +40,9 @@ namespace Data.DataContext
             modelBuilder.ApplyConfiguration(new AppliedPostConfiguration());
             modelBuilder.ApplyConfiguration(new CommitmentConfiguration());
             modelBuilder.ApplyConfiguration(new PostCommitmentsConfigurations());
+            modelBuilder.ApplyConfiguration(new ContractorPostTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new BuilderPostTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new BuilderPostSkillConfigurations());
 
             modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("UserLogins").HasKey(x => x.UserId);
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("UserRoles").HasKey(x => new { x.UserId, x.RoleId });
@@ -65,5 +68,8 @@ namespace Data.DataContext
         public DbSet<AppliedPost> AppliedPosts { get; set; }    
         public DbSet<PostCommitment> PostCommitments { get; set; }    
         public DbSet<Commitment> Commitments { get; set; }    
+        public DbSet<ContractorPostType> ContractorPostTypes { get; set; }    
+        public DbSet<BuilderPostType> BuilderPostTypes { get; set; }    
+        public DbSet<BuilderPostSkill> BuilderPostSkills { get; set; }    
     }
 }

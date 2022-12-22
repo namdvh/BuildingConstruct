@@ -30,5 +30,18 @@ namespace BuildingConstructApi.Controllers
             var result = await _commitmentService.GetCommitment(Guid.Parse(userID),validFilter);
             return Ok(result);
         }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateCommitment([FromBody]int commitmentID)
+        {
+            var userID = User.FindFirst("UserID").Value;
+
+            if (userID == null)
+            {
+                return BadRequest();
+            }
+            var result = await _commitmentService.UpdateCommitment(Guid.Parse(userID), commitmentID);
+            return Ok(result);
+        }
     }
 }

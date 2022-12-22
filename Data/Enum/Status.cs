@@ -12,6 +12,7 @@ namespace Data.Enum
         Level2,
         Level3,
         SUCCESS,
-        DECLINED
+        DECLINED,
+        NOT_RESPONSE,
     }
 }
