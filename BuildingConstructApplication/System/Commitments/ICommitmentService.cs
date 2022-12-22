@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ViewModels.Commitment;
 using ViewModels.ContractorPost;
 using ViewModels.Pagination;
+using ViewModels.Response;
 
 namespace Application.System.Commitments
 {
@@ -13,6 +14,6 @@ namespace Application.System.Commitments
     {
         Task<BasePagination<List<CommitmentDTO>>> GetCommitment(Guid UserID,PaginationFilter filter);
 
-        Task<BasePagination<List<DetailCommitmentDTO>>> GetDetailCommitment(int commitmenntID );
+        Task<BaseResponse<DetailCommitmentDTO>> GetDetailCommitment(int commitmenntID );
     }
 }

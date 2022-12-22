@@ -79,7 +79,7 @@ namespace Application.System.Commitments
             return response;
         }
 
-        public async Task<BasePagination<DetailCommitmentDTO>> GetDetailCommitment(int commitmenntID)
+        public async Task<BaseResponse<DetailCommitmentDTO>> GetDetailCommitment(int commitmenntID)
         {
             BaseResponse<DetailCommitmentDTO> response;
             List<DetailCommitmentDTO> ls = new();
