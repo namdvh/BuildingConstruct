@@ -28,6 +28,8 @@ namespace Data.Entities
 
         public Status Status { get; set; }
 
+        public bool IsAuthor { get; set; }
+
     }
 }
 

@@ -413,6 +413,9 @@ namespace Data.Migrations
                     b.Property<int?>("GroupID")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsAuthor")
+                        .HasColumnType("bit");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 

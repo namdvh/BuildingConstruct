@@ -13,6 +13,7 @@ namespace Data.Entities
         public string? Avatar { get; set; }
         public Status Status { get; set; }
         public string? Token { get; set; }
+        public string? IdNumber { get; set; }
 
         public DateTime LastModifiedAt { get; set; } = DateTime.Now;
 

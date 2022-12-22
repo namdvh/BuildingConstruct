@@ -554,7 +554,8 @@ namespace Data.Migrations
                     UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CommitmentID = table.Column<int>(type: "int", nullable: false),
                     GroupID = table.Column<int>(type: "int", nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: false)
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    IsAuthor = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

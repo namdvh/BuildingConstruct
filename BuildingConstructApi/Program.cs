@@ -1,5 +1,6 @@
 
 using Application.System.BuilderPosts;
+using Application.System.Commitments;
 using Application.System.ContractorPosts;
 using Application.System.MaterialStores;
 using Application.System.Users;
@@ -141,6 +142,7 @@ builder.Services.AddScoped<IValidator<RegisterRequestDTO>, RegisterRequestValida
 builder.Services.AddScoped<IContractorPostService, ContractorPostService>();
 builder.Services.AddScoped<IBuilderPostService, BuilderPostServices>(); 
 builder.Services.AddScoped<IMaterialStoreService, MaterialStoreService>();
+builder.Services.AddScoped<ICommitmentService, CommitmentService>();
 
 var app = builder.Build();
 
