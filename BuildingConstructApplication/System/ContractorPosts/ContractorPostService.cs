@@ -103,7 +103,7 @@ namespace Application.System.ContractorPosts
                         flag = true;
                     }
                 }
-               
+
             };
             await _context.SaveChangesAsync();
             if (flag)
@@ -111,6 +111,94 @@ namespace Application.System.ContractorPosts
                 return true;
             }
             return false;
+        }
+
+        public async Task<BaseResponse<ContractorPostDetailDTO>> GetDetailPost(int cPostid)
+        {
+            var rs = await _context.ContractorPosts.FirstOrDefaultAsync(x => x.Id == cPostid);
+            BaseResponse<ContractorPostDetailDTO> response = new();
+
+            if (rs == null)
+            {
+                response.Code = BaseCode.ERROR;
+                response.Message = "Cannot find that Post";
+                return response;
+            }
+
+            ContractorPostDetailDTO postDetail = MapToDetailDTO(rs);
+            response.Data = postDetail;
+            response.Code = BaseCode.SUCCESS;
+            response.Message = "SUCCESS";
+            return response;
+        }
+        private ContractorPostDetailDTO MapToDetailDTO(ContractorPost post)
+        {
+            var product = _context.ContractorPostProducts.Include(x => x.Products).Where(x => x.ContractorPostID == post.Id).Select(x => x.ProductID).ToListAsync();
+            var userId = _context.ContractorPostProducts.Include(x => x.ContractorPost).Where(x => x.ContractorPostID == post.Id).Select(x => x.ContractorPost.CreateBy).FirstOrDefault();
+            ContractorPostDetailDTO postDTO = new()
+            {
+                Title = post.Title,
+                ProjectName = post.ProjectName,
+                Salaries = post.Salaries,
+                Description = post.Description,
+                Products = GetProductFromPost(post.Id),
+                StarDate = post.StarDate,
+                EndDate = post.EndDate,
+                LastModifiedAt = post.LastModifiedAt,
+                NumberPeople = post.NumberPeople,
+                PeopleRemained = post.PeopeRemained,
+                PostCategories = post.PostCategories,
+                Place = post.Place,
+                type = GetTypeAndSkillFromPost(post.Id),
+                CreatedBy = userId
+            };
+            return postDTO;
+        }
+        private List<TypeModels> GetTypeAndSkillFromPost(int postID)
+        {
+            var results = _context.ContractorPostTypes.Include(x => x.Type).Where(x => x.ContractorPostID == postID).ToList();
+            var rsSkill = _context.ContractorPostSkills.Include(x => x.Skills).Where(x => x.ContractorPostID == postID).ToList();
+            var skillArr = new SkillArr();
+            var lskillArr = new List<SkillArr>();
+            foreach (var item in rsSkill)
+            {
+                skillArr.id= item.SkillID;
+                skillArr.name= item.Skills.Name;
+                skillArr.fromSystem= item.Skills.FromSystem;
+                lskillArr.Add(skillArr);
+            }
+            var final = new List<TypeModels>();
+
+            foreach (var x in results)
+            {
+                TypeModels dto = new();
+                dto.id = x.TypeID;
+                dto.name = x.Type.Name;
+                dto.SkillArr = lskillArr;
+                final.Add(dto);
+            }
+            return final;
+        }
+        private List<ContractorPostProductDTO> GetProductFromPost(int postID)
+        {
+            var results = _context.ContractorPostProducts.Include(x => x.Products).Where(x => x.ContractorPostID == postID).ToList();
+
+            var final = new List<ContractorPostProductDTO>();
+
+            foreach (var x in results)
+            {
+                ContractorPostProductDTO dto = new();
+                dto.Id = x.ProductID;
+                dto.Name = x.Products.Name;
+                dto.Brand = x.Products.Brand;
+                dto.Description = x.Products.Description;
+                dto.UnitPrice = x.Products.UnitPrice;
+                dto.UnitInStock = x.Products.UnitInStock;
+                dto.MaterialStore = x.Products.MaterialStore;
+                dto.ProductCategories = x.Products.ProductCategories;
+                final.Add(dto);
+            }
+            return final;
         }
         public async Task<BasePagination<List<ContractorPostDTO>>> GetPost(PaginationFilter filter)
         {

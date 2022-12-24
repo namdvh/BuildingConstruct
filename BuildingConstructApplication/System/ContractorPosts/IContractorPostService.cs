@@ -17,6 +17,6 @@ namespace Application.System.ContractorPosts
 
         Task<BasePagination<List<ContractorPostDTO>>> SearchPost(PaginationFilter filter, string keyword);
         Task<bool>CreateContractorPost(ContractorPostModels contractorPostDTO);
-        public Task<BaseResponse<PostDetailDTO>> GetDetailPost(int id)
+        Task<BaseResponse<ContractorPostDetailDTO>> GetDetailPost(int cPostid);
     }
 }

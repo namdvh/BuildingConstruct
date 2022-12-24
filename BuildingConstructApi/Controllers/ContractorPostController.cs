@@ -1,5 +1,6 @@
 ﻿using Application.System.ContractorPosts;
 using Data.Enum;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ViewModels.ContractorPost;
@@ -57,12 +58,13 @@ namespace BuildingConstructApi.Controllers
         [HttpPost("createPost")]
         public async Task<IActionResult> CreateContractorPost([FromBody] ContractorPostModels contractorPost)
         {
-            BaseResponse<string> response = new();
+            BaseResponse<ContractorPostModels> response = new();
             var rs = await _contractorPostService.CreateContractorPost(contractorPost);
             if (rs)
             {
                 response.Code = BaseCode.SUCCESS;
                 response.Message = "Create Post success";
+                response.Data = contractorPost;
             }
             else
             {
@@ -71,5 +73,12 @@ namespace BuildingConstructApi.Controllers
             }
             return Ok(response);
         }
+        [HttpGet("id")]
+        public async Task<IActionResult> GetPost(int id)
+        {
+            var rs = await _contractorPostService.GetDetailPost(id);
+            return Ok(rs);
+        }
+
     }
 }
