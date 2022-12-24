@@ -120,28 +120,37 @@ namespace Application.System.ContractorPosts
 
             if (rs == null)
             {
+              
                 response.Code = BaseCode.ERROR;
                 response.Message = "Cannot find that Post";
                 return response;
             }
-
-            ContractorPostDetailDTO postDetail = MapToDetailDTO(rs);
+            var count = await _context.ContractorPosts.Where(x => x.Id == cPostid).ToListAsync();
+            foreach(var item in count)
+            {
+                int view = item.ViewCount;
+                view++;
+                item.ViewCount = view;
+                 _context.ContractorPosts.Update(item);
+                await _context.SaveChangesAsync();
+            }
+            ContractorPostDetailDTO postDetail =await MapToDetailDTO(rs);
             response.Data = postDetail;
             response.Code = BaseCode.SUCCESS;
             response.Message = "SUCCESS";
             return response;
         }
-        private ContractorPostDetailDTO MapToDetailDTO(ContractorPost post)
+        private async Task<ContractorPostDetailDTO> MapToDetailDTO(ContractorPost post)
         {
-            var product = _context.ContractorPostProducts.Include(x => x.Products).Where(x => x.ContractorPostID == post.Id).Select(x => x.ProductID).ToListAsync();
-            var userId = _context.ContractorPostProducts.Include(x => x.ContractorPost).Where(x => x.ContractorPostID == post.Id).Select(x => x.ContractorPost.CreateBy).FirstOrDefault();
+            var product =await _context.ContractorPostProducts.Include(x => x.Products).Where(x => x.ContractorPostID == post.Id).Select(x => x.ProductID).ToListAsync();
+            var userId =await _context.ContractorPostProducts.Include(x => x.ContractorPost).Where(x => x.ContractorPostID == post.Id).Select(x => x.ContractorPost.CreateBy).FirstOrDefaultAsync();
             ContractorPostDetailDTO postDTO = new()
             {
                 Title = post.Title,
                 ProjectName = post.ProjectName,
                 Salaries = post.Salaries,
                 Description = post.Description,
-                Products = GetProductFromPost(post.Id),
+                Products = await GetProductFromPost(post.Id),
                 StarDate = post.StarDate,
                 EndDate = post.EndDate,
                 LastModifiedAt = post.LastModifiedAt,
@@ -149,15 +158,16 @@ namespace Application.System.ContractorPosts
                 PeopleRemained = post.PeopeRemained,
                 PostCategories = post.PostCategories,
                 Place = post.Place,
-                type = GetTypeAndSkillFromPost(post.Id),
+                type = await GetTypeAndSkillFromPost(post.Id),
                 CreatedBy = userId
             };
+
             return postDTO;
         }
-        private List<TypeModels> GetTypeAndSkillFromPost(int postID)
+        private async Task<List<TypeModels>> GetTypeAndSkillFromPost(int postID)
         {
-            var results = _context.ContractorPostTypes.Include(x => x.Type).Where(x => x.ContractorPostID == postID).ToList();
-            var rsSkill = _context.ContractorPostSkills.Include(x => x.Skills).Where(x => x.ContractorPostID == postID).ToList();
+            var results =await _context.ContractorPostTypes.Include(x => x.Type).Where(x => x.ContractorPostID == postID).ToListAsync();
+            var rsSkill =await _context.ContractorPostSkills.Include(x => x.Skills).Where(x => x.ContractorPostID == postID).ToListAsync();
             var skillArr = new SkillArr();
             var lskillArr = new List<SkillArr>();
             foreach (var item in rsSkill)
@@ -179,9 +189,9 @@ namespace Application.System.ContractorPosts
             }
             return final;
         }
-        private List<ContractorPostProductDTO> GetProductFromPost(int postID)
+        private async Task<List<ContractorPostProductDTO>> GetProductFromPost(int postID)
         {
-            var results = _context.ContractorPostProducts.Include(x => x.Products).Where(x => x.ContractorPostID == postID).ToList();
+            var results =await _context.ContractorPostProducts.Include(x => x.Products).Where(x => x.ContractorPostID == postID).ToListAsync();
 
             var final = new List<ContractorPostProductDTO>();
 
