@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ViewModels.ContractorPost;
 using ViewModels.Pagination;
+using ViewModels.Response;
 
 namespace Application.System.ContractorPosts
 {
@@ -15,5 +16,7 @@ namespace Application.System.ContractorPosts
         Task<BasePagination<List<ContractorPostDTO>>> GetPostByViews(PaginationFilter filter);
 
         Task<BasePagination<List<ContractorPostDTO>>> SearchPost(PaginationFilter filter, string keyword);
+        Task<bool>CreateContractorPost(ContractorPostModels contractorPostDTO);
+        public Task<BaseResponse<PostDetailDTO>> GetDetailPost(int id)
     }
 }

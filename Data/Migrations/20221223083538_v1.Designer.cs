@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(BuildingConstructDbContext))]
-    [Migration("20221222081137_v4")]
-    partial class v4
+    [Migration("20221223083538_v1")]
+    partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -130,12 +130,9 @@ namespace Data.Migrations
                     b.Property<int>("BuilderPostID")
                         .HasColumnType("int");
 
-                    b.Property<int>("SkillsId")
-                        .HasColumnType("int");
-
                     b.HasKey("SkillID", "BuilderPostID");
 
-                    b.HasIndex("SkillsId");
+                    b.HasIndex("BuilderPostID");
 
                     b.ToTable("BuilderPostSkill", (string)null);
                 });
@@ -897,13 +894,13 @@ namespace Data.Migrations
                 {
                     b.HasOne("Data.Entities.BuilderPost", "BuilderPost")
                         .WithMany("BuilderPostSkills")
-                        .HasForeignKey("SkillID")
+                        .HasForeignKey("BuilderPostID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Data.Entities.Skill", "Skills")
                         .WithMany("BuilderPostSkills")
-                        .HasForeignKey("SkillsId")
+                        .HasForeignKey("SkillID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

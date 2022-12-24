@@ -2,25 +2,116 @@
 using Data.Entities;
 using Data.Enum;
 using Gridify;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Security.Claims;
 using System.Text;
 using ViewModels.BuilderPosts;
 using ViewModels.ContractorPost;
 using ViewModels.Pagination;
+using ViewModels.Response;
 
 namespace Application.System.ContractorPosts
 {
     public class ContractorPostService : IContractorPostService
     {
         private readonly BuildingConstructDbContext _context;
-
-        public ContractorPostService(BuildingConstructDbContext context)
+        private IHttpContextAccessor _accessor;
+        public ContractorPostService(BuildingConstructDbContext context, IHttpContextAccessor accessor)
         {
             _context = context;
+            _accessor = accessor;
         }
 
+        public async Task<bool> CreateContractorPost(ContractorPostModels contractorPostDTO)
+        {
+            Claim identifierClaim = _accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+            var userID = identifierClaim.Value;
+            var contracID = _context.Users.Where(x => x.Id.ToString().Equals(userID)).FirstOrDefault().ContractorId;
+
+            var contractorPost = new ContractorPost
+            {
+                Title = contractorPostDTO.Title,
+                ProjectName = contractorPostDTO.ProjectName,
+                Description = contractorPostDTO.Description,
+                StarDate = contractorPostDTO.StarDate,
+                EndDate = contractorPostDTO.EndDate,
+                Place = contractorPostDTO.Place,
+                Salaries = contractorPostDTO.Salaries,
+                ViewCount = 0,
+                NumberPeople = contractorPostDTO.NumberPeople,
+                PeopeRemained = contractorPostDTO.NumberPeople,
+                Status = Status.Level1,
+                PostCategories = PostCategories.Categories1,
+                LastModifiedAt = DateTime.Now,
+                CreateBy = Guid.Parse(userID),
+                ContractorID = (int)contracID
+
+            };
+
+            await _context.ContractorPosts.AddAsync(contractorPost);
+            await _context.SaveChangesAsync();
+            var id = contractorPost.Id;
+            var cPostProduct = new ContractorPostProduct();
+            foreach (var item in contractorPostDTO.ProductId)
+            {
+                cPostProduct.ProductID = item;
+                cPostProduct.ContractorPostID = contractorPost.Id;
+                _context.ContractorPostProducts.Add(cPostProduct);
+                _context.SaveChanges();
+            }
+            var type = contractorPostDTO.type;
+            foreach (var item in type)
+            {
+                var rType = new Data.Entities.ContractorPostType();
+                rType.TypeID = item.id;
+                rType.ContractorPostID = id;
+                _context.ContractorPostTypes.Add(rType);
+                _context.SaveChanges();
+
+            }
+
+            var flag = false;
+            foreach (var i in type)
+            {
+                foreach (var o in i.SkillArr)
+                {
+
+                    if (o.fromSystem == false)
+                    {
+                        var rSkill = new Skill();
+                        rSkill.Name = o.name;
+                        rSkill.FromSystem = o.fromSystem;
+                        _context.Skills.Add(rSkill);
+                        _context.SaveChanges();
+                        var cPostSkill = new ContractorPostSkill();
+                        cPostSkill.ContractorPostID = id;
+                        cPostSkill.SkillID = rSkill.Id;
+                        _context.ContractorPostSkills.Add(cPostSkill);
+                        _context.SaveChanges();
+                        flag = true;
+                    }
+                    else
+                    {
+                        var cPostSkill = new ContractorPostSkill();
+                        cPostSkill.ContractorPostID = id;
+                        cPostSkill.SkillID = o.id;
+                        _context.ContractorPostSkills.Add(cPostSkill);
+                        _context.SaveChanges();
+                        flag = true;
+                    }
+                }
+               
+            };
+            await _context.SaveChangesAsync();
+            if (flag)
+            {
+                return true;
+            }
+            return false;
+        }
         public async Task<BasePagination<List<ContractorPostDTO>>> GetPost(PaginationFilter filter)
         {
             BasePagination<List<ContractorPostDTO>> response;
@@ -257,7 +348,7 @@ namespace Application.System.ContractorPosts
 
             foreach (var item in list)
             {
-                var user = _context.Users.Where(x => x.ContractorId == item.ContractorID).FirstOrDefault();
+                var user = _context.Users.Where(x => x.ContractorId.Equals(item.ContractorID)).FirstOrDefault();
 
                 ContractorPostDTO dto = new()
                 {

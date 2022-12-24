@@ -12,7 +12,7 @@ namespace Data.Entities
 
         public string Name { get; set; }    
 
-        public Enum.Type Type { get; set; }
+        public Enum.TypeEnum Type { get; set; }
 
         public List<ProductCategories> ProductCategories { get; set; }
     }

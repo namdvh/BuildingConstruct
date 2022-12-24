@@ -1,5 +1,7 @@
 ﻿using Data.Enum;
 using Microsoft.AspNetCore.Identity;
+using System.Text.Json.Serialization;
+
 namespace Data.Entities
 {
     public class User : IdentityUser<Guid>
@@ -26,15 +28,17 @@ namespace Data.Entities
         public DateTime RefreshTokenExpiryTime { get; set; }
 
         public int? ContractorId { get; set; }
+        [JsonIgnore]
 
         public Contractor Contractor { get; set; }
 
         public int? BuilderId { get; set; }
+        [JsonIgnore]
 
         public Builder Builder { get; set; }
 
         public int? MaterialStoreID { get; set; }
-
+        [JsonIgnore]
         public MaterialStore MaterialStore { get; set; }
 
         public List<PostCommitment>? PostCommitments { get; set; }

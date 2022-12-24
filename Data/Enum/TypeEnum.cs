@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Data.Enum
 {
-    public enum Type
+    public enum TypeEnum
     {
         FROM,
         MATERIAL,

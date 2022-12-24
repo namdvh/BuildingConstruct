@@ -6,6 +6,7 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -161,20 +162,33 @@ namespace Application.System.Users
                         var builder = new Builder();
                         builder.CreateBy = user.Id;
                         await _context.Builders.AddAsync(builder);
+                        _context.SaveChanges();
+
+                        user.BuilderId = builder.Id;
+                        _context.Entry<User>(user).State = EntityState.Modified;
                         await _context.SaveChangesAsync();
                     }
                     else if (defaultRole.Id == Guid.Parse(BaseCode.StoreRole))
                     {
                         var store = new MaterialStore();
                         store.CreateBy = user.Id;
+                        
                         await _context.MaterialStores.AddAsync(store);
+                        _context.SaveChanges();
+
+                        user.MaterialStoreID =store.Id;
+                        _context.Entry(store).State = EntityState.Modified;
                         await _context.SaveChangesAsync();
                     }
                     else if (defaultRole.Id == Guid.Parse(BaseCode.ContractorRole))
                     {
                         var ctor = new Contractor();
                         ctor.CreateBy = user.Id;
+                      
                         await _context.Contractors.AddAsync(ctor);
+                        _context.SaveChanges();
+                        user.ContractorId = ctor.Id;
+                        _context.Entry(ctor).State = EntityState.Modified;
                         await _context.SaveChangesAsync();
                     }
                     response.Data = user;
