@@ -570,7 +570,12 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("TypeId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TypeId");
 
                     b.ToTable("Skills", (string)null);
                 });
@@ -1100,6 +1105,15 @@ namespace Data.Migrations
                     b.Navigation("MaterialStore");
                 });
 
+            modelBuilder.Entity("Data.Entities.Skill", b =>
+                {
+                    b.HasOne("Data.Entities.Type", "Type")
+                        .WithMany("Skill")
+                        .HasForeignKey("TypeId");
+
+                    b.Navigation("Type");
+                });
+
             modelBuilder.Entity("Data.Entities.User", b =>
                 {
                     b.HasOne("Data.Entities.Builder", "Builder")
@@ -1216,6 +1230,8 @@ namespace Data.Migrations
                     b.Navigation("BuilderPostTypes");
 
                     b.Navigation("ContractorPostTypes");
+
+                    b.Navigation("Skill");
                 });
 
             modelBuilder.Entity("Data.Entities.User", b =>

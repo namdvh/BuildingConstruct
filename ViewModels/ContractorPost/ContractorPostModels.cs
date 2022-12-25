@@ -13,7 +13,7 @@ namespace ViewModels.ContractorPost
         public string Title { get; set; }
 
         public string ProjectName { get; set; }
-        public List<TypeModels> type { get; set; }
+        public List<TypeModels>? type { get; set; }
 
         public string Description { get; set; }
 

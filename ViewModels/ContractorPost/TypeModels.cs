@@ -8,8 +8,9 @@ namespace ViewModels.ContractorPost
 {
     public class TypeModels
     {
-        public int id { get; set; }
-        public string name { get; set; }
+        public int? id { get; set; }
+        public string? name { get; set; }
         public List<SkillArr> SkillArr { get; set; }
+        
     }
 }

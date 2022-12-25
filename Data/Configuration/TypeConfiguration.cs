@@ -15,6 +15,8 @@ namespace Data.Configuration
             builder.Property(x => x.Id)
                   .ValueGeneratedOnAdd();
             builder.Property(x => x.Name).IsRequired();
+            builder.HasMany(x => x.Skill).WithOne(x => x.Type).HasForeignKey(x => x.TypeId).IsRequired(false);
+
         }
     }
 }

@@ -66,11 +66,13 @@ namespace Application.System.ContractorPosts
             foreach (var item in type)
             {
                 var rType = new Data.Entities.ContractorPostType();
-                rType.TypeID = item.id;
-                rType.ContractorPostID = id;
-                _context.ContractorPostTypes.Add(rType);
-                _context.SaveChanges();
-
+                if (item.id != null)
+                {
+                    rType.TypeID = (int)item.id;
+                    rType.ContractorPostID = id;
+                    _context.ContractorPostTypes.Add(rType);
+                    _context.SaveChanges();
+                }
             }
 
             var flag = false;
@@ -95,12 +97,26 @@ namespace Application.System.ContractorPosts
                     }
                     else
                     {
-                        var cPostSkill = new ContractorPostSkill();
-                        cPostSkill.ContractorPostID = id;
-                        cPostSkill.SkillID = o.id;
-                        _context.ContractorPostSkills.Add(cPostSkill);
-                        _context.SaveChanges();
-                        flag = true;
+                        var rs = await _context.Skills.Include(x => x.Type).Where(x=>x.Id==o.id).ToListAsync();
+                        foreach(var c in rs)
+                        {
+                            if (i.id == c.TypeId)
+                            {
+
+                                var cPostSkill = new ContractorPostSkill();
+                                cPostSkill.ContractorPostID = id;
+                                cPostSkill.SkillID = o.id;
+                                _context.ContractorPostSkills.Add(cPostSkill);
+                                _context.SaveChanges();
+                                flag = true;
+                            }
+                            else
+                            {
+                                _context.ContractorPosts.Remove(contractorPost);
+                                _context.SaveChanges();
+                                return false;
+                            }
+                        }
                     }
                 }
 
@@ -166,27 +182,39 @@ namespace Application.System.ContractorPosts
         }
         private async Task<List<TypeModels>> GetTypeAndSkillFromPost(int postID)
         {
-            var results =await _context.ContractorPostTypes.Include(x => x.Type).Where(x => x.ContractorPostID == postID).ToListAsync();
+            //var results =await _context.ContractorPostTypes.Include(x => x.Type).Where(x => x.ContractorPostID == postID).ToListAsync();
             var rsSkill =await _context.ContractorPostSkills.Include(x => x.Skills).Where(x => x.ContractorPostID == postID).ToListAsync();
-            var skillArr = new SkillArr();
-            var lskillArr = new List<SkillArr>();
-            foreach (var item in rsSkill)
-            {
-                skillArr.id= item.SkillID;
-                skillArr.name= item.Skills.Name;
-                skillArr.fromSystem= item.Skills.FromSystem;
-                lskillArr.Add(skillArr);
-            }
             var final = new List<TypeModels>();
 
-            foreach (var x in results)
+            foreach (var item in rsSkill)
             {
-                TypeModels dto = new();
-                dto.id = x.TypeID;
-                dto.name = x.Type.Name;
-                dto.SkillArr = lskillArr;
-                final.Add(dto);
+                var skillArr = new SkillArr();
+                skillArr.id = item.SkillID;
+                skillArr.name = item.Skills.Name;
+                skillArr.fromSystem = item.Skills.FromSystem;
+                skillArr.TypeId = item.Skills.TypeId;
+                var type = _context.Types.Where(x => x.Id == item.Skills.TypeId).SingleOrDefault();
+                var typeModels = new TypeModels();
+                if (type != null)
+                {
+                    typeModels.id = type.Id;
+                    typeModels.name = type.Name;
+                }
+                typeModels.SkillArr = new();
+                typeModels.SkillArr.Add(skillArr);
+                final.Add(typeModels);
+
             }
+
+
+            //foreach (var x in results)
+            //{
+            //    TypeModels dto = new();
+            //    dto.id = x.TypeID;
+            //    dto.name = x.Type.Name;
+            //    dto.SkillArr = lskillArr;
+            //    final.Add(dto);
+            //}
             return final;
         }
         private async Task<List<ContractorPostProductDTO>> GetProductFromPost(int postID)

@@ -20,6 +20,8 @@ namespace Data.Configuration
             builder.Property(x => x.Id)
                   .ValueGeneratedOnAdd();
             builder.Property(x => x.Name).IsRequired();
+            builder.HasOne(x => x.Type).WithMany(x => x.Skill).HasForeignKey(x => x.TypeId).IsRequired(false);
+
         }
 
     }
