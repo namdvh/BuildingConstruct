@@ -4,7 +4,6 @@ using Data.Enum;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 using ViewModels.Commitment;
-using ViewModels.ContractorPost;
 using ViewModels.Pagination;
 using ViewModels.Response;
 
@@ -139,7 +138,8 @@ namespace Application.System.Commitments
                     ProjectName = item.ContractorPosts.ProjectName,
                     StartDate = item.Commitment.StartDate,
                     Status = item.Commitment.Status,
-                    Title = item.ContractorPosts.Title
+                    Title = item.ContractorPosts.Title,
+                    PostID=item.ContractorPosts.Id
                 };
                 result.Add(dto);
             }
@@ -149,6 +149,21 @@ namespace Application.System.Commitments
 
         private DetailCommitmentDTO MapToDetailDTO(PostCommitment postCommitment, User author, User builder)
         {
+            CommitmentUser userA = new()
+            {
+                FirstName = author.FirstName,
+                LastName = author.LastName,
+                IDNumber = author.IdNumber
+            };
+
+            CommitmentUser userB = new()
+            {
+                FirstName = builder.FirstName,
+                LastName = builder.LastName,
+                IDNumber = builder.IdNumber
+            };
+
+
             DetailCommitmentDTO result = new()
             {
                 Description = postCommitment.ContractorPosts.Description,
@@ -156,20 +171,12 @@ namespace Application.System.Commitments
                 Status = postCommitment.Status,
                 OptionalTerm = postCommitment.Commitment.OptionalTerm,
                 ProjectName = postCommitment.ContractorPosts.ProjectName,
+                Salaries= postCommitment.ContractorPosts.Salaries,
                 StartDate = postCommitment.Commitment.StartDate,
                 Title = postCommitment.ContractorPosts.Title,
-                PartyA =
-                {
-                    FirstName = author.FirstName,
-                    LastName = author.LastName,
-                    IDNumber = author.IdNumber
-                },
-                PartyB =
-                {
-                    FirstName = builder.FirstName,
-                    LastName = builder.LastName,
-                    IDNumber = builder.IdNumber
-                }
+                PostID=postCommitment.ContractorPosts.Id,
+                PartyA =userA,
+                PartyB =userB
 
             };
             return result;
@@ -178,6 +185,25 @@ namespace Application.System.Commitments
 
         private DetailCommitmentDTO MapToDetailGroupDTO(PostCommitment postCommitment, User author, User builder, List<GroupMember> groupMember)
         {
+
+            CommitmentUser userA = new()
+            {
+                FirstName = author.FirstName,
+                LastName = author.LastName,
+                IDNumber = author.IdNumber
+            };
+
+            CommitmentUser userB = new()
+            {
+                FirstName = builder.FirstName,
+                LastName = builder.LastName,
+                IDNumber = builder.IdNumber
+            };
+
+            var group = MapGroup(groupMember);
+
+
+
             DetailCommitmentDTO result = new()
             {
                 Description = postCommitment.ContractorPosts.Description,
@@ -185,23 +211,13 @@ namespace Application.System.Commitments
                 Status = postCommitment.Status,
                 OptionalTerm = postCommitment.Commitment.OptionalTerm,
                 ProjectName = postCommitment.ContractorPosts.ProjectName,
+                Salaries = postCommitment.ContractorPosts.Salaries,
+                PostID = postCommitment.ContractorPosts.Id,
                 StartDate = postCommitment.Commitment.StartDate,
                 Title = postCommitment.ContractorPosts.Title,
-                PartyA =
-                {
-                    FirstName = author.FirstName,
-                    LastName = author.LastName,
-                    IDNumber = author.IdNumber
-                },
-                PartyB =
-                {
-                    FirstName = builder.FirstName,
-                    LastName = builder.LastName,
-                    IDNumber = builder.IdNumber
-                },
-                Group = MapGroup(groupMember)
-
-
+                PartyA =userA,
+                PartyB=userB,
+                Group = group
 
             };
             return result;
@@ -212,7 +228,7 @@ namespace Application.System.Commitments
         {
             List<CommitmentGroup> result = new();
 
-            foreach (var item in result)
+            foreach (var item in groupMembers)
             {
                 CommitmentGroup rs = new()
                 {
@@ -244,15 +260,15 @@ namespace Application.System.Commitments
             }
 
             postCommitment.Status = Status.SUCCESS;
-            _context.PostCommitments.Add(postCommitment);
-            _context.SaveChanges();
+            _context.PostCommitments.Update(postCommitment);
+            await _context.SaveChangesAsync();
 
             var count = _context.PostCommitments.Where(x => x.PostID == postCommitment.PostID && x.Status.Equals(Status.SUCCESS)).Count();
             if (count == 2)
             {
                 var commitment = await _context.Commitments.Where(x => x.Id == commitmenntID).FirstOrDefaultAsync();
                 commitment.Status = Status.SUCCESS;
-                await _context.Commitments.AddAsync(commitment);
+                _context.Commitments.Update(commitment);
                 await _context.SaveChangesAsync();
             }
 
@@ -262,6 +278,86 @@ namespace Application.System.Commitments
                 Message = BaseCode.SUCCESS_MESSAGE
             };
             return response;
+        }
+
+        public async Task<BaseResponse<string>> CreateCommitment(CreateCommimentRequest request, Guid ContractorID)
+        {
+            BaseResponse<string> response;
+            PostCommitment builder;
+
+            Commitment commitment = new()
+            {
+                EndDate = request.EndDate,
+                StartDate = request.StartDate,
+                Status = Status.NOT_RESPONSE,
+                OptionalTerm = request.OptionalTerm,
+
+            };
+
+            await _context.Commitments.AddAsync(commitment);
+            await _context.SaveChangesAsync();
+
+            PostCommitment ctor = new()
+            {
+                CommitmentID = commitment.Id,
+                IsAuthor = true,
+                PostID = request.PostContractorID,
+                UserID = ContractorID,
+                Status = Status.NOT_RESPONSE,
+            };
+
+            await _context.PostCommitments.AddAsync(ctor);
+            await _context.SaveChangesAsync();
+
+            var group = await _context.Groups.Where(x => x.BuilderID == request.BuilderID && x.PostID == request.PostContractorID).FirstOrDefaultAsync();
+            var builderID = await _context.Users.Where(x => x.BuilderId == request.BuilderID).Select(x => x.Id).FirstOrDefaultAsync();
+            if (group != null)
+            {
+                builder = new()
+                {
+                    CommitmentID = commitment.Id,
+                    IsAuthor = false,
+                    PostID = request.PostContractorID,
+                    UserID = builderID,
+                    Status = Status.NOT_RESPONSE,
+                    GroupID = group.Id,
+                };
+            }
+            else
+            {
+                builder = new()
+                {
+                    CommitmentID = commitment.Id,
+                    IsAuthor = false,
+                    PostID = request.PostContractorID,
+                    UserID = builderID,
+                    Status = Status.NOT_RESPONSE,
+                };
+            }
+            _context.ChangeTracker.Clear();
+            await _context.PostCommitments.AddAsync(builder);
+            var rs = await _context.SaveChangesAsync();
+            if (rs > 0)
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = null
+                };
+            }
+            else
+            {
+                response = new()
+                {
+                    Code = BaseCode.ERROR,
+                    Message = BaseCode.ERROR_MESSAGE,
+                    Data = null
+                };
+            }
+            return response;
+
+
         }
     }
 }

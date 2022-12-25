@@ -5,10 +5,13 @@ using Gridify;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using ViewModels.BuilderPosts;
+using ViewModels.Commitment;
 using ViewModels.ContractorPost;
 using ViewModels.Pagination;
+using ViewModels.Response;
 
 namespace Application.System.ContractorPosts
 {
@@ -251,6 +254,76 @@ namespace Application.System.ContractorPosts
             return response;
         }
 
+        public async Task<BaseResponse<string>> AppliedPost(AppliedPostRequest request, Guid userID)
+        {
+            BaseResponse<string> response;
+
+            var user =await _context.Users.Where(x=>x.Id.Equals(userID)).FirstOrDefaultAsync();
+
+            //Group is not null
+            if(request.Groups is not null)
+            {
+                Group group = new()
+                {
+                    BuilderID = user.BuilderId.Value,
+                    PostID = request.PostContractorID
+                };
+
+                await _context.Groups.AddAsync(group);
+                await _context.SaveChangesAsync();
+
+                foreach (var item in request.Groups)
+                {
+                    GroupMember groupMember = new()
+                    {
+                        DOB = item.DOB,
+                        IdNumber = item.IdNumber,
+                        Name = item.Name,
+                        TypeID = item.TypeID,
+                        GroupId=group.Id
+                    };
+
+                    await _context.GroupMembers.AddAsync(groupMember);
+                    await _context.SaveChangesAsync();
+                }
+
+                AppliedPost applied = new()
+                {
+                    BuilderID = user.BuilderId.Value,
+                    PostID = request.PostContractorID,
+                    GroupID = group.Id,
+                    Status = Status.NOT_RESPONSE,
+                };
+
+                await _context.AppliedPosts.AddAsync(applied);
+                await _context.SaveChangesAsync();
+
+            }
+            else
+            {
+                AppliedPost applied = new()
+                {
+                    BuilderID = user.BuilderId.Value,
+                    PostID = request.PostContractorID,
+                    Status = Status.NOT_RESPONSE,
+                };
+
+                await _context.AppliedPosts.AddAsync(applied);
+                await _context.SaveChangesAsync();
+            }
+
+
+            response = new()
+            {
+                Code = BaseCode.SUCCESS,
+                Message = BaseCode.SUCCESS_MESSAGE,
+
+            };
+
+            return response;
+
+        }
+
         private List<ContractorPostDTO> MapListDTO(List<ContractorPost> list)
         {
             List<ContractorPostDTO> result = new();
@@ -279,6 +352,91 @@ namespace Application.System.ContractorPosts
                 result.Add(dto);
             }
             return result;
+        }
+
+        public async Task<BaseResponse<List<AppliedPostDTO>>> ViewAppliedPost(int postID)
+        {
+            BaseResponse<List<AppliedPostDTO>> response;
+
+            var appliedPost = await _context.AppliedPosts
+                .Include(x=>x.ContractorPosts)
+                    .ThenInclude(x=>x.Contractor)
+                        .ThenInclude(x=>x.User)
+                .Where(x => x.PostID == postID)
+                .ToListAsync();
+
+
+            List<AppliedPostDTO> appliedPostDTOs= new List<AppliedPostDTO>();
+            foreach (var x in appliedPost)
+            {
+                var flag = await _context.Groups.Where(x => x.BuilderID == x.BuilderID && x.PostID == postID).FirstOrDefaultAsync();
+                if(flag == null)
+                {
+                    appliedPostDTOs.Add(MapToAppliedPostDTO(x));
+                }
+                else
+                {
+                    var groups = await _context.GroupMembers.Where(x => x.GroupId == flag.Id).ToListAsync();
+                    appliedPostDTOs.Add(MapToAppliedPostGroupDTO(x, groups));
+                }
+            }
+
+            response = new()
+            {
+                Code = BaseCode.SUCCESS,
+                Message = BaseCode.SUCCESS_MESSAGE,
+                Data = appliedPostDTOs
+            };
+
+            return response;
+        }
+
+
+        private AppliedPostDTO MapToAppliedPostDTO(AppliedPost applied)
+        {
+            AppliedPostDTO rs = new()
+            {
+                Avatar = applied.ContractorPosts.Contractor.User.Avatar,
+                BuilderID = applied.BuilderID,
+                FirstName = applied.ContractorPosts.Contractor.User.FirstName,
+                LastName = applied.ContractorPosts.Contractor.User.LastName,
+                UserID = applied.ContractorPosts.Contractor.User.Id
+            };
+            return rs;
+        }
+
+        private AppliedPostDTO MapToAppliedPostGroupDTO(AppliedPost applied, List<GroupMember> groupMember)
+        {
+            List<AppliedGroup > group = MapGroup(groupMember);
+
+            AppliedPostDTO rs = new()
+            {
+                Avatar = applied.ContractorPosts.Contractor.User.Avatar,
+                BuilderID = applied.BuilderID,
+                FirstName = applied.ContractorPosts.Contractor.User.FirstName,
+                LastName = applied.ContractorPosts.Contractor.User.LastName,
+                UserID = applied.ContractorPosts.Contractor.User.Id,
+                Groups = group
+            };
+            return rs;
+        }
+        private List<AppliedGroup> MapGroup(List<GroupMember> groupMembers)
+        {
+            List<AppliedGroup> result = new();
+
+            foreach (var item in groupMembers)
+            {
+                AppliedGroup rs = new()
+                {
+                    DOB = item.DOB,
+                    IdNumber = item.IdNumber,
+                    Name = item.Name,
+                    TypeID = item.TypeID,
+                };
+                result.Add(rs);
+            }
+            return result;
+
         }
     }
 }

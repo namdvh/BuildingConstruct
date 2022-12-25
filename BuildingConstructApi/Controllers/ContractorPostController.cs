@@ -1,6 +1,8 @@
 ﻿using Application.System.ContractorPosts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ViewModels.ContractorPost;
 using ViewModels.Filter;
 using ViewModels.Pagination;
 
@@ -8,6 +10,7 @@ namespace BuildingConstructApi.Controllers
 {
     [Route("api/contractorpost")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class ContractorPostController : ControllerBase
     {
         private readonly IContractorPostService _contractorPostService;
@@ -32,6 +35,22 @@ namespace BuildingConstructApi.Controllers
             }
 
             var result = await _contractorPostService.GetPost(request);
+            return Ok(result);
+        }
+
+        [HttpPost("applied")]
+        public async Task<IActionResult> AppliedPost([FromBody] AppliedPostRequest request)
+        {
+            var rs = User.FindFirst("UserID").Value;
+
+            var result = await _contractorPostService.AppliedPost(request,Guid.Parse(rs));
+            return Ok(result);
+        }
+
+        [HttpGet("applied")]
+        public async Task<IActionResult> AppliedPost(int postID)
+        {
+            var result = await _contractorPostService.ViewAppliedPost(postID);
             return Ok(result);
         }
 

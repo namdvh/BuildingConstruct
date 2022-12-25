@@ -1,4 +1,5 @@
-﻿using Data.Enum;
+﻿using Data.Entities;
+using Data.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,20 +8,16 @@ using System.Threading.Tasks;
 
 namespace ViewModels.Commitment
 {
-    public class CommitmentDTO
+    public class CreateCommimentRequest
     {
-        public int CommitmentId { get; set; }
+        
 
         public string? OptionalTerm { get; set; }
 
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public Status Status { get; set; }
-
-        public string? Title { get; set; }
-
-        public string? ProjectName { get; set; }
-        public int? PostID { get; set; }
+        public int PostContractorID { get; set; }
+        public int BuilderID { get; set; }
 
     }
 }

@@ -17,5 +17,8 @@ namespace Application.System.Commitments
         Task<BaseResponse<DetailCommitmentDTO>> GetDetailCommitment(int commitmenntID );
 
         Task<BaseResponse<string>> UpdateCommitment(Guid userID,int commitmenntID );
+
+        Task<BaseResponse<string>> CreateCommitment(CreateCommimentRequest request,Guid ContractorID);
     }
 }
+ 
