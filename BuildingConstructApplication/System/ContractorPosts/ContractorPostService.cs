@@ -205,9 +205,9 @@ namespace Application.System.ContractorPosts
                 }
                 final.Add(type);
             }
+            var t = new TypeModels();
             foreach (var i in rsSkill.Where(x => x.Skills.TypeId == null).ToList())
             {
-                var t = new TypeModels();
                 t.SkillArr = new();
                 var skillArr = new SkillArr();
                 skillArr.id=i.SkillID;
