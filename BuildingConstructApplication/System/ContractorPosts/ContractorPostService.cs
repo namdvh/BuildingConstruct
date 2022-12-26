@@ -261,23 +261,23 @@ namespace Application.System.ContractorPosts
             var user = await _context.Users.Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
 
             //Group is not null
-            if (request.Groups is not null)
+            if (request.GroupMember is not null)
             {
                 Group group = new()
                 {
                     BuilderID = user.BuilderId.Value,
-                    PostID = request.PostContractorID
+                    PostID = request.PostId
                 };
 
                 await _context.Groups.AddAsync(group);
                 await _context.SaveChangesAsync();
 
-                foreach (var item in request.Groups)
+                foreach (var item in request.GroupMember)
                 {
                     GroupMember groupMember = new()
                     {
                         DOB = item.DOB,
-                        IdNumber = item.IdNumber,
+                        IdNumber = item.VerifyId,
                         Name = item.Name,
                         TypeID = item.TypeID,
                         GroupId = group.Id
@@ -290,7 +290,7 @@ namespace Application.System.ContractorPosts
                 AppliedPost applied = new()
                 {
                     BuilderID = user.BuilderId.Value,
-                    PostID = request.PostContractorID,
+                    PostID = request.PostId,
                     GroupID = group.Id,
                     Status = Status.NOT_RESPONSE,
                 };
@@ -304,7 +304,7 @@ namespace Application.System.ContractorPosts
                 AppliedPost applied = new()
                 {
                     BuilderID = user.BuilderId.Value,
-                    PostID = request.PostContractorID,
+                    PostID = request.PostId,
                     Status = Status.NOT_RESPONSE,
                 };
 
@@ -396,7 +396,7 @@ namespace Application.System.ContractorPosts
 
             var totalRecord = await _context.AppliedPosts.Where(x => x.PostID == postID).CountAsync();
 
-            List<AppliedPostDTO> appliedPostDTOs = new List<AppliedPostDTO>();
+            List<AppliedPostDTO> appliedPostDTOs = new();
             foreach (var x in appliedPost)
             {
                 var flag = await _context.Groups.Where(x => x.BuilderID == x.BuilderID && x.PostID == postID).FirstOrDefaultAsync();
@@ -473,7 +473,7 @@ namespace Application.System.ContractorPosts
                 AppliedGroup rs = new()
                 {
                     DOB = item.DOB,
-                    IdNumber = item.IdNumber,
+                    VerifyId = item.IdNumber,
                     Name = item.Name,
                     TypeID = item.TypeID,
                 };

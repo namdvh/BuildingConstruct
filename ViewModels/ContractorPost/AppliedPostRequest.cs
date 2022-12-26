@@ -8,8 +8,8 @@ namespace ViewModels.ContractorPost
 {
     public class AppliedPostRequest
     {
-        public int PostContractorID { get; set; }   
-        public List<AppliedGroup>? Groups { get; set; } 
+        public int PostId { get; set; }   
+        public List<AppliedGroup>? GroupMember { get; set; } 
     }
 
     public class AppliedGroup
@@ -17,6 +17,6 @@ namespace ViewModels.ContractorPost
         public string Name { get; set; }
         public DateTime DOB { get; set; }
         public int TypeID { get; set; }
-        public string IdNumber { get; set; }
+        public string VerifyId { get; set; }
     }
 }
