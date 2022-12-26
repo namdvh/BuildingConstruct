@@ -10,14 +10,10 @@ namespace ViewModels.Commitment
 {
     public class CreateCommimentRequest
     {
-        
-
         public string? OptionalTerm { get; set; }
-
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
         public int PostContractorID { get; set; }
         public int BuilderID { get; set; }
+        public string? Salaries { get; set; }
 
     }
 }

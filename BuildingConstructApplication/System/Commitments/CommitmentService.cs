@@ -139,7 +139,7 @@ namespace Application.System.Commitments
                     StartDate = item.Commitment.StartDate,
                     Status = item.Commitment.Status,
                     Title = item.ContractorPosts.Title,
-                    PostID=item.ContractorPosts.Id
+                    PostID = item.ContractorPosts.Id
                 };
                 result.Add(dto);
             }
@@ -153,14 +153,17 @@ namespace Application.System.Commitments
             {
                 FirstName = author.FirstName,
                 LastName = author.LastName,
-                IDNumber = author.IdNumber
+                IDNumber = author.IdNumber,
+                PhoneNumber = author.PhoneNumber
+
             };
 
             CommitmentUser userB = new()
             {
                 FirstName = builder.FirstName,
                 LastName = builder.LastName,
-                IDNumber = builder.IdNumber
+                IDNumber = builder.IdNumber,
+                PhoneNumber = builder.PhoneNumber
             };
 
 
@@ -171,12 +174,12 @@ namespace Application.System.Commitments
                 Status = postCommitment.Status,
                 OptionalTerm = postCommitment.Commitment.OptionalTerm,
                 ProjectName = postCommitment.ContractorPosts.ProjectName,
-                Salaries= postCommitment.ContractorPosts.Salaries,
+                Salaries = postCommitment.ContractorPosts.Salaries,
                 StartDate = postCommitment.Commitment.StartDate,
                 Title = postCommitment.ContractorPosts.Title,
-                PostID=postCommitment.ContractorPosts.Id,
-                PartyA =userA,
-                PartyB =userB
+                PostID = postCommitment.ContractorPosts.Id,
+                PartyA = userA,
+                PartyB = userB
 
             };
             return result;
@@ -190,14 +193,16 @@ namespace Application.System.Commitments
             {
                 FirstName = author.FirstName,
                 LastName = author.LastName,
-                IDNumber = author.IdNumber
+                IDNumber = author.IdNumber,
+                PhoneNumber = author.PhoneNumber,
             };
 
             CommitmentUser userB = new()
             {
                 FirstName = builder.FirstName,
                 LastName = builder.LastName,
-                IDNumber = builder.IdNumber
+                IDNumber = builder.IdNumber,
+                PhoneNumber = builder.PhoneNumber
             };
 
             var group = MapGroup(groupMember);
@@ -215,8 +220,8 @@ namespace Application.System.Commitments
                 PostID = postCommitment.ContractorPosts.Id,
                 StartDate = postCommitment.Commitment.StartDate,
                 Title = postCommitment.ContractorPosts.Title,
-                PartyA =userA,
-                PartyB=userB,
+                PartyA = userA,
+                PartyB = userB,
                 Group = group
 
             };
@@ -284,30 +289,36 @@ namespace Application.System.Commitments
         {
             BaseResponse<string> response;
             PostCommitment builder;
-
-            Commitment commitment = new()
+            var post = await _context.ContractorPosts.Where(x => x.Id == request.PostContractorID).FirstOrDefaultAsync();
+            if (post != null)
             {
-                EndDate = request.EndDate,
-                StartDate = request.StartDate,
-                Status = Status.NOT_RESPONSE,
-                OptionalTerm = request.OptionalTerm,
 
-            };
+                Commitment commitment = new()
+                {
+                    EndDate = post.EndDate,
+                    StartDate = post.StarDate,
+                    Status = Status.NOT_RESPONSE,
+                    OptionalTerm = request.OptionalTerm,
+                    Salaries = request.Salaries,
 
-            await _context.Commitments.AddAsync(commitment);
-            await _context.SaveChangesAsync();
+                };
 
-            PostCommitment ctor = new()
-            {
-                CommitmentID = commitment.Id,
-                IsAuthor = true,
-                PostID = request.PostContractorID,
-                UserID = ContractorID,
-                Status = Status.NOT_RESPONSE,
-            };
+                await _context.Commitments.AddAsync(commitment);
+                await _context.SaveChangesAsync();
 
-            await _context.PostCommitments.AddAsync(ctor);
-            await _context.SaveChangesAsync();
+                PostCommitment ctor = new()
+                {
+                    CommitmentID = commitment.Id,
+                    IsAuthor = true,
+                    PostID = request.PostContractorID,
+                    UserID = ContractorID,
+                    Status = Status.SUCCESS,
+                };
+
+                await _context.PostCommitments.AddAsync(ctor);
+                await _context.SaveChangesAsync();
+            }
+
 
             var group = await _context.Groups.Where(x => x.BuilderID == request.BuilderID && x.PostID == request.PostContractorID).FirstOrDefaultAsync();
             var builderID = await _context.Users.Where(x => x.BuilderId == request.BuilderID).Select(x => x.Id).FirstOrDefaultAsync();
