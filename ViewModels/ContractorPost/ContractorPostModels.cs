@@ -22,15 +22,13 @@ namespace ViewModels.ContractorPost
         public DateTime EndDate { get; set; }
 
         public Place Place { get; set; }
-        public List<int> ProductId { get; set; }
-        //public List<ContractorPostProductModels> contractorPostProducts { get; set; }
+        public List<int> ProductSystemId { get; set; }
 
         public PostCategories PostCategories { get; set; }
 
-        public string? Salaries { get; set; }
+        public string Salaries { get; set; }
 
         public int NumberPeople { get; set; }
-        //public string? Image { get; set; }
 
         public DateTime LastModifiedAt { get; set; }
     }

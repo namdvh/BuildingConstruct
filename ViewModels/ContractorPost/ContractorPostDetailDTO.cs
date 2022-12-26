@@ -26,7 +26,7 @@ namespace ViewModels.ContractorPost
 
         public PostCategories PostCategories { get; set; }
 
-        public string? Salaries { get; set; }
+        public string Salaries { get; set; }
 
         public int NumberPeople { get; set; }
         public int PeopleRemained { get; set; }

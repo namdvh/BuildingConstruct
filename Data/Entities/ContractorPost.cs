@@ -28,7 +28,7 @@ namespace Data.Entities
 
         public PostCategories PostCategories { get; set; }
 
-        public string? Salaries { get; set; }
+        public string Salaries { get; set; }
 
         public int ViewCount { get; set; }
 

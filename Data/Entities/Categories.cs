@@ -15,5 +15,6 @@ namespace Data.Entities
         public Enum.TypeEnum Type { get; set; }
 
         public List<ProductCategories> ProductCategories { get; set; }
+        public List<ProductSystemCategories> ProductSystemCategories { get; set; }
     }
 }

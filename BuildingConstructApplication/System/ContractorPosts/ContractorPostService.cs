@@ -55,9 +55,9 @@ namespace Application.System.ContractorPosts
             await _context.SaveChangesAsync();
             var id = contractorPost.Id;
             var cPostProduct = new ContractorPostProduct();
-            foreach (var item in contractorPostDTO.ProductId)
+            foreach (var item in contractorPostDTO.ProductSystemId)
             {
-                cPostProduct.ProductID = item;
+                cPostProduct.ProductSystemID = item;
                 cPostProduct.ContractorPostID = contractorPost.Id;
                 _context.ContractorPostProducts.Add(cPostProduct);
                 _context.SaveChanges();
@@ -158,7 +158,7 @@ namespace Application.System.ContractorPosts
         }
         private async Task<ContractorPostDetailDTO> MapToDetailDTO(ContractorPost post)
         {
-            var product =await _context.ContractorPostProducts.Include(x => x.Products).Where(x => x.ContractorPostID == post.Id).Select(x => x.ProductID).ToListAsync();
+            var product =await _context.ContractorPostProducts.Include(x => x.ProductSystem).Where(x => x.ContractorPostID == post.Id).Select(x => x.ProductSystemID).ToListAsync();
             var userId =await _context.ContractorPostProducts.Include(x => x.ContractorPost).Where(x => x.ContractorPostID == post.Id).Select(x => x.ContractorPost.CreateBy).FirstOrDefaultAsync();
             ContractorPostDetailDTO postDTO = new()
             {
@@ -224,21 +224,18 @@ namespace Application.System.ContractorPosts
         }
         private async Task<List<ContractorPostProductDTO>> GetProductFromPost(int postID)
         {
-            var results =await _context.ContractorPostProducts.Include(x => x.Products).Where(x => x.ContractorPostID == postID).ToListAsync();
+            var results =await _context.ContractorPostProducts.Include(x => x.ProductSystem).Where(x => x.ContractorPostID == postID).ToListAsync();
 
             var final = new List<ContractorPostProductDTO>();
 
             foreach (var x in results)
             {
                 ContractorPostProductDTO dto = new();
-                dto.Id = x.ProductID;
-                dto.Name = x.Products.Name;
-                dto.Brand = x.Products.Brand;
-                dto.Description = x.Products.Description;
-                dto.UnitPrice = x.Products.UnitPrice;
-                dto.UnitInStock = x.Products.UnitInStock;
-                dto.MaterialStore = x.Products.MaterialStore;
-                dto.ProductCategories = x.Products.ProductCategories;
+                dto.Id = x.ProductSystemID;
+                dto.Name = x.ProductSystem.Name;
+                dto.Brand = x.ProductSystem.Brand;
+                dto.Description = x.ProductSystem.Description;
+                dto.ProductSystemCategories = x.ProductSystem.ProductSystemCategories;
                 final.Add(dto);
             }
             return final;

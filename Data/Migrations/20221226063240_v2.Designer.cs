@@ -4,6 +4,7 @@ using Data.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(BuildingConstructDbContext))]
-    partial class BuildingConstructDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221226063240_v2")]
+    partial class v2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -314,9 +316,14 @@ namespace Data.Migrations
                     b.Property<int>("ContractorPostID")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ProductsId")
+                        .HasColumnType("int");
+
                     b.HasKey("ProductSystemID", "ContractorPostID");
 
                     b.HasIndex("ContractorPostID");
+
+                    b.HasIndex("ProductsId");
 
                     b.ToTable("ContractorPostProduct", (string)null);
                 });
@@ -1020,6 +1027,10 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Data.Entities.Products", null)
+                        .WithMany("ContractorPostProducts")
+                        .HasForeignKey("ProductsId");
+
                     b.Navigation("ContractorPost");
 
                     b.Navigation("ProductSystem");
@@ -1275,6 +1286,8 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.Products", b =>
                 {
+                    b.Navigation("ContractorPostProducts");
+
                     b.Navigation("ProductCategories");
                 });
 

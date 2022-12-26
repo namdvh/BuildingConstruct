@@ -22,8 +22,6 @@
 
         public MaterialStore MaterialStore { get; set; }
 
-        public List<ContractorPostProduct>? ContractorPostProducts { get; set; }
-
         public List<ProductCategories>? ProductCategories { get; set; }
 
     }
