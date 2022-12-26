@@ -205,17 +205,20 @@ namespace Application.System.ContractorPosts
                 }
                 final.Add(type);
             }
-            var t = new TypeModels();
-            foreach (var i in rsSkill.Where(x => x.Skills.TypeId == null).ToList())
+            if (rsSkill.Where(x => x.Skills.TypeId == null).ToList().Any())
             {
-                t.SkillArr = new();
-                var skillArr = new SkillArr();
-                skillArr.id=i.SkillID;
-                skillArr.name = i.Skills.Name;
-                skillArr.fromSystem = i.Skills.FromSystem;
-                skillArr.TypeId = i.Skills.TypeId;
-                t.SkillArr.Add(skillArr);
-                final.Add(t);
+                var t = new TypeModels();
+                foreach (var i in rsSkill.Where(x => x.Skills.TypeId == null).ToList())
+                {
+                    t.SkillArr = new();
+                    var skillArr = new SkillArr();
+                    skillArr.id = i.SkillID;
+                    skillArr.name = i.Skills.Name;
+                    skillArr.fromSystem = i.Skills.FromSystem;
+                    skillArr.TypeId = i.Skills.TypeId;
+                    t.SkillArr.Add(skillArr);
+                    final.Add(t);
+                }
             }
             return final;
         }
