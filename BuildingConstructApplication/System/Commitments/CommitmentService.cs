@@ -35,7 +35,7 @@ namespace Application.System.Commitments
                 .Include(x => x.ContractorPosts)
                 .Include(x => x.Commitment)
                 .Where(x => x.UserID.Equals(UserID))
-                .OrderBy(filter._orderBy + " " + orderBy)
+                .OrderBy(filter._sortBy + " " + orderBy)
                 .Skip((filter.PageNumber - 1) * filter.PageSize)
                 .Take(filter.PageSize)
                 .ToListAsync();

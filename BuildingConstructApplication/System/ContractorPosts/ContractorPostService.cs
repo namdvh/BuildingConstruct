@@ -104,7 +104,7 @@ namespace Application.System.ContractorPosts
             }
 
             var result = await query
-               .OrderBy(filter._orderBy + " " + orderBy)
+               .OrderBy(filter._sortBy + " " + orderBy)
                .Skip((filter.PageNumber - 1) * filter.PageSize)
                .Take(filter.PageSize)
                .ToListAsync();
@@ -258,10 +258,10 @@ namespace Application.System.ContractorPosts
         {
             BaseResponse<string> response;
 
-            var user =await _context.Users.Where(x=>x.Id.Equals(userID)).FirstOrDefaultAsync();
+            var user = await _context.Users.Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
 
             //Group is not null
-            if(request.Groups is not null)
+            if (request.Groups is not null)
             {
                 Group group = new()
                 {
@@ -280,7 +280,7 @@ namespace Application.System.ContractorPosts
                         IdNumber = item.IdNumber,
                         Name = item.Name,
                         TypeID = item.TypeID,
-                        GroupId=group.Id
+                        GroupId = group.Id
                     };
 
                     await _context.GroupMembers.AddAsync(groupMember);
@@ -354,23 +354,53 @@ namespace Application.System.ContractorPosts
             return result;
         }
 
-        public async Task<BaseResponse<List<AppliedPostDTO>>> ViewAppliedPost(int postID)
+        public async Task<BasePagination<List<AppliedPostDTO>>> ViewAppliedPost(int postID, PaginationFilter filter)
         {
-            BaseResponse<List<AppliedPostDTO>> response;
+            BasePagination<List<AppliedPostDTO>> response;
+            var orderBy = filter._orderBy.ToString();
+
+            orderBy = orderBy switch
+            {
+                "1" => "ascending",
+                "-1" => "descending",
+                _ => orderBy
+            };
+
+            if (string.IsNullOrEmpty(filter._sortBy))
+            {
+                filter._sortBy = "PostID";
+            }
+
 
             var appliedPost = await _context.AppliedPosts
-                .Include(x=>x.ContractorPosts)
-                    .ThenInclude(x=>x.Contractor)
-                        .ThenInclude(x=>x.User)
+                .Include(x => x.ContractorPosts)
+                    .ThenInclude(x => x.Contractor)
+                        .ThenInclude(x => x.User)
                 .Where(x => x.PostID == postID)
+                .OrderBy(filter._sortBy + " " + orderBy)
+                .Skip((filter.PageNumber - 1) * filter.PageSize)
+                .Take(filter.PageSize)
                 .ToListAsync();
 
 
-            List<AppliedPostDTO> appliedPostDTOs= new List<AppliedPostDTO>();
+            if (!appliedPost.Any())
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.EMPTY_MESSAGE,
+                    Data = new(),
+                };
+                return response;
+            }
+
+            var totalRecord = await _context.AppliedPosts.Where(x => x.PostID == postID).CountAsync();
+
+            List<AppliedPostDTO> appliedPostDTOs = new List<AppliedPostDTO>();
             foreach (var x in appliedPost)
             {
                 var flag = await _context.Groups.Where(x => x.BuilderID == x.BuilderID && x.PostID == postID).FirstOrDefaultAsync();
-                if(flag == null)
+                if (flag == null)
                 {
                     appliedPostDTOs.Add(MapToAppliedPostDTO(x));
                 }
@@ -379,13 +409,27 @@ namespace Application.System.ContractorPosts
                     var groups = await _context.GroupMembers.Where(x => x.GroupId == flag.Id).ToListAsync();
                     appliedPostDTOs.Add(MapToAppliedPostGroupDTO(x, groups));
                 }
+
             }
+            double totalPages;
+
+            totalPages = ((double)totalRecord / (double)filter.PageSize);
+
+            var roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
+            Pagination pagination = new()
+            {
+                CurrentPage = filter.PageNumber,
+                PageSize = filter.PageSize,
+                TotalPages = roundedTotalPages,
+                TotalRecords = totalRecord
+            };
 
             response = new()
             {
                 Code = BaseCode.SUCCESS,
                 Message = BaseCode.SUCCESS_MESSAGE,
-                Data = appliedPostDTOs
+                Data = appliedPostDTOs,
+                Pagination=pagination
             };
 
             return response;
@@ -407,7 +451,7 @@ namespace Application.System.ContractorPosts
 
         private AppliedPostDTO MapToAppliedPostGroupDTO(AppliedPost applied, List<GroupMember> groupMember)
         {
-            List<AppliedGroup > group = MapGroup(groupMember);
+            List<AppliedGroup> group = MapGroup(groupMember);
 
             AppliedPostDTO rs = new()
             {

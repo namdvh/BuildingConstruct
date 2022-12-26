@@ -47,10 +47,11 @@ namespace BuildingConstructApi.Controllers
             return Ok(result);
         }
 
-        [HttpGet("applied")]
-        public async Task<IActionResult> AppliedPost(int postID)
+        [HttpGet("applied/{id}")]
+        public async Task<IActionResult> AppliedPost(int id, [FromQuery] PaginationFilter request)
         {
-            var result = await _contractorPostService.ViewAppliedPost(postID);
+            var validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
+            var result = await _contractorPostService.ViewAppliedPost(id,validFilter);
             return Ok(result);
         }
 
