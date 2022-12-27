@@ -11,7 +11,6 @@ namespace Data.Entities
         public int CategoriesID { get; set; }
 
         public int ProductSystemID { get; set; }
-
         public ProductSystem ProductSystem { get; set; }
 
         public Categories Categories { get; set; }

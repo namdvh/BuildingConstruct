@@ -23,6 +23,6 @@ namespace ViewModels.ContractorPost
 
         public string? Brand { get; set; }
 
-        public List<ProductSystemCategories>? ProductSystemCategories { get; set; }
+        public Data.Entities.Categories? Categories { get; set; }
     }
 }

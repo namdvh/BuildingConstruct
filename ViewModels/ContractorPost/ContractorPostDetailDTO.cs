@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ViewModels.Users;
 
 namespace ViewModels.ContractorPost
 {
@@ -22,7 +23,7 @@ namespace ViewModels.ContractorPost
         public DateTime EndDate { get; set; }
 
         public Place Place { get; set; }
-        public List<ContractorPostProductDTO> Products { get; set; }
+        public List<ContractorPostProductDTO> ProductSystem { get; set; }
 
         public PostCategories PostCategories { get; set; }
 
@@ -33,5 +34,6 @@ namespace ViewModels.ContractorPost
 
         public DateTime LastModifiedAt { get; set; }
         public Guid CreatedBy { get; set; }
+        public UserModelsDTO User { get; set; }
     }
 }
