@@ -317,55 +317,63 @@ namespace Application.System.Commitments
 
                 await _context.PostCommitments.AddAsync(ctor);
                 await _context.SaveChangesAsync();
-            }
-
-
-            var group = await _context.Groups.Where(x => x.BuilderID == request.BuilderID && x.PostID == request.PostContractorID).FirstOrDefaultAsync();
-            var builderID = await _context.Users.Where(x => x.BuilderId == request.BuilderID).Select(x => x.Id).FirstOrDefaultAsync();
-            if (group != null)
-            {
-                builder = new()
+                var group = await _context.Groups.Where(x => x.BuilderID == request.BuilderID && x.PostID == request.PostContractorID).FirstOrDefaultAsync();
+                var builderID = await _context.Users.Where(x => x.BuilderId == request.BuilderID).Select(x => x.Id).FirstOrDefaultAsync();
+                if (group != null)
                 {
-                    CommitmentID = commitment.Id,
-                    IsAuthor = false,
-                    PostID = request.PostContractorID,
-                    UserID = builderID,
-                    Status = Status.NOT_RESPONSE,
-                    GroupID = group.Id,
-                };
+                    builder = new()
+                    {
+                        CommitmentID = commitment.Id,
+                        IsAuthor = false,
+                        PostID = request.PostContractorID,
+                        UserID = builderID,
+                        Status = Status.NOT_RESPONSE,
+                        GroupID = group.Id,
+                    };
+                }
+                else
+                {
+                    builder = new()
+                    {
+                        CommitmentID = commitment.Id,
+                        IsAuthor = false,
+                        PostID = request.PostContractorID,
+                        UserID = builderID,
+                        Status = Status.NOT_RESPONSE,
+                    };
+                }
+                _context.ChangeTracker.Clear();
+                await _context.PostCommitments.AddAsync(builder);
+                var rs = await _context.SaveChangesAsync();
+                if (rs > 0)
+                {
+                    response = new()
+                    {
+                        Code = BaseCode.SUCCESS,
+                        Message = BaseCode.SUCCESS_MESSAGE,
+                        Data = null
+                    };
+                }
+                else
+                {
+                    response = new()
+                    {
+                        Code = BaseCode.ERROR,
+                        Message = BaseCode.ERROR_MESSAGE,
+                        Data = null
+                    };
+                }
+                return response;
             }
             else
-            {
-                builder = new()
-                {
-                    CommitmentID = commitment.Id,
-                    IsAuthor = false,
-                    PostID = request.PostContractorID,
-                    UserID = builderID,
-                    Status = Status.NOT_RESPONSE,
-                };
-            }
-            _context.ChangeTracker.Clear();
-            await _context.PostCommitments.AddAsync(builder);
-            var rs = await _context.SaveChangesAsync();
-            if (rs > 0)
             {
                 response = new()
                 {
                     Code = BaseCode.SUCCESS,
-                    Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = null
+                    Message = BaseCode.NOTFOUND_MESSAGE + "POST"
                 };
             }
-            else
-            {
-                response = new()
-                {
-                    Code = BaseCode.ERROR,
-                    Message = BaseCode.ERROR_MESSAGE,
-                    Data = null
-                };
-            }
+
             return response;
 
 

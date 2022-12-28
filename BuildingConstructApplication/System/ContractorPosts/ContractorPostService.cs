@@ -258,7 +258,20 @@ namespace Application.System.ContractorPosts
         {
             BaseResponse<string> response;
 
+
+
             var user = await _context.Users.Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
+            var alreadyApplied = await _context.AppliedPosts.Where(x => x.BuilderID == user.BuilderId && x.PostID == request.PostId).FirstOrDefaultAsync();
+
+            if(alreadyApplied != null)
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = "You have already applied to the post"
+                };
+                return response;
+            }
 
             //Group is not null
             if (request.GroupMember is not null)
@@ -373,13 +386,13 @@ namespace Application.System.ContractorPosts
 
 
             var appliedPost = await _context.AppliedPosts
-                .Include(x => x.ContractorPosts)
-                    .ThenInclude(x => x.Contractor)
-                        .ThenInclude(x => x.User)
+                .Include(x => x.Builder)
+                    .ThenInclude(x => x.User)
                 .Where(x => x.PostID == postID)
                 .OrderBy(filter._sortBy + " " + orderBy)
                 .Skip((filter.PageNumber - 1) * filter.PageSize)
                 .Take(filter.PageSize)
+                .AsNoTracking()
                 .ToListAsync();
 
 
@@ -407,7 +420,7 @@ namespace Application.System.ContractorPosts
                 else
                 {
                     var groups = await _context.GroupMembers.Where(x => x.GroupId == flag.Id).ToListAsync();
-                    appliedPostDTOs.Add(MapToAppliedPostGroupDTO(x, groups));
+                    appliedPostDTOs.Add( MapToAppliedPostGroupDTO(x, groups));
                 }
 
             }
@@ -440,26 +453,26 @@ namespace Application.System.ContractorPosts
         {
             AppliedPostDTO rs = new()
             {
-                Avatar = applied.ContractorPosts.Contractor.User.Avatar,
+                Avatar = applied.Builder.User.Avatar,
                 BuilderID = applied.BuilderID,
-                FirstName = applied.ContractorPosts.Contractor.User.FirstName,
-                LastName = applied.ContractorPosts.Contractor.User.LastName,
-                UserID = applied.ContractorPosts.Contractor.User.Id
+                FirstName = applied.Builder.User.FirstName,
+                LastName = applied.Builder.User.LastName,
+                UserID = applied.Builder.User.Id
             };
             return rs;
         }
 
-        private AppliedPostDTO MapToAppliedPostGroupDTO(AppliedPost applied, List<GroupMember> groupMember)
+        private  AppliedPostDTO MapToAppliedPostGroupDTO(AppliedPost applied, List<GroupMember> groupMember)
         {
             List<AppliedGroup> group = MapGroup(groupMember);
 
             AppliedPostDTO rs = new()
             {
-                Avatar = applied.ContractorPosts.Contractor.User.Avatar,
+                Avatar = applied.Builder.User.Avatar,
                 BuilderID = applied.BuilderID,
-                FirstName = applied.ContractorPosts.Contractor.User.FirstName,
-                LastName = applied.ContractorPosts.Contractor.User.LastName,
-                UserID = applied.ContractorPosts.Contractor.User.Id,
+                FirstName = applied.Builder.User.FirstName,
+                LastName = applied.Builder.User.LastName,
+                UserID = applied.Builder.User.Id,
                 Groups = group
             };
             return rs;
