@@ -412,7 +412,7 @@ namespace Application.System.ContractorPosts
             List<AppliedPostDTO> appliedPostDTOs = new();
             foreach (var x in appliedPost)
             {
-                var flag = await _context.Groups.Where(x => x.BuilderID == x.BuilderID && x.PostID == postID).FirstOrDefaultAsync();
+                var flag = await _context.Groups.Where(group => group.BuilderID == x.BuilderID && group.PostID == postID).FirstOrDefaultAsync();
                 if (flag == null)
                 {
                     appliedPostDTOs.Add(MapToAppliedPostDTO(x));
