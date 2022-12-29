@@ -16,7 +16,7 @@ namespace Data.Entities
 
         public List<BuilderPost>? Posts { get; set; }
 
-        public int? TypeID { get; set; }
+        public Guid? TypeID { get; set; }
 
         public Type Type { get; set; }
         

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(BuildingConstructDbContext))]
-    [Migration("20221226063240_v2")]
-    partial class v2
+    [Migration("20221229072112_v1")]
+    partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -67,8 +67,8 @@ namespace Data.Migrations
                     b.Property<int?>("Place")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TypeID")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("TypeID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -139,8 +139,8 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.BuilderPostType", b =>
                 {
-                    b.Property<int>("TypeID")
-                        .HasColumnType("int");
+                    b.Property<Guid>("TypeID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("BuilderPostID")
                         .HasColumnType("int");
@@ -316,14 +316,9 @@ namespace Data.Migrations
                     b.Property<int>("ContractorPostID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProductsId")
-                        .HasColumnType("int");
-
                     b.HasKey("ProductSystemID", "ContractorPostID");
 
                     b.HasIndex("ContractorPostID");
-
-                    b.HasIndex("ProductsId");
 
                     b.ToTable("ContractorPostProduct", (string)null);
                 });
@@ -345,8 +340,8 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.ContractorPostType", b =>
                 {
-                    b.Property<int>("TypeID")
-                        .HasColumnType("int");
+                    b.Property<Guid>("TypeID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("ContractorPostID")
                         .HasColumnType("int");
@@ -401,8 +396,8 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TypeID")
-                        .HasColumnType("int");
+                    b.Property<Guid>("TypeID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -622,8 +617,8 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TypeId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("TypeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -634,11 +629,9 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.Type", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1027,10 +1020,6 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Data.Entities.Products", null)
-                        .WithMany("ContractorPostProducts")
-                        .HasForeignKey("ProductsId");
-
                     b.Navigation("ContractorPost");
 
                     b.Navigation("ProductSystem");
@@ -1286,8 +1275,6 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.Products", b =>
                 {
-                    b.Navigation("ContractorPostProducts");
-
                     b.Navigation("ProductCategories");
                 });
 

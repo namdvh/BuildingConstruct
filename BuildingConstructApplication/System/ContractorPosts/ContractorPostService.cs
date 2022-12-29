@@ -69,7 +69,7 @@ namespace Application.System.ContractorPosts
                 var rType = new Data.Entities.ContractorPostType();
                 if (item.id != null)
                 {
-                    rType.TypeID = (int)item.id;
+                    rType.TypeID = (Guid)item.id;
                     rType.ContractorPostID = id;
                     _context.ContractorPostTypes.Add(rType);
                     _context.SaveChanges();
@@ -101,7 +101,9 @@ namespace Application.System.ContractorPosts
                         var rs = await _context.Skills.Include(x => x.Type).Where(x => x.Id == o.id).ToListAsync();
                         foreach (var c in rs)
                         {
-                            if (i.id == c.TypeId)
+                            var guid = i.id.ToString();
+                            var cid = c.TypeId.ToString();
+                            if (guid.Equals(cid))
                             {
 
                                 var cPostSkill = new ContractorPostSkill();
@@ -195,7 +197,7 @@ namespace Application.System.ContractorPosts
                 type.SkillArr = new();
                 foreach (var i in rsSkill)
                 {
-                    if (i.Skills.TypeId == item.TypeID)
+                    if (i.Skills.TypeId.Equals(item.TypeID))
                     {
                         var skillArr = new SkillArr();
                         skillArr.id = i.SkillID;

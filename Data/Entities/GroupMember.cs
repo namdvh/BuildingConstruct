@@ -12,7 +12,7 @@ namespace Data.Entities
         public string Name { get; set; }
         public DateTime DOB { get; set; }
 
-        public int TypeID { get; set; }
+        public Guid TypeID { get; set; }
         public Type Type { get; set; }
 
         public string IdNumber { get; set; }

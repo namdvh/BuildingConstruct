@@ -65,8 +65,8 @@ namespace Data.Migrations
                     b.Property<int?>("Place")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TypeID")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("TypeID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -137,8 +137,8 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.BuilderPostType", b =>
                 {
-                    b.Property<int>("TypeID")
-                        .HasColumnType("int");
+                    b.Property<Guid>("TypeID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("BuilderPostID")
                         .HasColumnType("int");
@@ -338,8 +338,8 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.ContractorPostType", b =>
                 {
-                    b.Property<int>("TypeID")
-                        .HasColumnType("int");
+                    b.Property<Guid>("TypeID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("ContractorPostID")
                         .HasColumnType("int");
@@ -394,8 +394,8 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TypeID")
-                        .HasColumnType("int");
+                    b.Property<Guid>("TypeID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -615,8 +615,8 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TypeId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("TypeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -627,11 +627,9 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.Type", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
