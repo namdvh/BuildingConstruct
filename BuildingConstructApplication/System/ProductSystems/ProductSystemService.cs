@@ -65,6 +65,8 @@ namespace Application.System.ProductSystems
             StringBuilder categoriesSearch = new();
 
             var data = await query
+                .Include(x => x.ProductSystemCategories).ThenInclude(x=>x.Categories)
+                .AsNoTracking()
                 .Where(x => x.FromSystem == true)
                .OrderBy(filter._sortBy + " " + orderBy)
                .Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -121,7 +123,11 @@ namespace Application.System.ProductSystems
                 dto.FromSystem = item.FromSystem;
                 dto.Brand = item.Brand;
                 dto.Image = item.Image;
-                dto.ProductSystemCategories = MapListDTO(item.ProductSystemCategories);
+                dto.Categories = new();
+                foreach(var i in item.ProductSystemCategories)
+                {
+                    dto.Categories.Add(i.Categories);
+                }
                 result.Add(dto);
             }
             return result;
