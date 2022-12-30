@@ -12,7 +12,7 @@ namespace ViewModels.Commitment
 
         public DateTime DOB { get; set; }
 
-        public int TypeID { get; set; }
+        public Guid TypeID { get; set; }
 
         public string IdNumber { get; set; }
     }
