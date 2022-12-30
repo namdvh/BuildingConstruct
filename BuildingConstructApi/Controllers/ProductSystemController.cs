@@ -40,7 +40,7 @@ namespace BuildingConstructApi.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetAllProductSystems([FromQuery] PaginationFilter filter)
         {
-            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize, "id", filter._orderBy);
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize, "Id", filter._orderBy);
             var rs = await _productSystemService.GetAllProducSystems(validFilter);
             return Ok(rs);
         }

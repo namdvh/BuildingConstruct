@@ -53,6 +53,10 @@ namespace Application.System.ProductSystems
             BasePagination<List<ProductSystemDTO>> response;
             var orderBy = filter._orderBy.ToString();
             int totalRecord;
+            if (string.IsNullOrEmpty(filter._sortBy))
+            {
+                filter._sortBy = "Id";
+            }
             orderBy = orderBy switch
             {
                 "1" => "ascending",
@@ -61,8 +65,7 @@ namespace Application.System.ProductSystems
             };
 
             IQueryable<ProductSystem> query = _context.ProductSystems;
-            StringBuilder placeSearch = new();
-            StringBuilder categoriesSearch = new();
+
 
             var data = await query
                 .Include(x => x.ProductSystemCategories).ThenInclude(x=>x.Categories)

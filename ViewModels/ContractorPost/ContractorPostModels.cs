@@ -29,7 +29,5 @@ namespace ViewModels.ContractorPost
         public string Salaries { get; set; }
 
         public int NumberPeople { get; set; }
-
-        public DateTime LastModifiedAt { get; set; }
     }
 }
