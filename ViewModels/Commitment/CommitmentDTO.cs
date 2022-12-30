@@ -20,6 +20,7 @@ namespace ViewModels.Commitment
         public string? Title { get; set; }
 
         public string? ProjectName { get; set; }
+        public int? PostID { get; set; }
 
     }
 }

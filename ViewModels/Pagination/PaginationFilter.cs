@@ -28,7 +28,7 @@ namespace ViewModels.Pagination
         {
             PageNumber = pageNumber < 1 ? 1 : pageNumber;
             PageSize = pageSize > 25 ? 25 : pageSize;
-            _sortBy = string.IsNullOrEmpty(sortBy) ? "LastModifiedAt" : sortBy;
+            _sortBy = string.IsNullOrEmpty(sortBy) ? "LastModifiedAt" : string.Empty;
             _orderBy = orderBy > 0 ? 1 : orderBy;
         }
 
@@ -37,7 +37,7 @@ namespace ViewModels.Pagination
         {
             PageNumber = pageNumber < 1 ? 1 : pageNumber;
             PageSize = pageSize > 25 ? 25 : pageSize;
-            _sortBy = string.IsNullOrEmpty(sortBy) ? "LastModifiedAt" : sortBy;
+            _sortBy = string.IsNullOrEmpty(sortBy) ? "LastModifiedAt" : string.Empty;
             _orderBy = orderBy > 0 ? 1 : orderBy;
             FilterRequest = request;
         }
