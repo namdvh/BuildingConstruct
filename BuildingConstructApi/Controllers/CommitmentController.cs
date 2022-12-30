@@ -46,6 +46,18 @@ namespace BuildingConstructApi.Controllers
             var result = await _commitmentService.GetDetailCommitment(id);
             return Ok(result);
         }
+        [HttpGet("load")]
+        public async Task<IActionResult> GetData(int postID,int builderID)
+        {
+            var userID = User.FindFirst("UserID").Value;
+
+            if (userID == null)
+            {
+                return BadRequest();
+            }
+            var result = await _commitmentService.GetDetailForCreate(postID,builderID,Guid.Parse(userID));
+            return Ok(result);
+        }
 
         [HttpPut("{commitmentID}")]
         public async Task<IActionResult> UpdateCommitment([FromRoute]int commitmentID)

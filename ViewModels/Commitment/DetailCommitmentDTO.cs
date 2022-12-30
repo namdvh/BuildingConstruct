@@ -20,6 +20,8 @@ namespace ViewModels.Commitment
         public string? Description { get; set; }
         public string? OptionalTerm { get; set; }
 
+        public string? PostSalaries { get; set; }
+
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public Status? Status { get; set; }

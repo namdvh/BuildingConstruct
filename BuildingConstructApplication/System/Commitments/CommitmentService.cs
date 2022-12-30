@@ -178,8 +178,82 @@ namespace Application.System.Commitments
                 StartDate = postCommitment.Commitment.StartDate,
                 Title = postCommitment.ContractorPosts.Title,
                 PostID = postCommitment.ContractorPosts.Id,
+                PostSalaries= postCommitment.ContractorPosts.Salaries,
                 PartyA = userA,
                 PartyB = userB
+
+            };
+            return result;
+
+        }
+        private DetailCommitmentDTO MapToDetailDTO(User author, User builder,ContractorPost post)
+        {
+            CommitmentUser userA = new()
+            {
+                FirstName = author.FirstName,
+                LastName = author.LastName,
+                IDNumber = author.IdNumber,
+                PhoneNumber = author.PhoneNumber
+
+            };
+
+            CommitmentUser userB = new()
+            {
+                FirstName = builder.FirstName,
+                LastName = builder.LastName,
+                IDNumber = builder.IdNumber,
+                PhoneNumber = builder.PhoneNumber
+            };
+
+
+            DetailCommitmentDTO result = new()
+            {
+                Description = post.Description,
+                ProjectName = post.ProjectName,
+                Salaries = post.Salaries,
+                Title = post.Title,
+                PostID = post.Id,
+                PostSalaries = post.Salaries,
+                PartyA = userA,
+                PartyB = userB
+
+            };
+            return result;
+
+        }
+        private DetailCommitmentDTO MapToDetailGroupDTO(User author, User builder, ContractorPost post, List<GroupMember> groupMember)
+        {
+            CommitmentUser userA = new()
+            {
+                FirstName = author.FirstName,
+                LastName = author.LastName,
+                IDNumber = author.IdNumber,
+                PhoneNumber = author.PhoneNumber
+
+            };
+
+            CommitmentUser userB = new()
+            {
+                FirstName = builder.FirstName,
+                LastName = builder.LastName,
+                IDNumber = builder.IdNumber,
+                PhoneNumber = builder.PhoneNumber
+            };
+            var group = MapGroup(groupMember);
+
+
+            DetailCommitmentDTO result = new()
+            {
+                Description = post.Description,
+                ProjectName = post.ProjectName,
+                Salaries = post.Salaries,
+                Title = post.Title,
+                PostID = post.Id,
+                PostSalaries = post.Salaries,
+                PartyA = userA,
+                PartyB = userB,
+                Group = group
+
 
             };
             return result;
@@ -378,5 +452,40 @@ namespace Application.System.Commitments
 
 
         }
+
+        public async Task<BaseResponse<DetailCommitmentDTO>> GetDetailForCreate(int postID, int builderId, Guid userID)
+        {
+            BaseResponse<DetailCommitmentDTO> response;
+            List<DetailCommitmentDTO> ls = new();
+            bool isInGroup = false;
+
+            var post = await _context.ContractorPosts.Where(x => x.Id == postID).FirstOrDefaultAsync();
+            var builder = await _context.Users.Where(x=>x.BuilderId==builderId).Include(x=>x.Builder).FirstOrDefaultAsync();
+            var contractor = await _context.Users.Include(x=>x.Contractor).Where(x=>x.Id.Equals(userID)).FirstOrDefaultAsync();
+
+
+            var flag = await _context.Groups.Where(x => x.BuilderID == builder.Builder.Id && x.PostID == post.Id).FirstOrDefaultAsync();
+
+            if (flag == null)
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = MapToDetailDTO(contractor,builder,post),
+                };
+            }
+            else
+            {
+                var groups = await _context.GroupMembers.Where(x => x.GroupId == flag.Id).ToListAsync();
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = MapToDetailGroupDTO(contractor, builder, post,groups),
+                };
+            }
+            return response;
+        }
+        }
     }
-}
