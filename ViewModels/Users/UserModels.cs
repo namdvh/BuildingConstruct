@@ -13,5 +13,9 @@ namespace ViewModels.Users
         public string Phone { get; set; } = string.Empty;
         public string UserName { get; set; } = string.Empty;
         public string Role { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? Avatar { get; set; }
+
     }
 }

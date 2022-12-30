@@ -11,6 +11,8 @@ namespace Application.System.Users
 {
     public interface IUserService
     {
+        public Task<BaseResponse<UserModels>> LoginGoogle(LoginGoogleRequest request);
+        public Task<BaseResponse<UserModels>> UpdateRole(UpdateRoleRequest request);
         public Task<BaseResponse<UserModels>> Login(LoginRequestDTO request);
         Task<RegisterResponseDTO> Register(RegisterRequestDTO request);
         public Task<BaseResponse<Token>> GenerateToken(UserModels request);
