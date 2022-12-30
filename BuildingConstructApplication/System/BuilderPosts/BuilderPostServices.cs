@@ -26,7 +26,7 @@ namespace Application.System.BuilderPosts
         public async Task<bool> CreateContractorPost(BuilderPostRequestDTO builderPostDTO)
         {
 
-            Claim identifierClaim = _accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+            Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
             var userID = identifierClaim.Value;
             var builderID = _context.Users.Where(x => x.Id.ToString().Equals(userID)).FirstOrDefault().BuilderId;
             var builderPost = new BuilderPost

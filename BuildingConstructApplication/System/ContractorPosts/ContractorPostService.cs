@@ -31,7 +31,7 @@ namespace Application.System.ContractorPosts
 
         public async Task<bool> CreateContractorPost(ContractorPostModels contractorPostDTO)
         {
-            Claim identifierClaim = _accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+            Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
             var userID = identifierClaim.Value;
             var contracID = _context.Users.Where(x => x.Id.ToString().Equals(userID)).FirstOrDefault().ContractorId;
 
@@ -57,6 +57,7 @@ namespace Application.System.ContractorPosts
 
             await _context.ContractorPosts.AddAsync(contractorPost);
             await _context.SaveChangesAsync();
+            //first
             var id = contractorPost.Id;
             var cPostProduct = new ContractorPostProduct();
             foreach (var item in contractorPostDTO.ProductSystemId)
@@ -64,7 +65,14 @@ namespace Application.System.ContractorPosts
                 cPostProduct.ProductSystemID = item;
                 cPostProduct.ContractorPostID = contractorPost.Id;
                 _context.ContractorPostProducts.Add(cPostProduct);
-                _context.SaveChanges();
+                var rs = _context.SaveChanges();
+                //second
+                if (rs < 0)
+                {
+                     _context.Remove(contractorPost);
+                    return false;
+
+                }
             }
             var type = contractorPostDTO.type;
             foreach (var item in type)
@@ -75,7 +83,13 @@ namespace Application.System.ContractorPosts
                     rType.TypeID = (Guid)item.id;
                     rType.ContractorPostID = id;
                     _context.ContractorPostTypes.Add(rType);
-                    _context.SaveChanges();
+                    var rs=_context.SaveChanges();
+                    if (rs < 0)
+                    {
+                        _context.Remove(contractorPost);
+                        return false;
+
+                    }
                 }
             }
 
@@ -92,11 +106,19 @@ namespace Application.System.ContractorPosts
                         rSkill.FromSystem = o.fromSystem;
                         _context.Skills.Add(rSkill);
                         _context.SaveChanges();
+
+
+
                         var cPostSkill = new ContractorPostSkill();
                         cPostSkill.ContractorPostID = id;
                         cPostSkill.SkillID = rSkill.Id;
                         _context.ContractorPostSkills.Add(cPostSkill);
-                        _context.SaveChanges();
+                        var rs = _context.SaveChanges();
+                        if (rs < 0)
+                        {
+                            _context.Remove(contractorPost);
+                            return false;
+                        }
                         flag = true;
                     }
                     else

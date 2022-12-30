@@ -31,6 +31,12 @@ namespace Application.System.Commitments
                 "-1" => "descending",
                 _ => orderBy
             };
+
+            if (string.IsNullOrEmpty(filter._sortBy))
+            {
+                filter._sortBy = "PostID";
+            }
+
             var result = await _context.PostCommitments
                 .Include(x => x.ContractorPosts)
                 .Include(x => x.Commitment)
@@ -90,6 +96,16 @@ namespace Application.System.Commitments
                 .Include(x => x.Commitment)
                 .Where(x => x.CommitmentID == commitmenntID)
                 .ToListAsync();
+
+            if (!result.Any())
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = "NOT FOUND"
+                };
+                return response;
+            }
 
             var authorID = result.Where(x => x.IsAuthor == true).Select(x => x.UserID).FirstOrDefault();
             var builderID = result.Where(x => x.IsAuthor == false).Select(x => x.UserID).FirstOrDefault();
