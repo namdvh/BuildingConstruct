@@ -8,12 +8,12 @@ namespace Data.Entities
 {
     public class Type
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public string Name { get; set; }
 
         public List<Builder>? Builder { get; set; }
-
+        public List<Skill> Skill { get; set; }
         public List<ContractorPostType>? ContractorPostTypes { get; set; }
         public List<BuilderPostType>? BuilderPostTypes { get; set; }
 

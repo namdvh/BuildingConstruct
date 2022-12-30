@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Data.Entities
@@ -12,8 +13,11 @@ namespace Data.Entities
 
         public string Name { get; set; }    
 
-        public Enum.Type Type { get; set; }
-
+        public Enum.TypeEnum Type { get; set; }
+        [JsonIgnore]
         public List<ProductCategories> ProductCategories { get; set; }
+        [JsonIgnore]
+
+        public List<ProductSystemCategories> ProductSystemCategories { get; set; }
     }
 }

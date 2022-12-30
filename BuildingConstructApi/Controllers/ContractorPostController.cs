@@ -1,10 +1,12 @@
-﻿using Application.System.ContractorPosts;
+using Application.System.ContractorPosts;
+using Data.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ViewModels.ContractorPost;
 using ViewModels.Filter;
 using ViewModels.Pagination;
+using ViewModels.Response;
 
 namespace BuildingConstructApi.Controllers
 {
@@ -19,7 +21,8 @@ namespace BuildingConstructApi.Controllers
         {
             _contractorPostService = contractorPostService;
         }
-        [HttpPost]
+
+        [HttpPost("getAll")]
         public async Task<IActionResult> GetAll([FromBody] PaginationFilter request)
         {
             var validFilter = new PaginationFilter();
@@ -70,5 +73,30 @@ namespace BuildingConstructApi.Controllers
             var result = await _contractorPostService.GetPostByViews(validFilter);
             return Ok(result);
         }
+        [HttpPost("createPost")]
+        public async Task<IActionResult> CreateContractorPost([FromBody] ContractorPostModels contractorPost)
+        {
+            BaseResponse<ContractorPostModels> response = new();
+            var rs = await _contractorPostService.CreateContractorPost(contractorPost);
+            if (rs)
+            {
+                response.Code = BaseCode.SUCCESS;
+                response.Message = "Create Post success";
+                response.Data = contractorPost;
+            }
+            else
+            {
+                response.Code = BaseCode.ERROR;
+                response.Message = "Create Post fail";
+            }
+            return Ok(response);
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPost([FromRoute]int id)
+        {
+            var rs = await _contractorPostService.GetDetailPost(id);
+            return Ok(rs);
+        }
+
     }
 }

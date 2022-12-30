@@ -14,11 +14,11 @@ namespace Data.Configuration
         public void Configure(EntityTypeBuilder<ContractorPostProduct> builder)
         {
             builder.ToTable("ContractorPostProduct");
-            builder.HasKey(x => new { x.ProductID, x.ContractorPostID });
+            builder.HasKey(x => new { x.ProductSystemID, x.ContractorPostID });
 
 
             builder.HasOne(x => x.ContractorPost).WithMany(x =>x.ContractorPostProducts).HasForeignKey(x => x.ContractorPostID);
-            builder.HasOne(x => x.Products).WithMany(x => x.ContractorPostProducts).HasForeignKey(x => x.ProductID);
+            builder.HasOne(x => x.ProductSystem).WithMany(x => x.ContractorPostProducts).HasForeignKey(x => x.ProductSystemID);
         }
     }
 }

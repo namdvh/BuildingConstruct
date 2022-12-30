@@ -10,7 +10,7 @@ namespace Data.Entities
     {
         public int BuilderPostID { get; set; }
 
-        public int TypeID { get; set; }
+        public Guid TypeID { get; set; }
 
         public BuilderPost BuilderPosts { get; set; }
 

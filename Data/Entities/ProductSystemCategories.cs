@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 
 namespace Data.Entities
 {
-    public class ContractorPostProduct
+    public class ProductSystemCategories
     {
-        public int ContractorPostID { get; set; }
+        public int CategoriesID { get; set; }
 
         public int ProductSystemID { get; set; }
-
-        public ContractorPost ContractorPost { get; set; }
-
         public ProductSystem ProductSystem { get; set; }
+
+        public Categories Categories { get; set; }
     }
 }

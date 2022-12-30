@@ -77,6 +77,23 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProductSystems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Brand = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FromSystem = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductSystems", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RoleClaims",
                 columns: table => new
                 {
@@ -107,25 +124,10 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Skills",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FromSystem = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Skills", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Types",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -219,7 +221,7 @@ namespace Data.Migrations
                     Status = table.Column<int>(type: "int", nullable: false),
                     Place = table.Column<int>(type: "int", nullable: false),
                     PostCategories = table.Column<int>(type: "int", nullable: false),
-                    Salaries = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Salaries = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ViewCount = table.Column<int>(type: "int", nullable: false),
                     NumberPeople = table.Column<int>(type: "int", nullable: false),
                     PeopeRemained = table.Column<int>(type: "int", nullable: false),
@@ -264,6 +266,30 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProductSystemCategories",
+                columns: table => new
+                {
+                    CategoriesID = table.Column<int>(type: "int", nullable: false),
+                    ProductSystemID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductSystemCategories", x => new { x.ProductSystemID, x.CategoriesID });
+                    table.ForeignKey(
+                        name: "FK_ProductSystemCategories_Categories_CategoriesID",
+                        column: x => x.CategoriesID,
+                        principalTable: "Categories",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductSystemCategories_ProductSystems_ProductSystemID",
+                        column: x => x.ProductSystemID,
+                        principalTable: "ProductSystems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Builders",
                 columns: table => new
                 {
@@ -271,7 +297,7 @@ namespace Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Experience = table.Column<int>(type: "int", nullable: true),
                     Place = table.Column<int>(type: "int", nullable: true),
-                    TypeID = table.Column<int>(type: "int", nullable: true),
+                    TypeID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreateBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -286,27 +312,23 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ContractorPostSkills",
+                name: "Skills",
                 columns: table => new
                 {
-                    ContractorPostID = table.Column<int>(type: "int", nullable: false),
-                    SkillID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FromSystem = table.Column<bool>(type: "bit", nullable: false),
+                    TypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ContractorPostSkills", x => new { x.SkillID, x.ContractorPostID });
+                    table.PrimaryKey("PK_Skills", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ContractorPostSkills_ContractorPosts_ContractorPostID",
-                        column: x => x.ContractorPostID,
-                        principalTable: "ContractorPosts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ContractorPostSkills_Skills_SkillID",
-                        column: x => x.SkillID,
-                        principalTable: "Skills",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Skills_Types_TypeId",
+                        column: x => x.TypeId,
+                        principalTable: "Types",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -314,11 +336,11 @@ namespace Data.Migrations
                 columns: table => new
                 {
                     ContractorPostID = table.Column<int>(type: "int", nullable: false),
-                    ProductID = table.Column<int>(type: "int", nullable: false)
+                    ProductSystemID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ContractorPostProduct", x => new { x.ProductID, x.ContractorPostID });
+                    table.PrimaryKey("PK_ContractorPostProduct", x => new { x.ProductSystemID, x.ContractorPostID });
                     table.ForeignKey(
                         name: "FK_ContractorPostProduct_ContractorPosts_ContractorPostID",
                         column: x => x.ContractorPostID,
@@ -326,9 +348,33 @@ namespace Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ContractorPostProduct_Products_ProductID",
-                        column: x => x.ProductID,
-                        principalTable: "Products",
+                        name: "FK_ContractorPostProduct_ProductSystems_ProductSystemID",
+                        column: x => x.ProductSystemID,
+                        principalTable: "ProductSystems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ContractorPostType",
+                columns: table => new
+                {
+                    ContractorPostID = table.Column<int>(type: "int", nullable: false),
+                    TypeID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ContractorPostType", x => new { x.TypeID, x.ContractorPostID });
+                    table.ForeignKey(
+                        name: "FK_ContractorPostType_ContractorPosts_ContractorPostID",
+                        column: x => x.ContractorPostID,
+                        principalTable: "ContractorPosts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ContractorPostType_Types_TypeID",
+                        column: x => x.TypeID,
+                        principalTable: "Types",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -385,30 +431,6 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BuilderSkills",
-                columns: table => new
-                {
-                    BuilderSkillID = table.Column<int>(type: "int", nullable: false),
-                    SkillID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BuilderSkills", x => new { x.BuilderSkillID, x.SkillID });
-                    table.ForeignKey(
-                        name: "FK_BuilderSkills_Builders_BuilderSkillID",
-                        column: x => x.BuilderSkillID,
-                        principalTable: "Builders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_BuilderSkills_Skills_SkillID",
-                        column: x => x.SkillID,
-                        principalTable: "Skills",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Group",
                 columns: table => new
                 {
@@ -441,6 +463,7 @@ namespace Data.Migrations
                     Avatar = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
                     Token = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IdNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getutcdate()"),
                     CreateBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     VerifyID = table.Column<int>(type: "int", nullable: true),
@@ -488,6 +511,102 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BuilderSkills",
+                columns: table => new
+                {
+                    BuilderSkillID = table.Column<int>(type: "int", nullable: false),
+                    SkillID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BuilderSkills", x => new { x.BuilderSkillID, x.SkillID });
+                    table.ForeignKey(
+                        name: "FK_BuilderSkills_Builders_BuilderSkillID",
+                        column: x => x.BuilderSkillID,
+                        principalTable: "Builders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BuilderSkills_Skills_SkillID",
+                        column: x => x.SkillID,
+                        principalTable: "Skills",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ContractorPostSkills",
+                columns: table => new
+                {
+                    ContractorPostID = table.Column<int>(type: "int", nullable: false),
+                    SkillID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ContractorPostSkills", x => new { x.SkillID, x.ContractorPostID });
+                    table.ForeignKey(
+                        name: "FK_ContractorPostSkills_ContractorPosts_ContractorPostID",
+                        column: x => x.ContractorPostID,
+                        principalTable: "ContractorPosts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ContractorPostSkills_Skills_SkillID",
+                        column: x => x.SkillID,
+                        principalTable: "Skills",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BuilderPostSkill",
+                columns: table => new
+                {
+                    BuilderPostID = table.Column<int>(type: "int", nullable: false),
+                    SkillID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BuilderPostSkill", x => new { x.SkillID, x.BuilderPostID });
+                    table.ForeignKey(
+                        name: "FK_BuilderPostSkill_BuilderPosts_BuilderPostID",
+                        column: x => x.BuilderPostID,
+                        principalTable: "BuilderPosts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BuilderPostSkill_Skills_SkillID",
+                        column: x => x.SkillID,
+                        principalTable: "Skills",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BuilderPostType",
+                columns: table => new
+                {
+                    BuilderPostID = table.Column<int>(type: "int", nullable: false),
+                    TypeID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BuilderPostType", x => new { x.TypeID, x.BuilderPostID });
+                    table.ForeignKey(
+                        name: "FK_BuilderPostType_BuilderPosts_BuilderPostID",
+                        column: x => x.BuilderPostID,
+                        principalTable: "BuilderPosts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BuilderPostType_Types_TypeID",
+                        column: x => x.TypeID,
+                        principalTable: "Types",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AppliedPost",
                 columns: table => new
                 {
@@ -526,7 +645,7 @@ namespace Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DOB = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TypeID = table.Column<int>(type: "int", nullable: false),
+                    TypeID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IdNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     GroupId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -601,6 +720,16 @@ namespace Data.Migrations
                 column: "BuilderID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BuilderPostSkill_BuilderPostID",
+                table: "BuilderPostSkill",
+                column: "BuilderPostID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BuilderPostType_BuilderPostID",
+                table: "BuilderPostType",
+                column: "BuilderPostID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Builders_TypeID",
                 table: "Builders",
                 column: "TypeID");
@@ -623,6 +752,11 @@ namespace Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_ContractorPostSkills_ContractorPostID",
                 table: "ContractorPostSkills",
+                column: "ContractorPostID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ContractorPostType_ContractorPostID",
+                table: "ContractorPostType",
                 column: "ContractorPostID");
 
             migrationBuilder.CreateIndex(
@@ -666,6 +800,16 @@ namespace Data.Migrations
                 column: "MaterialStoreID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProductSystemCategories_CategoriesID",
+                table: "ProductSystemCategories",
+                column: "CategoriesID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Skills_TypeId",
+                table: "Skills",
+                column: "TypeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_BuilderId",
                 table: "Users",
                 column: "BuilderId",
@@ -700,7 +844,10 @@ namespace Data.Migrations
                 name: "AppliedPost");
 
             migrationBuilder.DropTable(
-                name: "BuilderPosts");
+                name: "BuilderPostSkill");
+
+            migrationBuilder.DropTable(
+                name: "BuilderPostType");
 
             migrationBuilder.DropTable(
                 name: "BuilderSkills");
@@ -712,6 +859,9 @@ namespace Data.Migrations
                 name: "ContractorPostSkills");
 
             migrationBuilder.DropTable(
+                name: "ContractorPostType");
+
+            migrationBuilder.DropTable(
                 name: "GroupMember");
 
             migrationBuilder.DropTable(
@@ -719,6 +869,9 @@ namespace Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProductCategories");
+
+            migrationBuilder.DropTable(
+                name: "ProductSystemCategories");
 
             migrationBuilder.DropTable(
                 name: "RoleClaims");
@@ -739,6 +892,9 @@ namespace Data.Migrations
                 name: "UserTokens");
 
             migrationBuilder.DropTable(
+                name: "BuilderPosts");
+
+            migrationBuilder.DropTable(
                 name: "Skills");
 
             migrationBuilder.DropTable(
@@ -754,10 +910,13 @@ namespace Data.Migrations
                 name: "Users");
 
             migrationBuilder.DropTable(
+                name: "Products");
+
+            migrationBuilder.DropTable(
                 name: "Categories");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "ProductSystems");
 
             migrationBuilder.DropTable(
                 name: "Builders");

@@ -10,7 +10,7 @@ namespace Data.Entities
     {
         public int ContractorPostID { get; set; }
 
-        public int TypeID { get; set; }
+        public Guid TypeID { get; set; }
 
         public ContractorPost ContractorPost { get; set; }
 

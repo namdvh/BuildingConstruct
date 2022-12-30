@@ -65,8 +65,8 @@ namespace Data.Migrations
                     b.Property<int?>("Place")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TypeID")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("TypeID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -137,8 +137,8 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.BuilderPostType", b =>
                 {
-                    b.Property<int>("TypeID")
-                        .HasColumnType("int");
+                    b.Property<Guid>("TypeID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("BuilderPostID")
                         .HasColumnType("int");
@@ -283,6 +283,7 @@ namespace Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Salaries")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("StarDate")
@@ -307,13 +308,13 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.ContractorPostProduct", b =>
                 {
-                    b.Property<int>("ProductID")
+                    b.Property<int>("ProductSystemID")
                         .HasColumnType("int");
 
                     b.Property<int>("ContractorPostID")
                         .HasColumnType("int");
 
-                    b.HasKey("ProductID", "ContractorPostID");
+                    b.HasKey("ProductSystemID", "ContractorPostID");
 
                     b.HasIndex("ContractorPostID");
 
@@ -337,8 +338,8 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.ContractorPostType", b =>
                 {
-                    b.Property<int>("TypeID")
-                        .HasColumnType("int");
+                    b.Property<Guid>("TypeID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("ContractorPostID")
                         .HasColumnType("int");
@@ -393,8 +394,8 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TypeID")
-                        .HasColumnType("int");
+                    b.Property<Guid>("TypeID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -530,6 +531,50 @@ namespace Data.Migrations
                     b.ToTable("Products", (string)null);
                 });
 
+            modelBuilder.Entity("Data.Entities.ProductSystem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Brand")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("FromSystem")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProductSystems", (string)null);
+                });
+
+            modelBuilder.Entity("Data.Entities.ProductSystemCategories", b =>
+                {
+                    b.Property<int>("ProductSystemID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoriesID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductSystemID", "CategoriesID");
+
+                    b.HasIndex("CategoriesID");
+
+                    b.ToTable("ProductSystemCategories", (string)null);
+                });
+
             modelBuilder.Entity("Data.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
@@ -570,18 +615,21 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("TypeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TypeId");
 
                     b.ToTable("Skills", (string)null);
                 });
 
             modelBuilder.Entity("Data.Entities.Type", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -964,15 +1012,15 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Data.Entities.Products", "Products")
+                    b.HasOne("Data.Entities.ProductSystem", "ProductSystem")
                         .WithMany("ContractorPostProducts")
-                        .HasForeignKey("ProductID")
+                        .HasForeignKey("ProductSystemID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ContractorPost");
 
-                    b.Navigation("Products");
+                    b.Navigation("ProductSystem");
                 });
 
             modelBuilder.Entity("Data.Entities.ContractorPostSkill", b =>
@@ -1100,6 +1148,34 @@ namespace Data.Migrations
                     b.Navigation("MaterialStore");
                 });
 
+            modelBuilder.Entity("Data.Entities.ProductSystemCategories", b =>
+                {
+                    b.HasOne("Data.Entities.Categories", "Categories")
+                        .WithMany("ProductSystemCategories")
+                        .HasForeignKey("CategoriesID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Data.Entities.ProductSystem", "ProductSystem")
+                        .WithMany("ProductSystemCategories")
+                        .HasForeignKey("ProductSystemID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Categories");
+
+                    b.Navigation("ProductSystem");
+                });
+
+            modelBuilder.Entity("Data.Entities.Skill", b =>
+                {
+                    b.HasOne("Data.Entities.Type", "Type")
+                        .WithMany("Skill")
+                        .HasForeignKey("TypeId");
+
+                    b.Navigation("Type");
+                });
+
             modelBuilder.Entity("Data.Entities.User", b =>
                 {
                     b.HasOne("Data.Entities.Builder", "Builder")
@@ -1150,6 +1226,8 @@ namespace Data.Migrations
             modelBuilder.Entity("Data.Entities.Categories", b =>
                 {
                     b.Navigation("ProductCategories");
+
+                    b.Navigation("ProductSystemCategories");
                 });
 
             modelBuilder.Entity("Data.Entities.Commitment", b =>
@@ -1195,9 +1273,14 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.Products", b =>
                 {
+                    b.Navigation("ProductCategories");
+                });
+
+            modelBuilder.Entity("Data.Entities.ProductSystem", b =>
+                {
                     b.Navigation("ContractorPostProducts");
 
-                    b.Navigation("ProductCategories");
+                    b.Navigation("ProductSystemCategories");
                 });
 
             modelBuilder.Entity("Data.Entities.Skill", b =>
@@ -1216,6 +1299,8 @@ namespace Data.Migrations
                     b.Navigation("BuilderPostTypes");
 
                     b.Navigation("ContractorPostTypes");
+
+                    b.Navigation("Skill");
                 });
 
             modelBuilder.Entity("Data.Entities.User", b =>

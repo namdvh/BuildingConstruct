@@ -1,8 +1,11 @@
 
 using Application.System.BuilderPosts;
+using Application.System.Category;
 using Application.System.Commitments;
 using Application.System.ContractorPosts;
 using Application.System.MaterialStores;
+using Application.System.ProductSystems;
+using Application.System.Types;
 using Application.System.Users;
 using Constants;
 using Data.DataContext;
@@ -138,11 +141,14 @@ builder.Services.AddScoped<UserManager<User>, UserManager<User>>();
 builder.Services.AddScoped<SignInManager<User>, SignInManager<User>>();
 builder.Services.AddScoped<RoleManager<Role>, RoleManager<Role>>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITypeService, TypeService>();
 builder.Services.AddScoped<IValidator<RegisterRequestDTO>, RegisterRequestValidatorDTO>();
-builder.Services.AddScoped<IContractorPostService, ContractorPostService>();
+builder.Services.AddTransient<IContractorPostService, ContractorPostService>();
 builder.Services.AddScoped<IBuilderPostService, BuilderPostServices>(); 
 builder.Services.AddScoped<IMaterialStoreService, MaterialStoreService>();
 builder.Services.AddScoped<ICommitmentService, CommitmentService>();
+builder.Services.AddScoped<IProductSystemService, ProductSystemService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 var app = builder.Build();
 

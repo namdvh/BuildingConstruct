@@ -1,6 +1,13 @@
-﻿namespace Data.Entities
+﻿using Data.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ViewModels.ContractorPost
 {
-    public class Products
+    public class ContractorPostProductDTO
     {
         public int Id { get; set; }
 
@@ -16,13 +23,6 @@
 
         public string? Brand { get; set; }
 
-        public int SoldQuantities { get; set; }
-
-        public int? MaterialStoreID { get; set; }
-
-        public MaterialStore MaterialStore { get; set; }
-
-        public List<ProductCategories>? ProductCategories { get; set; }
-
+        public Data.Entities.Categories? Categories { get; set; }
     }
 }

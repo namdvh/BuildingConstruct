@@ -27,6 +27,8 @@ namespace Data.DataContext
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.ApplyConfiguration(new ContractorConfiguration());
             modelBuilder.ApplyConfiguration(new SkillConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductSystemCategoriesConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductSystemConfiguration());
             modelBuilder.ApplyConfiguration(new VerifyConfiguration());
             modelBuilder.ApplyConfiguration(new BuilderSkillConfiguration());
             modelBuilder.ApplyConfiguration(new ContractorPostSkillConfiguration());
@@ -65,6 +67,8 @@ namespace Data.DataContext
         public DbSet<ContractorPostProduct> ContractorPostProducts { get; set; }    
         public DbSet<Categories> Categories { get; set; }    
         public DbSet<ProductCategories> ProductCategories { get; set; }    
+        public DbSet<ProductSystem> ProductSystems { get; set; }    
+        public DbSet<ProductSystemCategories> ProductSystemCategories { get; set; }    
         public DbSet<AppliedPost> AppliedPosts { get; set; }    
         public DbSet<PostCommitment> PostCommitments { get; set; }    
         public DbSet<Commitment> Commitments { get; set; }    
