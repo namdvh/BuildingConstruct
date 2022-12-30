@@ -325,7 +325,7 @@ namespace Application.System.Commitments
         public async Task<BaseResponse<string>> UpdateCommitment(Guid userID, int commitmenntID)
         {
             BaseResponse<string> response;
-            var postCommitment = await _context.PostCommitments.Where(x => x.UserID.Equals(userID) && commitmenntID == commitmenntID).FirstOrDefaultAsync();
+            var postCommitment = await _context.PostCommitments.Where(x => x.UserID.Equals(userID) && x.CommitmentID == commitmenntID).FirstOrDefaultAsync();
 
             if (postCommitment == null)
             {
