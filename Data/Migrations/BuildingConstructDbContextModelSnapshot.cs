@@ -199,6 +199,9 @@ namespace Data.Migrations
                     b.Property<string>("OptionalTerm")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Salaries")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(BuildingConstructDbContext))]
-    [Migration("20221229072112_v1")]
+    [Migration("20221230052130_v1")]
     partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -199,6 +199,9 @@ namespace Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("OptionalTerm")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Salaries")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("StartDate")

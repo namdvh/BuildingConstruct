@@ -12,7 +12,6 @@ namespace BuildingConstructApi.Controllers
 {
     [Route("api/contractorpost")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Bearer")]
     public class ContractorPostController : ControllerBase
     {
         private readonly IContractorPostService _contractorPostService;
