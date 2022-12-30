@@ -10,5 +10,7 @@ namespace Application.System.BuilderPosts
         Task<BasePagination<List<BuilderPostDTO>>> GetPostByViews(PaginationFilter filter);
 
         Task<BasePagination<List<BuilderPostDTO>>> SearchPost(PaginationFilter filter, string keyword);
+        Task<bool> CreateContractorPost(BuilderPostRequestDTO builderPostDTO);
+
     }
 }

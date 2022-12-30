@@ -73,8 +73,8 @@ namespace BuildingConstructApi.Controllers
             }
             return Ok(response);
         }
-        [HttpGet("id")]
-        public async Task<IActionResult> GetPost(int id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPost([FromRoute]int id)
         {
             var rs = await _contractorPostService.GetDetailPost(id);
             return Ok(rs);
