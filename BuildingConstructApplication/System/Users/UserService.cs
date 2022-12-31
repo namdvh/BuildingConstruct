@@ -172,11 +172,11 @@ namespace Application.System.Users
                     {
                         var store = new MaterialStore();
                         store.CreateBy = user.Id;
-                        
+
                         await _context.MaterialStores.AddAsync(store);
                         _context.SaveChanges();
 
-                        user.MaterialStoreID =store.Id;
+                        user.MaterialStoreID = store.Id;
                         _context.Entry(store).State = EntityState.Modified;
                         await _context.SaveChangesAsync();
                     }
@@ -184,7 +184,7 @@ namespace Application.System.Users
                     {
                         var ctor = new Contractor();
                         ctor.CreateBy = user.Id;
-                      
+
                         await _context.Contractors.AddAsync(ctor);
                         _context.SaveChanges();
                         user.ContractorId = ctor.Id;
@@ -224,6 +224,7 @@ namespace Application.System.Users
             var refreshtoken = new JwtSecurityToken(_config["Tokens:Issuer"],
                 _config["Tokens:Issuer"],
                 claims,
+                expires: DateTime.Now.AddYears(1),
                 signingCredentials: creds);
             var ReturnToken = new JwtSecurityTokenHandler().WriteToken(accesstoken);
             var ReturnRFToken = new JwtSecurityTokenHandler().WriteToken(refreshtoken);
@@ -241,8 +242,6 @@ namespace Application.System.Users
         {
             BaseResponse<string> response = new();
             var tokenHandler = new JwtSecurityTokenHandler();
-
-
 
             dynamic principal = null;
             try
@@ -299,7 +298,7 @@ namespace Application.System.Users
             var accesstoken = new JwtSecurityToken(_config["Tokens:Issuer"],
                 _config["Tokens:Issuer"],
                 claims,
-                expires: DateTime.Now.AddMinutes(1),
+                expires: DateTime.Now.AddMinutes(60),
                 signingCredentials: creds);
             TokenResponse token = new();
             var newAccessToken = new JwtSecurityTokenHandler().WriteToken(accesstoken);

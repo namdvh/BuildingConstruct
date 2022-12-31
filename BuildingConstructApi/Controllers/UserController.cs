@@ -77,6 +77,7 @@ namespace BuildingConstructApi.Controllers
             }
         }
         [HttpPost("refresh")]
+        [AllowAnonymous]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenResponse refreshToken)
         {
             var rs = await _userService.RefreshToken(refreshToken);
