@@ -39,8 +39,8 @@ namespace Application.System.BuilderPosts
                 Place = builderPostDTO.Place,
                 Description = builderPostDTO.Description,
                 Views = 0,
-                Salaries=builderPostDTO.Salaries,
-                Status=Status.Level1,
+                Salaries = builderPostDTO.Salaries,
+                Status = Status.Level1,
                 Field = builderPostDTO.Field,
                 BuilderID = (int)builderID,
                 CreateBy = Guid.Parse(userID),
@@ -59,7 +59,14 @@ namespace Application.System.BuilderPosts
                     rType.TypeID = (Guid)item.id;
                     rType.BuilderPostID = id;
                     _context.BuilderPostTypes.Add(rType);
-                    _context.SaveChanges();
+                    var rs = _context.SaveChanges();
+                    //second
+                    if (rs < 0)
+                    {
+                        _context.Remove(builderPost);
+                        return false;
+
+                    }
                 }
             }
 
@@ -76,11 +83,19 @@ namespace Application.System.BuilderPosts
                         rSkill.FromSystem = o.fromSystem;
                         _context.Skills.Add(rSkill);
                         _context.SaveChanges();
+
                         var bPostSkill = new BuilderPostSkill();
                         bPostSkill.BuilderPostID = id;
                         bPostSkill.SkillID = rSkill.Id;
                         _context.BuilderPostSkills.Add(bPostSkill);
-                        _context.SaveChanges();
+                        var rs = _context.SaveChanges();
+
+                        if (rs < 0)
+                        {
+                            _context.Remove(builderPost);
+                            return false;
+
+                        }
                         flag = true;
                     }
                     else
@@ -98,6 +113,7 @@ namespace Application.System.BuilderPosts
                                 bPostSkill.SkillID = o.id;
                                 _context.BuilderPostSkills.Add(bPostSkill);
                                 _context.SaveChanges();
+
                                 flag = true;
                             }
                             else
@@ -148,21 +164,21 @@ namespace Application.System.BuilderPosts
         private async Task<BuilderPostDetailDTO> MapToDetailDTO(BuilderPost post)
         {
             var product = await _context.BuilderPosts.Where(x => x.BuilderID == post.Id).ToListAsync();
-            var userId = await _context.ContractorPostProducts.Include(x => x.ContractorPost).Where(x => x.ContractorPostID == post.Id).Select(x => x.ContractorPost.CreateBy).FirstOrDefaultAsync();
+            var userId = await _context.BuilderPosts.Where(x => x.Id == post.Id).Select(x => x.CreateBy).FirstOrDefaultAsync();
             BuilderPostDetailDTO postDTO = new()
             {
                 Title = post.Title,
                 Field = post.Field,
-                Id=post.Id,
+                Id = post.Id,
                 Salaries = post.Salaries,
                 Description = post.Description,
-                Status=post.Status,
+                Status = post.Status,
                 LastModifiedAt = post.LastModifiedAt,
                 PostCategories = post.PostCategories,
                 Place = post.Place,
                 type = await GetTypeAndSkillFromPost(post.Id),
                 CreatedBy = userId,
-                User = await GetUserProfile(userId)
+                Author = await GetUserProfile(userId)
             };
 
             return postDTO;

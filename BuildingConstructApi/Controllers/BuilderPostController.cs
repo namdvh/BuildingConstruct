@@ -1,8 +1,10 @@
 ﻿using Application.System.BuilderPosts;
 using Application.System.ContractorPosts;
 using Data.Enum;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using ViewModels.BuilderPosts;
 using ViewModels.Pagination;
 using ViewModels.Response;
@@ -11,6 +13,8 @@ namespace BuildingConstructApi.Controllers
 {
     [Route("api/builderpost")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Bearer")]
+
     public class BuilderPostController : ControllerBase
     {
         private readonly IBuilderPostService _builderPostService;

@@ -24,6 +24,6 @@ namespace ViewModels.BuilderPosts
         public string? Field { get; set; }
         public DateTime LastModifiedAt { get; set; }
         public Guid CreatedBy { get; set; }
-        public UserModelsDTO User { get; set; }
+        public UserModelsDTO Author { get; set; }
     }
 }

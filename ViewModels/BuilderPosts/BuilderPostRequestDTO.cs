@@ -10,8 +10,6 @@ namespace ViewModels.BuilderPosts
 {
     public class BuilderPostRequestDTO
     {
-        public int Id { get; set; }
-
         public PostCategories PostCategories { get; set; }
         public List<TypeModels>? type { get; set; }
 
