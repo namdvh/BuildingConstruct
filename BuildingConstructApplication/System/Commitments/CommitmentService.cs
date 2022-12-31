@@ -46,6 +46,14 @@ namespace Application.System.Commitments
                 .Take(filter.PageSize)
                 .ToListAsync();
 
+            var builder = await _context.Users
+                .Include(x => x.Builder)
+                    .ThenInclude(x => x.Type)
+                .Where(x => x.Id.Equals(UserID) && x.BuilderId != null)
+                .FirstOrDefaultAsync();
+
+
+
             totalRecord = await _context.PostCommitments.Where(x => x.UserID.Equals(UserID)).CountAsync();
 
 
@@ -73,13 +81,29 @@ namespace Application.System.Commitments
                     TotalRecords = totalRecord
                 };
 
-                response = new()
+                if (builder != null)
                 {
-                    Code = BaseCode.SUCCESS,
-                    Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = MapListDTO(result),
-                    Pagination = pagination
-                };
+                    response = new()
+                    {
+                        Code = BaseCode.SUCCESS,
+                        Message = BaseCode.SUCCESS_MESSAGE,
+                        Data = MapListDTO(result,builder),
+                        Pagination = pagination
+                    };
+                }
+                else
+                {
+
+                    response = new()
+                    {
+                        Code = BaseCode.SUCCESS,
+                        Message = BaseCode.SUCCESS_MESSAGE,
+                        Data = MapListDTO(result),
+                        Pagination = pagination
+                    };
+                }
+
+
             }
             return response;
         }
@@ -162,6 +186,31 @@ namespace Application.System.Commitments
             return result;
         }
 
+        private List<CommitmentDTO> MapListDTO(List<PostCommitment> list, User builder)
+        {
+            List<CommitmentDTO> result = new();
+
+            foreach (var item in list)
+            {
+                CommitmentDTO dto = new()
+                {
+                    CommitmentId = item.CommitmentID,
+                    EndDate = item.Commitment.EndDate,
+                    OptionalTerm = item.Commitment.OptionalTerm,
+                    ProjectName = item.ContractorPosts.ProjectName,
+                    StartDate = item.Commitment.StartDate,
+                    Status = item.Commitment.Status,
+                    Title = item.ContractorPosts.Title,
+                    PostID = item.ContractorPosts.Id,
+                    BuilderName = builder.FirstName + " " + builder.LastName,
+                    BuilderPhone = builder.PhoneNumber,
+                    BuilderTypeName = builder.Builder.Type.Name
+                };
+                result.Add(dto);
+            }
+            return result;
+        }
+
 
         private DetailCommitmentDTO MapToDetailDTO(PostCommitment postCommitment, User author, User builder)
         {
@@ -194,7 +243,7 @@ namespace Application.System.Commitments
                 StartDate = postCommitment.Commitment.StartDate,
                 Title = postCommitment.ContractorPosts.Title,
                 PostID = postCommitment.ContractorPosts.Id,
-                PostSalaries= postCommitment.ContractorPosts.Salaries,
+                PostSalaries = postCommitment.ContractorPosts.Salaries,
                 PartyA = userA,
                 PartyB = userB
 
@@ -202,7 +251,7 @@ namespace Application.System.Commitments
             return result;
 
         }
-        private DetailCommitmentDTO MapToDetailDTO(User author, User builder,ContractorPost post)
+        private DetailCommitmentDTO MapToDetailDTO(User author, User builder, ContractorPost post)
         {
             CommitmentUser userA = new()
             {
@@ -476,8 +525,8 @@ namespace Application.System.Commitments
             bool isInGroup = false;
 
             var post = await _context.ContractorPosts.Where(x => x.Id == postID).FirstOrDefaultAsync();
-            var builder = await _context.Users.Where(x=>x.BuilderId==builderId).Include(x=>x.Builder).FirstOrDefaultAsync();
-            var contractor = await _context.Users.Include(x=>x.Contractor).Where(x=>x.Id.Equals(userID)).FirstOrDefaultAsync();
+            var builder = await _context.Users.Where(x => x.BuilderId == builderId).Include(x => x.Builder).FirstOrDefaultAsync();
+            var contractor = await _context.Users.Include(x => x.Contractor).Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
 
 
             var flag = await _context.Groups.Where(x => x.BuilderID == builder.Builder.Id && x.PostID == post.Id).FirstOrDefaultAsync();
@@ -488,7 +537,7 @@ namespace Application.System.Commitments
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = MapToDetailDTO(contractor,builder,post),
+                    Data = MapToDetailDTO(contractor, builder, post),
                 };
             }
             else
@@ -498,10 +547,10 @@ namespace Application.System.Commitments
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = MapToDetailGroupDTO(contractor, builder, post,groups),
+                    Data = MapToDetailGroupDTO(contractor, builder, post, groups),
                 };
             }
             return response;
         }
-        }
     }
+}

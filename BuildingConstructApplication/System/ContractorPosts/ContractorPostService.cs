@@ -524,7 +524,8 @@ namespace Application.System.ContractorPosts
                 BuilderID = applied.BuilderID,
                 FirstName = applied.Builder.User.FirstName,
                 LastName = applied.Builder.User.LastName,
-                UserID = applied.Builder.User.Id
+                UserID = applied.Builder.User.Id,
+                AppliedDate=applied.AppliedDate
             };
             return rs;
         }
@@ -540,7 +541,8 @@ namespace Application.System.ContractorPosts
                 FirstName = applied.Builder.User.FirstName,
                 LastName = applied.Builder.User.LastName,
                 UserID = applied.Builder.User.Id,
-                Groups = group
+                Groups = group,
+                AppliedDate= applied.AppliedDate
             };
             return rs;
         }
@@ -744,6 +746,7 @@ namespace Application.System.ContractorPosts
                     PostID = request.PostId,
                     GroupID = group.Id,
                     Status = Status.NOT_RESPONSE,
+                    AppliedDate=DateTime.Now
                 };
 
                 await _context.AppliedPosts.AddAsync(applied);
@@ -757,6 +760,8 @@ namespace Application.System.ContractorPosts
                     BuilderID = user.BuilderId.Value,
                     PostID = request.PostId,
                     Status = Status.NOT_RESPONSE,
+                    AppliedDate = DateTime.Now
+
                 };
 
                 await _context.AppliedPosts.AddAsync(applied);

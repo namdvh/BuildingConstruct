@@ -24,6 +24,9 @@ namespace Data.Entities
 
         public Status Status { get; set; }
 
+        public DateTime AppliedDate { get; set; }
+
+
 
     }
 }
