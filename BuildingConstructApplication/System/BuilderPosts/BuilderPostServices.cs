@@ -23,7 +23,7 @@ namespace Application.System.BuilderPosts
             _accessor = accessor;
         }
 
-        public async Task<bool> CreateContractorPost(BuilderPostRequestDTO builderPostDTO)
+        public async Task<bool> CreateBuilderPost(BuilderPostRequestDTO builderPostDTO)
         {
 
             Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");

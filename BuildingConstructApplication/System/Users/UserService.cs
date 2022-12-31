@@ -34,9 +34,9 @@ namespace Application.System.Users
             _config = config;
             _context = context;
         }
-        public async Task<BaseResponse<UserModels>> Login(LoginRequestDTO request)
+        public async Task<BaseResponse<UserDTO>> Login(LoginRequestDTO request)
         {
-            BaseResponse<UserModels> response = new();
+            BaseResponse<UserDTO> response = new();
             dynamic rs;
             //var user = await _userService.FindByNameAsync(request.UserName);
             rs = await _signInManager.PasswordSignInAsync(request.UserName, request.Password, request.RememberMe, true);
@@ -72,7 +72,21 @@ namespace Application.System.Users
                         us.Token = token.Data.RefreshToken;
                         us.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;
                         await _userService.UpdateAsync(us);
-                        response.Data = userDTO;
+                        response.Data = new()
+                        {
+                            UserName = us.UserName,
+                            Phone = us.PhoneNumber,
+                            FirstName = us.LastName,
+                            LastName = us.PhoneNumber,
+                            Status = us.Status,
+                            Id = us.Id,
+                            Address = us.Address,
+                            Avatar = us.Avatar,
+                            DOB = us.DOB,
+                            Gender = us.Gender,
+                            Role=roleName
+                        };
+
                     }
                 }
                 return response;
@@ -103,7 +117,21 @@ namespace Application.System.Users
                 user.Token = token.Data.RefreshToken;
                 user.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;
                 await _userService.UpdateAsync(user);
-                response.Data = userDTO;
+                response.Data = new()
+                {
+                    UserName = user.UserName,
+                    Phone = user.PhoneNumber,
+                    FirstName = user.LastName,
+                    LastName = user.PhoneNumber,
+                    Status = user.Status,
+                    Id = user.Id,
+                    Address = user.Address,
+                    Avatar = user.Avatar,
+                    DOB = user.DOB,
+                    Gender = user.Gender,
+                    Role = roleName
+                };
+
             }
 
 
