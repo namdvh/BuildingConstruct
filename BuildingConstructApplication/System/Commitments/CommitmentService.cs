@@ -46,12 +46,6 @@ namespace Application.System.Commitments
                 .Take(filter.PageSize)
                 .ToListAsync();
 
-            var builder = await _context.Users
-                .Include(x => x.Builder)
-                    .ThenInclude(x => x.Type)
-                .Where(x => x.Id.Equals(UserID) && x.BuilderId != null)
-                .FirstOrDefaultAsync();
-
 
 
             totalRecord = await _context.PostCommitments.Where(x => x.UserID.Equals(UserID)).CountAsync();
@@ -81,27 +75,14 @@ namespace Application.System.Commitments
                     TotalRecords = totalRecord
                 };
 
-                if (builder != null)
-                {
-                    response = new()
-                    {
-                        Code = BaseCode.SUCCESS,
-                        Message = BaseCode.SUCCESS_MESSAGE,
-                        Data = MapListDTO(result,builder),
-                        Pagination = pagination
-                    };
-                }
-                else
-                {
 
-                    response = new()
-                    {
-                        Code = BaseCode.SUCCESS,
-                        Message = BaseCode.SUCCESS_MESSAGE,
-                        Data = MapListDTO(result),
-                        Pagination = pagination
-                    };
-                }
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = MapListDTO(result),
+                    Pagination = pagination
+                };
 
 
             }
@@ -170,28 +151,14 @@ namespace Application.System.Commitments
 
             foreach (var item in list)
             {
-                CommitmentDTO dto = new()
-                {
-                    CommitmentId = item.CommitmentID,
-                    EndDate = item.Commitment.EndDate,
-                    OptionalTerm = item.Commitment.OptionalTerm,
-                    ProjectName = item.ContractorPosts.ProjectName,
-                    StartDate = item.Commitment.StartDate,
-                    Status = item.Commitment.Status,
-                    Title = item.ContractorPosts.Title,
-                    PostID = item.ContractorPosts.Id
-                };
-                result.Add(dto);
-            }
-            return result;
-        }
+                var lsBuilder = _context.PostCommitments
+                    .Include(x => x.User)
+                    .ThenInclude(x => x.Builder)
+                        .ThenInclude(x => x.Type)
+           .Where(x => x.CommitmentID.Equals(item.CommitmentID) && x.PostID.Equals(item.PostID) && x.IsAuthor == false)
+           .FirstOrDefault();
 
-        private List<CommitmentDTO> MapListDTO(List<PostCommitment> list, User builder)
-        {
-            List<CommitmentDTO> result = new();
 
-            foreach (var item in list)
-            {
                 CommitmentDTO dto = new()
                 {
                     CommitmentId = item.CommitmentID,
@@ -202,9 +169,9 @@ namespace Application.System.Commitments
                     Status = item.Commitment.Status,
                     Title = item.ContractorPosts.Title,
                     PostID = item.ContractorPosts.Id,
-                    BuilderName = builder.FirstName + " " + builder.LastName,
-                    BuilderPhone = builder.PhoneNumber,
-                    BuilderTypeName = builder.Builder.Type.Name
+                    BuilderName = lsBuilder.User.FirstName + " " + lsBuilder.User.LastName,
+                    BuilderPhone = lsBuilder.User.PhoneNumber,
+                    BuilderTypeName = lsBuilder.User.Builder.Type.Name
                 };
                 result.Add(dto);
             }
