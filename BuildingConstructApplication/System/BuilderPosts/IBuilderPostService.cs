@@ -1,5 +1,6 @@
 ﻿using ViewModels.BuilderPosts;
 using ViewModels.Pagination;
+using ViewModels.Response;
 
 namespace Application.System.BuilderPosts
 {
@@ -11,6 +12,8 @@ namespace Application.System.BuilderPosts
 
         Task<BasePagination<List<BuilderPostDTO>>> SearchPost(PaginationFilter filter, string keyword);
         Task<bool> CreateBuilderPost(BuilderPostRequestDTO builderPostDTO);
+        Task<BaseResponse<BuilderPostDetailDTO>> GetDetailPost(int bPostid);
+
 
     }
 }

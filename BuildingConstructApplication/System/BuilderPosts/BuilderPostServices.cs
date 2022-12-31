@@ -8,7 +8,10 @@ using System.Linq.Dynamic.Core;
 using System.Security.Claims;
 using System.Text;
 using ViewModels.BuilderPosts;
+using ViewModels.ContractorPost;
 using ViewModels.Pagination;
+using ViewModels.Response;
+using ViewModels.Users;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Application.System.BuilderPosts
@@ -36,6 +39,8 @@ namespace Application.System.BuilderPosts
                 Place = builderPostDTO.Place,
                 Description = builderPostDTO.Description,
                 Views = 0,
+                Salaries=builderPostDTO.Salaries,
+                Status=Status.Level1,
                 Field = builderPostDTO.Field,
                 BuilderID = (int)builderID,
                 CreateBy = Guid.Parse(userID),
@@ -114,6 +119,113 @@ namespace Application.System.BuilderPosts
             return false;
         }
 
+        public async Task<BaseResponse<BuilderPostDetailDTO>> GetDetailPost(int bPostid)
+        {
+            var rs = await _context.BuilderPosts.FirstOrDefaultAsync(x => x.Id == bPostid);
+            BaseResponse<BuilderPostDetailDTO> response = new();
+
+            if (rs == null)
+            {
+                response.Code = BaseCode.ERROR;
+                response.Message = "Cannot find that Post";
+                return response;
+            }
+            var count = await _context.BuilderPosts.Where(x => x.Id == bPostid).ToListAsync();
+            foreach (var item in count)
+            {
+                int view = item.Views;
+                view++;
+                item.Views = view;
+                _context.BuilderPosts.Update(item);
+                await _context.SaveChangesAsync();
+            }
+            BuilderPostDetailDTO postDetail = await MapToDetailDTO(rs);
+            response.Data = postDetail;
+            response.Code = BaseCode.SUCCESS;
+            response.Message = "SUCCESS";
+            return response;
+        }
+        private async Task<BuilderPostDetailDTO> MapToDetailDTO(BuilderPost post)
+        {
+            var product = await _context.BuilderPosts.Where(x => x.BuilderID == post.Id).ToListAsync();
+            var userId = await _context.ContractorPostProducts.Include(x => x.ContractorPost).Where(x => x.ContractorPostID == post.Id).Select(x => x.ContractorPost.CreateBy).FirstOrDefaultAsync();
+            BuilderPostDetailDTO postDTO = new()
+            {
+                Title = post.Title,
+                Field = post.Field,
+                Id=post.Id,
+                Salaries = post.Salaries,
+                Description = post.Description,
+                Status=post.Status,
+                LastModifiedAt = post.LastModifiedAt,
+                PostCategories = post.PostCategories,
+                Place = post.Place,
+                type = await GetTypeAndSkillFromPost(post.Id),
+                CreatedBy = userId,
+                User = await GetUserProfile(userId)
+            };
+
+            return postDTO;
+        }
+        private async Task<List<TypeModels>> GetTypeAndSkillFromPost(int postID)
+        {
+            var results = await _context.BuilderPostTypes.Include(x => x.Types).Where(x => x.BuilderPostID == postID).ToListAsync();
+            var rsSkill = await _context.BuilderPostSkills.Include(x => x.Skills).Where(x => x.BuilderPostID == postID).ToListAsync();
+            var final = new List<TypeModels>();
+            foreach (var item in results)
+            {
+                var type = new TypeModels();
+                type.id = item.TypeID;
+                type.name = item.Types.Name;
+                type.SkillArr = new();
+                foreach (var i in rsSkill)
+                {
+                    if (i.Skills.TypeId.Equals(item.TypeID))
+                    {
+                        var skillArr = new SkillArr();
+                        skillArr.id = i.SkillID;
+                        skillArr.name = i.Skills.Name;
+                        skillArr.fromSystem = i.Skills.FromSystem;
+                        skillArr.TypeId = i.Skills.TypeId;
+                        type.SkillArr.Add(skillArr);
+                    }
+                }
+                final.Add(type);
+            }
+            if (rsSkill.Where(x => x.Skills.TypeId == null).ToList().Any())
+            {
+                var t = new TypeModels();
+                foreach (var i in rsSkill.Where(x => x.Skills.TypeId == null).ToList())
+                {
+                    t.SkillArr = new();
+                    var skillArr = new SkillArr();
+                    skillArr.id = i.SkillID;
+                    skillArr.name = i.Skills.Name;
+                    skillArr.fromSystem = i.Skills.FromSystem;
+                    skillArr.TypeId = i.Skills.TypeId;
+                    t.SkillArr.Add(skillArr);
+                    final.Add(t);
+                }
+            }
+            return final;
+        }
+        private async Task<UserModelsDTO> GetUserProfile(Guid userID)
+        {
+            var results = await _context.Users.Where(x => x.Id.Equals(userID)).SingleOrDefaultAsync();
+            var roleid = await _context.UserRoles.Where(x => x.UserId.Equals(userID)).Select(x => x.RoleId).SingleOrDefaultAsync();
+            var final = new UserModelsDTO();
+            final.UserName = results.UserName;
+            final.Phone = results.PhoneNumber;
+            final.FirstName = results.FirstName;
+            final.LastName = results.LastName;
+            final.Address = results.Address;
+            final.Gender = results.Gender;
+            final.Avatar = results.Avatar;
+            final.DOB = results.DOB;
+            final.Email = results.Email;
+            final.RoleName = await _context.Roles.Where(x => x.Id.Equals(roleid)).Select(x => x.Name).SingleOrDefaultAsync();
+            return final;
+        }
         public async Task<BasePagination<List<BuilderPostDTO>>> GetPost(PaginationFilter filter)
         {
             BasePagination<List<BuilderPostDTO>> response;
