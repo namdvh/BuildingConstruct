@@ -13,7 +13,8 @@ namespace Data.Entities
         public string Title { get; set; }
         public string Description { get; set; }
         public string Field { get; set; }
-
+        public string Salaries { get; set; }
+        public Status Status { get; set; }
         public int Views { get; set; }
 
         public int BuilderID { get; set; }

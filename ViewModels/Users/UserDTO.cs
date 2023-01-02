@@ -14,6 +14,10 @@ namespace ViewModels.Users
         public string UserName { get; set; } = string.Empty;
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
+        public string? Address { get; set; }
+        public Gender? Gender { get; set; }
+        public DateTime? DOB { get; set; }
+        public string? Avatar { get; set; }
         public string? Role { get; set; }
 
         public Status? Status { get; set; }
