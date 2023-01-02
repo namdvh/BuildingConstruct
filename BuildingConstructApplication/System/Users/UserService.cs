@@ -247,7 +247,7 @@ namespace Application.System.Users
             var accesstoken = new JwtSecurityToken(_config["Tokens:Issuer"],
                 _config["Tokens:Issuer"],
                 claims,
-                expires: DateTime.Now.AddSeconds(15),
+                expires: DateTime.Now.AddHours(1),
                 signingCredentials: creds);
             var refreshtoken = new JwtSecurityToken(_config["Tokens:Issuer"],
                 _config["Tokens:Issuer"],
@@ -321,7 +321,7 @@ namespace Application.System.Users
             var accesstoken = new JwtSecurityToken(_config["Tokens:Issuer"],
                 _config["Tokens:Issuer"],
                 claims,
-                expires: DateTime.Now.AddSeconds(15),
+                expires: DateTime.Now.AddHours(1),
                 signingCredentials: creds);
             TokenResponse token = new();
             var newAccessToken = new JwtSecurityTokenHandler().WriteToken(accesstoken);
