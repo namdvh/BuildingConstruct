@@ -306,15 +306,10 @@ namespace Application.System.Users
             string username = principal.Identity.Name;
             var user = await _userService.FindByNameAsync(username);
 
-            if (user == null || user.Token != refreshToken.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
-            {
-                response.Code = "901";
-                response.Message = "Expired Token";
-                return response;
-            }
             var roles = await _userService.GetRolesAsync(user);
             var claims = new[]
             {
+                new Claim("UserID",user.Id.ToString()),
                 new Claim(ClaimTypes.Name,user.UserName),
                 new Claim(ClaimTypes.Role,string.Join(";",roles))
                 };
