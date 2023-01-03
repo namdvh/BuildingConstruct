@@ -60,19 +60,21 @@ namespace Application.System.ContractorPosts
             //first
             var id = contractorPost.Id;
             var cPostProduct = new ContractorPostProduct();
-            foreach (var item in contractorPostDTO.ProductSystemId)
+            foreach (var item in contractorPostDTO.ProductPost)
             {
-                cPostProduct.ProductSystemID = item;
+
+                cPostProduct.ProductSystemID = item.ProductId;
+                cPostProduct.Quantity = item.Quantity;
                 cPostProduct.ContractorPostID = contractorPost.Id;
                 _context.ContractorPostProducts.Add(cPostProduct);
                 var rs = _context.SaveChanges();
                 //second
                 if (rs < 0)
                 {
-                     _context.Remove(contractorPost);
+                    _context.Remove(contractorPost);
                     return false;
-
                 }
+
             }
             var type = contractorPostDTO.type;
             foreach (var item in type)
@@ -83,7 +85,7 @@ namespace Application.System.ContractorPosts
                     rType.TypeID = (Guid)item.id;
                     rType.ContractorPostID = id;
                     _context.ContractorPostTypes.Add(rType);
-                    var rs=_context.SaveChanges();
+                    var rs = _context.SaveChanges();
                     if (rs < 0)
                     {
                         _context.Remove(contractorPost);
@@ -525,7 +527,7 @@ namespace Application.System.ContractorPosts
                 FirstName = applied.Builder.User.FirstName,
                 LastName = applied.Builder.User.LastName,
                 UserID = applied.Builder.User.Id,
-                AppliedDate=applied.AppliedDate
+                AppliedDate = applied.AppliedDate
             };
             return rs;
         }
@@ -542,7 +544,7 @@ namespace Application.System.ContractorPosts
                 LastName = applied.Builder.User.LastName,
                 UserID = applied.Builder.User.Id,
                 Groups = group,
-                AppliedDate= applied.AppliedDate
+                AppliedDate = applied.AppliedDate
             };
             return rs;
         }
@@ -746,7 +748,7 @@ namespace Application.System.ContractorPosts
                     PostID = request.PostId,
                     GroupID = group.Id,
                     Status = Status.NOT_RESPONSE,
-                    AppliedDate=DateTime.Now
+                    AppliedDate = DateTime.Now
                 };
 
                 await _context.AppliedPosts.AddAsync(applied);
