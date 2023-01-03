@@ -142,7 +142,9 @@ namespace Application.System.Commitments
             //MapToDTO có group 
             else
             {
-                var groups = await _context.GroupMembers.Where(x => x.GroupId == flag.Id).ToListAsync();
+                var groups = await _context.GroupMembers
+                    .Include(x=>x.Type)
+                    .Where(x => x.GroupId == flag.Id).ToListAsync();
                 response = new()
                 {
                     Code = BaseCode.SUCCESS,
@@ -289,9 +291,10 @@ namespace Application.System.Commitments
                 CommitmentGroup rs = new()
                 {
                     DOB = item.DOB,
-                    IdNumber = item.IdNumber,
+                    VerifyId = item.IdNumber,
                     Name = item.Name,
                     TypeID = item.TypeID,
+                    TypeName = item.Type.Name
                 };
                 result.Add(rs);
             }
@@ -490,7 +493,9 @@ namespace Application.System.Commitments
             }
             else
             {
-                var groups = await _context.GroupMembers.Where(x => x.GroupId == flag.Id).ToListAsync();
+                var groups = await _context.GroupMembers
+                    .Include(x=>x.Type)
+                    .Where(x => x.GroupId == flag.Id).ToListAsync();
                 response = new()
                 {
                     Code = BaseCode.SUCCESS,

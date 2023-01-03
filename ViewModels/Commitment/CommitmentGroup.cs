@@ -14,6 +14,8 @@ namespace ViewModels.Commitment
 
         public Guid TypeID { get; set; }
 
-        public string IdNumber { get; set; }
+        public string? TypeName { get; set; }
+
+        public string VerifyId { get; set; }
     }
 }
