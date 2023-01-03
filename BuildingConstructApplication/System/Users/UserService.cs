@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq.Dynamic.Core;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
@@ -38,44 +39,46 @@ namespace Application.System.Users
         public async Task<BaseResponse<UserModels>> UpdateRole(UpdateRoleRequest request)
         {
             BaseResponse<UserModels> response = new();
-            var users = await _userService.FindByIdAsync(request.UserId); 
-            var userInUserRole = _context.UserRoles.Where(r => r.UserId.Equals(request.UserId)).FirstOrDefault();
-            
-            if (userInUserRole == null)
-            {
+            var users = await _userService.FindByIdAsync(request.UserId);
+            var roleNames = await _context.Roles.Where(x => x.Id.ToString().Equals(request.RoleId)).Select(x => x.Name).SingleOrDefaultAsync();
                 
-                return response;
-            }
-            else
-            {
-                if (request.RoleId == null)
+                if (request.RoleId == BaseCode.UsRole)
                 {
-                    response.Code = "202";
-                    response.Message = "Role ID is null";
-                    return response;
+                    var builder = new Builder();
+                    builder.CreateBy = users.Id;
+                    await _context.Builders.AddAsync(builder);
+                    _context.SaveChanges();
+
+                    users.BuilderId = builder.Id;
+                    _context.Entry<User>(users).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
                 }
-                //else if (request.RoleId == "52ec6e78-6732-43bf-adab-9cfa2e5da268")
-                //{
-                //    userInUserRole.RoleId = Guid.Parse(request.RoleId);
-                //}
-                //else if (request.RoleId == "20efd516-f16c-41b3-b11d-bc908cd2056b")
-                //{
-                //    userInUserRole.RoleId = Guid.Parse(request.RoleId);
-                //}
-                //else if (request.RoleId == "a4fbc29e-9749-4ea0-bcaa-67fc9f104bd1")
-                //{
-                //    userInUserRole.RoleId = Guid.Parse(request.RoleId);
-                //}
-                //else if (request.RoleId == "dc48ba58-ddcb-41de-96fe-e41327e5f313")
-                //{
-                //    userInUserRole.RoleId = Guid.Parse(request.RoleId);
-                //}
-                else
+                    else if (request.RoleId == BaseCode.StoreRole)
                 {
-                    userInUserRole.RoleId = Guid.Parse(request.RoleId);
+                    var store = new MaterialStore();
+                    store.CreateBy = users.Id;
+
+                    await _context.MaterialStores.AddAsync(store);
+                    _context.SaveChanges();
+
+                    users.MaterialStoreID = store.Id;
+                    _context.Entry(store).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
                 }
-                //_context.UserRoles.Update(userInUserRole);
-                //_context.SaveChangesAsync();
+                else if (request.RoleId == BaseCode.ContractorRole)
+                {
+                    var ctor = new Contractor();
+                    ctor.CreateBy = users.Id;
+
+                    await _context.Contractors.AddAsync(ctor);
+                    _context.SaveChanges();
+                    users.ContractorId = ctor.Id;
+                    _context.Entry(ctor).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                }
+                
+                    await _userService.AddToRoleAsync(users, roleNames);
+                
                     var roleName = (from usr in _context.Users
                                 join userRole in _context.UserRoles on users.Id equals userRole.UserId
                                 join role in _context.Roles on userRole.RoleId equals role.Id
@@ -87,8 +90,6 @@ namespace Application.System.Users
                     users.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;
                     await _userService.UpdateAsync(users);
                     response.Data = userDTO;
-            }
-            
             return response;
         }
 
@@ -97,6 +98,7 @@ namespace Application.System.Users
             BaseResponse<UserModels> response = new();
             
             var users = await _userService.FindByNameAsync(request.Email);// check email exist or not
+            
             if (users == null) 
             {
                 var user = new User()
@@ -119,7 +121,7 @@ namespace Application.System.Users
                 };
                 
                     response.Data = us;
-                    response.Code = "200";
+                    response.Code = "201";
                     response.Message = "Regist successfully but haven't got role";
                     return response;
             }
@@ -131,17 +133,36 @@ namespace Application.System.Users
                                 select role.Name).FirstOrDefault();  //get roleName from db
                 if (roleName == null)
                 {
+                    UserModels us = new()
+                    {
+                        UserName = users.UserName,
+                        Avatar = users.Avatar,
+                        FirstName = users.FirstName,
+                        LastName = users.LastName,
+                    };
+                    response.Data = us; 
                     response.Code = "202";
                     response.Message = "Role Name is null";
                     return response;
                 }
-
+                UserModels u = new()
+                {
+                    UserName = users.UserName,
+                    Avatar = users.Avatar,
+                    FirstName = users.FirstName,
+                    LastName = users.LastName,
+                    Role = roleName
+                };
                 var userDTO = MapToDto(users, roleName);
                 var token = await GenerateToken(userDTO);
                 users.Token = token.Data.RefreshToken;
                 users.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;
                 await _userService.UpdateAsync(users);
+
                 response.Data = userDTO;
+                response.Data = u;
+                response.Code = "200";
+                response.Message = "Login Success";
             }
             return response;
         }

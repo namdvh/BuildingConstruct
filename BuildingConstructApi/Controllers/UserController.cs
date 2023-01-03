@@ -32,7 +32,7 @@ namespace BuildingConstructApi.Controllers
             _userService = userService;
         }
 
-        [HttpPost("loginWithGoogle")]
+        [HttpPost("loginOthers")]
         [AllowAnonymous]
         public async Task<IActionResult> LoginWithGoogle([FromBody] LoginGoogleRequest request)
         {
@@ -41,16 +41,16 @@ namespace BuildingConstructApi.Controllers
                 return BadRequest(ModelState);
             }
             var rs = await _userService.LoginGoogle(request);
-            if (rs.Data == null)
-            {
-                return Ok(new
-                {
-                    code = BaseCode.ERROR,
-                    Message = "Username or Password is Incorrect"
-                });
-            }
-            else
-            {
+            //if (rs.Data == null)
+            //{
+            //    return Ok(new
+            //    {
+            //        code = BaseCode.ERROR,
+            //        Message = "Username or Password is Incorrect"
+            //    });
+            //}
+            //else
+            //{
                 var token = await _userService.GenerateToken(rs.Data);
                 if (token != null)
                 {
@@ -68,15 +68,19 @@ namespace BuildingConstructApi.Controllers
                     catch (Exception)
                     {
                     }
-                    token.Message = "Login Success";
-                    token.Code = BaseCode.SUCCESS;
-
+                    //token.Message = "Login Success";
+                    //token.Code = BaseCode.SUCCESS;
+                    //rs.Code = token.Code;
+                    //rs.Message = token.Message;
+                    rs.Data.AccessToken = token.Data.AccessToken;
+                    rs.Data.RefreshToken = token.Data.RefreshToken;
+                    rs.Data.RefreshTokenExpiryTime = token.Data.RefreshTokenExpiryTime;
                 }
-                return Ok(token);
-            }
+                return Ok(rs);
+            //}
         }
 
-        [HttpPost("updateRoleForUser")]
+        [HttpPost("SetRole")]
         [AllowAnonymous]
         public async Task<IActionResult> UpdateRole([FromBody] UpdateRoleRequest request)
         {
