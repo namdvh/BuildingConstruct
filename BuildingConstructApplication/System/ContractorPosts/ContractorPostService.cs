@@ -376,7 +376,7 @@ namespace Application.System.ContractorPosts
                     query = query.Where(x => x.NumberPeople == filter.FilterRequest.Participant);
                 }
 
-                if (string.IsNullOrEmpty(filter.FilterRequest.Title))
+                if (!string.IsNullOrEmpty(filter.FilterRequest.Title))
                 {
                     query = query.Include(x => x.Contractor).Where(x => x.Title.Contains(filter.FilterRequest.Title) || x.Contractor.CompanyName.Contains(filter.FilterRequest.Title));
                 }
