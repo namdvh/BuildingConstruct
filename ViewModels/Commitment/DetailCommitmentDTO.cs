@@ -11,6 +11,7 @@ namespace ViewModels.Commitment
 
         public List<CommitmentGroup>? Group { get; set; }
         public string? Title { get; set; }
+        public int? Id { get; set; }
 
         public string? ProjectName { get; set; }
         public int? PostID { get; set; }
@@ -24,7 +25,7 @@ namespace ViewModels.Commitment
 
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public Status? Status { get; set; }
+        public Status? IsAccepted { get; set; }
 
     }
 

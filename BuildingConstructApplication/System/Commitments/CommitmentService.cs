@@ -115,8 +115,16 @@ namespace Application.System.Commitments
             var authorID = result.Where(x => x.IsAuthor == true).Select(x => x.UserID).FirstOrDefault();
             var builderID = result.Where(x => x.IsAuthor == false).Select(x => x.UserID).FirstOrDefault();
 
-            var author = await _context.Users.Where(x => x.Id.Equals(authorID)).FirstOrDefaultAsync();
-            var builder = await _context.Users.Where(x => x.Id.Equals(builderID)).FirstOrDefaultAsync();
+            var author = await _context.Users
+                                    .Include(x => x.Contractor)
+                                    .Where(x => x.Id.Equals(authorID))
+                                    .FirstOrDefaultAsync();
+
+            var builder = await _context.Users
+                                .Include(x => x.Builder)
+                                    .ThenInclude(x => x.Type)
+                                .Where(x => x.Id.Equals(builderID))
+                                .FirstOrDefaultAsync();
 
 
             var flag = await _context.Groups.Where(x => x.BuilderID == builder.BuilderId && x.PostID == result.First().PostID).FirstOrDefaultAsync();
@@ -185,8 +193,9 @@ namespace Application.System.Commitments
             {
                 FirstName = author.FirstName,
                 LastName = author.LastName,
-                IDNumber = author.IdNumber,
-                PhoneNumber = author.PhoneNumber
+                VerifyId = author.IdNumber,
+                PhoneNumber = author.PhoneNumber,
+                CompanyName=author.Contractor.CompanyName
 
             };
 
@@ -194,16 +203,19 @@ namespace Application.System.Commitments
             {
                 FirstName = builder.FirstName,
                 LastName = builder.LastName,
-                IDNumber = builder.IdNumber,
-                PhoneNumber = builder.PhoneNumber
+                VerifyId = builder.IdNumber,
+                PhoneNumber = builder.PhoneNumber,
+                TypeName=builder.Builder.Type.Name
+                
             };
 
 
             DetailCommitmentDTO result = new()
             {
+                Id=postCommitment.CommitmentID,
                 Description = postCommitment.ContractorPosts.Description,
                 EndDate = postCommitment.Commitment.EndDate,
-                Status = postCommitment.Status,
+                IsAccepted = postCommitment.Status,
                 OptionalTerm = postCommitment.Commitment.OptionalTerm,
                 ProjectName = postCommitment.ContractorPosts.ProjectName,
                 Salaries = postCommitment.Commitment.Salaries,
@@ -218,79 +230,7 @@ namespace Application.System.Commitments
             return result;
 
         }
-        private DetailCommitmentDTO MapToDetailDTO(User author, User builder, ContractorPost post)
-        {
-            CommitmentUser userA = new()
-            {
-                FirstName = author.FirstName,
-                LastName = author.LastName,
-                IDNumber = author.IdNumber,
-                PhoneNumber = author.PhoneNumber
 
-            };
-
-            CommitmentUser userB = new()
-            {
-                FirstName = builder.FirstName,
-                LastName = builder.LastName,
-                IDNumber = builder.IdNumber,
-                PhoneNumber = builder.PhoneNumber
-            };
-
-
-            DetailCommitmentDTO result = new()
-            {
-                Description = post.Description,
-                ProjectName = post.ProjectName,
-                Salaries = post.Salaries,
-                Title = post.Title,
-                PostID = post.Id,
-                PostSalaries = post.Salaries,
-                PartyA = userA,
-                PartyB = userB
-
-            };
-            return result;
-
-        }
-        private DetailCommitmentDTO MapToDetailGroupDTO(User author, User builder, ContractorPost post, List<GroupMember> groupMember)
-        {
-            CommitmentUser userA = new()
-            {
-                FirstName = author.FirstName,
-                LastName = author.LastName,
-                IDNumber = author.IdNumber,
-                PhoneNumber = author.PhoneNumber
-
-            };
-
-            CommitmentUser userB = new()
-            {
-                FirstName = builder.FirstName,
-                LastName = builder.LastName,
-                IDNumber = builder.IdNumber,
-                PhoneNumber = builder.PhoneNumber
-            };
-            var group = MapGroup(groupMember);
-
-
-            DetailCommitmentDTO result = new()
-            {
-                Description = post.Description,
-                ProjectName = post.ProjectName,
-                Salaries = post.Salaries,
-                Title = post.Title,
-                PostID = post.Id,
-                PostSalaries = post.Salaries,
-                PartyA = userA,
-                PartyB = userB,
-                Group = group
-
-
-            };
-            return result;
-
-        }
 
         private DetailCommitmentDTO MapToDetailGroupDTO(PostCommitment postCommitment, User author, User builder, List<GroupMember> groupMember)
         {
@@ -299,16 +239,20 @@ namespace Application.System.Commitments
             {
                 FirstName = author.FirstName,
                 LastName = author.LastName,
-                IDNumber = author.IdNumber,
+                VerifyId = author.IdNumber,
                 PhoneNumber = author.PhoneNumber,
+                CompanyName = author.Contractor.CompanyName
+
             };
 
             CommitmentUser userB = new()
             {
                 FirstName = builder.FirstName,
                 LastName = builder.LastName,
-                IDNumber = builder.IdNumber,
-                PhoneNumber = builder.PhoneNumber
+                VerifyId = builder.IdNumber,
+                PhoneNumber = builder.PhoneNumber,
+                TypeName = builder.Builder.Type.Name
+
             };
 
             var group = MapGroup(groupMember);
@@ -317,9 +261,10 @@ namespace Application.System.Commitments
 
             DetailCommitmentDTO result = new()
             {
+                Id=postCommitment.CommitmentID,
                 Description = postCommitment.ContractorPosts.Description,
                 EndDate = postCommitment.Commitment.EndDate,
-                Status = postCommitment.Status,
+                IsAccepted = postCommitment.Status,
                 OptionalTerm = postCommitment.Commitment.OptionalTerm,
                 ProjectName = postCommitment.ContractorPosts.ProjectName,
                 Salaries = postCommitment.Commitment.Salaries,
@@ -492,7 +437,12 @@ namespace Application.System.Commitments
             bool isInGroup = false;
 
             var post = await _context.ContractorPosts.Where(x => x.Id == postID).FirstOrDefaultAsync();
-            var builder = await _context.Users.Where(x => x.BuilderId == builderId).Include(x => x.Builder).FirstOrDefaultAsync();
+            var builder = await _context.Users
+                                .Include(x => x.Builder)
+                                    .ThenInclude(x=>x.Type)
+                                .Where(x => x.BuilderId == builderId)
+                                .FirstOrDefaultAsync();
+
             var contractor = await _context.Users.Include(x => x.Contractor).Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
 
 
@@ -504,7 +454,7 @@ namespace Application.System.Commitments
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = MapToDetailDTO(contractor, builder, post),
+                    Data = MapToLoadDTO(contractor, builder, post),
                 };
             }
             else
@@ -514,10 +464,94 @@ namespace Application.System.Commitments
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = MapToDetailGroupDTO(contractor, builder, post, groups),
+                    Data = MapToLoadGroupDTO(contractor, builder, post, groups),
                 };
             }
             return response;
+        }
+
+        private DetailCommitmentDTO MapToLoadDTO(User author, User builder, ContractorPost post)
+        {
+            CommitmentUser userA = new()
+            {
+                FirstName = author.FirstName,
+                LastName = author.LastName,
+                VerifyId = author.IdNumber,
+                PhoneNumber = author.PhoneNumber,
+                CompanyName = author.Contractor.CompanyName
+
+            };
+
+            CommitmentUser userB = new()
+            {
+                FirstName = builder.FirstName,
+                LastName = builder.LastName,
+                VerifyId = builder.IdNumber,
+                PhoneNumber = builder.PhoneNumber,
+                TypeName=builder.Builder.Type.Name
+                
+            };
+
+
+            DetailCommitmentDTO result = new()
+            {
+                Id=null,
+                Description = post.Description,
+                ProjectName = post.ProjectName,
+                Salaries = post.Salaries,
+                Title = post.Title,
+                PostID = post.Id,
+                PostSalaries = post.Salaries,
+                PartyA = userA,
+                PartyB = userB
+
+            };
+            return result;
+
+        }
+
+        private DetailCommitmentDTO MapToLoadGroupDTO(User author, User builder, ContractorPost post, List<GroupMember> groupMember)
+        {
+            CommitmentUser userA = new()
+            {
+                FirstName = author.FirstName,
+                LastName = author.LastName,
+                VerifyId = author.IdNumber,
+                PhoneNumber = author.PhoneNumber,
+                CompanyName = author.Contractor.CompanyName
+
+
+            };
+
+            CommitmentUser userB = new()
+            {
+                FirstName = builder.FirstName,
+                LastName = builder.LastName,
+                VerifyId = builder.IdNumber,
+                PhoneNumber = builder.PhoneNumber,
+                TypeName = builder.Builder.Type.Name
+
+            };
+            var group = MapGroup(groupMember);
+
+
+            DetailCommitmentDTO result = new()
+            {
+                Id=null,
+                Description = post.Description,
+                ProjectName = post.ProjectName,
+                Salaries = post.Salaries,
+                Title = post.Title,
+                PostID = post.Id,
+                PostSalaries = post.Salaries,
+                PartyA = userA,
+                PartyB = userB,
+                Group = group
+
+
+            };
+            return result;
+
         }
     }
 }
