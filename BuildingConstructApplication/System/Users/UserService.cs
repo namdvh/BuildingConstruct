@@ -6,6 +6,7 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -33,9 +34,9 @@ namespace Application.System.Users
             _config = config;
             _context = context;
         }
-        public async Task<BaseResponse<UserModels>> Login(LoginRequestDTO request)
+        public async Task<BaseResponse<UserDTO>> Login(LoginRequestDTO request)
         {
-            BaseResponse<UserModels> response = new();
+            BaseResponse<UserDTO> response = new();
             dynamic rs;
             //var user = await _userService.FindByNameAsync(request.UserName);
             rs = await _signInManager.PasswordSignInAsync(request.UserName, request.Password, request.RememberMe, true);
@@ -71,7 +72,21 @@ namespace Application.System.Users
                         us.Token = token.Data.RefreshToken;
                         us.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;
                         await _userService.UpdateAsync(us);
-                        response.Data = userDTO;
+                        response.Data = new()
+                        {
+                            UserName = us.UserName,
+                            Phone = us.PhoneNumber,
+                            FirstName = us.LastName,
+                            LastName = us.PhoneNumber,
+                            Status = us.Status,
+                            Id = us.Id,
+                            Address = us.Address,
+                            Avatar = us.Avatar,
+                            DOB = us.DOB,
+                            Gender = us.Gender,
+                            Role=roleName
+                        };
+
                     }
                 }
                 return response;
@@ -102,7 +117,21 @@ namespace Application.System.Users
                 user.Token = token.Data.RefreshToken;
                 user.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;
                 await _userService.UpdateAsync(user);
-                response.Data = userDTO;
+                response.Data = new()
+                {
+                    UserName = user.UserName,
+                    Phone = user.PhoneNumber,
+                    FirstName = user.LastName,
+                    LastName = user.PhoneNumber,
+                    Status = user.Status,
+                    Id = user.Id,
+                    Address = user.Address,
+                    Avatar = user.Avatar,
+                    DOB = user.DOB,
+                    Gender = user.Gender,
+                    Role = roleName
+                };
+
             }
 
 
@@ -161,20 +190,33 @@ namespace Application.System.Users
                         var builder = new Builder();
                         builder.CreateBy = user.Id;
                         await _context.Builders.AddAsync(builder);
+                        _context.SaveChanges();
+
+                        user.BuilderId = builder.Id;
+                        _context.Entry<User>(user).State = EntityState.Modified;
                         await _context.SaveChangesAsync();
                     }
                     else if (defaultRole.Id == Guid.Parse(BaseCode.StoreRole))
                     {
                         var store = new MaterialStore();
                         store.CreateBy = user.Id;
+
                         await _context.MaterialStores.AddAsync(store);
+                        _context.SaveChanges();
+
+                        user.MaterialStoreID = store.Id;
+                        _context.Entry(store).State = EntityState.Modified;
                         await _context.SaveChangesAsync();
                     }
                     else if (defaultRole.Id == Guid.Parse(BaseCode.ContractorRole))
                     {
                         var ctor = new Contractor();
                         ctor.CreateBy = user.Id;
+
                         await _context.Contractors.AddAsync(ctor);
+                        _context.SaveChanges();
+                        user.ContractorId = ctor.Id;
+                        _context.Entry(ctor).State = EntityState.Modified;
                         await _context.SaveChangesAsync();
                     }
                     response.Data = user;
@@ -210,6 +252,7 @@ namespace Application.System.Users
             var refreshtoken = new JwtSecurityToken(_config["Tokens:Issuer"],
                 _config["Tokens:Issuer"],
                 claims,
+                expires: DateTime.Now.AddYears(1),
                 signingCredentials: creds);
             var ReturnToken = new JwtSecurityTokenHandler().WriteToken(accesstoken);
             var ReturnRFToken = new JwtSecurityTokenHandler().WriteToken(refreshtoken);
@@ -227,8 +270,6 @@ namespace Application.System.Users
         {
             BaseResponse<string> response = new();
             var tokenHandler = new JwtSecurityTokenHandler();
-
-
 
             dynamic principal = null;
             try
@@ -265,15 +306,10 @@ namespace Application.System.Users
             string username = principal.Identity.Name;
             var user = await _userService.FindByNameAsync(username);
 
-            if (user == null || user.Token != refreshToken.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
-            {
-                response.Code = "901";
-                response.Message = "Expired Token";
-                return response;
-            }
             var roles = await _userService.GetRolesAsync(user);
             var claims = new[]
             {
+                new Claim("UserID",user.Id.ToString()),
                 new Claim(ClaimTypes.Name,user.UserName),
                 new Claim(ClaimTypes.Role,string.Join(";",roles))
                 };
@@ -285,7 +321,7 @@ namespace Application.System.Users
             var accesstoken = new JwtSecurityToken(_config["Tokens:Issuer"],
                 _config["Tokens:Issuer"],
                 claims,
-                expires: DateTime.Now.AddMinutes(1),
+                expires: DateTime.Now.AddHours(1),
                 signingCredentials: creds);
             TokenResponse token = new();
             var newAccessToken = new JwtSecurityTokenHandler().WriteToken(accesstoken);
@@ -314,7 +350,6 @@ namespace Application.System.Users
                     ValidAudience = issuer,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ClockSkew = TimeSpan.Zero,
                     IssuerSigningKey = new SymmetricSecurityKey(signingKeyBytes),
                 };
                 principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);

@@ -1,5 +1,6 @@
 ﻿using Application.ClaimTokens;
 using Application.System.Users;
+using Data.DataContext;
 using Data.Entities;
 using Data.Enum;
 using Microsoft.AspNetCore.Authentication;
@@ -22,6 +23,7 @@ namespace BuildingConstructApi.Controllers
 
     public class UserController : ControllerBase
     {
+        public string userID { get; set; } 
         private readonly IUserService _userService;
         private readonly IConfiguration _configuration;
         private Task<AuthenticationState> authenticationStateTask { get; set; }
@@ -50,7 +52,14 @@ namespace BuildingConstructApi.Controllers
             }
             else
             {
-                var token = await _userService.GenerateToken(rs.Data);
+                var userModels = new UserModels()
+                {
+                    UserName = rs.Data.UserName,
+                    Id = rs.Data.Id,
+                    Phone = rs.Data.Phone,
+                    Role=rs.Data.Role
+                };
+                var token = await _userService.GenerateToken(userModels);
                 if (token != null)
                 {
                     try
@@ -69,13 +78,18 @@ namespace BuildingConstructApi.Controllers
                     }
                     token.Message = "Login Success";
                     token.Code = BaseCode.SUCCESS;
-
+                    rs.Code = token.Code;
+                    rs.Message = token.Message;
+                    rs.Data.AccessToken = token.Data.AccessToken;
+                    rs.Data.RefreshToken = token.Data.RefreshToken;
+                    rs.Data.RefreshTokenExpiryTime = token.Data.RefreshTokenExpiryTime;
                 }
-                return Ok(token);
+                return Ok(rs);
 
             }
         }
         [HttpPost("refresh")]
+        [AllowAnonymous]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenResponse refreshToken)
         {
             var rs = await _userService.RefreshToken(refreshToken);
@@ -136,6 +150,7 @@ namespace BuildingConstructApi.Controllers
         {
             var rs = User.FindFirst("UserID").Value;
             //or if u want the list of claims
+            userID = rs;
             var claims = User.Claims;
             return Ok(rs);
         }

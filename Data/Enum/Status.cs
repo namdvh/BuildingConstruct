@@ -10,6 +10,9 @@ namespace Data.Enum
     { 
         Level1,
         Level2,
-        Level3
+        Level3,
+        SUCCESS,
+        DECLINED,
+        NOT_RESPONSE,
     }
 }

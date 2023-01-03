@@ -6,7 +6,7 @@ namespace Data.Entities
     {
         public int Id { get; set; }
 
-        public string? Webstie { get; set; }
+        public string? Website { get; set; }
 
         public string? Description { get; set; }
 
@@ -19,5 +19,7 @@ namespace Data.Entities
         public Place Place { get; set; }    
 
         public User? User { get; set; }
+
+        public List<Products> Products { get; set; }
     }
 }

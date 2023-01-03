@@ -6,7 +6,7 @@ namespace Data.Entities
     {
         public int Id { get; set; }
 
-        public int Experience { get; set; }
+        public int? Experience { get; set; }
 
         public Place? Place { get; set; }
 
@@ -14,6 +14,15 @@ namespace Data.Entities
 
         public User? User { get; set; }
 
-        public List<BuilderPost> Posts { get; set; }
+        public List<BuilderPost>? Posts { get; set; }
+
+        public Guid? TypeID { get; set; }
+
+        public Type Type { get; set; }
+        
+        public List<Group>? Groups { get; set; }
+
+        public List<AppliedPost>? AppliedPosts { get; set; }
+        
     }
 }
