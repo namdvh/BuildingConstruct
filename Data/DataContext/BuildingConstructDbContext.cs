@@ -45,6 +45,7 @@ namespace Data.DataContext
             modelBuilder.ApplyConfiguration(new ContractorPostTypeConfiguration());
             modelBuilder.ApplyConfiguration(new BuilderPostTypeConfiguration());
             modelBuilder.ApplyConfiguration(new BuilderPostSkillConfigurations());
+            modelBuilder.ApplyConfiguration(new CartConfiguration());
 
             modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("UserLogins").HasKey(x => x.UserId);
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("UserRoles").HasKey(x => new { x.UserId, x.RoleId });
@@ -75,5 +76,6 @@ namespace Data.DataContext
         public DbSet<ContractorPostType> ContractorPostTypes { get; set; }    
         public DbSet<BuilderPostType> BuilderPostTypes { get; set; }    
         public DbSet<BuilderPostSkill> BuilderPostSkills { get; set; }    
+        public DbSet<Cart> Carts { get; set; }    
     }
 }

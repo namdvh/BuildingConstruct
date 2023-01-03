@@ -155,5 +155,19 @@ namespace BuildingConstructApi.Controllers
             return Ok(rs);
         }
 
+        [HttpGet("detail")]
+        public async Task<IActionResult> GetUserDetail(string role)
+        {
+            var userID = User.FindFirst("UserID").Value;
+            if (userID == null)
+            {
+                return BadRequest();
+            }
+
+            var result = await _userService.GetProfile(Guid.Parse(userID), role);
+            return Ok(result);
+
+        }
+
     }
 }

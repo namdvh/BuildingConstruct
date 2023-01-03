@@ -24,5 +24,7 @@
 
         public List<ProductCategories>? ProductCategories { get; set; }
 
+        public List<Cart> Carts { get; set; }
+
     }
 }

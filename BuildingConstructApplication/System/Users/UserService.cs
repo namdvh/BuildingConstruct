@@ -84,7 +84,7 @@ namespace Application.System.Users
                             Avatar = us.Avatar,
                             DOB = us.DOB,
                             Gender = us.Gender,
-                            Role=roleName
+                            Role = roleName
                         };
 
                     }
@@ -367,6 +367,156 @@ namespace Application.System.Users
                 throw new ArgumentException();
             }
             return principal;
+        }
+
+        public async Task<BaseResponse<UserDetailDTO>> GetProfile(Guid userID, string role)
+        {
+            BaseResponse<UserDetailDTO> response;
+            var user = await _context.Users.Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                response = new()
+                {
+                    Code = BaseCode.ERROR,
+                    Message = BaseCode.NOTFOUND_MESSAGE
+                };
+                return response;
+            }
+
+            if (role.Equals("BUILDER"))
+            {
+                var result = await _context.Users.Include(x => x.Builder).Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Data = MapToDetailDTO(result, 1),
+                    Message = BaseCode.SUCCESS_MESSAGE
+                };
+                return response;
+
+            }
+            else if (role.Equals("CONTRACTOR"))
+            {
+                var result = await _context.Users.Include(x => x.Contractor).Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Data = MapToDetailDTO(result, 2),
+                    Message = BaseCode.SUCCESS_MESSAGE
+                };
+                return response;
+            }
+            else
+            {
+                var result = await _context.Users.Include(x => x.MaterialStore).Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Data = MapToDetailDTO(result, 3),
+                    Message = BaseCode.SUCCESS_MESSAGE
+                };
+                return response;
+
+            }
+
+        }
+
+
+
+
+        private UserDetailDTO MapToDetailDTO(User user, int status)
+        {
+            //1 Builder
+            //2 Ctor
+            //3 Material Store
+
+            UserDetailDTO userDetail;
+
+            if (status == 1)
+            {
+                DetailBuilder detailBuilder = new()
+                {
+                    BuilderSkills = user.Builder.BuilderSkills,
+                    Id = user.Builder.Id,
+                    Place = user.Builder.Place,
+                    TypeName = user.Builder.Type.Name,
+                    Experience = user.Builder.Experience
+                };
+
+
+                userDetail = new()
+                {
+                    Address = user.Address,
+                    Avatar = user.Avatar,
+                    DOB = user.DOB,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    Gender = user.Gender,
+                    IdNumber = user.IdNumber,
+                    LastName = user.LastName,
+                    Status = user.Status,
+                    Builder = detailBuilder,
+                };
+
+            }
+            else if (status == 2)
+            {
+                DetailContractor detailContractor = new()
+                {
+                    CompanyName = user.Contractor.CompanyName,
+                    Description = user.Contractor.Description,
+                    Id = user.Contractor.Id,
+                    Website = user.Contractor.Website
+                };
+
+
+                userDetail = new()
+                {
+                    Address = user.Address,
+                    Avatar = user.Avatar,
+                    DOB = user.DOB,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    Gender = user.Gender,
+                    IdNumber = user.IdNumber,
+                    LastName = user.LastName,
+                    Status = user.Status,
+                    Contractor = detailContractor,
+                };
+            }
+            else
+            {
+                DetailMaterialStore detailMaterial = new()
+                {
+                    Description = user.MaterialStore.Description,
+                    Id = user.MaterialStore.Id,
+                    Website = user.MaterialStore.Website,
+                    Experience = user.MaterialStore.Experience,
+                    Image = user.MaterialStore.Image,
+                    Place = user.MaterialStore.Place,
+                    TaxCode = user.MaterialStore.TaxCode
+                };
+
+
+                userDetail = new()
+                {
+                    Address = user.Address,
+                    Avatar = user.Avatar,
+                    DOB = user.DOB,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    Gender = user.Gender,
+                    IdNumber = user.IdNumber,
+                    LastName = user.LastName,
+                    Status = user.Status,
+                    DetailMaterialStore = detailMaterial,
+                };
+            }
+
+
+            return userDetail;
         }
     }
 }
