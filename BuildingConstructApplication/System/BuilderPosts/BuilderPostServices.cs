@@ -41,7 +41,6 @@ namespace Application.System.BuilderPosts
                 Views = 0,
                 Salaries = builderPostDTO.Salaries,
                 Status = Status.Level1,
-                Field = builderPostDTO.Field,
                 BuilderID = (int)builderID,
                 CreateBy = Guid.Parse(userID),
                 LastModifiedAt = DateTime.Now
@@ -168,7 +167,6 @@ namespace Application.System.BuilderPosts
             BuilderPostDetailDTO postDTO = new()
             {
                 Title = post.Title,
-                Field = post.Field,
                 Id = post.Id,
                 Salaries = post.Salaries,
                 Description = post.Description,
@@ -463,7 +461,6 @@ namespace Application.System.BuilderPosts
                     Title = item.Title,
                     LastModifiedAt = item.LastModifiedAt,
                     BuilderID = item.BuilderID,
-                    Field = item.Field,
                 };
                 result.Add(dto);
             }

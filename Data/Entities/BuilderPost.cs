@@ -12,7 +12,6 @@ namespace Data.Entities
         public Place Place { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public string Field { get; set; }
         public string Salaries { get; set; }
         public Status Status { get; set; }
         public int Views { get; set; }

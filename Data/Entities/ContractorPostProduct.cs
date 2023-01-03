@@ -11,6 +11,7 @@ namespace Data.Entities
         public int ContractorPostID { get; set; }
 
         public int ProductSystemID { get; set; }
+        public int Quantity { get; set; }
 
         public ContractorPost ContractorPost { get; set; }
 

@@ -22,7 +22,7 @@ namespace ViewModels.ContractorPost
         public DateTime EndDate { get; set; }
 
         public Place Place { get; set; }
-        public List<int> ProductSystemId { get; set; }
+        public List<ProductPost> ProductPost { get; set; }
 
         public PostCategories PostCategories { get; set; }
 
