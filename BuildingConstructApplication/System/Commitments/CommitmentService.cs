@@ -434,16 +434,47 @@ namespace Application.System.Commitments
         {
             BaseResponse<DetailCommitmentDTO> response;
             List<DetailCommitmentDTO> ls = new();
-            bool isInGroup = false;
 
             var post = await _context.ContractorPosts.Where(x => x.Id == postID).FirstOrDefaultAsync();
+            if (post == null)
+            {
+                response = new()
+                {
+                    Code = BaseCode.ERROR,
+                    Message = BaseCode.NOTFOUND_MESSAGE + "POST",
+                };
+                return response;
+            }
+
+
             var builder = await _context.Users
                                 .Include(x => x.Builder)
                                     .ThenInclude(x=>x.Type)
                                 .Where(x => x.BuilderId == builderId)
                                 .FirstOrDefaultAsync();
+            if (builder == null)
+            {
+                response = new()
+                {
+                    Code = BaseCode.ERROR,
+                    Message = BaseCode.NOTFOUND_MESSAGE + "BUILDER",
+                };
+                return response;
+            }
 
             var contractor = await _context.Users.Include(x => x.Contractor).Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
+            if (contractor == null)
+            {
+                response = new()
+                {
+                    Code = BaseCode.ERROR,
+                    Message = BaseCode.NOTFOUND_MESSAGE + "CONTRACTOR",
+                };
+                return response;
+            }
+
+
+
 
 
             var flag = await _context.Groups.Where(x => x.BuilderID == builder.Builder.Id && x.PostID == post.Id).FirstOrDefaultAsync();
