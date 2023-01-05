@@ -337,8 +337,7 @@ namespace Data.Migrations
                 columns: table => new
                 {
                     ContractorPostID = table.Column<int>(type: "int", nullable: false),
-                    ProductSystemID = table.Column<int>(type: "int", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false)
+                    ProductSystemID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -415,8 +414,7 @@ namespace Data.Migrations
                     Place = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Salaries = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
+                    Field = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Views = table.Column<int>(type: "int", nullable: false),
                     BuilderID = table.Column<int>(type: "int", nullable: false),
                     LastModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -616,8 +614,7 @@ namespace Data.Migrations
                     PostID = table.Column<int>(type: "int", nullable: false),
                     BuilderID = table.Column<int>(type: "int", nullable: false),
                     GroupID = table.Column<int>(type: "int", nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    AppliedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -706,38 +703,6 @@ namespace Data.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Saves",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ContractorPostId = table.Column<int>(type: "int", nullable: true),
-                    BuilderPostId = table.Column<int>(type: "int", nullable: true),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Saves", x => new { x.Id, x.UserId });
-                    table.ForeignKey(
-                        name: "FK_Saves_BuilderPosts_BuilderPostId",
-                        column: x => x.BuilderPostId,
-                        principalTable: "BuilderPosts",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Saves_ContractorPosts_ContractorPostId",
-                        column: x => x.ContractorPostId,
-                        principalTable: "ContractorPosts",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Saves_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -841,21 +806,6 @@ namespace Data.Migrations
                 column: "CategoriesID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Saves_BuilderPostId",
-                table: "Saves",
-                column: "BuilderPostId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Saves_ContractorPostId",
-                table: "Saves",
-                column: "ContractorPostId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Saves_UserId",
-                table: "Saves",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Skills_TypeId",
                 table: "Skills",
                 column: "TypeId");
@@ -931,9 +881,6 @@ namespace Data.Migrations
                 name: "Roles");
 
             migrationBuilder.DropTable(
-                name: "Saves");
-
-            migrationBuilder.DropTable(
                 name: "UserClaims");
 
             migrationBuilder.DropTable(
@@ -946,13 +893,22 @@ namespace Data.Migrations
                 name: "UserTokens");
 
             migrationBuilder.DropTable(
+                name: "BuilderPosts");
+
+            migrationBuilder.DropTable(
                 name: "Skills");
 
             migrationBuilder.DropTable(
                 name: "Commitment");
 
             migrationBuilder.DropTable(
+                name: "ContractorPosts");
+
+            migrationBuilder.DropTable(
                 name: "Group");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Products");
@@ -964,25 +920,16 @@ namespace Data.Migrations
                 name: "ProductSystems");
 
             migrationBuilder.DropTable(
-                name: "BuilderPosts");
-
-            migrationBuilder.DropTable(
-                name: "ContractorPosts");
-
-            migrationBuilder.DropTable(
-                name: "Users");
-
-            migrationBuilder.DropTable(
                 name: "Builders");
 
             migrationBuilder.DropTable(
                 name: "Contractors");
 
             migrationBuilder.DropTable(
-                name: "MaterialStores");
+                name: "Verifies");
 
             migrationBuilder.DropTable(
-                name: "Verifies");
+                name: "MaterialStores");
 
             migrationBuilder.DropTable(
                 name: "Types");

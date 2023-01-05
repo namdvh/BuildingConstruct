@@ -9,7 +9,6 @@ namespace Data.Entities
         public PostCategories PostCategories { get; set; }
         public List<BuilderPostType>? BuilderPostTypes { get; set; }
         public List<BuilderPostSkill>? BuilderPostSkills { get; set; }
-        public List<Save>? Saves { get; set; }
         public Place Place { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }

@@ -4,6 +4,7 @@ using Data.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(BuildingConstructDbContext))]
-    partial class BuildingConstructDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221230052130_v1")]
+    partial class v1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,9 +31,6 @@ namespace Data.Migrations
 
                     b.Property<int>("BuilderID")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("AppliedDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<int?>("GroupID")
                         .HasColumnType("int");
@@ -96,6 +95,10 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Field")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("LastModifiedAt")
                         .HasColumnType("datetime2");
 
@@ -103,13 +106,6 @@ namespace Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("PostCategories")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Salaries")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -321,9 +317,6 @@ namespace Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("ContractorPostID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.HasKey("ProductSystemID", "ContractorPostID");
