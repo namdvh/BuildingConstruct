@@ -25,6 +25,11 @@ namespace Application.System.SavePost
             _accessor = accessor;
         }
 
+        public Task<BaseResponse<List<Save>>> GetRepostByUsID(Guid UserID)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<BaseResponse<string>> SavePost(SavePostRequest request)
         {
             BasePagination<string> response = new();

@@ -163,7 +163,6 @@ namespace Application.System.BuilderPosts
         private async Task<BuilderPostDetailDTO> MapToDetailDTO(BuilderPost post)
         {
             var product = await _context.BuilderPosts.Where(x => x.BuilderID == post.Id).ToListAsync();
-            var userId = await _context.BuilderPosts.Where(x => x.Id == post.Id).Select(x => x.CreateBy).FirstOrDefaultAsync();
             BuilderPostDetailDTO postDTO = new()
             {
                 Title = post.Title,
@@ -175,8 +174,8 @@ namespace Application.System.BuilderPosts
                 PostCategories = post.PostCategories,
                 Place = post.Place,
                 type = await GetTypeAndSkillFromPost(post.Id),
-                CreatedBy = userId,
-                Author = await GetUserProfile(userId)
+                CreatedBy = post.CreateBy,
+                Author = await GetUserProfile(post.CreateBy)
             };
 
             return postDTO;
@@ -225,7 +224,7 @@ namespace Application.System.BuilderPosts
         }
         private async Task<UserModelsDTO> GetUserProfile(Guid userID)
         {
-            var results = await _context.Users.Where(x => x.Id.Equals(userID)).SingleOrDefaultAsync();
+            var results = await _context.Users.Where(x => x.Id.ToString().Equals(userID.ToString())).SingleOrDefaultAsync();
             var roleid = await _context.UserRoles.Where(x => x.UserId.Equals(userID)).Select(x => x.RoleId).SingleOrDefaultAsync();
             var final = new UserModelsDTO();
             final.UserName = results.UserName;

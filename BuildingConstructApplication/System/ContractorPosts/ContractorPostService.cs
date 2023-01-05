@@ -49,6 +49,8 @@ namespace Application.System.ContractorPosts
                 PeopeRemained = contractorPostDTO.NumberPeople,
                 Status = Status.Level1,
                 PostCategories = PostCategories.Categories1,
+                Benefit=contractorPostDTO.Benefit,
+                Required=contractorPostDTO.Required,
                 LastModifiedAt = DateTime.Now,
                 CreateBy = Guid.Parse(userID),
                 ContractorID = (int)contracID
@@ -197,6 +199,8 @@ namespace Application.System.ContractorPosts
                 ProjectName = post.ProjectName,
                 Salaries = post.Salaries,
                 Description = post.Description,
+                Benefit=post.Benefit,
+                Required=post.Required,
                 ProductSystem = await GetProductFromPost(post.Id),
                 StarDate = post.StarDate,
                 EndDate = post.EndDate,
@@ -256,7 +260,7 @@ namespace Application.System.ContractorPosts
         }
         private async Task<UserModelsDTO> GetUserProfile(Guid userID)
         {
-            var results = await _context.Users.Where(x => x.Id.Equals(userID)).SingleOrDefaultAsync();
+            var results = await _context.Users.Where(x => x.Id.ToString().Equals(userID.ToString())).SingleOrDefaultAsync();
             var roleid = await _context.UserRoles.Where(x => x.UserId.Equals(userID)).Select(x => x.RoleId).SingleOrDefaultAsync();
             var final = new UserModelsDTO();
             final.UserName = results.UserName;
@@ -273,7 +277,6 @@ namespace Application.System.ContractorPosts
         }
         private async Task<List<ContractorPostProductDTO>> GetProductFromPost(int postID)
         {
-            var results = await _context.ContractorPostProducts.Include(x => x.ProductSystem).Where(x => x.ContractorPostID == postID).ToListAsync();
             var query = from cP in _context.ContractorPostProducts
                         join pSys in _context.ProductSystems on cP.ProductSystemID equals pSys.Id into rs1
                         from r in rs1.DefaultIfEmpty()
@@ -290,7 +293,6 @@ namespace Application.System.ContractorPosts
                         };
             var result = await query.AsNoTracking().ToListAsync();
             var final = new List<ContractorPostProductDTO>();
-
             foreach (var x in result)
             {
                 ContractorPostProductDTO dto = new();
