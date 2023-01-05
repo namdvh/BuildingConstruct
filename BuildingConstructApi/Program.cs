@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using ViewModels.ContractorPost;
 using ViewModels.Users;
 using static Constants.Constants;
 
@@ -143,6 +144,7 @@ builder.Services.AddScoped<RoleManager<Role>, RoleManager<Role>>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITypeService, TypeService>();
 builder.Services.AddScoped<IValidator<RegisterRequestDTO>, RegisterRequestValidatorDTO>();
+builder.Services.AddScoped<IValidator<ContractorPostModels>, ContractorPostValidator>();
 builder.Services.AddTransient<IContractorPostService, ContractorPostService>();
 builder.Services.AddScoped<IBuilderPostService, BuilderPostServices>(); 
 builder.Services.AddScoped<IMaterialStoreService, MaterialStoreService>();
