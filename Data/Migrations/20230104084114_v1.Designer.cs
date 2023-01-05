@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(BuildingConstructDbContext))]
-    [Migration("20230103055122_v6")]
-    partial class v6
+    [Migration("20230104084114_v1")]
+    partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -614,6 +614,37 @@ namespace Data.Migrations
                     b.ToTable("Roles", (string)null);
                 });
 
+            modelBuilder.Entity("Data.Entities.Save", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("BuilderPostId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ContractorPostId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id", "UserId");
+
+                    b.HasIndex("BuilderPostId");
+
+                    b.HasIndex("ContractorPostId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Saves", (string)null);
+                });
+
             modelBuilder.Entity("Data.Entities.Skill", b =>
                 {
                     b.Property<int>("Id")
@@ -1181,6 +1212,29 @@ namespace Data.Migrations
                     b.Navigation("ProductSystem");
                 });
 
+            modelBuilder.Entity("Data.Entities.Save", b =>
+                {
+                    b.HasOne("Data.Entities.BuilderPost", "BuilderPost")
+                        .WithMany("Saves")
+                        .HasForeignKey("BuilderPostId");
+
+                    b.HasOne("Data.Entities.ContractorPost", "ContractorPost")
+                        .WithMany("Saves")
+                        .HasForeignKey("ContractorPostId");
+
+                    b.HasOne("Data.Entities.User", "User")
+                        .WithMany("Saves")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("BuilderPost");
+
+                    b.Navigation("ContractorPost");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Data.Entities.Skill", b =>
                 {
                     b.HasOne("Data.Entities.Type", "Type")
@@ -1235,6 +1289,8 @@ namespace Data.Migrations
                     b.Navigation("BuilderPostSkills");
 
                     b.Navigation("BuilderPostTypes");
+
+                    b.Navigation("Saves");
                 });
 
             modelBuilder.Entity("Data.Entities.Categories", b =>
@@ -1267,6 +1323,8 @@ namespace Data.Migrations
                     b.Navigation("PostCommitments");
 
                     b.Navigation("PostSkills");
+
+                    b.Navigation("Saves");
                 });
 
             modelBuilder.Entity("Data.Entities.Group", b =>
@@ -1320,6 +1378,8 @@ namespace Data.Migrations
             modelBuilder.Entity("Data.Entities.User", b =>
                 {
                     b.Navigation("PostCommitments");
+
+                    b.Navigation("Saves");
                 });
 
             modelBuilder.Entity("Data.Entities.Verify", b =>
