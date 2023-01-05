@@ -369,7 +369,7 @@ namespace Application.System.Users
             return principal;
         }
 
-        public async Task<BaseResponse<UserDetailDTO>> GetProfile(Guid userID, string role)
+        public async Task<BaseResponse<UserDetailDTO>> GetProfile(Guid userID)
         {
             BaseResponse<UserDetailDTO> response;
             var user = await _context.Users.Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
@@ -384,9 +384,16 @@ namespace Application.System.Users
                 return response;
             }
 
-            if (role.Equals("BUILDER"))
+            var rolename =  _userService.GetRolesAsync(user).Result;
+
+
+            if (rolename.First().Equals("User"))
             {
-                var result = await _context.Users.Include(x => x.Builder).Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
+                var result = await _context.Users
+                                    .Include(x => x.Builder)
+                                        .ThenInclude(x=>x.Type)
+                                    .Where(x => x.Id.Equals(userID))
+                                    .FirstOrDefaultAsync();
 
                 response = new()
                 {
@@ -397,7 +404,7 @@ namespace Application.System.Users
                 return response;
 
             }
-            else if (role.Equals("CONTRACTOR"))
+            else if (rolename.First().Equals("Contractor"))
             {
                 var result = await _context.Users.Include(x => x.Contractor).Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
                 response = new()

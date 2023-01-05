@@ -156,15 +156,14 @@ namespace BuildingConstructApi.Controllers
         }
 
         [HttpGet("detail")]
-        public async Task<IActionResult> GetUserDetail(string role)
+        public async Task<IActionResult> GetUserDetail(Guid userID)
         {
-            var userID = User.FindFirst("UserID").Value;
             if (userID == null)
             {
                 return BadRequest();
             }
 
-            var result = await _userService.GetProfile(Guid.Parse(userID), role);
+            var result = await _userService.GetProfile(userID);
             return Ok(result);
 
         }

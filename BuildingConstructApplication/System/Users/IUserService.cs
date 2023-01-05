@@ -15,7 +15,7 @@ namespace Application.System.Users
         Task<RegisterResponseDTO> Register(RegisterRequestDTO request);
         public Task<BaseResponse<Token>> GenerateToken(UserModels request);
         Task<BaseResponse<string>> RefreshToken(RefreshTokenResponse refreshToken);
-        Task<BaseResponse<UserDetailDTO>> GetProfile(Guid userID , string role);
+        Task<BaseResponse<UserDetailDTO>> GetProfile(Guid userID);
 
 
     }

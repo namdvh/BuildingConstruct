@@ -6,6 +6,7 @@ using Application.System.Commitments;
 using Application.System.ContractorPosts;
 using Application.System.MaterialStores;
 using Application.System.ProductSystems;
+using Application.System.Skills;
 using Application.System.Types;
 using Application.System.Users;
 using Constants;
@@ -150,6 +151,7 @@ builder.Services.AddScoped<IMaterialStoreService, MaterialStoreService>();
 builder.Services.AddScoped<ICommitmentService, CommitmentService>();
 builder.Services.AddScoped<IProductSystemService, ProductSystemService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ISkillService, SkillServices>();
 builder.Services.AddTransient<ICartService, CartService>();
 
 var app = builder.Build();
