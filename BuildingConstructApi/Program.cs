@@ -1,5 +1,6 @@
 
 using Application.System.BuilderPosts;
+using Application.System.Carts;
 using Application.System.Category;
 using Application.System.Commitments;
 using Application.System.ContractorPosts;
@@ -149,6 +150,7 @@ builder.Services.AddScoped<IMaterialStoreService, MaterialStoreService>();
 builder.Services.AddScoped<ICommitmentService, CommitmentService>();
 builder.Services.AddScoped<IProductSystemService, ProductSystemService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddTransient<ICartService, CartService>();
 
 var app = builder.Build();
 
