@@ -206,8 +206,8 @@ namespace Application.System.ContractorPosts
                 PostCategories = post.PostCategories,
                 Place = post.Place,
                 type = await GetTypeAndSkillFromPost(post.Id),
-                CreatedBy = userId,
-                Author = await GetUserProfile(userId)
+                CreatedBy = post.CreateBy,
+                Author = await GetUserProfile(post.CreateBy)
             };
 
             return postDTO;
