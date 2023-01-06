@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(BuildingConstructDbContext))]
-    [Migration("20230105130925_v2")]
-    partial class v2
+    [Migration("20230106043912_v1")]
+    partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -315,6 +315,9 @@ namespace Data.Migrations
 
                     b.Property<int>("ViewCount")
                         .HasColumnType("int");
+
+                    b.Property<bool?>("isApplied")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

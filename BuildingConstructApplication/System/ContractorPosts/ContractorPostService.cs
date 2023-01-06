@@ -191,8 +191,18 @@ namespace Application.System.ContractorPosts
         }
         private async Task<ContractorPostDetailDTO> MapToDetailDTO(ContractorPost post)
         {
+            Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
+            var userID = identifierClaim.Value.ToString();
+            var check = await _context.AppliedPosts.Where(x => x.BuilderID.ToString().Equals(userID) && x.PostID.Equals(post.Id)).ToListAsync();
+            if (check.Any())
+            {
+                post.isApplied = true;
+            }
+            else
+            {
+                post.isApplied = false;
+            }
             var product = await _context.ContractorPostProducts.Include(x => x.ProductSystem).Where(x => x.ContractorPostID == post.Id).Select(x => x.ProductSystemID).ToListAsync();
-            var userId = await _context.ContractorPostProducts.Include(x => x.ContractorPost).Where(x => x.ContractorPostID == post.Id).Select(x => x.ContractorPost.CreateBy).FirstOrDefaultAsync();
             ContractorPostDetailDTO postDTO = new()
             {
                 Title = post.Title,
@@ -209,6 +219,7 @@ namespace Application.System.ContractorPosts
                 PeopleRemained = post.PeopeRemained,
                 PostCategories = post.PostCategories,
                 Place = post.Place,
+                IsApplied =post.isApplied,
                 type = await GetTypeAndSkillFromPost(post.Id),
                 CreatedBy = post.CreateBy,
                 Author = await GetUserProfile(post.CreateBy)
@@ -258,7 +269,7 @@ namespace Application.System.ContractorPosts
             }
             return final;
         }
-        private async Task<UserModelsDTO> GetUserProfile(Guid userID)
+        public async Task<UserModelsDTO> GetUserProfile(Guid userID)
         {
             var results = await _context.Users.Where(x => x.Id.ToString().Equals(userID.ToString())).SingleOrDefaultAsync();
             var roleid = await _context.UserRoles.Where(x => x.UserId.Equals(userID)).Select(x => x.RoleId).SingleOrDefaultAsync();
@@ -280,6 +291,8 @@ namespace Application.System.ContractorPosts
             var query = from cP in _context.ContractorPostProducts
                         join pSys in _context.ProductSystems on cP.ProductSystemID equals pSys.Id into rs1
                         from r in rs1.DefaultIfEmpty()
+                        join d in _context.ContractorPostProducts on r.Id equals d.ProductSystemID into rs4
+                        from r4 in rs4.DefaultIfEmpty()
                         join cat in _context.ProductSystemCategories on r.Id equals cat.ProductSystemID into rs2
                         from r1 in rs2.DefaultIfEmpty()
                         join c in _context.Categories on r1.CategoriesID equals c.ID into rs3
@@ -289,7 +302,8 @@ namespace Application.System.ContractorPosts
                         {
                             ProductSystemCategories = r1,
                             ProductSystem = r,
-                            Categories = r3
+                            Categories = r3,
+                            ContractorPostProduct=r4
                         };
             var result = await query.AsNoTracking().ToListAsync();
             var final = new List<ContractorPostProductDTO>();
@@ -298,6 +312,7 @@ namespace Application.System.ContractorPosts
                 ContractorPostProductDTO dto = new();
                 dto.Id = x.ProductSystem.Id;
                 dto.Name = x.ProductSystem.Name;
+                dto.Quantity = x.ContractorPostProduct.Quantity;
                 dto.Brand = x.ProductSystem.Brand;
                 dto.Description = x.ProductSystem.Description;
                 dto.Categories = x.Categories;

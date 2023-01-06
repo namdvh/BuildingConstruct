@@ -314,6 +314,9 @@ namespace Data.Migrations
                     b.Property<int>("ViewCount")
                         .HasColumnType("int");
 
+                    b.Property<bool?>("isApplied")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ContractorID");

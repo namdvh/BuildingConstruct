@@ -217,6 +217,8 @@ namespace Data.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProjectName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Benefit = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Required = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StarDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
@@ -226,6 +228,7 @@ namespace Data.Migrations
                     ViewCount = table.Column<int>(type: "int", nullable: false),
                     NumberPeople = table.Column<int>(type: "int", nullable: false),
                     PeopeRemained = table.Column<int>(type: "int", nullable: false),
+                    isApplied = table.Column<bool>(type: "bit", nullable: true),
                     ContractorID = table.Column<int>(type: "int", nullable: false),
                     LastModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getutcdate()"),
                     CreateBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false)

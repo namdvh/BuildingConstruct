@@ -33,6 +33,7 @@ namespace ViewModels.ContractorPost
 
         public int NumberPeople { get; set; }
         public int PeopleRemained { get; set; }
+        public bool? IsApplied { get; set; }
 
         public DateTime LastModifiedAt { get; set; }
         public Guid CreatedBy { get; set; }
