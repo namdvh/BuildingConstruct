@@ -41,10 +41,14 @@ namespace Application.System.SavePost
                 return response;
             }
             var userID = identifierClaim.Value.ToString();
-            var result = await _context.Saves.Include(x => x.ContractorPost).Include(x => x.BuilderPost).Where(x => x.UserId.Equals(userID)).ToListAsync();
+            var result = await _context.Saves.Include(x => x.ContractorPost).Include(x => x.BuilderPost).Where(x => x.UserId.ToString().Equals(userID)).ToListAsync();
             List<SavePostDetailDTO> list = new();
             if (result != null)
             {
+                foreach (var item in result)
+                {
+                    list.Add(await MapToDTO(item));
+                }
                 response.Data = list;
                 response.Message = BaseCode.SUCCESS;
                 response.Code = BaseCode.SUCCESS_MESSAGE;
