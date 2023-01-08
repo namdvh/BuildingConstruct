@@ -1,6 +1,7 @@
 ﻿using Application.System.SavePost;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ViewModels.Response;
 using ViewModels.SavePost;
 
 namespace BuildingConstructApi.Controllers
@@ -24,10 +25,27 @@ namespace BuildingConstructApi.Controllers
             return Ok(rs);
         }
         [HttpPost]
-        public async Task<IActionResult> CreateSavePost([FromBody]SavePostRequest request)
+        public async Task<IActionResult> CreateSavePost([FromBody] SavePostRequest request)
         {
             var rs = await _saveService.SavePost(request);
             return Ok(rs);
+        }
+        [HttpDelete]
+        public async Task<IActionResult> DeleteSave([FromBody] DeleteSaveRequest request)
+        {
+            BaseResponse<string> response = new();
+            var rs = await _saveService.DeleteSave(request);
+            if (rs)
+            {
+                response.Code = "200";
+                response.Message = "Delete repost succesfully";
+            }
+            else
+            {
+                response.Code = "202";
+                response.Message = "Delete repost unsuccesfully";
+            }
+            return Ok(response);
         }
     }
 }

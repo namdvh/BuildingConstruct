@@ -263,5 +263,31 @@ namespace Application.System.SavePost
             }
             return response;
         }
+
+        public async Task<bool> DeleteSave(DeleteSaveRequest request)
+        {
+            Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
+            var userID = identifierClaim.Value.ToString();
+            dynamic save;
+            if (request.BuilderPostId == null)
+            {
+                save = await _context.Saves.FirstOrDefaultAsync(x => x.ContractorPostId == request.ContractorPostId && x.UserId.Equals(userID));
+
+            }
+            else
+            {
+                save = await _context.Saves.FirstOrDefaultAsync(x => x.BuilderPostId == request.BuilderPostId && x.UserId.Equals(userID));
+            }
+
+            if (save == null)
+            {
+                return false;
+            }
+            _context.Saves.Remove(save);
+            await _context.SaveChangesAsync();
+
+
+            return true;
+        }
     }
 }

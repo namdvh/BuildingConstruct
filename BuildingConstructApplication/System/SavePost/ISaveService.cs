@@ -13,5 +13,6 @@ namespace Application.System.SavePost
     {
         public Task<BaseResponse<string>> SavePost(SavePostRequest request);
         public Task<BaseResponse<List<SavePostDetailDTO>>> GetSavePostByUsID();
+        public Task<bool> DeleteSave(DeleteSaveRequest request);
     }
 }
