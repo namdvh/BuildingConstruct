@@ -193,6 +193,12 @@ namespace Application.System.ContractorPosts
         {
             Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
             var userID = identifierClaim.Value.ToString();
+            bool IsSave = false;
+            var save = await _context.Saves.Where(x => x.UserId.ToString().Equals(userID) && x.ContractorPostId == post.Id).ToListAsync();
+            if (save.Any())
+            {
+                IsSave = true;
+            }
             var check = await _context.AppliedPosts.Where(x => x.BuilderID.ToString().Equals(userID) && x.PostID.Equals(post.Id)).ToListAsync();
             if (check.Any())
             {
@@ -222,7 +228,8 @@ namespace Application.System.ContractorPosts
                 IsApplied =post.isApplied,
                 type = await GetTypeAndSkillFromPost(post.Id),
                 CreatedBy = post.CreateBy,
-                Author = await GetUserProfile(post.CreateBy)
+                Author = await GetUserProfile(post.CreateBy),
+                IsSave=IsSave
             };
 
             return postDTO;

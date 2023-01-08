@@ -62,13 +62,25 @@ namespace Application.System.SavePost
         }
         private async Task<SavePostDetailDTO> MapToDTO(Save save)
         {
-            SavePostDetailDTO dto = new()
+            SavePostDetailDTO dto = new();
+            if (dto.BuilderPost == null)
             {
-                UserId = save.UserId,
-                cPost =await GetContractorPost(save.ContractorPost),
-                bPost=await GetBuilderPost(save.BuilderPost),
-                CreatedDate=save.Date
-            };
+                dto.UserId = save.UserId;
+                dto.ContractorPost = await GetContractorPost(save.ContractorPost);
+                dto.CreatedDate = save.Date;
+            }else if (dto.ContractorPost == null)
+            {
+                dto.UserId = save.UserId;
+                dto.BuilderPost = await GetBuilderPost(save.BuilderPost);
+                dto.CreatedDate = save.Date;
+            }
+            else
+            {
+                dto.UserId = save.UserId;
+                dto.ContractorPost = await GetContractorPost(save.ContractorPost);
+                dto.BuilderPost = await GetBuilderPost(save.BuilderPost);
+                dto.CreatedDate = save.Date;
+            }
             return dto;
         }
         private async Task<List<ContractorPostDetailDTO>> GetContractorPost(ContractorPost post)
@@ -80,6 +92,7 @@ namespace Application.System.SavePost
 
             foreach (var x in results)
             {
+                dto.Id = x.Id;
                 dto.Title = x.Title;
                 dto.ProjectName = x.ProjectName;
                 dto.Description = x.Description;
@@ -152,6 +165,7 @@ namespace Application.System.SavePost
 
             foreach (var x in results)
             {
+                dto.Id = x.Id;
                 dto.Title = x.Title;
                 dto.Description = x.Description;
                 dto.PostCategories = x.PostCategories;

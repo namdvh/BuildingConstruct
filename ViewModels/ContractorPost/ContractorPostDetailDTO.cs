@@ -11,6 +11,7 @@ namespace ViewModels.ContractorPost
 {
     public class ContractorPostDetailDTO
     {
+        public int? Id { get; set; }
         public string Title { get; set; }
 
         public string ProjectName { get; set; }
@@ -34,6 +35,7 @@ namespace ViewModels.ContractorPost
         public int NumberPeople { get; set; }
         public int PeopleRemained { get; set; }
         public bool? IsApplied { get; set; }
+        public bool? IsSave { get; set; }
 
         public DateTime LastModifiedAt { get; set; }
         public Guid CreatedBy { get; set; }
