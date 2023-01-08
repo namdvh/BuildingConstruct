@@ -83,13 +83,18 @@ namespace Application.System.Users
                                 join userRole in _context.UserRoles on users.Id equals userRole.UserId
                                 join role in _context.Roles on userRole.RoleId equals role.Id
                                 select role.Name).FirstOrDefault();
-                
-                    var userDTO = MapToDto(users, roleName);
-                    var token = await GenerateToken(userDTO);
-                    users.Token = token.Data.RefreshToken;
-                    users.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;
-                    await _userService.UpdateAsync(users);
-                    response.Data = userDTO;
+            UserModels u = new()
+            {
+                Id = users.Id
+            };
+                var userDTO = MapToDto(users, roleName);
+                var token = await GenerateToken(userDTO);
+                users.Token = token.Data.RefreshToken;
+                users.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;
+                await _userService.UpdateAsync(users);
+                response.Data = u;
+                response.Data = userDTO;
+                    
             return response;
         }
 
@@ -114,6 +119,7 @@ namespace Application.System.Users
 
                 UserModels us = new()
                 {
+                    Id = user.Id,
                     UserName = user.UserName,
                     Avatar = user.Avatar,
                     FirstName = user.FirstName,
@@ -147,6 +153,7 @@ namespace Application.System.Users
                 }
                 UserModels u = new()
                 {
+                    Id = users.Id,
                     UserName = users.UserName,
                     Avatar = users.Avatar,
                     FirstName = users.FirstName,

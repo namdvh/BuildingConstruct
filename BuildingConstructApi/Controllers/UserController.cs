@@ -72,6 +72,7 @@ namespace BuildingConstructApi.Controllers
                     //token.Code = BaseCode.SUCCESS;
                     //rs.Code = token.Code;
                     //rs.Message = token.Message;
+                    
                     rs.Data.AccessToken = token.Data.AccessToken;
                     rs.Data.RefreshToken = token.Data.RefreshToken;
                     rs.Data.RefreshTokenExpiryTime = token.Data.RefreshTokenExpiryTime;
