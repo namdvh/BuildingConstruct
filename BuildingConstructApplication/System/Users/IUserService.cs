@@ -17,6 +17,10 @@ namespace Application.System.Users
         Task<BaseResponse<string>> RefreshToken(RefreshTokenResponse refreshToken);
         Task<BaseResponse<UserDetailDTO>> GetProfile(Guid userID);
 
+        Task<BaseResponse<string>> UpdateBuilderProfile(UpdateBuilderRequest request, Guid userID);
+        Task<BaseResponse<string>> UpdateContractorProfile(UpdateContractorRequest request, Guid userID);
+        Task<BaseResponse<string>> UpdateStoreProfile(UpdateStoreRequest request, Guid userID);
+
 
     }
 }

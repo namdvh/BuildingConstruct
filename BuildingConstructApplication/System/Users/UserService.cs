@@ -384,14 +384,14 @@ namespace Application.System.Users
                 return response;
             }
 
-            var rolename =  _userService.GetRolesAsync(user).Result;
+            var rolename = _userService.GetRolesAsync(user).Result;
 
 
             if (rolename.First().Equals("User"))
             {
                 var result = await _context.Users
                                     .Include(x => x.Builder)
-                                        .ThenInclude(x=>x.Type)
+                                        .ThenInclude(x => x.Type)
                                     .Where(x => x.Id.Equals(userID))
                                     .FirstOrDefaultAsync();
 
@@ -524,6 +524,166 @@ namespace Application.System.Users
 
 
             return userDetail;
+        }
+
+        public async Task<BaseResponse<string>> UpdateBuilderProfile(UpdateBuilderRequest request, Guid userID)
+        {
+            BaseResponse<string> response;
+
+            var user = await _context.Users.Include(x => x.Builder).FirstOrDefaultAsync(x => x.Id.Equals(userID));
+
+            if (user != null)
+            {
+                user.FirstName = request.FirstName;
+                user.LastName = request.FirstName;
+                user.Email = request.Email;
+                user.Gender = request.Gender;
+                user.IdNumber = request.IdNumber;
+                user.DOB = request.DOB;
+                user.Avatar = request.Avatar;
+                user.PhoneNumber = request.Phone;
+
+                user.Builder.YearOfExperience = request.YearOfExperience;
+                user.Builder.Certificate = request.Certificate;
+
+                user.Builder.Experience = request.Experience;
+                user.Builder.TypeID = request.TypeID;
+                user.Builder.Place = request.Place;
+
+
+                if (request.Skills != null)
+                {
+                    var skills = await _context.BuilderSkills.Where(x => x.BuilderSkillID.Equals(user.BuilderId)).ToListAsync();
+                    _context.RemoveRange(skills);
+                    await _context.SaveChangesAsync();
+
+
+                    foreach (var x in request.Skills)
+                    {
+                        BuilderSkill newSkills = new()
+                        {
+                            BuilderSkillID = (int)user.BuilderId,
+                            SkillID = x
+                        };
+                        await _context.BuilderSkills.AddAsync(newSkills);
+                        await _context.SaveChangesAsync();
+                    }
+
+
+                }
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE
+                };
+
+
+            }
+            else
+            {
+                response = new()
+                {
+                    Message = BaseCode.NOTFOUND_MESSAGE,
+                    Code = BaseCode.ERROR
+                };
+            }
+            return response;
+        }
+
+        public async Task<BaseResponse<string>> UpdateContractorProfile(UpdateContractorRequest request, Guid userID)
+        {
+            BaseResponse<string> response;
+
+            var user = await _context.Users.Include(x => x.Contractor).FirstOrDefaultAsync(x => x.Id.Equals(userID));
+
+            if (user != null)
+            {
+                user.FirstName = request.FirstName;
+                user.LastName = request.FirstName;
+                user.Email = request.Email;
+                user.Gender = request.Gender;
+                user.IdNumber = request.IdNumber;
+                user.DOB = request.DOB;
+                user.Avatar = request.Avatar;
+                user.PhoneNumber = request.Phone;
+
+                user.Contractor.CompanyName = request.CompanyName;
+                user.Contractor.Description = request.Description;
+                user.Contractor.Website = request.Website;
+               
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE
+                };
+
+
+            }
+            else
+            {
+                response = new()
+                {
+                    Message = BaseCode.NOTFOUND_MESSAGE,
+                    Code = BaseCode.ERROR
+                };
+            }
+            return response;
+        }
+
+        public async Task<BaseResponse<string>> UpdateStoreProfile(UpdateStoreRequest request, Guid userID)
+        {
+            BaseResponse<string> response;
+
+            var user = await _context.Users.Include(x => x.MaterialStore).FirstOrDefaultAsync(x => x.Id.Equals(userID));
+
+            if (user != null)
+            {
+                user.FirstName = request.FirstName;
+                user.LastName = request.FirstName;
+                user.Email = request.Email;
+                user.Gender = request.Gender;
+                user.IdNumber = request.IdNumber;
+                user.DOB = request.DOB;
+                user.Avatar = request.Avatar;
+                user.PhoneNumber = request.Phone;
+
+                user.MaterialStore.TaxCode = request.TaxCode;
+                user.MaterialStore.Description = request.Description;
+                user.MaterialStore.Website = request.Website;
+                user.MaterialStore.Experience = request.Experience;
+                user.MaterialStore.Image = request.Image;
+                user.MaterialStore.Place = request.Place;
+
+
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE
+                };
+
+
+            }
+            else
+            {
+                response = new()
+                {
+                    Message = BaseCode.NOTFOUND_MESSAGE,
+                    Code = BaseCode.ERROR
+                };
+            }
+            return response;
         }
     }
 }
