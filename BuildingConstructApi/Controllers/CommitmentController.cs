@@ -1,5 +1,6 @@
 ﻿using Application.System.BuilderPosts;
 using Application.System.Commitments;
+using Data.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +22,7 @@ namespace BuildingConstructApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] PaginationFilter request)
+        public async Task<IActionResult> GetAll([FromQuery] PaginationFilter request,Status status)
         {
             var validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
             var userID = User.FindFirst("UserID").Value;
@@ -30,7 +31,7 @@ namespace BuildingConstructApi.Controllers
             {
                 return BadRequest();
             }
-            var result = await _commitmentService.GetCommitment(Guid.Parse(userID), validFilter);
+            var result = await _commitmentService.GetCommitment(Guid.Parse(userID), validFilter,status);
             return Ok(result);
         }
 

@@ -18,12 +18,14 @@ namespace Application.System.Commitments
             _context = context;
         }
 
-        public async Task<BasePagination<List<CommitmentDTO>>> GetCommitment(Guid UserID, PaginationFilter filter)
+        public async Task<BasePagination<List<CommitmentDTO>>> GetCommitment(Guid UserID, PaginationFilter filter,Status status)
         {
             BasePagination<List<CommitmentDTO>> response;
 
             var orderBy = filter._orderBy.ToString();
             int totalRecord;
+
+            dynamic result;
 
             orderBy = orderBy switch
             {
@@ -37,14 +39,37 @@ namespace Application.System.Commitments
                 filter._sortBy = "PostID";
             }
 
-            var result = await _context.PostCommitments
+
+            if (status == Status.SUCCESS)
+            {
+
+            result = await _context.PostCommitments
                 .Include(x => x.ContractorPosts)
                 .Include(x => x.Commitment)
-                .Where(x => x.UserID.Equals(UserID))
+                .Where(x => x.UserID.Equals(UserID)&&x.Commitment.Status==Status.SUCCESS)
                 .OrderBy(filter._sortBy + " " + orderBy)
                 .Skip((filter.PageNumber - 1) * filter.PageSize)
                 .Take(filter.PageSize)
                 .ToListAsync();
+
+                totalRecord = await _context.PostCommitments.Where(x => x.UserID.Equals(UserID) && x.Commitment.Status == Status.SUCCESS).CountAsync();
+
+            }
+            else
+            {
+                result = await _context.PostCommitments
+               .Include(x => x.ContractorPosts)
+               .Include(x => x.Commitment)
+               .Where(x => x.UserID.Equals(UserID) && x.Commitment.Status == Status.NOT_RESPONSE)
+               .OrderBy(filter._sortBy + " " + orderBy)
+               .Skip((filter.PageNumber - 1) * filter.PageSize)
+               .Take(filter.PageSize)
+               .ToListAsync();
+
+                totalRecord = await _context.PostCommitments.Where(x => x.UserID.Equals(UserID) && x.Commitment.Status == Status.NOT_RESPONSE).CountAsync();
+
+            }
+
 
 
 
