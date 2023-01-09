@@ -10,7 +10,7 @@ namespace Data.Entities
 
         public string? Certificate { get; set; }
 
-        public int? Experience { get; set; }
+        public int? ExperienceDetail { get; set; }
 
         public Place? Place { get; set; }
 

@@ -369,66 +369,6 @@ namespace Application.System.Users
             return principal;
         }
 
-        public async Task<BaseResponse<UserDetailDTO>> GetProfile(Guid userID)
-        {
-            BaseResponse<UserDetailDTO> response;
-            var user = await _context.Users.Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
-
-            if (user == null)
-            {
-                response = new()
-                {
-                    Code = BaseCode.ERROR,
-                    Message = BaseCode.NOTFOUND_MESSAGE
-                };
-                return response;
-            }
-
-            var rolename = _userService.GetRolesAsync(user).Result;
-
-
-            if (rolename.First().Equals("User"))
-            {
-                var result = await _context.Users
-                                    .Include(x => x.Builder)
-                                        .ThenInclude(x => x.Type)
-                                    .Where(x => x.Id.Equals(userID))
-                                    .FirstOrDefaultAsync();
-
-                response = new()
-                {
-                    Code = BaseCode.SUCCESS,
-                    Data = MapToDetailDTO(result, 1),
-                    Message = BaseCode.SUCCESS_MESSAGE
-                };
-                return response;
-
-            }
-            else if (rolename.First().Equals("Contractor"))
-            {
-                var result = await _context.Users.Include(x => x.Contractor).Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
-                response = new()
-                {
-                    Code = BaseCode.SUCCESS,
-                    Data = MapToDetailDTO(result, 2),
-                    Message = BaseCode.SUCCESS_MESSAGE
-                };
-                return response;
-            }
-            else
-            {
-                var result = await _context.Users.Include(x => x.MaterialStore).Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
-                response = new()
-                {
-                    Code = BaseCode.SUCCESS,
-                    Data = MapToDetailDTO(result, 3),
-                    Message = BaseCode.SUCCESS_MESSAGE
-                };
-                return response;
-
-            }
-
-        }
 
 
 
@@ -443,13 +383,20 @@ namespace Application.System.Users
 
             if (status == 1)
             {
+
+                var tmp = _context.BuilderSkills.Include(x=>x.Skill).Where(x => x.BuilderSkillID == user.BuilderId).ToList();
+
+               
+
                 DetailBuilder detailBuilder = new()
                 {
-                    BuilderSkills = user.Builder.BuilderSkills,
+                    BuilderSkills = MapToSkillDTO(tmp),
                     Id = user.Builder.Id,
                     Place = user.Builder.Place,
                     TypeName = user.Builder.Type.Name,
-                    Experience = user.Builder.Experience
+                    Experience = user.Builder.ExperienceDetail,
+                    ExperienceDetail=user.Builder.YearOfExperience,
+                    Certificate=user.Builder.Certificate
                 };
 
 
@@ -526,6 +473,82 @@ namespace Application.System.Users
             return userDetail;
         }
 
+        private List<BuilderSkillsDTO> MapToSkillDTO(List<BuilderSkill> skills)
+        {
+            List<BuilderSkillsDTO> ls = new();
+
+            foreach (var x in skills)
+            {
+                BuilderSkillsDTO dto = new()
+                {
+                    Id = x.SkillID,
+                    Name = x.Skill.Name
+                };
+                ls.Add(dto);
+            }
+            return ls;
+        }
+
+        public async Task<BaseResponse<UserDetailDTO>> GetProfile(Guid userID)
+        {
+            BaseResponse<UserDetailDTO> response;
+            var user = await _context.Users.Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                response = new()
+                {
+                    Code = BaseCode.ERROR,
+                    Message = BaseCode.NOTFOUND_MESSAGE
+                };
+                return response;
+            }
+
+            var rolename = _userService.GetRolesAsync(user).Result;
+
+
+            if (rolename.First().Equals("User"))
+            {
+                var result = await _context.Users
+                                    .Include(x => x.Builder)
+                                        .ThenInclude(x => x.Type)
+                                    .Where(x => x.Id.Equals(userID))
+                                    .FirstOrDefaultAsync();
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Data = MapToDetailDTO(result, 1),
+                    Message = BaseCode.SUCCESS_MESSAGE
+                };
+                return response;
+
+            }
+            else if (rolename.First().Equals("Contractor"))
+            {
+                var result = await _context.Users.Include(x => x.Contractor).Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Data = MapToDetailDTO(result, 2),
+                    Message = BaseCode.SUCCESS_MESSAGE
+                };
+                return response;
+            }
+            else
+            {
+                var result = await _context.Users.Include(x => x.MaterialStore).Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Data = MapToDetailDTO(result, 3),
+                    Message = BaseCode.SUCCESS_MESSAGE
+                };
+                return response;
+
+            }
+
+        }
         public async Task<BaseResponse<string>> UpdateBuilderProfile(UpdateBuilderRequest request, Guid userID)
         {
             BaseResponse<string> response;
@@ -546,7 +569,7 @@ namespace Application.System.Users
                 user.Builder.YearOfExperience = request.YearOfExperience;
                 user.Builder.Certificate = request.Certificate;
 
-                user.Builder.Experience = request.Experience;
+                user.Builder.ExperienceDetail = request.Experience;
                 user.Builder.TypeID = request.TypeID;
                 user.Builder.Place = request.Place;
 
