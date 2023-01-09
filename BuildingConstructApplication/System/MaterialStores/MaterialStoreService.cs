@@ -8,16 +8,68 @@ using System.Linq.Dynamic.Core;
 using ViewModels.Pagination;
 using Microsoft.EntityFrameworkCore;
 using ViewModels.ContractorPost;
+using ViewModels.Response;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
+using ViewModels.Categories;
 
 namespace Application.System.MaterialStores
 {
     public class MaterialStoreService : IMaterialStoreService
     {
         private readonly BuildingConstructDbContext _context;
+        private IHttpContextAccessor _accessor;
 
-        public MaterialStoreService(BuildingConstructDbContext context)
+        public MaterialStoreService(BuildingConstructDbContext context, IHttpContextAccessor accessor)
         {
             _context = context;
+            _accessor = accessor;
+        }
+
+        public async Task<bool> CreateProduct(ProductDTO request)
+        {
+            Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
+            var userID = identifierClaim.Value.ToString();
+            var storeID = await _context.Users.Where(x => x.Id.ToString().Equals(userID)).Select(x => x.MaterialStoreID).FirstOrDefaultAsync();
+            Products products = new();
+            products.Name = request.Name;
+            products.Description = request.Description;
+            products.Brand = request.Brand;
+            products.UnitPrice = request.UnitPrice;
+            products.UnitInStock = request.UnitInStock;
+            products.Image = request.Image;
+            products.SoldQuantities = 0;
+            products.MaterialStoreID = storeID;
+            await _context.Products.AddAsync(products);
+            await _context.SaveChangesAsync();
+            if (request.CategoriesId != null)
+            {
+                var productcate = new ProductCategories();
+
+                foreach (var item in request.CategoriesId)
+                {
+                    var check = _context.Categories.Where(x => x.ID == item).SingleOrDefault();
+                    if (check == null)
+                    {
+                        _context.Products.Remove(products);
+                        await _context.SaveChangesAsync();
+                        return false;
+                    }
+                    var id = products.Id;
+                    productcate.ProductID = id;
+                    productcate.CategoriesID = item;
+                    await _context.AddAsync(productcate);
+                    var rs = await _context.SaveChangesAsync();
+                    if (rs < 0)
+                    {
+                        _context.Products.Remove(products);
+                        await _context.SaveChangesAsync();
+                        return false;
+                    }
+                }
+
+            }
+            return true;
         }
 
         public async Task<BasePagination<List<MaterialStoreDTO>>> GetList(PaginationFilter filter)

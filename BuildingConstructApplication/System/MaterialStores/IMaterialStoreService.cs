@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ViewModels.ContractorPost;
 using ViewModels.MaterialStore;
 using ViewModels.Pagination;
+using ViewModels.Response;
 
 namespace Application.System.MaterialStores
 {
@@ -14,5 +15,6 @@ namespace Application.System.MaterialStores
         Task<BasePagination<List<MaterialStoreDTO>>> GetList(PaginationFilter filter);
 
         Task<BasePagination<List<MaterialStoreDTO>>> Search(PaginationFilter filter, string keyword);
+        Task<bool> CreateProduct(ProductDTO request);
     }
 }
