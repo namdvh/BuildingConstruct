@@ -9,7 +9,7 @@ namespace ViewModels.Commitment
 {
     public class CommitmentDTO
     {
-        public int CommitmentId { get; set; }
+        public int? Id { get; set; }
 
         public string? OptionalTerm { get; set; }
 

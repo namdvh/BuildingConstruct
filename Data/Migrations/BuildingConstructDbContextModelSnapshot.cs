@@ -218,34 +218,6 @@ namespace Data.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("Data.Entities.Commitment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("OptionalTerm")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Salaries")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Commitment", (string)null);
-                });
-
             modelBuilder.Entity("Data.Entities.Contractor", b =>
                 {
                     b.Property<int>("Id")
@@ -486,33 +458,55 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.PostCommitment", b =>
                 {
-                    b.Property<int>("PostID")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserID")
-                        .HasColumnType("uniqueidentifier");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CommitmentID")
+                    b.Property<int?>("PostID")
                         .HasColumnType("int");
+
+                    b.Property<int?>("BuilderID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ContractorID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("GroupID")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsAuthor")
-                        .HasColumnType("bit");
+                    b.Property<string>("OptionalTerm")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Salaries")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.HasKey("PostID", "UserID", "CommitmentID");
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasIndex("CommitmentID");
+                    b.HasKey("Id", "PostID", "BuilderID", "ContractorID");
+
+                    b.HasIndex("BuilderID");
+
+                    b.HasIndex("ContractorID");
 
                     b.HasIndex("GroupID");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex("PostID");
 
-                    b.ToTable("PostCommitment", (string)null);
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Commitment", (string)null);
                 });
 
             modelBuilder.Entity("Data.Entities.ProductCategories", b =>
@@ -1147,10 +1141,16 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.PostCommitment", b =>
                 {
-                    b.HasOne("Data.Entities.Commitment", "Commitment")
+                    b.HasOne("Data.Entities.Builder", "Builder")
                         .WithMany("PostCommitments")
-                        .HasForeignKey("CommitmentID")
+                        .HasForeignKey("BuilderID")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Data.Entities.Contractor", "Contractor")
+                        .WithMany("PostCommitments")
+                        .HasForeignKey("ContractorID")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Data.Entities.Group", "Group")
@@ -1163,19 +1163,17 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Data.Entities.User", "User")
+                    b.HasOne("Data.Entities.User", null)
                         .WithMany("PostCommitments")
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
-                    b.Navigation("Commitment");
+                    b.Navigation("Builder");
+
+                    b.Navigation("Contractor");
 
                     b.Navigation("ContractorPosts");
 
                     b.Navigation("Group");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Data.Entities.ProductCategories", b =>
@@ -1269,6 +1267,8 @@ namespace Data.Migrations
 
                     b.Navigation("Groups");
 
+                    b.Navigation("PostCommitments");
+
                     b.Navigation("Posts");
 
                     b.Navigation("User");
@@ -1288,14 +1288,11 @@ namespace Data.Migrations
                     b.Navigation("ProductSystemCategories");
                 });
 
-            modelBuilder.Entity("Data.Entities.Commitment", b =>
-                {
-                    b.Navigation("PostCommitments");
-                });
-
             modelBuilder.Entity("Data.Entities.Contractor", b =>
                 {
                     b.Navigation("ContractorPosts");
+
+                    b.Navigation("PostCommitments");
 
                     b.Navigation("User");
                 });

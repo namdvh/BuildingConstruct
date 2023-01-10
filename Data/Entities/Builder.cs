@@ -27,6 +27,9 @@ namespace Data.Entities
         public List<Group>? Groups { get; set; }
 
         public List<AppliedPost>? AppliedPosts { get; set; }
-        
+
+        public List<PostCommitment>? PostCommitments { get; set; }
+
+
     }
 }

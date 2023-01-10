@@ -40,7 +40,6 @@ namespace Data.DataContext
             modelBuilder.ApplyConfiguration(new ContractorPostProductsConfiguration());
             modelBuilder.ApplyConfiguration(new ProductCategoriesConfiguration());
             modelBuilder.ApplyConfiguration(new AppliedPostConfiguration());
-            modelBuilder.ApplyConfiguration(new CommitmentConfiguration());
             modelBuilder.ApplyConfiguration(new PostCommitmentsConfigurations());
             modelBuilder.ApplyConfiguration(new ContractorPostTypeConfiguration());
             modelBuilder.ApplyConfiguration(new BuilderPostTypeConfiguration());
@@ -72,7 +71,6 @@ namespace Data.DataContext
         public DbSet<ProductSystemCategories> ProductSystemCategories { get; set; }    
         public DbSet<AppliedPost> AppliedPosts { get; set; }    
         public DbSet<PostCommitment> PostCommitments { get; set; }    
-        public DbSet<Commitment> Commitments { get; set; }    
         public DbSet<ContractorPostType> ContractorPostTypes { get; set; }    
         public DbSet<BuilderPostType> BuilderPostTypes { get; set; }    
         public DbSet<BuilderPostSkill> BuilderPostSkills { get; set; }    

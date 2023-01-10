@@ -25,7 +25,7 @@ namespace ViewModels.Commitment
 
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public Status? IsAccepted { get; set; }
+        public bool IsAccepted { get; set; }
 
     }
 
