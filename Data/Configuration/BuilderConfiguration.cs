@@ -14,7 +14,7 @@ namespace Data.Configuration
 
         public void Configure(EntityTypeBuilder<Entities.Builder> builder)
         {
-            builder.ToTable("Builders");
+            builder.ToTable("Workers");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
             builder.Property(x => x.LastModifiedAt).HasDefaultValueSql("getutcdate()");

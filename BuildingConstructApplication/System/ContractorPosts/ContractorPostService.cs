@@ -302,7 +302,7 @@ namespace Application.System.ContractorPosts
                         from r4 in rs4.DefaultIfEmpty()
                         join cat in _context.ProductSystemCategories on r.Id equals cat.ProductSystemID into rs2
                         from r1 in rs2.DefaultIfEmpty()
-                        join c in _context.Categories on r1.CategoriesID equals c.ID into rs3
+                        join c in _context.Categories on r1.SystemCategoriesID equals c.ID into rs3
                         from r3 in rs3.DefaultIfEmpty()
                         where cP.ContractorPostID == postID
                         select new

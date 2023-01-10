@@ -20,7 +20,7 @@ namespace ViewModels.ProductSystems
         public bool FromSystem { get; set; }
 
         public List<ProducSystemCategoriesDTO>? ProductSystemCategories { get; set; }
-        public List<Data.Entities.Categories>? Categories { get; set; }
+        public List<SystemCategories>? SystemCategories { get; set; }
 
     }
     public class ProductSystemRequestDTO

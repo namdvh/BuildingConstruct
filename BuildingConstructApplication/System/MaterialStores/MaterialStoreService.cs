@@ -3,7 +3,6 @@ using Data.Entities;
 using Data.Enum;
 using Gridify;
 using System.Text;
-using ViewModels.MaterialStore;
 using System.Linq.Dynamic.Core;
 using ViewModels.Pagination;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +11,7 @@ using ViewModels.Response;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using ViewModels.Categories;
+using ViewModels.MaterialStore;
 
 namespace Application.System.MaterialStores
 {
@@ -70,6 +70,88 @@ namespace Application.System.MaterialStores
 
             }
             return true;
+        }
+
+        public async Task<BasePagination<List<ProductStoreDTO>>> GetAllProductStore(PaginationFilter filter)
+        {
+            BasePagination<List<ProductStoreDTO>> response;
+            var orderBy = filter._orderBy.ToString();
+            int totalRecord;
+            if (string.IsNullOrEmpty(filter._sortBy))
+            {
+                filter._sortBy = "Id";
+            }
+            orderBy = orderBy switch
+            {
+                "1" => "ascending",
+                "-1" => "descending",
+                _ => orderBy
+            };
+
+            IQueryable<Products> query = _context.Products;
+
+
+            var data = await query
+                .AsNoTracking()
+               .OrderBy(filter._sortBy + " " + orderBy)
+               .Skip((filter.PageNumber - 1) * filter.PageSize)
+               .Take(filter.PageSize)
+               .ToListAsync();
+            var totalRecords = await _context.ProductSystems.Where(x => x.FromSystem == true).CountAsync();
+
+            if (!data.Any())
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.EMPTY_MESSAGE,
+                    Data = new List<ProductStoreDTO>(),
+                };
+            }
+            else
+            {
+                double totalPages;
+
+                totalPages = totalRecords / (double)filter.PageSize;
+
+                var roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
+                Pagination pagination = new()
+                {
+                    CurrentPage = filter.PageNumber,
+                    PageSize = filter.PageSize,
+                    TotalPages = roundedTotalPages,
+                    TotalRecords = totalRecords
+                };
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = MapListDTO(data),
+                    Pagination = pagination
+                };
+            }
+
+            return response;
+        }
+        public List<ProductStoreDTO> MapListDTO(List<Products> list)
+        {
+            List<ProductStoreDTO> result = new();
+
+            foreach (var item in list)
+            {
+                ProductStoreDTO dto = new();
+                dto.Id = item.Id;
+                dto.Name = item.Name;
+                dto.Description = item.Description;
+                dto.Brand = item.Brand;
+                dto.UnitInStock = item.UnitInStock;
+                dto.UnitPrice = item.UnitPrice;
+                dto.SoldQuantities = item.SoldQuantities;
+                dto.Image = item.Image; 
+                result.Add(dto);
+            }
+            return result;
         }
 
         public async Task<BasePagination<List<MaterialStoreDTO>>> GetList(PaginationFilter filter)
@@ -220,6 +302,60 @@ namespace Application.System.MaterialStores
                 result.Add(dto);
             }
             return result;
+        }
+
+        public async Task<BaseResponse<ProductDetailDTO>> GetProductDetail(int productId)
+        {
+            BaseResponse<ProductDetailDTO> response = new();
+            var rs = await _context.Products.SingleOrDefaultAsync(x => x.Id == productId);
+            if (rs == null)
+            {
+
+                response.Code = BaseCode.ERROR;
+                response.Message = "Cannot find that Product";
+                return response;
+            }
+            ProductDetailDTO productDetail = new();
+            productDetail.Id = rs.Id;
+            productDetail.Name = rs.Name;
+            productDetail.Image = rs.Image;
+            productDetail.Description = rs.Description;
+            productDetail.UnitInStock = rs.UnitInStock;
+            productDetail.UnitPrice = rs.UnitPrice;
+            productDetail.SoldQuantities = rs.SoldQuantities;
+            productDetail.Store = await GetStore((int)rs.MaterialStoreID);
+            productDetail.ProductCategories = await GetCategory(rs.ProductCategories);
+            response.Data = productDetail;
+            response.Code = BaseCode.SUCCESS;
+            response.Message = "SUCCESS";
+            return response;
+        }
+        public async Task<MaterialStoreDTO> GetStore(int storeID)
+        {
+            var results = await _context.MaterialStores.Where(x => x.Id==storeID).SingleOrDefaultAsync();
+            var final = new MaterialStoreDTO();
+            final.Id= storeID;
+            final.Webstie = results.Website;
+            final.Description = results.Description;
+            final.Image = results.Image;
+            final.Experience = results.Experience;
+            final.TaxCode = results.TaxCode;
+            final.Place = results.Place;
+            return final;
+        }
+        public async Task<List<CategoryDTO>> GetCategory(List<ProductCategories> productCategories)
+        {
+            List<CategoryDTO> list = new();
+            foreach (var c in productCategories)
+            {
+                var results = await _context.Categories.Where(x => x.ID == c.CategoriesID).SingleOrDefaultAsync();
+                var final = new CategoryDTO();
+                final.Id = results.ID;
+                final.Name = results.Name;
+                final.Type = results.Type;
+                list.Add(final);
+            }
+            return list;
         }
     }
 }

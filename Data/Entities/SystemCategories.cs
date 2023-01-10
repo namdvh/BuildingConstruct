@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace Data.Entities
 {
-    public class Categories
+    public class SystemCategories
     {
         public int ID { get; set; }
 
-        public string Name { get; set; }    
+        public string Name { get; set; }
 
         public Enum.TypeEnum Type { get; set; }
         [JsonIgnore]
-        public List<ProductCategories> ProductCategories { get; set; }
+        public List<ProductSystemCategories> ProductSystemCategories { get; set; }
     }
 }

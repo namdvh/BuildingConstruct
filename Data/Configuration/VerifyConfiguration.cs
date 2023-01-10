@@ -8,7 +8,7 @@ namespace Data.Configuration
     {
         public void Configure(EntityTypeBuilder<Verify> builder)
         {
-            builder.ToTable("Verifies");
+            builder.ToTable("IdentitficationCards");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.LastModifiedAt).HasDefaultValueSql("getutcdate()");
 
