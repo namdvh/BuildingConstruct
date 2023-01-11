@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ViewModels.Categories;
 
 namespace ViewModels.MaterialStore
 {
@@ -23,5 +24,7 @@ namespace ViewModels.MaterialStore
         public string? Brand { get; set; }
 
         public int SoldQuantities { get; set; }
+        public List<CategoryDTO>? ProductCategories { get; set; }
+
     }
 }

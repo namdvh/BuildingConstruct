@@ -41,7 +41,7 @@ namespace BuildingConstructApi.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<IActionResult> Search( [FromQuery] PaginationFilter request, [FromQuery] string? keyword = "")
+        public async Task<IActionResult> Search([FromQuery] PaginationFilter request, [FromQuery] string? keyword = "")
         {
             var validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
             var result = await materialStoreService.Search(validFilter, keyword);
@@ -50,7 +50,7 @@ namespace BuildingConstructApi.Controllers
         [HttpPost("createProduct")]
         public async Task<IActionResult> AddProduct([FromBody] ProductDTO request)
         {
-            BaseResponse<ProductDTO> response=new();
+            BaseResponse<ProductDTO> response = new();
             var rs = await materialStoreService.CreateProduct(request);
             if (rs)
             {
@@ -65,5 +65,48 @@ namespace BuildingConstructApi.Controllers
             }
             return Ok(response);
         }
+        [HttpGet("getProductDetail/{productId}")]
+        public async Task<IActionResult> GetProductDetail([FromRoute] int productId)
+        {
+            var rs = await materialStoreService.GetProductDetail(productId);
+            return Ok(rs);
+        }
+        [HttpDelete("deleteProduct/{productId}")]
+        public async Task<IActionResult> DeleteProduct([FromRoute] int productId)
+        {
+            BaseResponse<ProductDTO> response = new();
+            var rs = await materialStoreService.DeleteProduct(productId);
+            if (rs)
+            {
+                response.Message = BaseCode.SUCCESS_MESSAGE;
+                response.Code = BaseCode.SUCCESS;
+            }
+            else
+            {
+                response.Code = BaseCode.ERROR;
+                response.Message = BaseCode.ERROR_MESSAGE;
+            }
+            return Ok(response);
+        }
+        [HttpPut("updateProduct")]
+        public async Task<IActionResult> UpdateProduct([FromBody] ProductDTO request, int productId)
+        {
+            var rs = await materialStoreService.UpdateProduct(request,productId);
+            return Ok(rs);
+        }
+        [HttpGet("getProductByUser")]
+        public async Task<IActionResult> GetAllProductByUS([FromQuery] PaginationFilter request)
+        {
+
+            var validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
+
+            var rs = await materialStoreService.GetAllProductStore(validFilter);
+            return Ok(rs);
+        }
+
+
+
+
+
     }
 }
