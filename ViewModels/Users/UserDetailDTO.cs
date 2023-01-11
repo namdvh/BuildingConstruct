@@ -29,8 +29,6 @@ namespace ViewModels.Users
     {
         public int Id { get; set; }
 
-        public int? Experience { get; set; }
-
         public Place? Place { get; set; }
 
         public List<BuilderSkillsDTO>? BuilderSkills { get; set; }

@@ -17,7 +17,6 @@ namespace ViewModels.Users
         public DateTime? DOB { get; set; }
         public string? Avatar { get; set; }
         public Status Status { get; set; }
-        public string? Token { get; set; }
         public string? IdNumber { get; set; }
 
         public string? Phone { get; set; }

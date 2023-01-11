@@ -384,9 +384,9 @@ namespace Application.System.Users
             if (status == 1)
             {
 
-                var tmp = _context.BuilderSkills.Include(x=>x.Skill).Where(x => x.BuilderSkillID == user.BuilderId).ToList();
+                var tmp = _context.BuilderSkills.Include(x => x.Skill).Where(x => x.BuilderSkillID == user.BuilderId).ToList();
 
-               
+
 
                 DetailBuilder detailBuilder = new()
                 {
@@ -394,9 +394,8 @@ namespace Application.System.Users
                     Id = user.Builder.Id,
                     Place = user.Builder.Place,
                     TypeName = user.Builder.Type.Name,
-                    Experience = user.Builder.ExperienceDetail,
-                    ExperienceDetail=user.Builder.YearOfExperience,
-                    Certificate=user.Builder.Certificate
+                    ExperienceDetail = user.Builder.ExperienceDetail,
+                    Certificate = user.Builder.Certificate
                 };
 
 
@@ -557,22 +556,66 @@ namespace Application.System.Users
 
             if (user != null)
             {
-                user.FirstName = request.FirstName;
-                user.LastName = request.FirstName;
-                user.Email = request.Email;
-                user.Gender = request.Gender;
-                user.IdNumber = request.IdNumber;
-                user.DOB = request.DOB;
-                user.Avatar = request.Avatar;
-                user.PhoneNumber = request.Phone;
+                if (!string.IsNullOrEmpty(request.FirstName))
+                {
+                    user.FirstName = request.FirstName;
+                }
 
-                user.Builder.YearOfExperience = request.YearOfExperience;
-                user.Builder.Certificate = request.Certificate;
+                if (!string.IsNullOrEmpty(request.LastName))
+                {
+                    user.LastName = request.LastName;
 
-                user.Builder.ExperienceDetail = request.Experience;
-                user.Builder.TypeID = request.TypeID;
-                user.Builder.Place = request.Place;
+                }
+                if (!string.IsNullOrEmpty(request.Email))
+                {
+                    user.Email = request.Email;
 
+                }
+                if (!string.IsNullOrEmpty(request.Gender.ToString()))
+                {
+                    user.Gender = request.Gender;
+
+                }
+                if (!string.IsNullOrEmpty(request.IdNumber))
+                {
+                    user.IdNumber = request.IdNumber;
+
+                }
+                if (!string.IsNullOrEmpty(request.DOB.ToString()))
+                {
+                    user.DOB = request.DOB;
+
+                }
+                if (!string.IsNullOrEmpty(request.Avatar))
+                {
+                    user.Avatar = request.Avatar;
+
+                }
+                if (!string.IsNullOrEmpty(request.Phone))
+                {
+                    user.PhoneNumber = request.Phone;
+
+                }
+                if (!string.IsNullOrEmpty(request.ExperienceDetail))
+                {
+                    user.Builder.ExperienceDetail = request.ExperienceDetail;
+
+                }
+                if (!string.IsNullOrEmpty(request.Certificate))
+                {
+                    user.Builder.Certificate = request.Certificate;
+
+                }
+                if (!string.IsNullOrEmpty(request.TypeID.ToString()))
+                {
+                    user.Builder.TypeID = request.TypeID;
+
+                }
+                if (!string.IsNullOrEmpty(request.Place.ToString()))
+                {
+                    user.Builder.Place = request.Place;
+
+                }
 
                 if (request.Skills != null)
                 {
@@ -625,19 +668,63 @@ namespace Application.System.Users
 
             if (user != null)
             {
-                user.FirstName = request.FirstName;
-                user.LastName = request.FirstName;
-                user.Email = request.Email;
-                user.Gender = request.Gender;
-                user.IdNumber = request.IdNumber;
-                user.DOB = request.DOB;
-                user.Avatar = request.Avatar;
-                user.PhoneNumber = request.Phone;
 
-                user.Contractor.CompanyName = request.CompanyName;
-                user.Contractor.Description = request.Description;
-                user.Contractor.Website = request.Website;
-               
+                if (!string.IsNullOrEmpty(request.FirstName))
+                {
+                    user.FirstName = request.FirstName;
+                }
+
+                if (!string.IsNullOrEmpty(request.LastName))
+                {
+                    user.LastName = request.LastName;
+
+                }
+                if (!string.IsNullOrEmpty(request.Email))
+                {
+                    user.Email = request.Email;
+
+                }
+                if (!string.IsNullOrEmpty(request.Gender.ToString()))
+                {
+                    user.Gender = request.Gender;
+
+                }
+                if (!string.IsNullOrEmpty(request.IdNumber))
+                {
+                    user.IdNumber = request.IdNumber;
+
+                }
+                if (!string.IsNullOrEmpty(request.DOB.ToString()))
+                {
+                    user.DOB = request.DOB;
+
+                }
+                if (!string.IsNullOrEmpty(request.Avatar))
+                {
+                    user.Avatar = request.Avatar;
+
+                }
+                if (!string.IsNullOrEmpty(request.Phone))
+                {
+                    user.PhoneNumber = request.Phone;
+
+                }
+
+                if (!string.IsNullOrEmpty(request.CompanyName))
+                {
+                    user.Contractor.CompanyName = request.CompanyName;
+
+
+                }
+                if (!string.IsNullOrEmpty(request.Description))
+                {
+                    user.Contractor.Description = request.Description;
+
+                }
+                if (!string.IsNullOrEmpty(request.Website))
+                {
+                    user.Contractor.Website = request.Website;
+                }
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
 
@@ -669,21 +756,86 @@ namespace Application.System.Users
 
             if (user != null)
             {
-                user.FirstName = request.FirstName;
-                user.LastName = request.FirstName;
-                user.Email = request.Email;
-                user.Gender = request.Gender;
-                user.IdNumber = request.IdNumber;
-                user.DOB = request.DOB;
-                user.Avatar = request.Avatar;
-                user.PhoneNumber = request.Phone;
+                if (!string.IsNullOrEmpty(request.FirstName))
+                {
+                    user.FirstName = request.FirstName;
+                }
 
-                user.MaterialStore.TaxCode = request.TaxCode;
-                user.MaterialStore.Description = request.Description;
-                user.MaterialStore.Website = request.Website;
-                user.MaterialStore.Experience = request.Experience;
-                user.MaterialStore.Image = request.Image;
-                user.MaterialStore.Place = request.Place;
+                if (!string.IsNullOrEmpty(request.LastName))
+                {
+                    user.LastName = request.LastName;
+
+                }
+                if (!string.IsNullOrEmpty(request.Email))
+                {
+                    user.Email = request.Email;
+
+                }
+                if (!string.IsNullOrEmpty(request.Gender.ToString()))
+                {
+                    user.Gender = request.Gender;
+
+                }
+                if (!string.IsNullOrEmpty(request.IdNumber))
+                {
+                    user.IdNumber = request.IdNumber;
+
+                }
+                if (!string.IsNullOrEmpty(request.DOB.ToString()))
+                {
+                    user.DOB = request.DOB;
+
+                }
+                if (!string.IsNullOrEmpty(request.Avatar))
+                {
+                    user.Avatar = request.Avatar;
+
+                }
+                if (!string.IsNullOrEmpty(request.Phone))
+                {
+                    user.PhoneNumber = request.Phone;
+
+                }
+                if (!string.IsNullOrEmpty(request.TaxCode))
+                {
+                    user.MaterialStore.TaxCode = request.TaxCode;
+
+                }
+                if (!string.IsNullOrEmpty(request.Description))
+                {
+                    user.MaterialStore.Description = request.Description;
+
+
+                }
+                if (!string.IsNullOrEmpty(request.Website))
+                {
+                    user.MaterialStore.Website = request.Website;
+
+
+                }
+                if (!string.IsNullOrEmpty(request.Experience))
+                {
+                    user.MaterialStore.Experience = request.Experience;
+
+
+                }
+                if (!string.IsNullOrEmpty(request.Image))
+                {
+                    user.MaterialStore.Image = request.Image;
+
+
+                }
+                if (!string.IsNullOrEmpty(request.Place.ToString()))
+                {
+                    user.MaterialStore.Place = request.Place;
+
+
+                }
+
+
+
+
+
 
 
                 _context.Users.Update(user);

@@ -9,8 +9,8 @@ namespace ViewModels.Users
 {
     public class UpdateBuilderRequest
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; } 
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; } 
         public string? Email { get; set; }
         public string? Address { get; set; }
         public Gender? Gender { get; set; }
@@ -21,16 +21,15 @@ namespace ViewModels.Users
 
 
 
-        public string? YearOfExperience { get; set; }
+        public string? ExperienceDetail { get; set; }
 
         public string? Certificate { get; set; }
 
-        public int? Experience { get; set; }
 
         public Place? Place { get; set; }
 
         public Guid? TypeID { get; set; }
 
-        public List<int> Skills { get; set; }
+        public List<int>? Skills { get; set; }
     }
 }

@@ -6,11 +6,11 @@ namespace Data.Entities
     {
         public int Id { get; set; }
 
-        public string? YearOfExperience { get; set; }
+        public string? ExperienceDetail { get; set; }
 
         public string? Certificate { get; set; }
 
-        public int? ExperienceDetail { get; set; }
+        public int? Experience { get; set; }
 
         public Place? Place { get; set; }
 
