@@ -12,6 +12,7 @@ namespace Application.System.SavePost
     public interface ISaveService
     {
         public Task<BaseResponse<string>> SavePost(SavePostRequest request);
-        public Task<BaseResponse<List<Save>>> GetRepostByUsID(Guid UserID);
+        public Task<BaseResponse<List<SavePostDetailDTO>>> GetSavePostByUsID();
+        public Task<bool> DeleteSave(DeleteSaveRequest request);
     }
 }

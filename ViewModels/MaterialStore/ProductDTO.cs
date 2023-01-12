@@ -1,18 +1,14 @@
-﻿using Data.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ViewModels.ContractorPost
+namespace ViewModels.MaterialStore
 {
-    public class ContractorPostProductDTO
+    public class ProductDTO
     {
-        public int Id { get; set; }
-
         public string? Name { get; set; }
-        public int? Quantity { get; set; }
 
         public decimal UnitPrice { get; set; }
 
@@ -21,9 +17,11 @@ namespace ViewModels.ContractorPost
         public string? Image { get; set; }
 
         public string? Description { get; set; }
+        public int SoldQuantities { get; set; }
+
 
         public string? Brand { get; set; }
 
-        public Data.Entities.Categories? Categories { get; set; }
+        public List<int>? CategoriesId { get; set; }
     }
 }

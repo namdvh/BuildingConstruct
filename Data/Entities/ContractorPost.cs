@@ -38,6 +38,7 @@ namespace Data.Entities
         public int NumberPeople { get; set; }
 
         public int PeopeRemained { get; set; }
+        public bool? isApplied { get; set; }
 
         public int ContractorID { get; set; }
 
