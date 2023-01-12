@@ -557,7 +557,9 @@ namespace Application.System.Commitments
                 PostID = post.Id,
                 PostSalaries = post.Salaries,
                 PartyA = userA,
-                PartyB = userB
+                PartyB = userB,
+                StartDate = post.StarDate,
+                EndDate = post.EndDate
 
             };
             return result;
@@ -600,7 +602,9 @@ namespace Application.System.Commitments
                 PostSalaries = post.Salaries,
                 PartyA = userA,
                 PartyB = userB,
-                Group = group
+                Group = group,
+                StartDate = post.StarDate,
+                EndDate = post.EndDate,
 
 
             };

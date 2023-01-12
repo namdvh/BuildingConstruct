@@ -21,6 +21,7 @@ namespace ViewModels.BuilderPosts
         public string Salaries { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
+        public bool? IsSave { get; set; }
         public DateTime LastModifiedAt { get; set; }
         public Guid CreatedBy { get; set; }
         public UserModelsDTO Author { get; set; }

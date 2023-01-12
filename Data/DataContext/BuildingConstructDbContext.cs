@@ -1,4 +1,4 @@
-﻿using Data.Configuration;
+using Data.Configuration;
 using Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -45,6 +45,8 @@ namespace Data.DataContext
             modelBuilder.ApplyConfiguration(new BuilderPostTypeConfiguration());
             modelBuilder.ApplyConfiguration(new BuilderPostSkillConfigurations());
             modelBuilder.ApplyConfiguration(new CartConfiguration());
+            modelBuilder.ApplyConfiguration(new SaveConfiguration());
+            modelBuilder.ApplyConfiguration(new SystemCategoriesConfiguration());
 
             modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("UserLogins").HasKey(x => x.UserId);
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("UserRoles").HasKey(x => new { x.UserId, x.RoleId });
@@ -75,5 +77,7 @@ namespace Data.DataContext
         public DbSet<BuilderPostType> BuilderPostTypes { get; set; }    
         public DbSet<BuilderPostSkill> BuilderPostSkills { get; set; }    
         public DbSet<Cart> Carts { get; set; }    
+        public DbSet<Save> Saves { get; set; }    
+        public DbSet<SystemCategories> SystemCategories { get; set; }    
     }
 }

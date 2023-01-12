@@ -36,7 +36,7 @@ namespace Application.System.ProductSystems
             pSystem.Description = request.Description;
             foreach(var item in request.ProductSystemCategories)
             {
-                productSystemCategories.CategoriesID = item.ProductSystemID;
+                productSystemCategories.SystemCategoriesID = item.ProductSystemID;
                 productSystemCategories.ProductSystemID = item.ProductSystemID;
             }
             await _context.AddAsync(pSystem);
@@ -68,7 +68,7 @@ namespace Application.System.ProductSystems
 
 
             var data = await query
-                .Include(x => x.ProductSystemCategories).ThenInclude(x=>x.Categories)
+                .Include(x => x.ProductSystemCategories).ThenInclude(x=>x.SystemCategories)
                 .AsNoTracking()
                 .Where(x => x.FromSystem == true)
                .OrderBy(filter._sortBy + " " + orderBy)
@@ -126,10 +126,10 @@ namespace Application.System.ProductSystems
                 dto.FromSystem = item.FromSystem;
                 dto.Brand = item.Brand;
                 dto.Image = item.Image;
-                dto.Categories = new();
+                dto.SystemCategories = new();
                 foreach(var i in item.ProductSystemCategories)
                 {
-                    dto.Categories.Add(i.Categories);
+                    dto.SystemCategories.Add(i.SystemCategories);
                 }
                 result.Add(dto);
             }
@@ -142,7 +142,7 @@ namespace Application.System.ProductSystems
             foreach (var item in list)
             {
                 ProducSystemCategoriesDTO dto = new();
-                dto.CategoriesID = item.CategoriesID;
+                dto.CategoriesID = item.SystemCategoriesID;
                 dto.ProductSystemID = item.ProductSystemID;
                 result.Add(dto);
             }

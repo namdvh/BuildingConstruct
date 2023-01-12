@@ -21,7 +21,5 @@ namespace ViewModels.MaterialStore
         public string? Image { get; set; }
 
         public Place Place { get; set; }
-
-        public string Avatar { get; set; }
     }
 }

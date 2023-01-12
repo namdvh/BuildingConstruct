@@ -193,7 +193,7 @@ namespace Application.System.Users
                         _context.SaveChanges();
 
                         user.BuilderId = builder.Id;
-                        _context.Entry<User>(user).State = EntityState.Modified;
+                         _context.Entry<User>(user).State = EntityState.Modified;
                         await _context.SaveChangesAsync();
                     }
                     else if (defaultRole.Id == Guid.Parse(BaseCode.StoreRole))

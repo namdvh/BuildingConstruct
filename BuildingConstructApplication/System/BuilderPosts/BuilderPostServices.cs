@@ -31,7 +31,7 @@ namespace Application.System.BuilderPosts
 
             Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
             var userID = identifierClaim.Value;
-            var builderID = _context.Users.Where(x => x.Id.ToString().Equals(userID)).FirstOrDefault().BuilderId;
+            var builderID =  _context.Users.Where(x => x.Id.ToString().Equals(userID.ToString())).FirstOrDefault().BuilderId;
             var builderPost = new BuilderPost
             {
                 Title = builderPostDTO.Title,
@@ -162,8 +162,15 @@ namespace Application.System.BuilderPosts
         }
         private async Task<BuilderPostDetailDTO> MapToDetailDTO(BuilderPost post)
         {
+            Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
+            var userID = identifierClaim.Value.ToString();
             var product = await _context.BuilderPosts.Where(x => x.BuilderID == post.Id).ToListAsync();
-            var userId = await _context.BuilderPosts.Where(x => x.Id == post.Id).Select(x => x.CreateBy).FirstOrDefaultAsync();
+            bool IsSave = false;
+            var save = await _context.Saves.Where(x => x.UserId.ToString().Equals(userID.ToString()) && x.BuilderPostId == post.Id).ToListAsync();
+            if (save.Any())
+            {
+                IsSave = true;
+            }
             BuilderPostDetailDTO postDTO = new()
             {
                 Title = post.Title,
@@ -175,8 +182,9 @@ namespace Application.System.BuilderPosts
                 PostCategories = post.PostCategories,
                 Place = post.Place,
                 type = await GetTypeAndSkillFromPost(post.Id),
-                CreatedBy = userId,
-                Author = await GetUserProfile(userId)
+                IsSave=IsSave,
+                CreatedBy = post.CreateBy,
+                Author = await GetUserProfile(post.CreateBy)
             };
 
             return postDTO;
@@ -225,7 +233,7 @@ namespace Application.System.BuilderPosts
         }
         private async Task<UserModelsDTO> GetUserProfile(Guid userID)
         {
-            var results = await _context.Users.Where(x => x.Id.Equals(userID)).SingleOrDefaultAsync();
+            var results = await _context.Users.Where(x => x.Id.ToString().Equals(userID.ToString())).SingleOrDefaultAsync();
             var roleid = await _context.UserRoles.Where(x => x.UserId.Equals(userID)).Select(x => x.RoleId).SingleOrDefaultAsync();
             var final = new UserModelsDTO();
             final.UserName = results.UserName;
