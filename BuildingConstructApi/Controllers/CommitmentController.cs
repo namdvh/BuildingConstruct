@@ -74,6 +74,7 @@ namespace BuildingConstructApi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Contractor")]
         public async Task<IActionResult> CreateCommitment([FromBody] CreateCommimentRequest request)
         {
             var contractorID = User.FindFirst("UserID").Value;
