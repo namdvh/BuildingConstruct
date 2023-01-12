@@ -13,15 +13,18 @@ namespace Data.Configuration
     {
         public void Configure(EntityTypeBuilder<PostCommitment> builder)
         {
-            builder.ToTable("PostCommitment");
+            builder.ToTable("Commitment");
 
-            builder.HasKey(x => new { x.PostID, x.UserID,x.CommitmentID });
+            builder.HasKey(x => new { x.Id,x.PostID, x.BuilderID,x.ContractorID });
+
+            builder.Property(x => x.Id)
+              .ValueGeneratedOnAdd();
 
 
 
-            builder.HasOne(x => x.User).WithMany(x => x.PostCommitments).HasForeignKey(x => x.UserID);
+            builder.HasOne(x => x.Builder).WithMany(x => x.PostCommitments).HasForeignKey(x => x.BuilderID);
             builder.HasOne(x => x.ContractorPosts).WithMany(x => x.PostCommitments).HasForeignKey(x => x.PostID);
-            builder.HasOne(x => x.Commitment).WithMany(x => x.PostCommitments).HasForeignKey(x => x.CommitmentID);
+            builder.HasOne(x => x.Contractor).WithMany(x => x.PostCommitments).HasForeignKey(x => x.ContractorID).OnDelete(DeleteBehavior.Restrict);
             builder.HasOne(x => x.Group).WithMany(x => x.PostCommitments).HasForeignKey(x => x.GroupID).IsRequired(false);
         }
 

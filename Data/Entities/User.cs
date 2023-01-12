@@ -42,6 +42,8 @@ namespace Data.Entities
         public MaterialStore MaterialStore { get; set; }
 
         public List<PostCommitment>? PostCommitments { get; set; }
+
+        public List<Cart> Carts { get; set; }
         public List<Save>? Saves { get; set; }
     }
 }

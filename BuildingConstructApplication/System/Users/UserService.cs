@@ -84,7 +84,7 @@ namespace Application.System.Users
                             Avatar = us.Avatar,
                             DOB = us.DOB,
                             Gender = us.Gender,
-                            Role=roleName
+                            Role = roleName
                         };
 
                     }
@@ -367,6 +367,498 @@ namespace Application.System.Users
                 throw new ArgumentException();
             }
             return principal;
+        }
+
+
+
+
+
+        private UserDetailDTO MapToDetailDTO(User user, int status)
+        {
+            //1 Builder
+            //2 Ctor
+            //3 Material Store
+
+            UserDetailDTO userDetail;
+
+            if (status == 1)
+            {
+
+                var tmp = _context.BuilderSkills.Include(x => x.Skill).Where(x => x.BuilderSkillID == user.BuilderId).ToList();
+
+
+
+                DetailBuilder detailBuilder = new()
+                {
+                    BuilderSkills = MapToSkillDTO(tmp),
+                    Id = user.Builder.Id,
+                    Place = user.Builder.Place,
+                    TypeName = user.Builder.Type.Name,
+                    ExperienceDetail = user.Builder.ExperienceDetail,
+                    Certificate = user.Builder.Certificate
+                };
+
+
+                userDetail = new()
+                {
+                    Address = user.Address,
+                    Avatar = user.Avatar,
+                    DOB = user.DOB,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    Gender = user.Gender,
+                    IdNumber = user.IdNumber,
+                    LastName = user.LastName,
+                    Status = user.Status,
+                    Builder = detailBuilder,
+                };
+
+            }
+            else if (status == 2)
+            {
+                DetailContractor detailContractor = new()
+                {
+                    CompanyName = user.Contractor.CompanyName,
+                    Description = user.Contractor.Description,
+                    Id = user.Contractor.Id,
+                    Website = user.Contractor.Website
+                };
+
+
+                userDetail = new()
+                {
+                    Address = user.Address,
+                    Avatar = user.Avatar,
+                    DOB = user.DOB,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    Gender = user.Gender,
+                    IdNumber = user.IdNumber,
+                    LastName = user.LastName,
+                    Status = user.Status,
+                    Contractor = detailContractor,
+                };
+            }
+            else
+            {
+                DetailMaterialStore detailMaterial = new()
+                {
+                    Description = user.MaterialStore.Description,
+                    Id = user.MaterialStore.Id,
+                    Website = user.MaterialStore.Website,
+                    Experience = user.MaterialStore.Experience,
+                    Image = user.MaterialStore.Image,
+                    Place = user.MaterialStore.Place,
+                    TaxCode = user.MaterialStore.TaxCode
+                };
+
+
+                userDetail = new()
+                {
+                    Address = user.Address,
+                    Avatar = user.Avatar,
+                    DOB = user.DOB,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    Gender = user.Gender,
+                    IdNumber = user.IdNumber,
+                    LastName = user.LastName,
+                    Status = user.Status,
+                    DetailMaterialStore = detailMaterial,
+                };
+            }
+
+
+            return userDetail;
+        }
+
+        private List<BuilderSkillsDTO> MapToSkillDTO(List<BuilderSkill> skills)
+        {
+            List<BuilderSkillsDTO> ls = new();
+
+            foreach (var x in skills)
+            {
+                BuilderSkillsDTO dto = new()
+                {
+                    Id = x.SkillID,
+                    Name = x.Skill.Name
+                };
+                ls.Add(dto);
+            }
+            return ls;
+        }
+
+        public async Task<BaseResponse<UserDetailDTO>> GetProfile(Guid userID)
+        {
+            BaseResponse<UserDetailDTO> response;
+            var user = await _context.Users.Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                response = new()
+                {
+                    Code = BaseCode.ERROR,
+                    Message = BaseCode.NOTFOUND_MESSAGE
+                };
+                return response;
+            }
+
+            var rolename = _userService.GetRolesAsync(user).Result;
+
+
+            if (rolename.First().Equals("User"))
+            {
+                var result = await _context.Users
+                                    .Include(x => x.Builder)
+                                        .ThenInclude(x => x.Type)
+                                    .Where(x => x.Id.Equals(userID))
+                                    .FirstOrDefaultAsync();
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Data = MapToDetailDTO(result, 1),
+                    Message = BaseCode.SUCCESS_MESSAGE
+                };
+                return response;
+
+            }
+            else if (rolename.First().Equals("Contractor"))
+            {
+                var result = await _context.Users.Include(x => x.Contractor).Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Data = MapToDetailDTO(result, 2),
+                    Message = BaseCode.SUCCESS_MESSAGE
+                };
+                return response;
+            }
+            else
+            {
+                var result = await _context.Users.Include(x => x.MaterialStore).Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Data = MapToDetailDTO(result, 3),
+                    Message = BaseCode.SUCCESS_MESSAGE
+                };
+                return response;
+
+            }
+
+        }
+        public async Task<BaseResponse<string>> UpdateBuilderProfile(UpdateBuilderRequest request, Guid userID)
+        {
+            BaseResponse<string> response;
+
+            var user = await _context.Users.Include(x => x.Builder).FirstOrDefaultAsync(x => x.Id.Equals(userID));
+
+            if (user != null)
+            {
+                if (!string.IsNullOrEmpty(request.FirstName))
+                {
+                    user.FirstName = request.FirstName;
+                }
+
+                if (!string.IsNullOrEmpty(request.LastName))
+                {
+                    user.LastName = request.LastName;
+
+                }
+                if (!string.IsNullOrEmpty(request.Email))
+                {
+                    user.Email = request.Email;
+
+                }
+                if (!string.IsNullOrEmpty(request.Gender.ToString()))
+                {
+                    user.Gender = request.Gender;
+
+                }
+                if (!string.IsNullOrEmpty(request.IdNumber))
+                {
+                    user.IdNumber = request.IdNumber;
+
+                }
+                if (!string.IsNullOrEmpty(request.DOB.ToString()))
+                {
+                    user.DOB = request.DOB;
+
+                }
+                if (!string.IsNullOrEmpty(request.Avatar))
+                {
+                    user.Avatar = request.Avatar;
+
+                }
+                if (!string.IsNullOrEmpty(request.Phone))
+                {
+                    user.PhoneNumber = request.Phone;
+
+                }
+                if (!string.IsNullOrEmpty(request.ExperienceDetail))
+                {
+                    user.Builder.ExperienceDetail = request.ExperienceDetail;
+
+                }
+                if (!string.IsNullOrEmpty(request.Certificate))
+                {
+                    user.Builder.Certificate = request.Certificate;
+
+                }
+                if (!string.IsNullOrEmpty(request.TypeID.ToString()))
+                {
+                    user.Builder.TypeID = request.TypeID;
+
+                }
+                if (!string.IsNullOrEmpty(request.Place.ToString()))
+                {
+                    user.Builder.Place = request.Place;
+
+                }
+
+                if (request.Skills != null)
+                {
+                    var skills = await _context.BuilderSkills.Where(x => x.BuilderSkillID.Equals(user.BuilderId)).ToListAsync();
+                    _context.RemoveRange(skills);
+                    await _context.SaveChangesAsync();
+
+
+                    foreach (var x in request.Skills)
+                    {
+                        BuilderSkill newSkills = new()
+                        {
+                            BuilderSkillID = (int)user.BuilderId,
+                            SkillID = x
+                        };
+                        await _context.BuilderSkills.AddAsync(newSkills);
+                        await _context.SaveChangesAsync();
+                    }
+
+
+                }
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE
+                };
+
+
+            }
+            else
+            {
+                response = new()
+                {
+                    Message = BaseCode.NOTFOUND_MESSAGE,
+                    Code = BaseCode.ERROR
+                };
+            }
+            return response;
+        }
+
+        public async Task<BaseResponse<string>> UpdateContractorProfile(UpdateContractorRequest request, Guid userID)
+        {
+            BaseResponse<string> response;
+
+            var user = await _context.Users.Include(x => x.Contractor).FirstOrDefaultAsync(x => x.Id.Equals(userID));
+
+            if (user != null)
+            {
+
+                if (!string.IsNullOrEmpty(request.FirstName))
+                {
+                    user.FirstName = request.FirstName;
+                }
+
+                if (!string.IsNullOrEmpty(request.LastName))
+                {
+                    user.LastName = request.LastName;
+
+                }
+                if (!string.IsNullOrEmpty(request.Email))
+                {
+                    user.Email = request.Email;
+
+                }
+                if (!string.IsNullOrEmpty(request.Gender.ToString()))
+                {
+                    user.Gender = request.Gender;
+
+                }
+                if (!string.IsNullOrEmpty(request.IdNumber))
+                {
+                    user.IdNumber = request.IdNumber;
+
+                }
+                if (!string.IsNullOrEmpty(request.DOB.ToString()))
+                {
+                    user.DOB = request.DOB;
+
+                }
+                if (!string.IsNullOrEmpty(request.Avatar))
+                {
+                    user.Avatar = request.Avatar;
+
+                }
+                if (!string.IsNullOrEmpty(request.Phone))
+                {
+                    user.PhoneNumber = request.Phone;
+
+                }
+
+                if (!string.IsNullOrEmpty(request.CompanyName))
+                {
+                    user.Contractor.CompanyName = request.CompanyName;
+
+
+                }
+                if (!string.IsNullOrEmpty(request.Description))
+                {
+                    user.Contractor.Description = request.Description;
+
+                }
+                if (!string.IsNullOrEmpty(request.Website))
+                {
+                    user.Contractor.Website = request.Website;
+                }
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE
+                };
+
+
+            }
+            else
+            {
+                response = new()
+                {
+                    Message = BaseCode.NOTFOUND_MESSAGE,
+                    Code = BaseCode.ERROR
+                };
+            }
+            return response;
+        }
+
+        public async Task<BaseResponse<string>> UpdateStoreProfile(UpdateStoreRequest request, Guid userID)
+        {
+            BaseResponse<string> response;
+
+            var user = await _context.Users.Include(x => x.MaterialStore).FirstOrDefaultAsync(x => x.Id.Equals(userID));
+
+            if (user != null)
+            {
+                if (!string.IsNullOrEmpty(request.FirstName))
+                {
+                    user.FirstName = request.FirstName;
+                }
+
+                if (!string.IsNullOrEmpty(request.LastName))
+                {
+                    user.LastName = request.LastName;
+
+                }
+                if (!string.IsNullOrEmpty(request.Email))
+                {
+                    user.Email = request.Email;
+
+                }
+                if (!string.IsNullOrEmpty(request.Gender.ToString()))
+                {
+                    user.Gender = request.Gender;
+
+                }
+                if (!string.IsNullOrEmpty(request.IdNumber))
+                {
+                    user.IdNumber = request.IdNumber;
+
+                }
+                if (!string.IsNullOrEmpty(request.DOB.ToString()))
+                {
+                    user.DOB = request.DOB;
+
+                }
+                if (!string.IsNullOrEmpty(request.Avatar))
+                {
+                    user.Avatar = request.Avatar;
+
+                }
+                if (!string.IsNullOrEmpty(request.Phone))
+                {
+                    user.PhoneNumber = request.Phone;
+
+                }
+                if (!string.IsNullOrEmpty(request.TaxCode))
+                {
+                    user.MaterialStore.TaxCode = request.TaxCode;
+
+                }
+                if (!string.IsNullOrEmpty(request.Description))
+                {
+                    user.MaterialStore.Description = request.Description;
+
+
+                }
+                if (!string.IsNullOrEmpty(request.Website))
+                {
+                    user.MaterialStore.Website = request.Website;
+
+
+                }
+                if (!string.IsNullOrEmpty(request.Experience))
+                {
+                    user.MaterialStore.Experience = request.Experience;
+
+
+                }
+                if (!string.IsNullOrEmpty(request.Image))
+                {
+                    user.MaterialStore.Image = request.Image;
+
+
+                }
+                if (!string.IsNullOrEmpty(request.Place.ToString()))
+                {
+                    user.MaterialStore.Place = request.Place;
+
+
+                }
+
+
+
+
+
+
+
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE
+                };
+
+
+            }
+            else
+            {
+                response = new()
+                {
+                    Message = BaseCode.NOTFOUND_MESSAGE,
+                    Code = BaseCode.ERROR
+                };
+            }
+            return response;
         }
     }
 }

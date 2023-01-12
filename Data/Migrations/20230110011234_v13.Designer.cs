@@ -4,6 +4,7 @@ using Data.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(BuildingConstructDbContext))]
-    partial class BuildingConstructDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230110011234_v13")]
+    partial class v13
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -256,9 +258,6 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Benefit")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("ContractorID")
                         .HasColumnType("int");
 
@@ -293,9 +292,6 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Required")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Salaries")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -312,9 +308,6 @@ namespace Data.Migrations
 
                     b.Property<int>("ViewCount")
                         .HasColumnType("int");
-
-                    b.Property<bool?>("isApplied")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -607,12 +600,12 @@ namespace Data.Migrations
                     b.Property<int>("ProductSystemID")
                         .HasColumnType("int");
 
-                    b.Property<int>("SystemCategoriesID")
+                    b.Property<int>("CategoriesID")
                         .HasColumnType("int");
 
-                    b.HasKey("ProductSystemID", "SystemCategoriesID");
+                    b.HasKey("ProductSystemID", "CategoriesID");
 
-                    b.HasIndex("SystemCategoriesID");
+                    b.HasIndex("CategoriesID");
 
                     b.ToTable("ProductSystemCategories", (string)null);
                 });
@@ -642,37 +635,6 @@ namespace Data.Migrations
                     b.ToTable("Roles", (string)null);
                 });
 
-            modelBuilder.Entity("Data.Entities.Save", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int?>("BuilderPostId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ContractorPostId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BuilderPostId");
-
-                    b.HasIndex("ContractorPostId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Saves", (string)null);
-                });
-
             modelBuilder.Entity("Data.Entities.Skill", b =>
                 {
                     b.Property<int>("Id")
@@ -696,26 +658,6 @@ namespace Data.Migrations
                     b.HasIndex("TypeId");
 
                     b.ToTable("Skills", (string)null);
-                });
-
-            modelBuilder.Entity("Data.Entities.SystemCategories", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("SystemCategories", (string)null);
                 });
 
             modelBuilder.Entity("Data.Entities.Type", b =>
@@ -884,7 +826,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("IdentitficationCards", (string)null);
+                    b.ToTable("Verifies", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -1266,44 +1208,21 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.ProductSystemCategories", b =>
                 {
+                    b.HasOne("Data.Entities.Categories", "Categories")
+                        .WithMany("ProductSystemCategories")
+                        .HasForeignKey("CategoriesID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Data.Entities.ProductSystem", "ProductSystem")
                         .WithMany("ProductSystemCategories")
                         .HasForeignKey("ProductSystemID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Data.Entities.SystemCategories", "SystemCategories")
-                        .WithMany("ProductSystemCategories")
-                        .HasForeignKey("SystemCategoriesID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Categories");
 
                     b.Navigation("ProductSystem");
-
-                    b.Navigation("SystemCategories");
-                });
-
-            modelBuilder.Entity("Data.Entities.Save", b =>
-                {
-                    b.HasOne("Data.Entities.BuilderPost", "BuilderPost")
-                        .WithMany("Saves")
-                        .HasForeignKey("BuilderPostId");
-
-                    b.HasOne("Data.Entities.ContractorPost", "ContractorPost")
-                        .WithMany("Saves")
-                        .HasForeignKey("ContractorPostId");
-
-                    b.HasOne("Data.Entities.User", "User")
-                        .WithMany("Saves")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("BuilderPost");
-
-                    b.Navigation("ContractorPost");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Data.Entities.Skill", b =>
@@ -1362,13 +1281,13 @@ namespace Data.Migrations
                     b.Navigation("BuilderPostSkills");
 
                     b.Navigation("BuilderPostTypes");
-
-                    b.Navigation("Saves");
                 });
 
             modelBuilder.Entity("Data.Entities.Categories", b =>
                 {
                     b.Navigation("ProductCategories");
+
+                    b.Navigation("ProductSystemCategories");
                 });
 
             modelBuilder.Entity("Data.Entities.Contractor", b =>
@@ -1391,8 +1310,6 @@ namespace Data.Migrations
                     b.Navigation("PostCommitments");
 
                     b.Navigation("PostSkills");
-
-                    b.Navigation("Saves");
                 });
 
             modelBuilder.Entity("Data.Entities.Group", b =>
@@ -1434,11 +1351,6 @@ namespace Data.Migrations
                     b.Navigation("ContractorPostSkills");
                 });
 
-            modelBuilder.Entity("Data.Entities.SystemCategories", b =>
-                {
-                    b.Navigation("ProductSystemCategories");
-                });
-
             modelBuilder.Entity("Data.Entities.Type", b =>
                 {
                     b.Navigation("Builder");
@@ -1455,8 +1367,6 @@ namespace Data.Migrations
                     b.Navigation("Carts");
 
                     b.Navigation("PostCommitments");
-
-                    b.Navigation("Saves");
                 });
 
             modelBuilder.Entity("Data.Entities.Verify", b =>

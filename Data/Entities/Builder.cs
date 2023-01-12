@@ -6,6 +6,10 @@ namespace Data.Entities
     {
         public int Id { get; set; }
 
+        public string? ExperienceDetail { get; set; }
+
+        public string? Certificate { get; set; }
+
         public int? Experience { get; set; }
 
         public Place? Place { get; set; }
@@ -23,6 +27,9 @@ namespace Data.Entities
         public List<Group>? Groups { get; set; }
 
         public List<AppliedPost>? AppliedPosts { get; set; }
-        
+
+        public List<PostCommitment>? PostCommitments { get; set; }
+
+
     }
 }

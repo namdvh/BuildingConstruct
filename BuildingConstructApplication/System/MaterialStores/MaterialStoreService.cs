@@ -194,6 +194,7 @@ namespace Application.System.MaterialStores
             }
 
             var result = await query
+                .Include(x=>x.User)
                .OrderBy(filter._orderBy + " " + orderBy)
                .Skip((filter.PageNumber - 1) * filter.PageSize)
                .Take(filter.PageSize)
@@ -291,11 +292,12 @@ namespace Application.System.MaterialStores
 
             foreach (var item in list)
             {
-                var user = _context.Users.Where(x => x.MaterialStoreID == item.Id).FirstOrDefault();
 
                 MaterialStoreDTO dto = new()
                 {
-                    //Avatar = user.Avatar,
+                    Avatar = item.User.Avatar,
+                    FirstName=item.User.FirstName,
+                    LastName=item.User.LastName,
                     Description = item.Description,
                     Id = item.Id,
                     Place = item.Place,

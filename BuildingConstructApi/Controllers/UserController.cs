@@ -23,7 +23,7 @@ namespace BuildingConstructApi.Controllers
 
     public class UserController : ControllerBase
     {
-        public string userID { get; set; } 
+        public string userID { get; set; }
         private readonly IUserService _userService;
         private readonly IConfiguration _configuration;
         private Task<AuthenticationState> authenticationStateTask { get; set; }
@@ -57,7 +57,7 @@ namespace BuildingConstructApi.Controllers
                     UserName = rs.Data.UserName,
                     Id = rs.Data.Id,
                     Phone = rs.Data.Phone,
-                    Role=rs.Data.Role
+                    Role = rs.Data.Role
                 };
                 var token = await _userService.GenerateToken(userModels);
                 if (token != null)
@@ -102,7 +102,7 @@ namespace BuildingConstructApi.Controllers
             {
                 Id = user.Id,
                 UserName = user.UserName,
-                Phone=user.PhoneNumber
+                Phone = user.PhoneNumber
             };
             return userDto;
         }
@@ -153,6 +153,56 @@ namespace BuildingConstructApi.Controllers
             userID = rs;
             var claims = User.Claims;
             return Ok(rs);
+        }
+
+        [HttpGet("detail")]
+        public async Task<IActionResult> GetUserDetail(Guid userID)
+        {
+            if (userID == null)
+            {
+                return BadRequest();
+            }
+
+            var result = await _userService.GetProfile(userID);
+            return Ok(result);
+
+        }
+
+
+        [HttpPut("update/builder")]
+        public async Task<IActionResult> UpdateBuilder([FromBody] UpdateBuilderRequest request)
+        {
+            var userID = User.FindFirst("UserID").Value;
+            if (userID == null)
+            {
+                return BadRequest();
+            }
+            var result = await _userService.UpdateBuilderProfile(request, Guid.Parse(userID));
+            return Ok(result);
+
+        }
+        [HttpPut("update/contractor")]
+        public async Task<IActionResult> UpdateContractor([FromBody] UpdateContractorRequest request)
+        {
+            var userID = User.FindFirst("UserID").Value;
+            if (userID == null)
+            {
+                return BadRequest();
+            }
+            var result = await _userService.UpdateContractorProfile(request, Guid.Parse(userID));
+            return Ok(result);
+        }
+        [HttpPut("update/store")]
+        public async Task<IActionResult> UpdateStore([FromBody] UpdateStoreRequest request)
+        {
+            var userID = User.FindFirst("UserID").Value;
+            if (userID == null)
+            {
+                return BadRequest();
+            }
+            var result = await _userService.UpdateStoreProfile(request, Guid.Parse(userID));
+            return Ok(result);
+
         }
 
     }

@@ -4,6 +4,10 @@ namespace ViewModels.MaterialStore
 {
     public class MaterialStoreDTO
     {
+
+        public string? FirstName { get; set; }  
+        public string? LastName { get; set; }  
+
         public int Id { get; set; }
 
         public string? Webstie { get; set; }
