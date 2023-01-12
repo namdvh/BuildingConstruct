@@ -103,10 +103,5 @@ namespace BuildingConstructApi.Controllers
             var rs = await materialStoreService.GetAllProductStore(validFilter);
             return Ok(rs);
         }
-
-
-
-
-
     }
 }
