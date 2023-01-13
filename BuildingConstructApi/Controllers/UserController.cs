@@ -117,11 +117,13 @@ namespace BuildingConstructApi.Controllers
                     catch (Exception)
                     {
                     }
-                    token.Message = "Update Success";
-                    token.Code = BaseCode.SUCCESS;
+                    rs.Data.AccessToken = token.Data.AccessToken;
+                    rs.Data.RefreshToken = token.Data.RefreshToken;
+                    rs.Message = "Update Success";
+                    rs.Code = BaseCode.SUCCESS;
 
                 }
-                return Ok(token);
+                return Ok(rs);
 
             }
         }

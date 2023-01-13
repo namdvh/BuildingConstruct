@@ -39,7 +39,7 @@ namespace Application.System.Users
         public async Task<BaseResponse<UserModels>> UpdateRole(UpdateRoleRequest request)
         {
             BaseResponse<UserModels> response = new();
-            var users = await _userService.FindByIdAsync(request.UserId);
+            var users = await _userService.FindByNameAsync(request.Email);
             var roleNames = await _context.Roles.Where(x => x.Id.ToString().Equals(request.RoleId)).Select(x => x.Name).SingleOrDefaultAsync();
                 
                 if (request.RoleId == BaseCode.UsRole)
@@ -85,7 +85,12 @@ namespace Application.System.Users
                                 select role.Name).FirstOrDefault();
             UserModels u = new()
             {
-                Id = users.Id
+                Id = users.Id,
+                Avatar = users.Avatar,
+                FirstName = users.FirstName,
+                LastName = users.LastName,
+                Role=roleName,
+                UserName=users.UserName
             };
                 var userDTO = MapToDto(users, roleName);
                 var token = await GenerateToken(userDTO);
@@ -93,7 +98,6 @@ namespace Application.System.Users
                 users.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;
                 await _userService.UpdateAsync(users);
                 response.Data = u;
-                response.Data = userDTO;
                     
             return response;
         }
@@ -102,7 +106,7 @@ namespace Application.System.Users
         {
             BaseResponse<UserModels> response = new();
             
-            var users = await _userService.FindByNameAsync(request.Email);// check email exist or not
+            var users = await _userService.FindByNameAsync(request.Email.ToUpper());// check email exist or not
             
             if (users == null) 
             {
@@ -113,7 +117,8 @@ namespace Application.System.Users
                     UserName = request.Email,
                     Avatar = request.Avatar,
                     Provider = Provider.GOOGLE,
-                    Status = Status.Level1
+                    Status = Status.Level1,
+                    Email = request.Email,
                 };
                 var rs = await _userService.CreateAsync(user, request.Email);
 

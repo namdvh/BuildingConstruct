@@ -10,7 +10,7 @@ namespace ViewModels.Users
     public class UpdateRoleRequest
     {
         [Required]
-        public string UserId { get; set; }
+        public string Email { get; set; }
         [Required]
         public string RoleId { get; set; }
     }
