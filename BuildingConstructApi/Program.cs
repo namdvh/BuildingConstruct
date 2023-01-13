@@ -6,12 +6,10 @@ using Application.System.Commitments;
 using Application.System.ContractorPosts;
 using Application.System.MaterialStores;
 using Application.System.ProductSystems;
-
-using Application.System.Skills;
 using Application.System.SavePost;
+using Application.System.Skills;
 using Application.System.Types;
 using Application.System.Users;
-using Constants;
 using Data.DataContext;
 using Data.Entities;
 using FluentValidation;

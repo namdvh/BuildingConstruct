@@ -15,8 +15,5 @@ namespace Application.System.MaterialStores
         Task<BaseResponse<ProductDetailDTO>> GetProductDetail(int productId);
         Task<bool> DeleteProduct(int productID);
         Task<BaseResponse<ProductStoreDTO>> UpdateProduct(ProductDTO request,int productId);
-
-
-
     }
 }
