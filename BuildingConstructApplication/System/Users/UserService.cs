@@ -193,7 +193,7 @@ namespace Application.System.Users
                         _context.SaveChanges();
 
                         user.BuilderId = builder.Id;
-                         _context.Entry<User>(user).State = EntityState.Modified;
+                        _context.Entry<User>(user).State = EntityState.Modified;
                         await _context.SaveChangesAsync();
                     }
                     else if (defaultRole.Id == Guid.Parse(BaseCode.StoreRole))
@@ -395,7 +395,8 @@ namespace Application.System.Users
                     Place = user.Builder.Place,
                     TypeName = user.Builder.Type.Name,
                     ExperienceDetail = user.Builder.ExperienceDetail,
-                    Certificate = user.Builder.Certificate
+                    Certificate = user.Builder.Certificate,
+                    Experience=user.Builder.Experience
                 };
 
 
@@ -410,6 +411,7 @@ namespace Application.System.Users
                     IdNumber = user.IdNumber,
                     LastName = user.LastName,
                     Status = user.Status,
+                    Phone=user.PhoneNumber,
                     Builder = detailBuilder,
                 };
 
@@ -436,6 +438,7 @@ namespace Application.System.Users
                     IdNumber = user.IdNumber,
                     LastName = user.LastName,
                     Status = user.Status,
+                    Phone = user.PhoneNumber,
                     Contractor = detailContractor,
                 };
             }
@@ -464,6 +467,7 @@ namespace Application.System.Users
                     IdNumber = user.IdNumber,
                     LastName = user.LastName,
                     Status = user.Status,
+                    Phone = user.PhoneNumber,
                     DetailMaterialStore = detailMaterial,
                 };
             }
@@ -571,6 +575,11 @@ namespace Application.System.Users
                     user.Email = request.Email;
 
                 }
+                if (!string.IsNullOrEmpty(request.Address))
+                {
+                    user.Address = request.Address;
+
+                }
                 if (!string.IsNullOrEmpty(request.Gender.ToString()))
                 {
                     user.Gender = request.Gender;
@@ -581,6 +590,7 @@ namespace Application.System.Users
                     user.IdNumber = request.IdNumber;
 
                 }
+
                 if (!string.IsNullOrEmpty(request.DOB.ToString()))
                 {
                     user.DOB = request.DOB;
@@ -599,6 +609,11 @@ namespace Application.System.Users
                 if (!string.IsNullOrEmpty(request.ExperienceDetail))
                 {
                     user.Builder.ExperienceDetail = request.ExperienceDetail;
+
+                }
+                if (!string.IsNullOrEmpty(request.Experience.ToString()))
+                {
+                    user.Builder.Experience = request.Experience;
 
                 }
                 if (!string.IsNullOrEmpty(request.Certificate))
@@ -620,15 +635,18 @@ namespace Application.System.Users
                 if (request.Skills != null)
                 {
                     var skills = await _context.BuilderSkills.Where(x => x.BuilderSkillID.Equals(user.BuilderId)).ToListAsync();
-                    _context.RemoveRange(skills);
-                    await _context.SaveChangesAsync();
+                    if (skills.Any())
+                    {
+                        _context.RemoveRange(skills);
+                        await _context.SaveChangesAsync();
+                    }
 
 
                     foreach (var x in request.Skills)
                     {
                         BuilderSkill newSkills = new()
                         {
-                            BuilderSkillID = (int)user.BuilderId,
+                            BuilderSkillID = user.BuilderId.Value,
                             SkillID = x
                         };
                         await _context.BuilderSkills.AddAsync(newSkills);
@@ -682,6 +700,11 @@ namespace Application.System.Users
                 if (!string.IsNullOrEmpty(request.Email))
                 {
                     user.Email = request.Email;
+
+                }
+                if (!string.IsNullOrEmpty(request.Address))
+                {
+                    user.Address = request.Address;
 
                 }
                 if (!string.IsNullOrEmpty(request.Gender.ToString()))
@@ -764,6 +787,11 @@ namespace Application.System.Users
                 if (!string.IsNullOrEmpty(request.LastName))
                 {
                     user.LastName = request.LastName;
+
+                }
+                if (!string.IsNullOrEmpty(request.Address))
+                {
+                    user.Address = request.Address;
 
                 }
                 if (!string.IsNullOrEmpty(request.Email))

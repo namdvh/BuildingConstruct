@@ -22,6 +22,7 @@ namespace ViewModels.Users
 
 
         public string? ExperienceDetail { get; set; }
+        public int? Experience{ get; set; }
 
         public string? Certificate { get; set; }
 
