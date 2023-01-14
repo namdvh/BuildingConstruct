@@ -394,6 +394,7 @@ namespace Application.System.Users
                     Id = user.Builder.Id,
                     Place = user.Builder.Place,
                     TypeName = user.Builder.Type.Name,
+                    TypeID=user.Builder.TypeID,
                     ExperienceDetail = user.Builder.ExperienceDetail,
                     Certificate = user.Builder.Certificate,
                     Experience=user.Builder.Experience

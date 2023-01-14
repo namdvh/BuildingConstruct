@@ -34,7 +34,8 @@ namespace ViewModels.Users
 
         public List<BuilderSkillsDTO>? BuilderSkills { get; set; }
 
-        public string TypeName { get; set; }
+        public string? TypeName { get; set; }
+        public Guid? TypeID { get; set; }
 
         public string? ExperienceDetail { get; set; }
         public int? Experience { get; set; }
