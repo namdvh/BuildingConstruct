@@ -95,12 +95,12 @@ namespace BuildingConstructApi.Controllers
             return Ok(rs);
         }
         [HttpGet("getProductByUser")]
-        public async Task<IActionResult> GetAllProductByUS([FromQuery] PaginationFilter request)
+        public async Task<IActionResult> GetAllProductByUS([FromQuery] PaginationFilter request,bool isAll)
         {
 
             var validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
 
-            var rs = await materialStoreService.GetAllProductStore(validFilter);
+            var rs = await materialStoreService.GetAllProductStore(validFilter,isAll);
             return Ok(rs);
         }
     }

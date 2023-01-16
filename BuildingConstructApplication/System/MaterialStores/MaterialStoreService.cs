@@ -77,11 +77,16 @@ namespace Application.System.MaterialStores
             return true;
         }
 
-        public async Task<BasePagination<List<ProductStoreDTO>>> GetAllProductStore(PaginationFilter filter)
+        public async Task<BasePagination<List<ProductStoreDTO>>> GetAllProductStore(PaginationFilter filter, bool isAll)
         {
+            Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
+            var userID = identifierClaim.Value.ToString();
+            var storeID = await _context.Users.Where(x => x.Id.ToString().Equals(userID)).Select(x => x.MaterialStoreID).FirstOrDefaultAsync();
+
             BasePagination<List<ProductStoreDTO>> response;
             var orderBy = filter._orderBy.ToString();
             int totalRecord;
+           
             if (string.IsNullOrEmpty(filter._sortBy))
             {
                 filter._sortBy = "Id";
@@ -93,7 +98,7 @@ namespace Application.System.MaterialStores
                 _ => orderBy
             };
 
-            IQueryable<Products> query = _context.Products.Include(x=>x.ProductCategories);
+            IQueryable<Products> query = _context.Products.Include(x => x.ProductCategories).Include(x => x.MaterialStore).ThenInclude(x => x.User);
 
 
             var data = await query
@@ -102,6 +107,15 @@ namespace Application.System.MaterialStores
                .Skip((filter.PageNumber - 1) * filter.PageSize)
                .Take(filter.PageSize)
                .ToListAsync();
+            if (isAll==false)
+            {
+                data = await query
+                .AsNoTracking().Where(x => x.MaterialStoreID == storeID)
+               .OrderBy(filter._sortBy + " " + orderBy)
+               .Skip((filter.PageNumber - 1) * filter.PageSize)
+               .Take(filter.PageSize)
+               .ToListAsync();
+            }
             var totalRecords = await _context.ProductSystems.Where(x => x.FromSystem == true).CountAsync();
 
             if (!data.Any())
@@ -132,14 +146,14 @@ namespace Application.System.MaterialStores
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = await MapListDTO(data),
+                    Data = await MapListDTO(data,isAll),
                     Pagination = pagination
                 };
             }
 
             return response;
         }
-        public async Task<List<ProductStoreDTO>> MapListDTO(List<Products> list)
+        public async Task<List<ProductStoreDTO>> MapListDTO(List<Products> list,bool? isAll)
         {
             List<ProductStoreDTO> result = new();
 
@@ -154,7 +168,11 @@ namespace Application.System.MaterialStores
                 dto.UnitPrice = item.UnitPrice;
                 dto.SoldQuantities = item.SoldQuantities;
                 dto.Image = item.Image;
+                dto.StoreName = item.MaterialStore?.User?.FirstName + item.MaterialStore?.User?.LastName;
+                dto.StoreID = item.MaterialStoreID;
+                dto.StoreImage = item.MaterialStore.Image;
                 dto.ProductCategories = await GetCategory(item.ProductCategories);
+                dto.isAll = isAll;
                 result.Add(dto);
             }
             return result;
@@ -194,7 +212,7 @@ namespace Application.System.MaterialStores
             }
 
             var result = await query
-                .Include(x=>x.User)
+                .Include(x => x.User)
                .OrderBy(filter._orderBy + " " + orderBy)
                .Skip((filter.PageNumber - 1) * filter.PageSize)
                .Take(filter.PageSize)
@@ -296,8 +314,8 @@ namespace Application.System.MaterialStores
                 MaterialStoreDTO dto = new()
                 {
                     Avatar = item.User.Avatar,
-                    FirstName=item.User.FirstName,
-                    LastName=item.User.LastName,
+                    FirstName = item.User.FirstName,
+                    LastName = item.User.LastName,
                     Description = item.Description,
                     Id = item.Id,
                     Place = item.Place,

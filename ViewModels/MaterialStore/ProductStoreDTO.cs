@@ -12,6 +12,9 @@ namespace ViewModels.MaterialStore
         public int Id { get; set; }
 
         public string? Name { get; set; }
+        public string? StoreName { get; set; }
+        public int? StoreID { get; set; }
+        public string? StoreImage { get; set; }
 
         public decimal UnitPrice { get; set; }
 
@@ -24,6 +27,7 @@ namespace ViewModels.MaterialStore
         public string? Brand { get; set; }
 
         public int SoldQuantities { get; set; }
+        public bool? isAll { get; set; }
         public List<CategoryDTO>? ProductCategories { get; set; }
 
     }

@@ -11,7 +11,7 @@ namespace Application.System.MaterialStores
 
         Task<BasePagination<List<MaterialStoreDTO>>> Search(PaginationFilter filter, string keyword);
         Task<bool> CreateProduct(ProductDTO request);
-        Task<BasePagination<List<ProductStoreDTO>>> GetAllProductStore(PaginationFilter filter);
+        Task<BasePagination<List<ProductStoreDTO>>> GetAllProductStore(PaginationFilter filter,bool isAll);
         Task<BaseResponse<ProductDetailDTO>> GetProductDetail(int productId);
         Task<bool> DeleteProduct(int productID);
         Task<BaseResponse<ProductStoreDTO>> UpdateProduct(ProductDTO request,int productId);
