@@ -94,13 +94,13 @@ namespace BuildingConstructApi.Controllers
             var rs = await materialStoreService.UpdateProduct(request,productId);
             return Ok(rs);
         }
-        [HttpGet("getProductByUser")]
-        public async Task<IActionResult> GetAllProductByUS([FromQuery] PaginationFilter request,bool isAll)
+        [HttpGet("getAllProduct")]
+        public async Task<IActionResult> GetAllProduct([FromQuery] PaginationFilter request,bool isAll,int? storeID)
         {
 
             var validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
 
-            var rs = await materialStoreService.GetAllProductStore(validFilter,isAll);
+            var rs = await materialStoreService.GetAllProductStore(validFilter,isAll, storeID);
             return Ok(rs);
         }
     }

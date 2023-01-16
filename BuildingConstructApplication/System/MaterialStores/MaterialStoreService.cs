@@ -77,12 +77,8 @@ namespace Application.System.MaterialStores
             return true;
         }
 
-        public async Task<BasePagination<List<ProductStoreDTO>>> GetAllProductStore(PaginationFilter filter, bool isAll)
+        public async Task<BasePagination<List<ProductStoreDTO>>> GetAllProductStore(PaginationFilter filter, bool isAll,int? storeID)
         {
-            Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
-            var userID = identifierClaim.Value.ToString();
-            var storeID = await _context.Users.Where(x => x.Id.ToString().Equals(userID)).Select(x => x.MaterialStoreID).FirstOrDefaultAsync();
-
             BasePagination<List<ProductStoreDTO>> response;
             var orderBy = filter._orderBy.ToString();
             int totalRecord;
