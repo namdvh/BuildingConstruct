@@ -19,6 +19,7 @@ namespace ViewModels.Users
         public string? Avatar { get; set; }
         public Status? Status { get; set; }
         public string? IdNumber { get; set; }
+        public string? Phone { get; set; }
 
         public DetailBuilder? Builder { get; set; }
         public DetailContractor? Contractor { get; set; }
@@ -33,9 +34,11 @@ namespace ViewModels.Users
 
         public List<BuilderSkillsDTO>? BuilderSkills { get; set; }
 
-        public string TypeName { get; set; }
+        public string? TypeName { get; set; }
+        public Guid? TypeID { get; set; }
 
         public string? ExperienceDetail { get; set; }
+        public int? Experience { get; set; }
 
         public string? Certificate { get; set; }
 

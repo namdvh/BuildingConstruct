@@ -1,4 +1,4 @@
-﻿using Data.DataContext;
+using Data.DataContext;
 using Data.Entities;
 using Data.Enum;
 using Gridify;
@@ -309,9 +309,10 @@ namespace Application.System.MaterialStores
 
                 MaterialStoreDTO dto = new()
                 {
-                    Avatar = item.User.Avatar,
-                    FirstName = item.User.FirstName,
-                    LastName = item.User.LastName,
+
+                    //Avatar = item.User.Avatar,
+                    FirstName=item.User.FirstName,
+                    LastName=item.User.LastName,
                     Description = item.Description,
                     Id = item.Id,
                     Place = item.Place,
