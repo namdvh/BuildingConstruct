@@ -6,7 +6,8 @@ namespace ViewModels.MaterialStore
     {
 
         public string? FirstName { get; set; }  
-        public string? LastName { get; set; }  
+        public string? LastName { get; set; }
+        public string? Avatar { get; set; }
 
         public int Id { get; set; }
 

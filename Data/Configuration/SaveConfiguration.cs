@@ -15,7 +15,7 @@ namespace Data.Configuration
         public void Configure(EntityTypeBuilder<Save> builder)
         {
             builder.ToTable("Saves");
-            builder.HasKey(x =>  x.Id);
+            builder.HasKey(x => new {x.Id,x.UserId});
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
 

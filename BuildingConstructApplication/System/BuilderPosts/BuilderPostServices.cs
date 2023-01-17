@@ -166,7 +166,7 @@ namespace Application.System.BuilderPosts
             var userID = identifierClaim.Value.ToString();
             var product = await _context.BuilderPosts.Where(x => x.BuilderID == post.Id).ToListAsync();
             bool IsSave = false;
-            var save = await _context.Saves.Where(x => x.UserId.ToString().Equals(userID.ToString()) && x.BuilderPostId == post.Id).ToListAsync();
+            var save = await _context.Saves.Where(x => x.UserId.ToString().Equals(userID) && x.BuilderPostId == post.Id).ToListAsync();
             if (save.Any())
             {
                 IsSave = true;

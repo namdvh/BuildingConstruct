@@ -62,8 +62,11 @@ namespace Data.Migrations
                     b.Property<Guid>("CreateBy")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("ExperienceDetail")
+                    b.Property<int?>("Experience")
                         .HasColumnType("int");
+
+                    b.Property<string>("ExperienceDetail")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("LastModifiedAt")
                         .HasColumnType("datetime2");
@@ -73,9 +76,6 @@ namespace Data.Migrations
 
                     b.Property<Guid?>("TypeID")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("YearOfExperience")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -650,6 +650,9 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int?>("BuilderPostId")
                         .HasColumnType("int");
 
@@ -659,10 +662,7 @@ namespace Data.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
+                    b.HasKey("Id", "UserId");
 
                     b.HasIndex("BuilderPostId");
 
