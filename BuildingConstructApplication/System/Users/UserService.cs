@@ -607,17 +607,26 @@ namespace Application.System.Users
                     user.PhoneNumber = request.Phone;
 
                 }
-                if (!string.IsNullOrEmpty(request.ExperienceDetail))
+                if (string.IsNullOrEmpty(request.ExperienceDetail))
+                {
+                    user.Builder.ExperienceDetail =null;
+
+                }
+                else
                 {
                     user.Builder.ExperienceDetail = request.ExperienceDetail;
-
                 }
                 if (!string.IsNullOrEmpty(request.Experience.ToString()))
                 {
                     user.Builder.Experience = request.Experience;
 
                 }
-                if (!string.IsNullOrEmpty(request.Certificate))
+                if (string.IsNullOrEmpty(request.Certificate))
+                {
+                    user.Builder.Certificate = null;
+
+                }
+                else
                 {
                     user.Builder.Certificate = request.Certificate;
 
