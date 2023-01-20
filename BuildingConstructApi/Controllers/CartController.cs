@@ -61,7 +61,7 @@ namespace BuildingConstructApi.Controllers
             return Ok(result);
         }
 
-        [HttpPut]
+        [HttpPut("delete")]
         public async Task<IActionResult> Delete([FromBody] List<RemoveCartRequest>? requests)
         {
             var userID = User.FindFirst("UserID").Value;
