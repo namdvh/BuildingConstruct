@@ -16,5 +16,7 @@
 
         public List<PostCommitment>? PostCommitments { get; set; }
 
+        public List<Bill>? Bills { get; set; }
+
     }
 }

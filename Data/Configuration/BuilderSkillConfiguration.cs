@@ -14,6 +14,7 @@ namespace Data.Configuration
 
 
 
+
             builder.HasOne(x => x.Builder).WithMany(x => x.BuilderSkills).HasForeignKey(x => x.BuilderSkillID);
             builder.HasOne(x => x.Skill).WithMany(x => x.BuilderSkills).HasForeignKey(x => x.SkillID);
         }

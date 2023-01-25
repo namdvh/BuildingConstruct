@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Data.Migrations
 {
-    public partial class v1 : Migration
+    public partial class v9 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -242,6 +242,37 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Bill",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ContractorId = table.Column<int>(type: "int", nullable: false),
+                    StoreID = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bill", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Bill_Contractors_ContractorId",
+                        column: x => x.ContractorId,
+                        principalTable: "Contractors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Bill_MaterialStores_StoreID",
+                        column: x => x.StoreID,
+                        principalTable: "MaterialStores",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
@@ -379,6 +410,59 @@ namespace Data.Migrations
                         name: "FK_ContractorPostType_Types_TypeID",
                         column: x => x.TypeID,
                         principalTable: "Types",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SmallBill",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    BillID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SmallBill", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SmallBill_Bill_BillID",
+                        column: x => x.BillID,
+                        principalTable: "Bill",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BillDetail",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BillId = table.Column<int>(type: "int", nullable: false),
+                    ProductID = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BillDetail", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BillDetail_Bill_BillId",
+                        column: x => x.BillId,
+                        principalTable: "Bill",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BillDetail_Products_ProductID",
+                        column: x => x.ProductID,
+                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -559,6 +643,34 @@ namespace Data.Migrations
                         name: "FK_ContractorPostSkills_Skills_SkillID",
                         column: x => x.SkillID,
                         principalTable: "Skills",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SmallBillDetail",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SmallBillID = table.Column<int>(type: "int", nullable: false),
+                    ProductID = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SmallBillDetail", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SmallBillDetail_Products_ProductID",
+                        column: x => x.ProductID,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SmallBillDetail_SmallBill_SmallBillID",
+                        column: x => x.SmallBillID,
+                        principalTable: "SmallBill",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -790,6 +902,26 @@ namespace Data.Migrations
                 column: "GroupID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Bill_ContractorId",
+                table: "Bill",
+                column: "ContractorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bill_StoreID",
+                table: "Bill",
+                column: "StoreID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BillDetail_BillId",
+                table: "BillDetail",
+                column: "BillId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BillDetail_ProductID",
+                table: "BillDetail",
+                column: "ProductID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_BuilderPosts_BuilderID",
                 table: "BuilderPosts",
                 column: "BuilderID");
@@ -915,6 +1047,21 @@ namespace Data.Migrations
                 column: "TypeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SmallBill_BillID",
+                table: "SmallBill",
+                column: "BillID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SmallBillDetail_ProductID",
+                table: "SmallBillDetail",
+                column: "ProductID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SmallBillDetail_SmallBillID",
+                table: "SmallBillDetail",
+                column: "SmallBillID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_BuilderId",
                 table: "Users",
                 column: "BuilderId",
@@ -947,6 +1094,9 @@ namespace Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "AppliedPost");
+
+            migrationBuilder.DropTable(
+                name: "BillDetail");
 
             migrationBuilder.DropTable(
                 name: "BuilderPostSkill");
@@ -991,6 +1141,9 @@ namespace Data.Migrations
                 name: "Saves");
 
             migrationBuilder.DropTable(
+                name: "SmallBillDetail");
+
+            migrationBuilder.DropTable(
                 name: "UserClaims");
 
             migrationBuilder.DropTable(
@@ -1012,9 +1165,6 @@ namespace Data.Migrations
                 name: "Categories");
 
             migrationBuilder.DropTable(
-                name: "Products");
-
-            migrationBuilder.DropTable(
                 name: "ProductSystems");
 
             migrationBuilder.DropTable(
@@ -1030,19 +1180,28 @@ namespace Data.Migrations
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Builders");
+                name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Contractors");
+                name: "SmallBill");
+
+            migrationBuilder.DropTable(
+                name: "Builders");
 
             migrationBuilder.DropTable(
                 name: "IdentitficationCards");
 
             migrationBuilder.DropTable(
-                name: "MaterialStores");
+                name: "Bill");
 
             migrationBuilder.DropTable(
                 name: "Types");
+
+            migrationBuilder.DropTable(
+                name: "Contractors");
+
+            migrationBuilder.DropTable(
+                name: "MaterialStores");
         }
     }
 }

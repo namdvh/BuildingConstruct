@@ -47,6 +47,10 @@ namespace Data.DataContext
             modelBuilder.ApplyConfiguration(new CartConfiguration());
             modelBuilder.ApplyConfiguration(new SaveConfiguration());
             modelBuilder.ApplyConfiguration(new SystemCategoriesConfiguration());
+            modelBuilder.ApplyConfiguration(new BillConfigurations());
+            modelBuilder.ApplyConfiguration(new BillDetailConfigurations());
+            modelBuilder.ApplyConfiguration(new SmallBillConfiguration());
+            modelBuilder.ApplyConfiguration(new SmallBillDetailConfiguration());
 
             modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("UserLogins").HasKey(x => x.UserId);
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("UserRoles").HasKey(x => new { x.UserId, x.RoleId });
@@ -79,5 +83,9 @@ namespace Data.DataContext
         public DbSet<Cart> Carts { get; set; }    
         public DbSet<Save> Saves { get; set; }    
         public DbSet<SystemCategories> SystemCategories { get; set; }    
+        public DbSet<Bill> Bills { get; set; }    
+        public DbSet<BillDetail> BillDetails { get; set; }    
+        public DbSet<SmallBill> SmallBills { get; set; }    
+        public DbSet<SmallBillDetail> SmallBillDetails { get; set; }    
     }
 }
