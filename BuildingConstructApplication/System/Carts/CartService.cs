@@ -6,7 +6,8 @@ using ViewModels.Carts;
 using ViewModels.Pagination;
 using ViewModels.Response;
 using System.Linq.Dynamic.Core;
-
+using System.Text;
+using Gridify;
 
 namespace Application.System.Carts
 {
@@ -209,11 +210,26 @@ namespace Application.System.Carts
             BaseResponse<string> response;
             int rs = 0;
 
-            var existed = await _context.Carts.Where(x => x.UserID.Equals(userID)).ToListAsync();
+            IQueryable<Cart> query = _context.Carts.Where(x => x.UserID.Equals(userID));
+            StringBuilder existed = new();
 
-            _context.RemoveRange(existed);
-            await _context.SaveChangesAsync();
+            var count = requests.Count;
+            for (int i = 0; i < count; i++)
+            {
+                if (i == count - 1)
+                {
+                    existed.Append("ProductID=" + requests[i].ProductID);
+                    break;
+                }
+                existed.Append("ProductID=" + requests[i].ProductID + "|");
+            }
+            query = query.ApplyFiltering(existed.ToString());
 
+            if (existed != null)
+            {
+                _context.RemoveRange(query);
+                await _context.SaveChangesAsync();
+            }
 
             foreach (var item in requests)
             {
