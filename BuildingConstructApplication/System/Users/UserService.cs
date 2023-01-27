@@ -354,15 +354,15 @@ namespace Application.System.Users
                 };
                 principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
             }
-            catch (SecurityTokenExpiredException ex)
+            catch (SecurityTokenExpiredException )
             {
                 throw new SecurityTokenExpiredException();
             }
-            catch (SecurityTokenInvalidSignatureException e)
+            catch (SecurityTokenInvalidSignatureException )
             {
                 throw new SecurityTokenInvalidSignatureException();
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException )
             {
                 throw new ArgumentException();
             }

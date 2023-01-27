@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(BuildingConstructDbContext))]
-    [Migration("20230113151101_v1")]
-    partial class v1
+    [Migration("20230125090132_v9")]
+    partial class v9
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -48,6 +48,76 @@ namespace Data.Migrations
                     b.HasIndex("GroupID");
 
                     b.ToTable("AppliedPost", (string)null);
+                });
+
+            modelBuilder.Entity("Data.Entities.Bill", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ContractorId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("PaymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StoreID")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContractorId");
+
+                    b.HasIndex("StoreID");
+
+                    b.ToTable("Bill", (string)null);
+                });
+
+            modelBuilder.Entity("Data.Entities.BillDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("BillId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ProductID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BillId");
+
+                    b.HasIndex("ProductID");
+
+                    b.ToTable("BillDetail", (string)null);
                 });
 
             modelBuilder.Entity("Data.Entities.Builder", b =>
@@ -700,6 +770,71 @@ namespace Data.Migrations
                     b.ToTable("Skills", (string)null);
                 });
 
+            modelBuilder.Entity("Data.Entities.SmallBill", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("BillID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("PaymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BillID");
+
+                    b.ToTable("SmallBill", (string)null);
+                });
+
+            modelBuilder.Entity("Data.Entities.SmallBillDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ProductID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SmallBillID")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductID");
+
+                    b.HasIndex("SmallBillID");
+
+                    b.ToTable("SmallBillDetail", (string)null);
+                });
+
             modelBuilder.Entity("Data.Entities.SystemCategories", b =>
                 {
                     b.Property<int>("ID")
@@ -1011,6 +1146,42 @@ namespace Data.Migrations
                     b.Navigation("Group");
                 });
 
+            modelBuilder.Entity("Data.Entities.Bill", b =>
+                {
+                    b.HasOne("Data.Entities.Contractor", "Contractor")
+                        .WithMany("Bills")
+                        .HasForeignKey("ContractorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Data.Entities.MaterialStore", "MaterialStore")
+                        .WithMany("Bills")
+                        .HasForeignKey("StoreID");
+
+                    b.Navigation("Contractor");
+
+                    b.Navigation("MaterialStore");
+                });
+
+            modelBuilder.Entity("Data.Entities.BillDetail", b =>
+                {
+                    b.HasOne("Data.Entities.Bill", "Bill")
+                        .WithMany("BillDetails")
+                        .HasForeignKey("BillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Data.Entities.Products", "Products")
+                        .WithMany("BillDetails")
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bill");
+
+                    b.Navigation("Products");
+                });
+
             modelBuilder.Entity("Data.Entities.Builder", b =>
                 {
                     b.HasOne("Data.Entities.Type", "Type")
@@ -1317,6 +1488,36 @@ namespace Data.Migrations
                     b.Navigation("Type");
                 });
 
+            modelBuilder.Entity("Data.Entities.SmallBill", b =>
+                {
+                    b.HasOne("Data.Entities.Bill", "Bill")
+                        .WithMany("SmallBills")
+                        .HasForeignKey("BillID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bill");
+                });
+
+            modelBuilder.Entity("Data.Entities.SmallBillDetail", b =>
+                {
+                    b.HasOne("Data.Entities.Products", "Products")
+                        .WithMany("SmallBillDetails")
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Data.Entities.SmallBill", "SmallBill")
+                        .WithMany("Details")
+                        .HasForeignKey("SmallBillID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Products");
+
+                    b.Navigation("SmallBill");
+                });
+
             modelBuilder.Entity("Data.Entities.User", b =>
                 {
                     b.HasOne("Data.Entities.Builder", "Builder")
@@ -1342,6 +1543,13 @@ namespace Data.Migrations
                     b.Navigation("MaterialStore");
 
                     b.Navigation("Verify");
+                });
+
+            modelBuilder.Entity("Data.Entities.Bill", b =>
+                {
+                    b.Navigation("BillDetails");
+
+                    b.Navigation("SmallBills");
                 });
 
             modelBuilder.Entity("Data.Entities.Builder", b =>
@@ -1375,6 +1583,8 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.Contractor", b =>
                 {
+                    b.Navigation("Bills");
+
                     b.Navigation("ContractorPosts");
 
                     b.Navigation("PostCommitments");
@@ -1408,6 +1618,8 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.MaterialStore", b =>
                 {
+                    b.Navigation("Bills");
+
                     b.Navigation("Products");
 
                     b.Navigation("User");
@@ -1415,9 +1627,13 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.Products", b =>
                 {
+                    b.Navigation("BillDetails");
+
                     b.Navigation("Carts");
 
                     b.Navigation("ProductCategories");
+
+                    b.Navigation("SmallBillDetails");
                 });
 
             modelBuilder.Entity("Data.Entities.ProductSystem", b =>
@@ -1434,6 +1650,11 @@ namespace Data.Migrations
                     b.Navigation("BuilderSkills");
 
                     b.Navigation("ContractorPostSkills");
+                });
+
+            modelBuilder.Entity("Data.Entities.SmallBill", b =>
+                {
+                    b.Navigation("Details");
                 });
 
             modelBuilder.Entity("Data.Entities.SystemCategories", b =>

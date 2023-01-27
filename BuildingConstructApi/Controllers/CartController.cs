@@ -31,7 +31,7 @@ namespace BuildingConstructApi.Controllers
             {
                 return BadRequest();
             }
-            var result = await _cartService.GetAll(Guid.Parse(userID));
+            var result = await _cartService.GetAll(Guid.Parse(userID),request);
             return Ok(result);
         }
 
@@ -61,7 +61,7 @@ namespace BuildingConstructApi.Controllers
             return Ok(result);
         }
 
-        [HttpDelete]
+        [HttpPut("delete")]
         public async Task<IActionResult> Delete([FromBody] List<RemoveCartRequest>? requests)
         {
             var userID = User.FindFirst("UserID").Value;

@@ -14,7 +14,7 @@ namespace Application.System.Carts
 {
     public interface ICartService
     {
-        Task<BaseResponse<List<CartDTO>>> GetAll(Guid userID);
+        Task<BasePagination<List<CartDTO>>> GetAll(Guid userID,PaginationFilter filter);
 
         Task<BaseResponse<CartDTO>> Create(Guid userID, CreateCartRequest requests);
 

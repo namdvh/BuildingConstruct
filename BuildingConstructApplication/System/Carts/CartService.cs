@@ -2,14 +2,12 @@
 using Data.Entities;
 using Data.Enum;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ViewModels.Carts;
 using ViewModels.Pagination;
 using ViewModels.Response;
+using System.Linq.Dynamic.Core;
+using System.Text;
+using Gridify;
 
 namespace Application.System.Carts
 {
@@ -26,7 +24,7 @@ namespace Application.System.Carts
         {
             BaseResponse<CartDTO> response;
 
-            var existed = await _context.Carts.Where(x=>x.UserID.Equals(userID)&&x.ProductID==requests.ProductID).FirstOrDefaultAsync();
+            var existed = await _context.Carts.Where(x => x.UserID.Equals(userID) && x.ProductID == requests.ProductID).FirstOrDefaultAsync();
 
             if (existed != null)
             {
@@ -85,10 +83,18 @@ namespace Application.System.Carts
 
         }
 
-        public async Task<BaseResponse<List<CartDTO>>> GetAll(Guid UserID)
+        public async Task<BasePagination<List<CartDTO>>> GetAll(Guid UserID, PaginationFilter filter)
         {
-            BaseResponse<List<CartDTO>> response;
+            BasePagination<List<CartDTO>> response;
 
+            var orderBy = filter._orderBy.ToString();
+            int totalRecord;
+            orderBy = orderBy switch
+            {
+                "1" => "ascending",
+                "-1" => "descending",
+                _ => orderBy
+            };
             List<CartDTO> ls = new();
 
 
@@ -96,7 +102,14 @@ namespace Application.System.Carts
                 .Include(x => x.Products)
                     .ThenInclude(x => x.MaterialStore)
                         .ThenInclude(x => x.User)
-                .Where(x => x.UserID.Equals(UserID)).ToListAsync();
+                .Where(x => x.UserID.Equals(UserID))
+                .OrderBy(filter._sortBy + " " + orderBy)
+                .Skip((filter.PageNumber - 1) * filter.PageSize)
+                .Take(filter.PageSize)
+                .ToListAsync();
+
+            totalRecord = await _context.Carts.Where(x => x.UserID.Equals(UserID)).CountAsync();
+
 
             if (!cart.Any())
             {
@@ -114,11 +127,25 @@ namespace Application.System.Carts
                 ls.Add(MapToDTO(item));
             }
 
+            double totalPages;
+
+            totalPages = ((double)totalRecord / (double)filter.PageSize);
+
+            var roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
+            Pagination pagination = new()
+            {
+                CurrentPage = filter.PageNumber,
+                PageSize = filter.PageSize,
+                TotalPages = roundedTotalPages,
+                TotalRecords = totalRecord
+            };
+
             response = new()
             {
                 Code = BaseCode.SUCCESS,
                 Message = BaseCode.SUCCESS_MESSAGE,
-                Data = ls
+                Data = ls,
+                Pagination = pagination
             };
 
             return response;
@@ -130,7 +157,7 @@ namespace Application.System.Carts
             BaseResponse<string> response;
 
 
-            if (requests.Count==0)
+            if (requests.Count == 0)
             {
                 var existed = await _context.Carts.Where(x => x.UserID.Equals(userID)).ToListAsync();
                 if (existed.Any())
@@ -183,11 +210,26 @@ namespace Application.System.Carts
             BaseResponse<string> response;
             int rs = 0;
 
-            var existed = await _context.Carts.Where(x => x.UserID.Equals(userID)).ToListAsync();
+            IQueryable<Cart> query = _context.Carts.Where(x => x.UserID.Equals(userID));
+            StringBuilder existed = new();
 
-            _context.RemoveRange(existed);
-            await _context.SaveChangesAsync();
+            var count = requests.Count;
+            for (int i = 0; i < count; i++)
+            {
+                if (i == count - 1)
+                {
+                    existed.Append("ProductID=" + requests[i].ProductID);
+                    break;
+                }
+                existed.Append("ProductID=" + requests[i].ProductID + "|");
+            }
+            query = query.ApplyFiltering(existed.ToString());
 
+            if (existed != null)
+            {
+                _context.RemoveRange(query);
+                await _context.SaveChangesAsync();
+            }
 
             foreach (var item in requests)
             {
