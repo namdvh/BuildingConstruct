@@ -17,7 +17,7 @@ namespace ViewModels.MaterialStore
         public string? Image { get; set; }
 
         public string? Description { get; set; }
-        public int SoldQuantities { get; set; }
+        public int? SoldQuantities { get; set; }
 
 
         public string? Brand { get; set; }

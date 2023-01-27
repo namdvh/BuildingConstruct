@@ -31,7 +31,7 @@ namespace Application.System.MaterialStores
             Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
             var userID = identifierClaim.Value.ToString();
             var roles = _accessor.HttpContext.User.FindFirst(ClaimTypes.Role).Value.ToString();
-            if (!roles.Equals("Store"))
+            if (!roles.Equals("store"))
             {
                 return false;
             }
@@ -405,7 +405,7 @@ namespace Application.System.MaterialStores
             var userID = identifierClaim.Value.ToString();
             var storeID = await _context.Users.Where(x => x.Id.ToString().Equals(userID)).Select(x => x.MaterialStoreID).SingleOrDefaultAsync();
             BaseResponse<ProductStoreDTO> response = new();
-            var products = await _context.Products.Where(x => x.Id == productId && x.MaterialStoreID == storeID).FirstOrDefaultAsync();
+            var products = await _context.Products.Include("ProductCategories").Where(x => x.Id == productId && x.MaterialStoreID == storeID).FirstOrDefaultAsync();
             if (productId == null)
             {
                 response.Message = BaseCode.ERROR_MESSAGE;
@@ -415,38 +415,42 @@ namespace Application.System.MaterialStores
             }
             products.Name = request.Name;
             products.Description = request.Description;
-            products.SoldQuantities = request.SoldQuantities;
             products.UnitPrice = request.UnitPrice;
             products.UnitInStock = request.UnitInStock;
             products.Brand = request.Brand;
             products.Image = request.Image;
             var listcate = new List<CategoryDTO>();
-            if (request.CategoriesId != null && products.ProductCategories != null)
+            if (request.CategoriesId != null)
             {
+                foreach (var i in products.ProductCategories)
+                {
+                    _context.ProductCategories.Remove(i);
+                }
                 foreach (var item in request.CategoriesId)
                 {
                     var cate = _context.Categories.Where(x => x.ID == item).SingleOrDefault();
                     if (cate != null)
                     {
                         var category = new CategoryDTO();
-                        foreach (var i in products.ProductCategories)
+                        var productcate = new ProductCategories();
+
+                        category.Id = cate.ID;
+                        category.Name = cate.Name;
+                        category.Type = cate.Type;
+                        productcate.CategoriesID = cate.ID;
+                        productcate.ProductID = productId;
+                        await _context.ProductCategories.AddAsync(productcate);
+
+                        var rs = _context.SaveChanges();
+                        if (rs < 0)
                         {
-                            category.Id = cate.ID;
-                            category.Name = cate.Name;
-                            category.Type = cate.Type;
-                            i.CategoriesID = cate.ID;
-                            i.ProductID = productId;
-                            _context.Update(i);
-                            var rs = _context.SaveChanges();
-                            if (rs < 0)
-                            {
-                                response.Message = BaseCode.ERROR_MESSAGE;
-                                response.Code = BaseCode.ERROR;
-                                response.Data = null;
-                                return response;
-                            }
-                            listcate.Add(category);
+                            response.Message = BaseCode.ERROR_MESSAGE;
+                            response.Code = BaseCode.ERROR;
+                            response.Data = null;
+                            return response;
                         }
+                        listcate.Add(category);
+
                     }
                 }
             }
@@ -463,7 +467,6 @@ namespace Application.System.MaterialStores
                 response.Data.UnitInStock = request.UnitInStock;
                 response.Data.UnitPrice = request.UnitPrice;
                 response.Data.Image = request.Image;
-                response.Data.SoldQuantities = request.SoldQuantities;
                 response.Data.ProductCategories = listcate;
             }
             return response;
