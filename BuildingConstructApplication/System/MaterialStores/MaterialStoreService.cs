@@ -163,12 +163,13 @@ namespace Application.System.MaterialStores
                 dto.UnitInStock = item.UnitInStock;
                 dto.UnitPrice = item.UnitPrice;
                 dto.SoldQuantities = item.SoldQuantities;
-                dto.Image = item.Image;
+                
+                string img = item?.Image;
+                string[] firstImg = img.Split(",");
+                dto.Image = firstImg[0].Trim();
                 dto.StoreName = item.MaterialStore?.User?.FirstName + item.MaterialStore?.User?.LastName;
                 dto.StoreID = item.MaterialStoreID;
-                string img = item.MaterialStore.Image;
-                string[] firstImg = img.Split(",");
-                dto.StoreImage = firstImg[0].Trim();
+                dto.StoreImage = item.MaterialStore?.Image;
                 dto.ProductCategories = await GetCategory(item.ProductCategories);
                 dto.isAll = isAll;
                 result.Add(dto);
@@ -343,7 +344,17 @@ namespace Application.System.MaterialStores
             ProductDetailDTO productDetail = new();
             productDetail.Id = rs.Id;
             productDetail.Name = rs.Name;
-            productDetail.Image = rs.Image;
+           
+            if (rs.Image != null)
+            {
+                string[] img = rs.Image.Split(",");
+                productDetail.Image = new();
+                foreach (var item in img)
+                {
+
+                    productDetail.Image.Add(item);
+                }
+            }
             productDetail.Description = rs.Description;
             productDetail.UnitInStock = rs.UnitInStock;
             productDetail.UnitPrice = rs.UnitPrice;

@@ -894,28 +894,52 @@ namespace Data.Migrations
             migrationBuilder.InsertData(
                 table: "Builders",
                 columns: new[] { "Id", "Certificate", "CreateBy", "Experience", "ExperienceDetail", "LastModifiedAt", "Place", "TypeID" },
-                values: new object[] { 1, null, new Guid("d7285fb7-835b-4680-a18c-673bd71f63d9"), null, null, new DateTime(2023, 1, 28, 15, 21, 44, 632, DateTimeKind.Local).AddTicks(1755), 60, null });
+                values: new object[,]
+                {
+                    { 1, null, new Guid("d7285fb7-835b-4680-a18c-673bd71f63d9"), null, null, new DateTime(2023, 1, 31, 1, 31, 44, 530, DateTimeKind.Local).AddTicks(1012), 60, null },
+                    { 2, null, new Guid("d39ae0a6-9b2d-4421-be4a-cc294cec054f"), null, null, new DateTime(2023, 1, 31, 1, 31, 44, 537, DateTimeKind.Local).AddTicks(9781), 61, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "MaterialStores",
+                columns: new[] { "Id", "CreateBy", "Description", "Experience", "Image", "LastModifiedAt", "Place", "TaxCode", "Website" },
+                values: new object[] { 1, new Guid("7ba0a48f-551b-4de5-b853-81a1243267f4"), null, null, null, new DateTime(2023, 1, 31, 1, 31, 44, 545, DateTimeKind.Local).AddTicks(7907), 52, null, null });
 
             migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Description", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("20efd516-f16c-41b3-b11d-bc908cd2056b"), "d00dd60c-ed9a-41a2-aaf8-c2d2483f0582", "Contractor", "Contractor", "CONTRACTOR" },
-                    { new Guid("52ec6e78-6732-43bf-adab-9cfa2e5da268"), "0b99b3c4-4e41-4896-a23d-c814d7f7a4ad", "Admin", "Admin", "ADMIN" },
-                    { new Guid("a4fbc29e-9749-4ea0-bcaa-67fc9f104bd1"), "6a425fb6-c974-44d3-9d5b-81c607e6dea6", "Admin", "Admin", "ADMIN" },
-                    { new Guid("dc48ba58-ddcb-41de-96fe-e41327e5f313"), "4a96d844-3a27-4685-9e21-16f3c3ea26a7", "User", "User", "USER" }
+                    { new Guid("20efd516-f16c-41b3-b11d-bc908cd2056b"), "3552501f-0e37-4f85-ab7d-898dbc38463b", "Contractor", "Contractor", "CONTRACTOR" },
+                    { new Guid("52ec6e78-6732-43bf-adab-9cfa2e5da268"), "e63c5ec7-5e1a-4b3e-9d81-a94451007d98", "Admin", "Admin", "ADMIN" },
+                    { new Guid("a4fbc29e-9749-4ea0-bcaa-67fc9f104bd1"), "d2e675b5-57d0-483f-bfce-617db836521e", "Store", "Store", "STORE" },
+                    { new Guid("dc48ba58-ddcb-41de-96fe-e41327e5f313"), "f260d1cc-e5fd-4f3c-958b-f160525b0b23", "User", "User", "USER" }
                 });
 
             migrationBuilder.InsertData(
                 table: "UserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { new Guid("dc48ba58-ddcb-41de-96fe-e41327e5f313"), new Guid("d7285fb7-835b-4680-a18c-673bd71f63d9") });
+                values: new object[,]
+                {
+                    { new Guid("a4fbc29e-9749-4ea0-bcaa-67fc9f104bd1"), new Guid("d39ae0a6-9b2d-4421-be4a-cc294cec054f") },
+                    { new Guid("dc48ba58-ddcb-41de-96fe-e41327e5f313"), new Guid("d39ae0a6-9b2d-4421-be4a-cc294cec054f") },
+                    { new Guid("dc48ba58-ddcb-41de-96fe-e41327e5f313"), new Guid("d7285fb7-835b-4680-a18c-673bd71f63d9") }
+                });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "AccessFailedCount", "Address", "Avatar", "BuilderId", "ConcurrencyStamp", "ContractorId", "CreateBy", "DOB", "Email", "EmailConfirmed", "FirstName", "Gender", "IdNumber", "LastModifiedAt", "LastName", "LockoutEnabled", "LockoutEnd", "MaterialStoreID", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "RefreshTokenExpiryTime", "SecurityStamp", "Status", "Token", "TwoFactorEnabled", "UserName", "VerifyID" },
-                values: new object[] { new Guid("d7285fb7-835b-4680-a18c-673bd71f63d9"), 0, "18, Phuoc Thien, Nhon Trach, Dong Nai", null, 1, "576e716f-0592-47f6-ac4b-9a568c7b9c02", null, new Guid("00000000-0000-0000-0000-000000000000"), new DateTime(2001, 4, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), "namhoaidoan15@gmail.com", false, "Hoai", 0, null, new DateTime(2023, 1, 28, 15, 21, 44, 626, DateTimeKind.Local).AddTicks(1019), "Nam", false, null, null, null, null, "AQAAAAEAACcQAAAAEPQFSAZTW8tIpKN7iTOw1ikUa0ZlaSGPK2TyzhTY8BQsholzpSojjmDgU0z+7cYm2Q==", "0879411575", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "", 0, "xxx", false, "namhoaidoan15@gmail.com", null });
+                values: new object[] { new Guid("7ba0a48f-551b-4de5-b853-81a1243267f4"), 0, "18, Phuoc Thien, Nhon Trach, Dong Nai", null, null, "7161f51e-de20-4aab-b610-7df29f743128", null, new Guid("00000000-0000-0000-0000-000000000000"), new DateTime(1999, 4, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), "namhoai1@gmail.com", false, "Store", 0, null, new DateTime(2023, 1, 31, 1, 31, 44, 537, DateTimeKind.Local).AddTicks(9795), "Nguyen Anh Vu", false, null, 1, null, null, "AQAAAAEAACcQAAAAEFZ6Rk2Lq/OPgvch+qfU78h9j5VeILKzcRg4L6Ip22+6RHYuVmgnFLF/ITkxTMedzg==", "0123456789", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "", 1, "xxx", false, "namhoai1@gmail.com", null });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "AccessFailedCount", "Address", "Avatar", "BuilderId", "ConcurrencyStamp", "ContractorId", "CreateBy", "DOB", "Email", "EmailConfirmed", "FirstName", "Gender", "IdNumber", "LastModifiedAt", "LastName", "LockoutEnabled", "LockoutEnd", "MaterialStoreID", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "RefreshTokenExpiryTime", "SecurityStamp", "Status", "Token", "TwoFactorEnabled", "UserName", "VerifyID" },
+                values: new object[] { new Guid("d39ae0a6-9b2d-4421-be4a-cc294cec054f"), 0, "18, Phuoc Thien, Nhon Trach, Dong Nai", null, 2, "b9f96ab0-b38c-4b2e-89c5-2b7212d37bce", null, new Guid("00000000-0000-0000-0000-000000000000"), new DateTime(2001, 4, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), "namhoaidoan1@gmail.com", false, "Hoai", 0, null, new DateTime(2023, 1, 31, 1, 31, 44, 530, DateTimeKind.Local).AddTicks(1039), "Nam Doan Vu", false, null, null, null, null, "AQAAAAEAACcQAAAAELfBEgEt/PxtKkl80pQEUWGGeMW88ojTVh9/8bU8poKzv9VkRc/2fyOGYhxmIw5wUQ==", "0392799276", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "", 0, "xxx", false, "namhoaidoan1@gmail.com", null });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "AccessFailedCount", "Address", "Avatar", "BuilderId", "ConcurrencyStamp", "ContractorId", "CreateBy", "DOB", "Email", "EmailConfirmed", "FirstName", "Gender", "IdNumber", "LastModifiedAt", "LastName", "LockoutEnabled", "LockoutEnd", "MaterialStoreID", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "RefreshTokenExpiryTime", "SecurityStamp", "Status", "Token", "TwoFactorEnabled", "UserName", "VerifyID" },
+                values: new object[] { new Guid("d7285fb7-835b-4680-a18c-673bd71f63d9"), 0, "18, Phuoc Thien, Nhon Trach, Dong Nai", null, 1, "d64429a3-adf2-4fc3-95d4-446700970884", null, new Guid("00000000-0000-0000-0000-000000000000"), new DateTime(2001, 4, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), "namhoaidoan15@gmail.com", false, "Hoai", 0, null, new DateTime(2023, 1, 31, 1, 31, 44, 522, DateTimeKind.Local).AddTicks(1218), "Nam", false, null, null, null, null, "AQAAAAEAACcQAAAAEISaGOjEeEErv4S4sRTnDFoyYB5PlqgSkZ6+uwtM32xN9eSbcQPH0PMmm0S7oQBOWQ==", "0879411575", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "", 0, "xxx", false, "namhoaidoan15@gmail.com", null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AppliedPost_BuilderID",

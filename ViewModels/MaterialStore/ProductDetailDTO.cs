@@ -17,7 +17,7 @@ namespace ViewModels.MaterialStore
 
         public int UnitInStock { get; set; }
 
-        public string? Image { get; set; }
+        public List<string>? Image { get; set; }
 
         public string? Description { get; set; }
 

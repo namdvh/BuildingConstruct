@@ -1,4 +1,5 @@
 ﻿using Data.Entities;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,7 +14,7 @@ namespace Data.Extensions
     {
         public static void Seed(this ModelBuilder modelBuilder)
         {
-            var hasher = new PasswordHasher<User>();
+            var hasher = new Microsoft.AspNetCore.Identity.PasswordHasher<User>();
             modelBuilder.Entity<Role>().HasData(new Role
             {
                 Id = Guid.Parse("52ec6e78-6732-43bf-adab-9cfa2e5da268"),
@@ -48,7 +49,7 @@ namespace Data.Extensions
                 Id = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d9"),
                 Email = "namhoaidoan15@gmail.com",
                 UserName= "namhoaidoan15@gmail.com",
-                PasswordHash = hasher.HashPassword(null, "Hoainam@123"),
+                PasswordHash = hasher.HashPassword(null,"Hoainam@123"),
                 SecurityStamp = string.Empty,
                 FirstName = "Hoai",
                 LastName = "Nam",
@@ -77,7 +78,7 @@ namespace Data.Extensions
                 Id = Guid.Parse("d39ae0a6-9b2d-4421-be4a-cc294cec054f"),
                 Email = "namhoaidoan1@gmail.com",
                 UserName = "namhoaidoan1@gmail.com",
-                PasswordHash = hasher.HashPassword(null, "Hoainam@123"),
+                PasswordHash = hasher.HashPassword(null,"Hoainam@123"),
                 SecurityStamp = string.Empty,
                 FirstName = "Hoai",
                 LastName = "Nam Doan Vu",
@@ -122,13 +123,103 @@ namespace Data.Extensions
             modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
             {
                 RoleId = Guid.Parse("a4fbc29e-9749-4ea0-bcaa-67fc9f104bd1"),
-                UserId = Guid.Parse("d39ae0a6-9b2d-4421-be4a-cc294cec054f"),
+                UserId = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f4"),
             });
             modelBuilder.Entity<MaterialStore>().HasData(new MaterialStore()
             {
                 Id = 1,
                 CreateBy = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f4"),
                 Place = Enum.Place._52
+            });
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f5"),
+                Email = "hoainam@gmail.com",
+                UserName = "hoainam@gmail.com",
+                PasswordHash = hasher.HashPassword(null, "Hoainam@123"),
+                SecurityStamp = string.Empty,
+                FirstName = "Store",
+                LastName = "Dien May Xanh",
+                DOB = new DateTime(1995, 5, 30),
+                PhoneNumber = "033451444",
+                Gender = Enum.Gender.MALE,
+                Token = "xxx",
+                Status = Enum.Status.Level2,
+                Avatar = null,
+                MaterialStoreID = 2,
+                Address = "18, Phuoc Thien, Nhon Trach, Dong Nai"
+            });
+            modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
+            {
+                RoleId = Guid.Parse("a4fbc29e-9749-4ea0-bcaa-67fc9f104bd1"),
+                UserId = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f5"),
+            });
+            modelBuilder.Entity<MaterialStore>().HasData(new MaterialStore()
+            {
+                Id = 2,
+                CreateBy = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f5"),
+                Place = Enum.Place._51
+            });
+            //Contractor
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f6"),
+                Email = "hoainam123@gmail.com",
+                UserName = "hoainam123@gmail.com",
+                PasswordHash = hasher.HashPassword(null, "Hoainam@123"),
+                SecurityStamp = string.Empty,
+                FirstName = "Nguyen",
+                LastName = "Hong",
+                DOB = new DateTime(1995, 5, 30),
+                PhoneNumber = "0333999444",
+                Gender = Enum.Gender.FEMALE,
+                Token = "xxx",
+                Status = Enum.Status.Level1,
+                Avatar = null,
+                ContractorId = 1,
+                Address = "18, Phuoc Thien, Nhon Trach, Dong Nai"
+            });
+            modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
+            {
+                RoleId = Guid.Parse("20efd516-f16c-41b3-b11d-bc908cd2056b"),
+                UserId = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f6"),
+            });
+            modelBuilder.Entity<Contractor>().HasData(new Contractor()
+            {
+                Id = 1,
+                CreateBy = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f6"),
+                CompanyName="Bat dong san Vinhome",
+                Website="abcdef.com.vn"
+            });
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f7"),
+                Email = "hoainam2001@gmail.com",
+                UserName = "hoainam2001@gmail.com",
+                PasswordHash = hasher.HashPassword(null, "Hoainam@123"),
+                SecurityStamp = string.Empty,
+                FirstName = "Nguyen",
+                LastName = "Duy",
+                DOB = new DateTime(1995, 5, 30),
+                PhoneNumber = "0333999444",
+                Gender = Enum.Gender.MALE,
+                Token = "xxx",
+                Status = Enum.Status.Level1,
+                Avatar = null,
+                ContractorId = 2,
+                Address = "18, Phuoc Thien, Nhon Trach, Dong Nai"
+            });
+            modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
+            {
+                RoleId = Guid.Parse("20efd516-f16c-41b3-b11d-bc908cd2056b"),
+                UserId = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f7"),
+            });
+            modelBuilder.Entity<Contractor>().HasData(new Contractor()
+            {
+                Id = 2,
+                CreateBy = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f7"),
+                CompanyName = "Bat dong san Thang Long",
+                Website = "nguyenduy.com.vn"
             });
         }
     }
