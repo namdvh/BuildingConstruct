@@ -166,7 +166,9 @@ namespace Application.System.MaterialStores
                 dto.Image = item.Image;
                 dto.StoreName = item.MaterialStore?.User?.FirstName + item.MaterialStore?.User?.LastName;
                 dto.StoreID = item.MaterialStoreID;
-                dto.StoreImage = item.MaterialStore.Image;
+                string img = item.MaterialStore.Image;
+                string[] firstImg = img.Split(",");
+                dto.StoreImage = firstImg[0].Trim();
                 dto.ProductCategories = await GetCategory(item.ProductCategories);
                 dto.isAll = isAll;
                 result.Add(dto);
