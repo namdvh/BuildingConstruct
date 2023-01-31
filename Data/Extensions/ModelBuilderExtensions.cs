@@ -1,4 +1,5 @@
 ﻿using Data.Entities;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,7 +15,7 @@ namespace Data.Extensions
 
         public static void Seed(this ModelBuilder modelBuilder)
         {
-            var hasher = new PasswordHasher<User>();
+            var hasher = new Microsoft.AspNetCore.Identity.PasswordHasher<User>();
             modelBuilder.Entity<Role>().HasData(new Role
             {
                 Id = Guid.Parse("52ec6e78-6732-43bf-adab-9cfa2e5da268"),
@@ -48,11 +49,11 @@ namespace Data.Extensions
             {
                 Id = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d9"),
                 Email = "namhoaidoan15@gmail.com",
-                PasswordHash = hasher.HashPassword(null, "Hoainam@123"),
+                UserName= "namhoaidoan15@gmail.com",
+                PasswordHash = hasher.HashPassword(null,"Hoainam@123"),
                 SecurityStamp = string.Empty,
                 FirstName = "Hoai",
                 LastName = "Nam",
-                UserName= "0879411575",
                 DOB = new DateTime(2001, 4, 30),
                 PhoneNumber = "0879411575",
                 Gender = Enum.Gender.MALE,
