@@ -286,7 +286,8 @@ namespace Data.Extensions
                 PostCategories=Enum.PostCategories.Categories1,
                 Salaries="10.000.000 - 15.000.000",
                 NumberPeople=20,
-                ContractorID=1
+                ContractorID=1,
+                CreateBy=Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f6")
             });
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
             {
@@ -311,7 +312,9 @@ namespace Data.Extensions
                 PostCategories = Enum.PostCategories.Categories1,
                 Salaries = "10.000.000 - 15.000.000",
                 NumberPeople = 20,
-                ContractorID = 2
+                ContractorID = 2,
+                CreateBy = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f7")
+
             });
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
             {
@@ -336,7 +339,9 @@ namespace Data.Extensions
                 PostCategories = Enum.PostCategories.Categories1,
                 Salaries = "10.000.000 - 15.000.000",
                 NumberPeople = 20,
-                ContractorID = 2
+                ContractorID = 2,
+                CreateBy = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f7")
+
             });
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
             {
@@ -361,7 +366,8 @@ namespace Data.Extensions
                 PostCategories = Enum.PostCategories.Categories1,
                 Salaries = "10.000.000 - 15.000.000",
                 NumberPeople = 20,
-                ContractorID = 1
+                ContractorID = 1,
+                CreateBy = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f6")
             });
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
             {
@@ -386,6 +392,7 @@ namespace Data.Extensions
                 PostCategories = Enum.PostCategories.Categories2,
                 Salaries = "10.000.000 - 15.000.000",
                 NumberPeople = 30,
+                CreateBy = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f7"),
                 ContractorID = 2
             });
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
@@ -411,7 +418,9 @@ namespace Data.Extensions
                 PostCategories = Enum.PostCategories.Categories2,
                 Salaries = "10.000.000 - 15.000.000",
                 NumberPeople = 30,
-                ContractorID = 1
+                ContractorID = 1,
+                CreateBy = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f6")
+
             });
             modelBuilder.Entity<Products>().HasData(new Products
             {
