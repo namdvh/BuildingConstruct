@@ -90,7 +90,6 @@ namespace Application.System.Bill
                         smallBill.BillID = bill.Id;
                         _context.SmallBills.Add(smallBill);
                         var result = _context.SaveChanges();
-                        
                     }
                 }
                 return true;
