@@ -22,7 +22,7 @@ namespace Application.System.Carts
 
         public async Task<BaseResponse<CartDTO>> Create(Guid userID, CreateCartRequest requests)
         {
-            BaseResponse<CartDTO> response;
+            BaseResponse<CartDTO>? response=null;
 
             var existed = await _context.Carts.Where(x => x.UserID.Equals(userID) && x.ProductID == requests.ProductID).FirstOrDefaultAsync();
 
@@ -62,14 +62,16 @@ namespace Application.System.Carts
                        .ThenInclude(x => x.User)
                .Where(x => x.UserID.Equals(userID) && x.ProductID == requests.ProductID).FirstOrDefaultAsync();
 
-                response = new()
+                if (result != null)
                 {
-                    Code = BaseCode.SUCCESS,
-                    Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = MapToDTO(result)
-                };
-
-
+                    response = new()
+                    {
+                        Code = BaseCode.SUCCESS,
+                        Message = BaseCode.SUCCESS_MESSAGE,
+                        Data = MapToDTO(result)
+                    };
+                    return response;
+                }
             }
             else
             {
@@ -189,8 +191,11 @@ namespace Application.System.Carts
                 foreach (var item in requests)
                 {
                     var remove = _context.Carts.Where(x => x.UserID.Equals(userID) && x.ProductID == item.ProductID).FirstOrDefault();
-                    _context.Carts.Remove(remove);
-                    await _context.SaveChangesAsync();
+                    if (remove != null)
+                    {
+                        _context.Carts.Remove(remove);
+                        await _context.SaveChangesAsync();
+                    }
                 }
             }
 
