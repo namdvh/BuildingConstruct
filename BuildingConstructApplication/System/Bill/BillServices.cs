@@ -36,8 +36,8 @@ namespace Application.System.Bill
             var rs = await _context.SaveChangesAsync();
             if (rs > 0)
             {
-            
-                foreach (var item in requests.ProductBill)
+
+                foreach (var item in requests.ProductBillDetail)
                 {
                     var billDetail = new BillDetail();
                     billDetail.BillId = bill.Id;
@@ -47,12 +47,35 @@ namespace Application.System.Bill
                     _context.BillDetails.Add(billDetail);
                     _context.SaveChanges();
                 }
-                if (requests.SmallBill != null && requests.BillType!=0)
+                if (requests.SmallBill != null && requests.BillType != 0)
                 {
-                    var smallBill = new Data.Entities.SmallBill()
+                    foreach (var item in requests.SmallBill)
                     {
-                        
-                    };
+                        var smallBill = new Data.Entities.SmallBill();
+                        smallBill.Note = item.Notes;
+                        smallBill.Status = item.Status;
+                        smallBill.StartDate = item.StartDate;
+                        smallBill.EndDate = item.EndDate;
+                        smallBill.TotalPrice = item.TotalPrice;
+                        smallBill.BillID = bill.Id;
+                        _context.SmallBills.Add(smallBill);
+                        var result = _context.SaveChanges();
+                        if (result > 0)
+                        {
+                            foreach (var i in item.SmallProductDetail)
+                            {
+                                var smallBillDetail = new SmallBillDetail();
+                                smallBillDetail.SmallBillID = smallBill.Id;
+                                smallBillDetail.ProductID = i.ProductId;
+                                smallBillDetail.Quantity = i.Quantity;
+                                smallBillDetail.Price = i.Price;
+                                _context.SmallBillDetails.Add(smallBillDetail);
+                                _context.SaveChanges();
+                            }
+                        }
+
+                    }
+
                 }
                 return true;
             }
