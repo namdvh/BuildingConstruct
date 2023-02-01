@@ -30,7 +30,7 @@ namespace BuildingConstructApi.Controllers
             var rs = await _saveService.SavePost(request);
             return Ok(rs);
         }
-        [HttpDelete]
+        [HttpPut]
         public async Task<IActionResult> DeleteSave([FromBody] DeleteSaveRequest request)
         {
             BaseResponse<string> response = new();

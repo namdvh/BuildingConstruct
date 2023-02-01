@@ -10,6 +10,5 @@ namespace ViewModels.SavePost
     {
         public int? ContractorPostId { get; set; }
         public int? BuiderPostId { get; set; }
-        public DateTime CreatedDate { get; set; }
     }
 }
