@@ -144,7 +144,7 @@ namespace Data.Extensions
                 SecurityStamp = string.Empty,
                 FirstName = "Công Ty Cổ Phần Đầu Tư Bất Động Sản",
                 LastName = "Taseco",
-                UserName = "09987654321",
+                UserName = "0987654321",
                 DOB = new DateTime(2001, 9, 15),
                 PhoneNumber = "09987654321",
                 Gender = Enum.Gender.MALE,
