@@ -310,6 +310,10 @@ namespace Application.System.ContractorPosts
                         };
             var result = await query.AsNoTracking().ToListAsync();
             var final = new List<ContractorPostProductDTO>();
+            if (result == null)
+            {
+                return final;
+            }
             foreach (var x in result)
             {
                 ContractorPostProductDTO dto = new();
