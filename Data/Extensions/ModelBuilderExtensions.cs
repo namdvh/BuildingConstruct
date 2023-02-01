@@ -111,15 +111,15 @@ namespace Data.Extensions
                 Email = "contractor@gmail.com",
                 PasswordHash = hasher.HashPassword(null, "Hoainam@123"),
                 SecurityStamp = string.Empty,
-                FirstName = "Contractor",
-                LastName = "Contractor",
+                FirstName = "Công Ty Cổ Phần Xây Dựng Và Công Nghiệp",
+                LastName = "NSN",
                 UserName = "0912345678",
                 DOB = new DateTime(2001, 9, 15),
                 PhoneNumber = "0912345678",
                 Gender = Enum.Gender.MALE,
                 Token = "xxx",
                 Status = Enum.Status.Level1,
-                Avatar = null,
+                Avatar = "https://www.vietnamworks.com/_next/image?url=https%3A%2F%2Fimages.vietnamworks.com%2Fpictureofcompany%2F78%2F11127264.png&w=128&q=75",
                 ContractorId = 1,
                 Address = "Q2"
             });
@@ -142,15 +142,15 @@ namespace Data.Extensions
                 Email = "contractor2@gmail.com",
                 PasswordHash = hasher.HashPassword(null, "Hoainam@123"),
                 SecurityStamp = string.Empty,
-                FirstName = "Contractor2",
-                LastName = "Contractor2",
+                FirstName = "Công Ty Cổ Phần Đầu Tư Bất Động Sản",
+                LastName = "Taseco",
                 UserName = "09987654321",
                 DOB = new DateTime(2001, 9, 15),
                 PhoneNumber = "09987654321",
                 Gender = Enum.Gender.MALE,
                 Token = "xxx",
                 Status = Enum.Status.Level1,
-                Avatar = null,
+                Avatar = "https://www.vietnamworks.com/_next/image?url=https%3A%2F%2Fimages.vietnamworks.com%2Fpictureofcompany%2F69%2F11128477.png&w=128&q=75",
                 ContractorId = 2,
                 Address = "Q2"
             });
@@ -194,6 +194,8 @@ namespace Data.Extensions
             modelBuilder.Entity<MaterialStore>().HasData(new MaterialStore()
             {
                 Id = 1,
+                Website = "https://vinasoftware.com.vn/",
+                Description = "Với mục tiêu cung cấp nhiều gói sản phẩm phong phú về mẫu mã và các tính năng linh hoạt cho nhiều loại hình website như giới thiệu công ty, bán hàng, trang tin tức, thương mại điện tử… cùng với nhiều giao diện phong phú đa dạng độc đáo đã được VNS lọc chọn và đúc kết nhằm giới thiệu tới khách hàng với mong muốn có một website nhanh, đẹp, hiệu quả và giá cả hợp lý.",
                 CreateBy = Guid.Parse("b57b172a-a044-11ed-a8fc-0242ac120002"),
             });
 
