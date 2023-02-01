@@ -245,7 +245,7 @@ namespace Application.System.SavePost
             Save save = new()
             {
                 Date = DateTime.Now,
-                BuilderPostId = request.BuiderPostId,
+                BuilderPostId = request.BuilderPostId,
                 ContractorPostId = request.ContractorPostId,
                 UserId = Guid.Parse(userID)
             };
