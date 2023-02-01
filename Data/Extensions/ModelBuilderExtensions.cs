@@ -330,7 +330,7 @@ namespace Data.Extensions
                 Salaries="10.000.000 - 15.000.000",
                 NumberPeople=20,
                 ContractorID=1,
-                CreateBy=Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f6")
+                CreateBy=Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7")
             });
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
             {
@@ -348,7 +348,7 @@ namespace Data.Extensions
                 Salaries = "10.000.000 - 15.000.000",
                 NumberPeople = 20,
                 ContractorID = 2,
-                CreateBy = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f7")
+                CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d6")
 
             });
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
@@ -367,7 +367,7 @@ namespace Data.Extensions
                 Salaries = "10.000.000 - 15.000.000",
                 NumberPeople = 20,
                 ContractorID = 2,
-                CreateBy = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f7")
+                CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d6")
 
             });
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
@@ -386,7 +386,7 @@ namespace Data.Extensions
                 Salaries = "10.000.000 - 15.000.000",
                 NumberPeople = 20,
                 ContractorID = 1,
-                CreateBy = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f6")
+                CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7")
             });
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
             {
@@ -403,7 +403,7 @@ namespace Data.Extensions
                 PostCategories = Enum.PostCategories.Categories2,
                 Salaries = "10.000.000 - 15.000.000",
                 NumberPeople = 30,
-                CreateBy = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f7"),
+                CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d6"),
                 ContractorID = 2
             });
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
@@ -422,7 +422,7 @@ namespace Data.Extensions
                 Salaries = "10.000.000 - 15.000.000",
                 NumberPeople = 30,
                 ContractorID = 1,
-                CreateBy = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f6")
+                CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7")
 
             });
             modelBuilder.Entity<Products>().HasData(new Products
