@@ -300,7 +300,7 @@ namespace Application.System.ContractorPosts
                         from r1 in rs2.DefaultIfEmpty()
                         join c in _context.Categories on r1.SystemCategoriesID equals c.ID into rs3
                         from r3 in rs3.DefaultIfEmpty()
-                        where cP.ContractorPostID == postID
+                        where r4.ContractorPostID == postID && cP.ContractorPostID == postID
                         select new
                         {
                             ProductSystemCategories = r1,
