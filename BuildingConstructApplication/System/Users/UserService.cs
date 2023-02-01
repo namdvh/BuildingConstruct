@@ -76,8 +76,8 @@ namespace Application.System.Users
                         {
                             UserName = us.UserName,
                             Phone = us.PhoneNumber,
-                            FirstName = us.LastName,
-                            LastName = us.PhoneNumber,
+                            FirstName = us.FirstName,
+                            LastName = us.LastName,
                             Status = us.Status,
                             Id = us.Id,
                             Address = us.Address,

@@ -31,7 +31,7 @@ namespace BuildingConstructApi.Controllers
             else
             {
                 response.Code = BaseCode.ERROR;
-                response.Message = "Create Post fail";
+                response.Message = "Create Bill fail";
             }
             return Ok(response);
         }
