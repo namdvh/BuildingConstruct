@@ -31,7 +31,7 @@ namespace Application.System.MaterialStores
             Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
             var userID = identifierClaim.Value.ToString();
             var roles = _accessor.HttpContext.User.FindFirst(ClaimTypes.Role).Value.ToString();
-            if (!roles.Equals("store"))
+            if (!roles.ToLower().Equals(("store")))
             {
                 return false;
             }

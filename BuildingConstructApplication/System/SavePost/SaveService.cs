@@ -276,7 +276,7 @@ namespace Application.System.SavePost
             }
             else
             {
-                save = await _context.Saves.FirstOrDefaultAsync(x => x.BuilderPostId == request.BuilderPostId && x.UserId.Equals(userID));
+                save = await _context.Saves.FirstOrDefaultAsync(x => x.BuilderPostId == request.BuilderPostId && x.UserId.ToString().Equals(userID.ToString()));
             }
 
             if (save == null)
