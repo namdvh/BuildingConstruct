@@ -183,6 +183,7 @@ namespace Data.Extensions
                 Id = 1,
                 CreateBy = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f6"),
                 CompanyName = "Bat dong san Vinhome",
+                Description="Công ty bất động sản xây dựng nhà ở và cơ sở hạ tầng",
                 Website = "abcdef.com.vn"
             });
             modelBuilder.Entity<User>().HasData(new User
@@ -213,6 +214,7 @@ namespace Data.Extensions
                 Id = 2,
                 CreateBy = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f7"),
                 CompanyName = "Bat dong san Thang Long",
+                Description = "Công ty bất động sản xây dựng nhà ở và cơ sở hạ tầng",
                 Website = "nguyenduy.com.vn"
             });
             modelBuilder.Entity<Entities.Type>().HasData(new Entities.Type
