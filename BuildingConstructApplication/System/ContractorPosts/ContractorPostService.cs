@@ -694,11 +694,11 @@ namespace Application.System.ContractorPosts
 
             foreach (var item in list)
             {
-                var user = _context.Users.Where(x => x.ContractorId.Equals(item.ContractorID)).FirstOrDefault();
+                //var user = _context.Users.Where(x => x.ContractorId.Equals(item.ContractorID)).FirstOrDefault();
 
                 ContractorPostDTO dto = new()
                 {
-                    //Avatar = user.Avatar,
+                    Avatar = item.Contractor.User.Avatar,
                     ContractorID = item.ContractorID,
                     Description = item.Description,
                     EndDate = item.EndDate,

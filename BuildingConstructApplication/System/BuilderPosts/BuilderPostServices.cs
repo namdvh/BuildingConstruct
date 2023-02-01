@@ -459,12 +459,11 @@ namespace Application.System.BuilderPosts
 
             foreach (var item in list)
             {
-                var user = _context.Users.Where(x => x.BuilderId == item.BuilderID).FirstOrDefault();
 
                 BuilderPostDTO dto = new()
                 {
-                    Avatar = user.Avatar,
-                    AuthorName = user.Builder.User.FirstName + " " + user.Builder.User.LastName,
+                    Avatar = item.Builder.User.Avatar,
+                    AuthorName = item.Builder.User.FirstName + " " + item.Builder.User.LastName,
                     Description = item.Description,
                     Id = item.Id,
                     Place = item.Place,
