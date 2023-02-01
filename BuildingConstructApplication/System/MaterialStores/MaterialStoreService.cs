@@ -358,6 +358,7 @@ namespace Application.System.MaterialStores
             productDetail.Description = rs.Description;
             productDetail.UnitInStock = rs.UnitInStock;
             productDetail.UnitPrice = rs.UnitPrice;
+            productDetail.Brand = rs.Brand;
             productDetail.SoldQuantities = rs.SoldQuantities;
             productDetail.Store = await GetStore((int)rs.MaterialStoreID);
             productDetail.ProductCategories = await GetCategory(rs.ProductCategories);
