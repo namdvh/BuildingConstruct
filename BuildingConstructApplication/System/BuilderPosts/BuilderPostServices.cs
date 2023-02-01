@@ -216,10 +216,11 @@ namespace Application.System.BuilderPosts
             }
             if (rsSkill.Where(x => x.Skills.TypeId == null).ToList().Any())
             {
-                var t = new TypeModels();
-                t.SkillArr = new();
+
                 foreach (var i in rsSkill.Where(x => x.Skills.TypeId == null).ToList())
                 {
+                    var t = new TypeModels();
+                    t.SkillArr = new();
                     var skillArr = new SkillArr();
                     skillArr.id = i.SkillID;
                     skillArr.name = i.Skills.Name;
