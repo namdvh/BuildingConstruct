@@ -131,7 +131,7 @@ namespace Data.Extensions
             modelBuilder.Entity<Contractor>().HasData(new Contractor()
             {
                 Id = 1,
-                CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d8"),
+                CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7"),
             });
 
 
