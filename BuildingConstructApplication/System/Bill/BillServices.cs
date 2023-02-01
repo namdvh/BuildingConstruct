@@ -1,8 +1,14 @@
 ﻿using Data.DataContext;
 using Data.Entities;
+using Data.Enum;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
 using ViewModels.BillModels;
+using ViewModels.Carts;
+using ViewModels.Pagination;
+using ViewModels.Response;
 
 namespace Application.System.Bill
 {
@@ -95,6 +101,69 @@ namespace Application.System.Bill
                 return true;
             }
             return false;
+        }
+
+        public async Task<BaseResponse<List<BillDetailDTO>>> GetDetail(int billID)
+        {
+            BaseResponse<List<BillDetailDTO>> response;
+
+            var rs = await _context.BillDetails
+                .Include(x => x.Bill)
+                    .ThenInclude(x => x.MaterialStore)
+                    .ThenInclude(x => x.User)
+                .Include(x => x.Bill)
+                    .ThenInclude(x => x.Contractor)
+                .Include(x => x.Products)
+                .Where(x => x.BillId == billID)
+                .ToListAsync();
+            if (!rs.Any())
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Data = new(),
+                    Message = BaseCode.NOTFOUND_MESSAGE
+                };
+                return response;
+            }
+
+
+            response = new()
+            {
+                Code = BaseCode.SUCCESS,
+                Message = BaseCode.SUCCESS_MESSAGE,
+                Data = MapListDetailDTO(rs),
+            };
+
+            return response;
+
+        }
+
+        public List<BillDetailDTO> MapListDetailDTO(List<BillDetail> list)
+        {
+            List<BillDetailDTO> rs = new();
+
+            foreach (var item in list)
+            {
+                BillDetailDTO dto = new()
+                {
+                    ContractorID = item.Bill.ContractorId,
+                    EndDate = item.Bill.EndDate,
+                    Id = item.Id,
+                    Image = item.Products.Image,
+                    Note = item.Bill.Note,
+                    ProductBrand = item.Products.Brand,
+                    ProductDescription = item.Products.Description,
+                    ProductName = item.Products.Name,
+                    StartDate = item.Bill.StartDate,
+                    StoreID = item.Bill.StoreID,
+                    StoreName = item.Bill.MaterialStore.User.FirstName + " " + item.Bill.MaterialStore.User.LastName,
+                    TotalPrice = item.Bill.TotalPrice,
+                    UnitPrice = item.Products.UnitPrice
+                };
+                rs.Add(dto);
+            }
+            return rs;
         }
     }
 }
