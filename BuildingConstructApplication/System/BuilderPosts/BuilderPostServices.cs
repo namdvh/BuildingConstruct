@@ -304,6 +304,8 @@ namespace Application.System.BuilderPosts
             }
 
             var result = await query
+                .Include(x=>x.Builder)
+                    .ThenInclude(x=>x.User)
                .OrderBy(filter._orderBy + " " + orderBy)
                .Skip((filter.PageNumber - 1) * filter.PageSize)
                .Take(filter.PageSize)
@@ -461,7 +463,8 @@ namespace Application.System.BuilderPosts
 
                 BuilderPostDTO dto = new()
                 {
-                    //Avatar = user.Avatar,
+                    Avatar = user.Avatar,
+                    AuthorName = user.Builder.User.FirstName + " " + user.Builder.User.LastName,
                     Description = item.Description,
                     Id = item.Id,
                     Place = item.Place,

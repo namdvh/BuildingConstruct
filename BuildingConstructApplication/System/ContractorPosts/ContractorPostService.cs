@@ -403,6 +403,8 @@ namespace Application.System.ContractorPosts
             }
 
             var result = await query
+                    .Include(x=>x.Contractor)
+                        .ThenInclude(x=>x.User)
                      .OrderBy(filter._sortBy + " " + orderBy)
                      .Skip((filter.PageNumber - 1) * filter.PageSize)
                      .Take(filter.PageSize)
@@ -707,6 +709,7 @@ namespace Application.System.ContractorPosts
                     ProjectName = item.ProjectName,
                     Salaries = item.Salaries,
                     StarDate = item.StarDate,
+                    AuthorName=item.Contractor.User.FirstName +" "+ item.Contractor.User.LastName,
                     Title = item.Title,
                     ViewCount = item.ViewCount,
                     LastModifiedAt = item.LastModifiedAt,

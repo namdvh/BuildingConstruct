@@ -81,7 +81,6 @@ namespace Data.Extensions
                 SecurityStamp = string.Empty,
                 FirstName = "Thinh",
                 LastName = "Nguyen",
-                UserName = "0937341639",
                 DOB = new DateTime(2001, 9, 15),
                 PhoneNumber = "0937341639",
                 Gender = Enum.Gender.MALE,
@@ -230,7 +229,7 @@ namespace Data.Extensions
 
             modelBuilder.Entity<Products>().HasData(new Products
             {
-                Id=1,
+                Id=20,
                 Name="Product 1",
                 UnitPrice=4000,
                 UnitInStock=1000,
@@ -243,7 +242,7 @@ namespace Data.Extensions
 
             modelBuilder.Entity<Products>().HasData(new Products
             {
-                Id = 2,
+                Id = 21,
                 Name = "Product 2",
                 UnitPrice = 5000,
                 UnitInStock = 1200,
@@ -257,7 +256,7 @@ namespace Data.Extensions
             modelBuilder.Entity<Products>().HasData(new Products
             {
 
-                Id = 3,
+                Id = 22,
                 Name = "Product 3",
                 UnitPrice = 6000,
                 UnitInStock = 100,
