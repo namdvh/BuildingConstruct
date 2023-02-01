@@ -4,6 +4,7 @@ using Data.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(BuildingConstructDbContext))]
-    partial class BuildingConstructDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230131134118_v6")]
+    partial class v6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -164,14 +166,14 @@ namespace Data.Migrations
                         {
                             Id = 1,
                             CreateBy = new Guid("d7285fb7-835b-4680-a18c-673bd71f63d9"),
-                            LastModifiedAt = new DateTime(2023, 2, 1, 1, 12, 46, 869, DateTimeKind.Local).AddTicks(9482),
+                            LastModifiedAt = new DateTime(2023, 1, 31, 20, 41, 17, 56, DateTimeKind.Local).AddTicks(9942),
                             Place = 60
                         },
                         new
                         {
                             Id = 2,
                             CreateBy = new Guid("d39ae0a6-9b2d-4421-be4a-cc294cec054f"),
-                            LastModifiedAt = new DateTime(2023, 2, 1, 1, 12, 46, 876, DateTimeKind.Local).AddTicks(337),
+                            LastModifiedAt = new DateTime(2023, 1, 31, 20, 41, 17, 63, DateTimeKind.Local).AddTicks(9494),
                             Place = 61
                         });
                 });
@@ -345,7 +347,7 @@ namespace Data.Migrations
                             Id = 1,
                             CompanyName = "Bat dong san Vinhome",
                             CreateBy = new Guid("7ba0a48f-551b-4de5-b853-81a1243267f6"),
-                            LastModifiedAt = new DateTime(2023, 2, 1, 1, 12, 46, 894, DateTimeKind.Local).AddTicks(3590),
+                            LastModifiedAt = new DateTime(2023, 1, 31, 20, 41, 17, 85, DateTimeKind.Local).AddTicks(5722),
                             Website = "abcdef.com.vn"
                         },
                         new
@@ -353,7 +355,7 @@ namespace Data.Migrations
                             Id = 2,
                             CompanyName = "Bat dong san Thang Long",
                             CreateBy = new Guid("7ba0a48f-551b-4de5-b853-81a1243267f7"),
-                            LastModifiedAt = new DateTime(2023, 2, 1, 1, 12, 46, 900, DateTimeKind.Local).AddTicks(5013),
+                            LastModifiedAt = new DateTime(2023, 1, 31, 20, 41, 17, 92, DateTimeKind.Local).AddTicks(7467),
                             Website = "nguyenduy.com.vn"
                         });
                 });
@@ -438,10 +440,10 @@ namespace Data.Migrations
                             Id = 1,
                             Benefit = "Bao ăn ở, bảo hiểm, và các phúc lợi khác",
                             ContractorID = 1,
-                            CreateBy = new Guid("7ba0a48f-551b-4de5-b853-81a1243267f6"),
+                            CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "- Đưa ra phương án và biện pháp thi công, phối hợp với các bộ phận liên quan để lên phương án thi công.- Giám sát thi công công trình, đảm bảo thi công đúng, đủ số lượng, chất lượng và tiến độ được giao, điều phối các đội thi công trong dự án mình phụ trách.- Tiếp nhận, chuyển và xử lý các vấn đề phát sinh tại công trình.- Chịu trách nhiệm về việc nghiệm thu khối lượng với khách hàng/nhà thầy phụ.- Thực hiện các công việc khác theo yêu cầu của cấp trên.",
                             EndDate = new DateTime(2023, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastModifiedAt = new DateTime(2023, 2, 1, 1, 12, 46, 900, DateTimeKind.Local).AddTicks(5119),
+                            LastModifiedAt = new DateTime(2023, 1, 31, 20, 41, 17, 92, DateTimeKind.Local).AddTicks(7624),
                             NumberPeople = 20,
                             PeopeRemained = 0,
                             Place = 52,
@@ -459,10 +461,10 @@ namespace Data.Migrations
                             Id = 2,
                             Benefit = "Bao ăn ở, bảo hiểm, và các phúc lợi khác",
                             ContractorID = 2,
-                            CreateBy = new Guid("7ba0a48f-551b-4de5-b853-81a1243267f7"),
+                            CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "- Đưa ra phương án và biện pháp thi công, phối hợp với các bộ phận liên quan để lên phương án thi công.- Giám sát thi công công trình, đảm bảo thi công đúng, đủ số lượng, chất lượng và tiến độ được giao, điều phối các đội thi công trong dự án mình phụ trách.- Tiếp nhận, chuyển và xử lý các vấn đề phát sinh tại công trình.- Chịu trách nhiệm về việc nghiệm thu khối lượng với khách hàng/nhà thầy phụ.- Thực hiện các công việc khác theo yêu cầu của cấp trên.",
                             EndDate = new DateTime(2023, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastModifiedAt = new DateTime(2023, 2, 1, 1, 12, 46, 900, DateTimeKind.Local).AddTicks(5134),
+                            LastModifiedAt = new DateTime(2023, 1, 31, 20, 41, 17, 92, DateTimeKind.Local).AddTicks(7639),
                             NumberPeople = 20,
                             PeopeRemained = 0,
                             Place = 52,
@@ -480,10 +482,10 @@ namespace Data.Migrations
                             Id = 3,
                             Benefit = "Bao ăn ở, bảo hiểm, và các phúc lợi khác",
                             ContractorID = 2,
-                            CreateBy = new Guid("7ba0a48f-551b-4de5-b853-81a1243267f7"),
+                            CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "- Đưa ra phương án và biện pháp thi công, phối hợp với các bộ phận liên quan để lên phương án thi công.- Giám sát thi công công trình, đảm bảo thi công đúng, đủ số lượng, chất lượng và tiến độ được giao, điều phối các đội thi công trong dự án mình phụ trách.- Tiếp nhận, chuyển và xử lý các vấn đề phát sinh tại công trình.- Chịu trách nhiệm về việc nghiệm thu khối lượng với khách hàng/nhà thầy phụ.- Thực hiện các công việc khác theo yêu cầu của cấp trên.",
                             EndDate = new DateTime(2023, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastModifiedAt = new DateTime(2023, 2, 1, 1, 12, 46, 900, DateTimeKind.Local).AddTicks(5143),
+                            LastModifiedAt = new DateTime(2023, 1, 31, 20, 41, 17, 92, DateTimeKind.Local).AddTicks(7649),
                             NumberPeople = 20,
                             PeopeRemained = 0,
                             Place = 52,
@@ -501,10 +503,10 @@ namespace Data.Migrations
                             Id = 4,
                             Benefit = "Bao ăn ở, bảo hiểm, và các phúc lợi khác",
                             ContractorID = 1,
-                            CreateBy = new Guid("7ba0a48f-551b-4de5-b853-81a1243267f6"),
+                            CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "- Đưa ra phương án và biện pháp thi công, phối hợp với các bộ phận liên quan để lên phương án thi công.- Giám sát thi công công trình, đảm bảo thi công đúng, đủ số lượng, chất lượng và tiến độ được giao, điều phối các đội thi công trong dự án mình phụ trách.- Tiếp nhận, chuyển và xử lý các vấn đề phát sinh tại công trình.- Chịu trách nhiệm về việc nghiệm thu khối lượng với khách hàng/nhà thầy phụ.- Thực hiện các công việc khác theo yêu cầu của cấp trên.",
                             EndDate = new DateTime(2023, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastModifiedAt = new DateTime(2023, 2, 1, 1, 12, 46, 900, DateTimeKind.Local).AddTicks(5152),
+                            LastModifiedAt = new DateTime(2023, 1, 31, 20, 41, 17, 92, DateTimeKind.Local).AddTicks(7657),
                             NumberPeople = 20,
                             PeopeRemained = 0,
                             Place = 20,
@@ -522,10 +524,10 @@ namespace Data.Migrations
                             Id = 5,
                             Benefit = "Bao ăn ở, bảo hiểm, và các phúc lợi khác",
                             ContractorID = 2,
-                            CreateBy = new Guid("7ba0a48f-551b-4de5-b853-81a1243267f7"),
+                            CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "- Đưa ra phương án và biện pháp thi công, phối hợp với các bộ phận liên quan để lên phương án thi công.- Giám sát thi công công trình, đảm bảo thi công đúng, đủ số lượng, chất lượng và tiến độ được giao, điều phối các đội thi công trong dự án mình phụ trách.- Tiếp nhận, chuyển và xử lý các vấn đề phát sinh tại công trình.- Chịu trách nhiệm về việc nghiệm thu khối lượng với khách hàng/nhà thầy phụ.- Thực hiện các công việc khác theo yêu cầu của cấp trên.",
                             EndDate = new DateTime(2024, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastModifiedAt = new DateTime(2023, 2, 1, 1, 12, 46, 900, DateTimeKind.Local).AddTicks(5160),
+                            LastModifiedAt = new DateTime(2023, 1, 31, 20, 41, 17, 92, DateTimeKind.Local).AddTicks(7667),
                             NumberPeople = 30,
                             PeopeRemained = 0,
                             Place = 14,
@@ -543,10 +545,10 @@ namespace Data.Migrations
                             Id = 6,
                             Benefit = "Bao ăn ở, bảo hiểm, và các phúc lợi khác",
                             ContractorID = 1,
-                            CreateBy = new Guid("7ba0a48f-551b-4de5-b853-81a1243267f6"),
+                            CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "- Đưa ra phương án và biện pháp thi công, phối hợp với các bộ phận liên quan để lên phương án thi công.- Giám sát thi công công trình, đảm bảo thi công đúng, đủ số lượng, chất lượng và tiến độ được giao, điều phối các đội thi công trong dự án mình phụ trách.- Tiếp nhận, chuyển và xử lý các vấn đề phát sinh tại công trình.- Chịu trách nhiệm về việc nghiệm thu khối lượng với khách hàng/nhà thầy phụ.- Thực hiện các công việc khác theo yêu cầu của cấp trên.",
                             EndDate = new DateTime(2024, 5, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastModifiedAt = new DateTime(2023, 2, 1, 1, 12, 46, 900, DateTimeKind.Local).AddTicks(5171),
+                            LastModifiedAt = new DateTime(2023, 1, 31, 20, 41, 17, 92, DateTimeKind.Local).AddTicks(7684),
                             NumberPeople = 30,
                             PeopeRemained = 0,
                             Place = 14,
@@ -707,14 +709,14 @@ namespace Data.Migrations
                         {
                             Id = 1,
                             CreateBy = new Guid("7ba0a48f-551b-4de5-b853-81a1243267f4"),
-                            LastModifiedAt = new DateTime(2023, 2, 1, 1, 12, 46, 882, DateTimeKind.Local).AddTicks(1884),
+                            LastModifiedAt = new DateTime(2023, 1, 31, 20, 41, 17, 71, DateTimeKind.Local).AddTicks(937),
                             Place = 52
                         },
                         new
                         {
                             Id = 2,
                             CreateBy = new Guid("7ba0a48f-551b-4de5-b853-81a1243267f5"),
-                            LastModifiedAt = new DateTime(2023, 2, 1, 1, 12, 46, 888, DateTimeKind.Local).AddTicks(2491),
+                            LastModifiedAt = new DateTime(2023, 1, 31, 20, 41, 17, 78, DateTimeKind.Local).AddTicks(6561),
                             Place = 51
                         });
                 });
@@ -985,7 +987,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("52ec6e78-6732-43bf-adab-9cfa2e5da268"),
-                            ConcurrencyStamp = "5f717fb1-8709-4fae-b036-64f372450ddd",
+                            ConcurrencyStamp = "d5f81c1b-cd63-408b-bd61-c448d75c4a2a",
                             Description = "Admin",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
@@ -993,7 +995,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("dc48ba58-ddcb-41de-96fe-e41327e5f313"),
-                            ConcurrencyStamp = "7e81469a-761b-49a7-a57b-33a910f7b100",
+                            ConcurrencyStamp = "34534128-7c9f-410b-a06b-e6e59205437b",
                             Description = "User",
                             Name = "User",
                             NormalizedName = "USER"
@@ -1001,7 +1003,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("20efd516-f16c-41b3-b11d-bc908cd2056b"),
-                            ConcurrencyStamp = "2b5bf21d-eab3-4cda-85a1-6f69c7df15ca",
+                            ConcurrencyStamp = "81b943b6-f930-4ecf-bb06-df780cfd4733",
                             Description = "Contractor",
                             Name = "Contractor",
                             NormalizedName = "CONTRACTOR"
@@ -1009,7 +1011,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("a4fbc29e-9749-4ea0-bcaa-67fc9f104bd1"),
-                            ConcurrencyStamp = "85f496f2-d12a-4811-8e64-253772271700",
+                            ConcurrencyStamp = "76fa1419-39f2-4612-b03b-f6b9b60b351c",
                             Description = "Store",
                             Name = "Store",
                             NormalizedName = "STORE"
@@ -1354,17 +1356,17 @@ namespace Data.Migrations
                             AccessFailedCount = 0,
                             Address = "18, Phuoc Thien, Nhon Trach, Dong Nai",
                             BuilderId = 1,
-                            ConcurrencyStamp = "b05cad2e-12c7-4b9d-bf35-8faa69ce3a4b",
+                            ConcurrencyStamp = "af082b24-5b88-4a1f-aa20-44bb2ca3fba3",
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             DOB = new DateTime(2001, 4, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "namhoaidoan15@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Hoai",
                             Gender = 0,
-                            LastModifiedAt = new DateTime(2023, 2, 1, 1, 12, 46, 863, DateTimeKind.Local).AddTicks(8749),
+                            LastModifiedAt = new DateTime(2023, 1, 31, 20, 41, 17, 50, DateTimeKind.Local).AddTicks(2845),
                             LastName = "Nam",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEJ4WmS1FCIDXvKtmqFRIAQoR+znMVzhtSiIWLcPJC6MagHAX1dRObb5zcilJp9DAEA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJi0poui5g5ClCn4qTaAeLN0deVz2m6eihjAMZ6zFHKkOQ2Icw6EeZfbtXvd2vWslw==",
                             PhoneNumber = "0879411575",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1380,17 +1382,17 @@ namespace Data.Migrations
                             AccessFailedCount = 0,
                             Address = "18, Phuoc Thien, Nhon Trach, Dong Nai",
                             BuilderId = 2,
-                            ConcurrencyStamp = "50b61bba-485e-4fea-96db-27f4422aed49",
+                            ConcurrencyStamp = "2dca1614-7a41-4878-938f-785498d38e9b",
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             DOB = new DateTime(2001, 4, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "namhoaidoan1@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Hoai",
                             Gender = 0,
-                            LastModifiedAt = new DateTime(2023, 2, 1, 1, 12, 46, 869, DateTimeKind.Local).AddTicks(9496),
+                            LastModifiedAt = new DateTime(2023, 1, 31, 20, 41, 17, 56, DateTimeKind.Local).AddTicks(9971),
                             LastName = "Nam Doan Vu",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEJX2dlSBFJvwErx8ED+g4PawYcSoV78wsQ7UmxJ8Rco0nCCvZLNRZ5c1T8eHOCeqpA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBFtGH0Q5wzI/bvOOGDV2S2weYEmSXVYfSvWKVm3pKJQ3ticQQeGzKZQS7Sxv3md6g==",
                             PhoneNumber = "0392799276",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1405,18 +1407,18 @@ namespace Data.Migrations
                             Id = new Guid("7ba0a48f-551b-4de5-b853-81a1243267f4"),
                             AccessFailedCount = 0,
                             Address = "18, Phuoc Thien, Nhon Trach, Dong Nai",
-                            ConcurrencyStamp = "80eab973-4508-4ca9-b02c-a82567f83a98",
+                            ConcurrencyStamp = "81c3fea3-793b-4909-b35e-c28257e7b3f7",
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             DOB = new DateTime(1999, 4, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "namhoai1@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Store",
                             Gender = 0,
-                            LastModifiedAt = new DateTime(2023, 2, 1, 1, 12, 46, 876, DateTimeKind.Local).AddTicks(356),
+                            LastModifiedAt = new DateTime(2023, 1, 31, 20, 41, 17, 63, DateTimeKind.Local).AddTicks(9524),
                             LastName = "Nguyen Anh Vu",
                             LockoutEnabled = false,
                             MaterialStoreID = 1,
-                            PasswordHash = "AQAAAAEAACcQAAAAEKJi77KV7MlOW0eA4O78yxyUmfgf0GT5fX7ovPboQl1G5kdXTMfrapMt2eIkqD48gA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMkixKZuo9nSryks7cet65G4HQiZ0uaJBSjCWVF/Jr0O0n5ot4Gf+2PGMc7gQZVfaQ==",
                             PhoneNumber = "0123456789",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1431,18 +1433,18 @@ namespace Data.Migrations
                             Id = new Guid("7ba0a48f-551b-4de5-b853-81a1243267f5"),
                             AccessFailedCount = 0,
                             Address = "18, Phuoc Thien, Nhon Trach, Dong Nai",
-                            ConcurrencyStamp = "348a51f8-7efe-4d1d-82c1-aed94819acf5",
+                            ConcurrencyStamp = "cbfd80a4-8cb7-4197-8ade-fb90180da7b3",
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             DOB = new DateTime(1995, 5, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "hoainam@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Store",
                             Gender = 0,
-                            LastModifiedAt = new DateTime(2023, 2, 1, 1, 12, 46, 882, DateTimeKind.Local).AddTicks(1916),
+                            LastModifiedAt = new DateTime(2023, 1, 31, 20, 41, 17, 71, DateTimeKind.Local).AddTicks(977),
                             LastName = "Dien May Xanh",
                             LockoutEnabled = false,
                             MaterialStoreID = 2,
-                            PasswordHash = "AQAAAAEAACcQAAAAEG+roNdJ1MVhbriX8GT6T9Y3geuPyjOFaHVupql9hD7rL3EWSGiQBf9zP5qY9d+Eig==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMW/d4gc/sl3T3huPShGkRjNAnfY1/cvcbtVG31bQrDakQoZCcm0PTIYLgoRWuvmDQ==",
                             PhoneNumber = "033451444",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1457,7 +1459,7 @@ namespace Data.Migrations
                             Id = new Guid("7ba0a48f-551b-4de5-b853-81a1243267f6"),
                             AccessFailedCount = 0,
                             Address = "18, Phuoc Thien, Nhon Trach, Dong Nai",
-                            ConcurrencyStamp = "c0c76469-9508-4559-b564-62464850b6db",
+                            ConcurrencyStamp = "80486e3d-162c-4123-9dc5-7ecb744a2de8",
                             ContractorId = 1,
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             DOB = new DateTime(1995, 5, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1465,10 +1467,10 @@ namespace Data.Migrations
                             EmailConfirmed = false,
                             FirstName = "Nguyen",
                             Gender = 1,
-                            LastModifiedAt = new DateTime(2023, 2, 1, 1, 12, 46, 888, DateTimeKind.Local).AddTicks(2507),
+                            LastModifiedAt = new DateTime(2023, 1, 31, 20, 41, 17, 78, DateTimeKind.Local).AddTicks(6596),
                             LastName = "Hong",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEGSzpDZyNE38h6mQrNyzaElqeYbCqTbYFYG6iiSMAUsx2qoBI5v9a386p6hZpm1aYA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENNs7PVDGmrUhJIrqbiukqffOLTV2wH7sKRs/ZVW2U9KTnologZvhAi9yPQ9nb0YZg==",
                             PhoneNumber = "0333999444",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1483,7 +1485,7 @@ namespace Data.Migrations
                             Id = new Guid("7ba0a48f-551b-4de5-b853-81a1243267f7"),
                             AccessFailedCount = 0,
                             Address = "18, Phuoc Thien, Nhon Trach, Dong Nai",
-                            ConcurrencyStamp = "490a88d2-9367-4210-bdfb-eb120857c16d",
+                            ConcurrencyStamp = "87f1eb23-3300-4b11-b420-dd810a8b205c",
                             ContractorId = 2,
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             DOB = new DateTime(1995, 5, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1491,10 +1493,10 @@ namespace Data.Migrations
                             EmailConfirmed = false,
                             FirstName = "Nguyen",
                             Gender = 0,
-                            LastModifiedAt = new DateTime(2023, 2, 1, 1, 12, 46, 894, DateTimeKind.Local).AddTicks(3615),
+                            LastModifiedAt = new DateTime(2023, 1, 31, 20, 41, 17, 85, DateTimeKind.Local).AddTicks(5752),
                             LastName = "Duy",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEIt29Mdm1m9oGiJawl1cobAjWpLRAhR0P028/cltQrD5u3OWs9NVKdMBB8dl95kuCA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEC2VBAXsQ0JGT6GTeWpuB7Fp0BB7hZy3KkDzqlOIiug5/DU/q0VdtS9DB3o1bwA0Cw==",
                             PhoneNumber = "0333999444",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
