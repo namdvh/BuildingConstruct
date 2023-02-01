@@ -165,8 +165,15 @@ namespace Application.System.MaterialStores
                 dto.SoldQuantities = item.SoldQuantities;
                 
                 string img = item?.Image;
-                string[] firstImg = img.Split(",");
-                dto.Image = firstImg[0].Trim();
+                if(img != null)
+                {
+                    string[] firstImg = img.Split(",");
+                    dto.Image = firstImg[0].Trim();
+                }
+                else
+                {
+                    dto.Image = "";
+                }
                 dto.StoreName = item.MaterialStore?.User?.FirstName + item.MaterialStore?.User?.LastName;
                 dto.StoreID = item.MaterialStoreID;
                 dto.StoreImage = item.MaterialStore?.Image;
