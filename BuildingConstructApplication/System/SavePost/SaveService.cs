@@ -269,9 +269,9 @@ namespace Application.System.SavePost
             Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
             var userID = identifierClaim.Value.ToString();
             dynamic save;
-            if (request.BuilderPostId == null)
+            if (request.BuilderPostId == 0)
             {
-                save = await _context.Saves.FirstOrDefaultAsync(x => x.ContractorPostId == request.ContractorPostId && x.UserId.Equals(userID));
+                save = await _context.Saves.FirstOrDefaultAsync(x => x.ContractorPostId == request.ContractorPostId && x.UserId.ToString().Equals(userID.ToString()));
 
             }
             else

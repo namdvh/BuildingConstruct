@@ -316,14 +316,17 @@ namespace Application.System.ContractorPosts
             }
             foreach (var x in result)
             {
-                ContractorPostProductDTO dto = new();
-                dto.Id = x.ProductSystem.Id;
-                dto.Name = x.ProductSystem.Name;
-                dto.Quantity = x.ContractorPostProduct.Quantity;
-                dto.Brand = x.ProductSystem.Brand;
-                dto.Description = x.ProductSystem.Description;
-                dto.Categories = x.Categories;
-                final.Add(dto);
+                if (x.ContractorPostProduct.ContractorPostID == postID)
+                {
+                    ContractorPostProductDTO dto = new();
+                    dto.Id = x.ProductSystem.Id;
+                    dto.Name = x.ProductSystem.Name;
+                    dto.Quantity = x.ContractorPostProduct.Quantity;
+                    dto.Brand = x.ProductSystem.Brand;
+                    dto.Description = x.ProductSystem.Description;
+                    dto.Categories = x.Categories;
+                    final.Add(dto);
+                }
             }
             return final;
         }
