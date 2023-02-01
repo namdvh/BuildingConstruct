@@ -6,6 +6,7 @@ namespace Data.Extensions
 {
     public static class ModelBuilderExtensions
     {
+
         public static void Seed(this ModelBuilder modelBuilder)
         {
             var hasher = new Microsoft.AspNetCore.Identity.PasswordHasher<User>();
@@ -64,9 +65,13 @@ namespace Data.Extensions
             modelBuilder.Entity<Builder>().HasData(new Builder()
             {
                 Id = 1,
-                CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d9"),
-                Place = Enum.Place._60
-            });
+                CreateBy=Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d9"),
+                Place=Enum.Place._60 
+            }) ;
+
+
+            //user 2 
+
             modelBuilder.Entity<User>().HasData(new User
             {
                 Id = Guid.Parse("d39ae0a6-9b2d-4421-be4a-cc294cec054f"),
@@ -74,10 +79,10 @@ namespace Data.Extensions
                 UserName = "namhoaidoan1@gmail.com",
                 PasswordHash = hasher.HashPassword(null, "Hoainam@123"),
                 SecurityStamp = string.Empty,
-                FirstName = "Hoai",
-                LastName = "Nam Doan Vu",
-                DOB = new DateTime(2001, 4, 30),
-                PhoneNumber = "0392799276",
+                FirstName = "Thinh",
+                LastName = "Nguyen",
+                DOB = new DateTime(2001, 9, 15),
+                PhoneNumber = "0937341639",
                 Gender = Enum.Gender.MALE,
                 Token = "xxx",
                 Status = Enum.Status.Level1,
@@ -96,126 +101,172 @@ namespace Data.Extensions
                 CreateBy = Guid.Parse("d39ae0a6-9b2d-4421-be4a-cc294cec054f"),
                 Place = Enum.Place._61
             });
+
+
+
+            //contractor
             modelBuilder.Entity<User>().HasData(new User
             {
-                Id = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f4"),
-                Email = "namhoai1@gmail.com",
-                UserName = "namhoai1@gmail.com",
+                Id = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7"),
+                Email = "contractor@gmail.com",
+                PasswordHash = hasher.HashPassword(null, "Hoainam@123"),
+                SecurityStamp = string.Empty,
+                FirstName = "Công Ty Cổ Phần Xây Dựng Và Công Nghiệp",
+                LastName = "NSN",
+                UserName = "0912345678",
+                DOB = new DateTime(2001, 9, 15),
+                PhoneNumber = "0912345678",
+                Gender = Enum.Gender.MALE,
+                Token = "xxx",
+                Status = Enum.Status.Level1,
+                Avatar = "https://www.vietnamworks.com/_next/image?url=https%3A%2F%2Fimages.vietnamworks.com%2Fpictureofcompany%2F78%2F11127264.png&w=128&q=75",
+                ContractorId = 1,
+                Address = "Q2"
+            });
+            modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
+            {
+                RoleId = Guid.Parse("20efd516-f16c-41b3-b11d-bc908cd2056b"),
+                UserId = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7"),
+            });
+            modelBuilder.Entity<Contractor>().HasData(new Contractor()
+            {
+                Id = 1,
+                CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d8"),
+            });
+
+
+            //contractor 2
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d6"),
+                Email = "contractor2@gmail.com",
+                PasswordHash = hasher.HashPassword(null, "Hoainam@123"),
+                SecurityStamp = string.Empty,
+                FirstName = "Công Ty Cổ Phần Đầu Tư Bất Động Sản",
+                LastName = "Taseco",
+                UserName = "0987654321",
+                DOB = new DateTime(2001, 9, 15),
+                PhoneNumber = "09987654321",
+                Gender = Enum.Gender.MALE,
+                Token = "xxx",
+                Status = Enum.Status.Level1,
+                Avatar = "https://www.vietnamworks.com/_next/image?url=https%3A%2F%2Fimages.vietnamworks.com%2Fpictureofcompany%2F69%2F11128477.png&w=128&q=75",
+                ContractorId = 2,
+                Address = "Q2"
+            });
+            modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
+            {
+                RoleId = Guid.Parse("20efd516-f16c-41b3-b11d-bc908cd2056b"),
+                UserId = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d6"),
+            });
+            modelBuilder.Entity<Contractor>().HasData(new Contractor()
+            {
+                Id = 2,
+                CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d6"),
+            });
+
+
+            //store 
+
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = Guid.Parse("b57b172a-a044-11ed-a8fc-0242ac120002"),
+                Email = "store@gmail.com",
                 PasswordHash = hasher.HashPassword(null, "Hoainam@123"),
                 SecurityStamp = string.Empty,
                 FirstName = "Store",
-                LastName = "Nguyen Anh Vu",
-                DOB = new DateTime(1999, 4, 30),
-                PhoneNumber = "0123456789",
+                LastName = "Store",
+                UserName = "0924516734",
+                DOB = new DateTime(2001, 9, 15),
+                PhoneNumber = "0924516734",
                 Gender = Enum.Gender.MALE,
                 Token = "xxx",
-                Status = Enum.Status.Level2,
+                Status = Enum.Status.Level1,
                 Avatar = null,
                 MaterialStoreID = 1,
-                Address = "18, Phuoc Thien, Nhon Trach, Dong Nai"
+                Address = "Q2"
             });
             modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
             {
                 RoleId = Guid.Parse("a4fbc29e-9749-4ea0-bcaa-67fc9f104bd1"),
-                UserId = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f4"),
+                UserId = Guid.Parse("b57b172a-a044-11ed-a8fc-0242ac120002"),
             });
             modelBuilder.Entity<MaterialStore>().HasData(new MaterialStore()
             {
                 Id = 1,
-                CreateBy = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f4"),
-                Place = Enum.Place._52
+                Website = "https://vinasoftware.com.vn/",
+                Description = "Với mục tiêu cung cấp nhiều gói sản phẩm phong phú về mẫu mã và các tính năng linh hoạt cho nhiều loại hình website như giới thiệu công ty, bán hàng, trang tin tức, thương mại điện tử… cùng với nhiều giao diện phong phú đa dạng độc đáo đã được VNS lọc chọn và đúc kết nhằm giới thiệu tới khách hàng với mong muốn có một website nhanh, đẹp, hiệu quả và giá cả hợp lý.",
+                CreateBy = Guid.Parse("b57b172a-a044-11ed-a8fc-0242ac120002"),
             });
+
             modelBuilder.Entity<User>().HasData(new User
             {
-                Id = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f5"),
-                Email = "hoainam@gmail.com",
-                UserName = "hoainam@gmail.com",
+                Id = Guid.Parse("be21b564-a044-11ed-a8fc-0242ac120002"),
+                Email = "store2@gmail.com",
                 PasswordHash = hasher.HashPassword(null, "Hoainam@123"),
                 SecurityStamp = string.Empty,
-                FirstName = "Store",
-                LastName = "Dien May Xanh",
-                DOB = new DateTime(1995, 5, 30),
-                PhoneNumber = "033451444",
+                FirstName = "Store2",
+                LastName = "Store2",
+                UserName = "09245167342",
+                DOB = new DateTime(2001, 9, 15),
+                PhoneNumber = "09245167342",
                 Gender = Enum.Gender.MALE,
                 Token = "xxx",
-                Status = Enum.Status.Level2,
+                Status = Enum.Status.Level1,
                 Avatar = null,
                 MaterialStoreID = 2,
-                Address = "18, Phuoc Thien, Nhon Trach, Dong Nai"
+                Address = "Q2"
             });
             modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
             {
                 RoleId = Guid.Parse("a4fbc29e-9749-4ea0-bcaa-67fc9f104bd1"),
-                UserId = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f5"),
+                UserId = Guid.Parse("be21b564-a044-11ed-a8fc-0242ac120002"),
             });
             modelBuilder.Entity<MaterialStore>().HasData(new MaterialStore()
             {
                 Id = 2,
-                CreateBy = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f5"),
-                Place = Enum.Place._51
+                CreateBy = Guid.Parse("be21b564-a044-11ed-a8fc-0242ac120002"),
             });
-            //Contractor
-            modelBuilder.Entity<User>().HasData(new User
+
+
+            modelBuilder.Entity<Products>().HasData(new Products
             {
-                Id = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f6"),
-                Email = "hoainam123@gmail.com",
-                UserName = "hoainam123@gmail.com",
-                PasswordHash = hasher.HashPassword(null, "Hoainam@123"),
-                SecurityStamp = string.Empty,
-                FirstName = "Hong",
-                LastName = "Nguyen",
-                DOB = new DateTime(1995, 5, 30),
-                PhoneNumber = "0333999444",
-                Gender = Enum.Gender.FEMALE,
-                Token = "xxx",
-                Status = Enum.Status.Level1,
-                Avatar = null,
-                ContractorId = 1,
-                Address = "18, Phuoc Thien, Nhon Trach, Dong Nai"
+                Id=20,
+                Name="Product 1",
+                UnitPrice=4000,
+                UnitInStock=1000,
+                Image=null,
+                Description="Description 1",
+                Brand="Kangaroo",
+                SoldQuantities=100,
+                MaterialStoreID=1
             });
-            modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
+
+            modelBuilder.Entity<Products>().HasData(new Products
             {
-                RoleId = Guid.Parse("20efd516-f16c-41b3-b11d-bc908cd2056b"),
-                UserId = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f6"),
+                Id = 21,
+                Name = "Product 2",
+                UnitPrice = 5000,
+                UnitInStock = 1200,
+                Image = null,
+                Description = "Description 2",
+                Brand = "Sony",
+                SoldQuantities = 1000,
+                MaterialStoreID = 1
             });
-            modelBuilder.Entity<Contractor>().HasData(new Contractor()
+
+            modelBuilder.Entity<Products>().HasData(new Products
             {
-                Id = 1,
-                CreateBy = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f6"),
-                CompanyName = "Bat dong san Vinhome",
-                Description="Công ty bất động sản xây dựng nhà ở và cơ sở hạ tầng",
-                Website = "abcdef.com.vn"
-            });
-            modelBuilder.Entity<User>().HasData(new User
-            {
-                Id = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f7"),
-                Email = "hoainam2001@gmail.com",
-                UserName = "hoainam2001@gmail.com",
-                PasswordHash = hasher.HashPassword(null, "Hoainam@123"),
-                SecurityStamp = string.Empty,
-                FirstName = "Nguyen",
-                LastName = "Duy",
-                DOB = new DateTime(1995, 5, 30),
-                PhoneNumber = "0333999444",
-                Gender = Enum.Gender.MALE,
-                Token = "xxx",
-                Status = Enum.Status.Level1,
-                Avatar = null,
-                ContractorId = 2,
-                Address = "18, Phuoc Thien, Nhon Trach, Dong Nai"
-            });
-            modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
-            {
-                RoleId = Guid.Parse("20efd516-f16c-41b3-b11d-bc908cd2056b"),
-                UserId = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f7"),
-            });
-            modelBuilder.Entity<Contractor>().HasData(new Contractor()
-            {
-                Id = 2,
-                CreateBy = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f7"),
-                CompanyName = "Bat dong san Thang Long",
-                Description = "Công ty bất động sản xây dựng nhà ở và cơ sở hạ tầng",
-                Website = "nguyenduy.com.vn"
+
+                Id = 22,
+                Name = "Product 3",
+                UnitPrice = 6000,
+                UnitInStock = 100,
+                Image = null,
+                Description = "Description 3",
+                Brand = "Samsung",
+                SoldQuantities = 100,
+                MaterialStoreID = 1
             });
             modelBuilder.Entity<Entities.Type>().HasData(new Entities.Type
             {
@@ -281,7 +332,7 @@ namespace Data.Extensions
                 Salaries="10.000.000 - 15.000.000",
                 NumberPeople=20,
                 ContractorID=1,
-                CreateBy=Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f6")
+                CreateBy=Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7")
             });
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
             {
@@ -299,7 +350,7 @@ namespace Data.Extensions
                 Salaries = "10.000.000 - 15.000.000",
                 NumberPeople = 20,
                 ContractorID = 2,
-                CreateBy = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f7")
+                CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d6")
 
             });
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
@@ -318,7 +369,7 @@ namespace Data.Extensions
                 Salaries = "10.000.000 - 15.000.000",
                 NumberPeople = 20,
                 ContractorID = 2,
-                CreateBy = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f7")
+                CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d6")
 
             });
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
@@ -337,7 +388,7 @@ namespace Data.Extensions
                 Salaries = "10.000.000 - 15.000.000",
                 NumberPeople = 20,
                 ContractorID = 1,
-                CreateBy = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f6")
+                CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7")
             });
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
             {
@@ -354,7 +405,7 @@ namespace Data.Extensions
                 PostCategories = Enum.PostCategories.Categories2,
                 Salaries = "10.000.000 - 15.000.000",
                 NumberPeople = 30,
-                CreateBy = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f7"),
+                CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d6"),
                 ContractorID = 2
             });
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
@@ -373,7 +424,7 @@ namespace Data.Extensions
                 Salaries = "10.000.000 - 15.000.000",
                 NumberPeople = 30,
                 ContractorID = 1,
-                CreateBy = Guid.Parse("7ba0a48f-551b-4de5-b853-81a1243267f6")
+                CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7")
 
             });
             modelBuilder.Entity<Products>().HasData(new Products
@@ -460,6 +511,103 @@ namespace Data.Extensions
                 MaterialStoreID = 2,
                 Brand = "Việt Nam"
             });
+
+            modelBuilder.Entity<BuilderPost>().HasData(new BuilderPost
+            {
+                Id = 1,
+                PostCategories = Enum.PostCategories.Categories1,
+                Place = Enum.Place._52,
+                Description = "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
+                Title = "Ứng Tuyển Công Ty Xây Dựng 1",
+                Views=0,
+                Salaries = "10.000.000 - 15.000.000",
+                Status = Enum.Status.SUCCESS,
+                BuilderID= 1,
+                CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d9"),
+                LastModifiedAt=DateTime.Now
+            });
+
+            modelBuilder.Entity<BuilderPost>().HasData(new BuilderPost
+            {
+                Id = 2,
+                PostCategories = Enum.PostCategories.Categories2,
+                Place = Enum.Place._50,
+                Description = "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
+                Title = "Ứng Tuyển Công Ty Xây Dựng 2",
+                Views = 0,
+                Salaries = "10.000.000 - 15.000.000",
+                Status = Enum.Status.SUCCESS,
+                BuilderID = 1,
+                CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d9"),
+                LastModifiedAt = DateTime.Now
+            });
+
+            modelBuilder.Entity<BuilderPost>().HasData(new BuilderPost
+            {
+                Id = 3,
+                PostCategories = Enum.PostCategories.Categories1,
+                Place = Enum.Place._51,
+                Description = "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
+                Title = "Ứng Tuyển Công Ty Xây Dựng 3",
+                Views = 0,
+                Salaries = "10.000.000 - 15.000.000",
+                Status = Enum.Status.SUCCESS,
+                BuilderID = 1,
+                CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d9"),
+                LastModifiedAt = DateTime.Now
+            });
+
+            modelBuilder.Entity<ProductSystem>().HasData(new ProductSystem
+            {
+                Id=1,
+                Image=null,
+                Brand="Sony",
+                Description="Description 1",
+                Name="Gạch lát",
+                FromSystem=true,
+            });
+
+            modelBuilder.Entity<ProductSystem>().HasData(new ProductSystem
+            {
+                Id = 2,
+                Image = null,
+                Brand = "Sony",
+                Description = "Description 2",
+                Name = "Gạch ống",
+                FromSystem = true,
+            });
+
+            modelBuilder.Entity<ProductSystem>().HasData(new ProductSystem
+            {
+                Id = 3,
+                Image = null,
+                Brand = "Sony",
+                Description = "Description 3",
+                Name = "Xi măng",
+                FromSystem = true,
+            });
+
+            modelBuilder.Entity<ProductSystem>().HasData(new ProductSystem
+            {
+                Id = 5,
+                Image = null,
+                Brand = "Sony",
+                Description = "Description 4",
+                Name = "Thang ép ",
+                FromSystem = true,
+            });
+
+            modelBuilder.Entity<ProductSystem>().HasData(new ProductSystem
+            {
+                Id = 4,
+                Image = null,
+                Brand = "Sony",
+                Description = "Description 5",
+                Name = "Cột chống ",
+                FromSystem = true,
+            });
+
+
         }
     }
 }

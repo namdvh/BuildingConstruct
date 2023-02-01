@@ -1,4 +1,5 @@
 
+using Application.System.Bill;
 using Application.System.BuilderPosts;
 using Application.System.Carts;
 using Application.System.Category;
@@ -156,6 +157,7 @@ builder.Services.AddScoped<IProductSystemService, ProductSystemService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ISkillService, SkillServices>();
 builder.Services.AddTransient<ICartService, CartService>();
+builder.Services.AddScoped<IBillServices, BillServices>();
 
 var app = builder.Build();
 

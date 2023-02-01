@@ -35,5 +35,13 @@ namespace BuildingConstructApi.Controllers
             }
             return Ok(response);
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetBillDetail([FromRoute] int id )
+        {
+            var rs = await _billServices.GetDetail(id);
+
+            return Ok(rs);
+        }
     }
 }

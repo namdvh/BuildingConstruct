@@ -56,8 +56,8 @@ namespace Data.DataContext
             modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("UserLogins").HasKey(x => x.UserId);
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("UserRoles").HasKey(x => new { x.UserId, x.RoleId });
             modelBuilder.Entity<IdentityUserToken<Guid>>().ToTable("UserTokens").HasKey(x => x.UserId);
-            modelBuilder.Seed();
 
+            modelBuilder.Seed();
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Builder> Builders { get; set; }

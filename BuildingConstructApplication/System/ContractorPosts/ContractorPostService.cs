@@ -407,6 +407,8 @@ namespace Application.System.ContractorPosts
             }
 
             var result = await query
+                    .Include(x=>x.Contractor)
+                        .ThenInclude(x=>x.User)
                      .OrderBy(filter._sortBy + " " + orderBy)
                      .Skip((filter.PageNumber - 1) * filter.PageSize)
                      .Take(filter.PageSize)
@@ -696,11 +698,11 @@ namespace Application.System.ContractorPosts
 
             foreach (var item in list)
             {
-                var user = _context.Users.Where(x => x.ContractorId.Equals(item.ContractorID)).FirstOrDefault();
+                //var user = _context.Users.Where(x => x.ContractorId.Equals(item.ContractorID)).FirstOrDefault();
 
                 ContractorPostDTO dto = new()
                 {
-                    //Avatar = user.Avatar,
+                    Avatar = item.Contractor.User.Avatar,
                     ContractorID = item.ContractorID,
                     Description = item.Description,
                     EndDate = item.EndDate,
@@ -711,6 +713,7 @@ namespace Application.System.ContractorPosts
                     ProjectName = item.ProjectName,
                     Salaries = item.Salaries,
                     StarDate = item.StarDate,
+                    AuthorName=item.Contractor.User.FirstName +" "+ item.Contractor.User.LastName,
                     Title = item.Title,
                     ViewCount = item.ViewCount,
                     LastModifiedAt = item.LastModifiedAt,

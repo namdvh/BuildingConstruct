@@ -304,6 +304,8 @@ namespace Application.System.BuilderPosts
             }
 
             var result = await query
+                .Include(x=>x.Builder)
+                    .ThenInclude(x=>x.User)
                .OrderBy(filter._orderBy + " " + orderBy)
                .Skip((filter.PageNumber - 1) * filter.PageSize)
                .Take(filter.PageSize)
@@ -457,11 +459,11 @@ namespace Application.System.BuilderPosts
 
             foreach (var item in list)
             {
-                var user = _context.Users.Where(x => x.BuilderId == item.BuilderID).FirstOrDefault();
 
                 BuilderPostDTO dto = new()
                 {
-                    //Avatar = user.Avatar,
+                    Avatar = item.Builder.User.Avatar,
+                    AuthorName = item.Builder.User.FirstName + " " + item.Builder.User.LastName,
                     Description = item.Description,
                     Id = item.Id,
                     Place = item.Place,

@@ -10,7 +10,9 @@ namespace Application.System.Bill
 {
     public interface IBillServices
     {
-        Task<bool> CreateBill(BillDTO requests); 
+        Task<bool> CreateBill(BillDTO requests);
+
+        Task<BaseResponse<List<BillDetailDTO>>> GetDetail(int billID);
 
     }
 }
