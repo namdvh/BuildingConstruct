@@ -1,9 +1,4 @@
 ﻿using Data.Enum;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ViewModels.BuilderPosts
 {
@@ -15,6 +10,7 @@ namespace ViewModels.BuilderPosts
         public Place Place { get; set; }
         public string? AuthorName { get; set; }
         public string? Title { get; set; }
+        public bool? IsSaved { get; set; }
         public string? Description { get; set; }
         public int BuilderID { get; set; }
         public DateTime LastModifiedAt { get; set; }

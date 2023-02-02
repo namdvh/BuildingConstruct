@@ -45,6 +45,7 @@ namespace Application.System.MaterialStores
             products.Image = request.Image;
             products.SoldQuantities = 0;
             products.MaterialStoreID = storeID;
+            products.CreatedBy = Guid.Parse(userID);
             await _context.Products.AddAsync(products);
             await _context.SaveChangesAsync();
             if (request.CategoriesId != null)

@@ -331,7 +331,7 @@ namespace Application.System.ContractorPosts
             }
             return final;
         }
-        public async Task<BasePagination<List<ContractorPostDTO>>> GetPost(PaginationFilter filter)
+        public async Task<BasePagination<List<ContractorPostDTO>>> GetPost(PaginationFilter filter,Guid id)
         {
             BasePagination<List<ContractorPostDTO>> response;
             var orderBy = filter._orderBy.ToString();
@@ -350,10 +350,6 @@ namespace Application.System.ContractorPosts
 
             if (filter.FilterRequest != null)
             {
-
-
-
-
                 if (filter.FilterRequest.Salary.Any())
                 {
                     var count = filter.FilterRequest.Salary.Count;
@@ -457,7 +453,7 @@ namespace Application.System.ContractorPosts
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = MapListDTO(result),
+                    Data = MapListDTO(result,id),
                     Pagination = pagination
                 };
             }
@@ -696,13 +692,20 @@ namespace Application.System.ContractorPosts
             return response;
         }
 
-        private List<ContractorPostDTO> MapListDTO(List<ContractorPost> list)
+        private List<ContractorPostDTO> MapListDTO(List<ContractorPost> list,Guid id)
         {
             List<ContractorPostDTO> result = new();
 
             foreach (var item in list)
             {
                 //var user = _context.Users.Where(x => x.ContractorId.Equals(item.ContractorID)).FirstOrDefault();
+                var isSaved = _context.Saves.Where(x => x.ContractorPostId == item.Id && x.UserId.Equals(id)).FirstOrDefault();
+                bool save = false;
+                if (isSaved != null)
+                {
+                    save = true;
+                }
+
 
                 ContractorPostDTO dto = new()
                 {
@@ -717,7 +720,41 @@ namespace Application.System.ContractorPosts
                     ProjectName = item.ProjectName,
                     Salaries = item.Salaries,
                     StarDate = item.StarDate,
-                    AuthorName=item.Contractor.User.FirstName +" "+ item.Contractor.User.LastName,
+                    AuthorName = item.Contractor.User.FirstName + " " + item.Contractor.User.LastName,
+                    Title = item.Title,
+                    IsSave = save,
+                    ViewCount = item.ViewCount,
+                    LastModifiedAt = item.LastModifiedAt,
+                };
+                result.Add(dto);
+            }
+            return result;
+        }
+
+        private List<ContractorPostDTO> MapListDTO(List<ContractorPost> list)
+        {
+            List<ContractorPostDTO> result = new();
+
+            foreach (var item in list)
+            {
+                //var user = _context.Users.Where(x => x.ContractorId.Equals(item.ContractorID)).FirstOrDefault();
+                
+
+
+                ContractorPostDTO dto = new()
+                {
+                    Avatar = item.Contractor.User.Avatar,
+                    ContractorID = item.ContractorID,
+                    Description = item.Description,
+                    EndDate = item.EndDate,
+                    Id = item.Id,
+                    NumberPeople = item.NumberPeople,
+                    Place = item.Place,
+                    PostCategories = item.PostCategories,
+                    ProjectName = item.ProjectName,
+                    Salaries = item.Salaries,
+                    StarDate = item.StarDate,
+                    AuthorName = item.Contractor.User.FirstName + " " + item.Contractor.User.LastName,
                     Title = item.Title,
                     ViewCount = item.ViewCount,
                     LastModifiedAt = item.LastModifiedAt,

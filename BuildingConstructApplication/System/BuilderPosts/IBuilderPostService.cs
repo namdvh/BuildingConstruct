@@ -6,7 +6,7 @@ namespace Application.System.BuilderPosts
 {
     public interface IBuilderPostService
     {
-        Task<BasePagination<List<BuilderPostDTO>>> GetPost(PaginationFilter filter);
+        Task<BasePagination<List<BuilderPostDTO>>> GetPost(PaginationFilter filter,Guid id);
 
         Task<BasePagination<List<BuilderPostDTO>>> GetPostByViews(PaginationFilter filter);
 
