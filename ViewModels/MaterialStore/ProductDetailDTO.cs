@@ -28,5 +28,6 @@ namespace ViewModels.MaterialStore
         public MaterialStoreDTO Store { get; set; }
 
         public List<CategoryDTO>? ProductCategories { get; set; }
+        public Guid? CreatedBy { get; set; }
     }
 }

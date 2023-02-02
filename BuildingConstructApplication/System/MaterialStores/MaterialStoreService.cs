@@ -370,6 +370,7 @@ namespace Application.System.MaterialStores
             productDetail.SoldQuantities = rs.SoldQuantities;
             productDetail.Store = await GetStore((int)rs.MaterialStoreID);
             productDetail.ProductCategories = await GetCategory(rs.ProductCategories);
+            productDetail.CreatedBy=rs.CreatedBy;
             response.Data = productDetail;
             response.Code = BaseCode.SUCCESS;
             response.Message = "SUCCESS";
