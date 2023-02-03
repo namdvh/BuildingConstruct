@@ -3,6 +3,7 @@ using Data.Enum;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ViewModels.Categories;
+using ViewModels.Pagination;
 using ViewModels.Response;
 
 namespace BuildingConstructApi.Controllers
@@ -16,6 +17,31 @@ namespace BuildingConstructApi.Controllers
         public CategoryController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
+        }
+        [HttpGet("GetAll")]
+
+        public async Task<IActionResult> GetAllCategory([FromQuery] PaginationFilter request)
+        {
+            var validFilter = new PaginationFilter();
+
+            if (request.FilterRequest == null)
+            {
+                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
+            }
+            else
+            {
+                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy, request.FilterRequest);
+
+            }
+            var result = await _categoryService.GetAllCategory(request);
+            return Ok(result);
+        }
+        [HttpPost("GetCategoryByID")]
+        public async Task<IActionResult> GetCategoryByID([FromQuery] int cateID)
+        {
+            BaseResponse<CategoryDTO> response = new();
+            var rs = await _categoryService.GetCateByID(cateID);
+            return Ok(rs);
         }
         [HttpPost]
         public async Task<IActionResult> createCategory([FromBody] CategoryDTO request)

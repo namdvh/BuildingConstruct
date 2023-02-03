@@ -190,7 +190,7 @@ namespace Application.System.SavePost
                         from r1 in rs2.DefaultIfEmpty()
                         join c in _context.Categories on r1.SystemCategoriesID equals c.ID into rs3
                         from r3 in rs3.DefaultIfEmpty()
-                        where cP.ContractorPostID == postID
+                        where r4.ContractorPostID == postID && cP.ContractorPostID==postID
                         select new
                         {
                             ProductSystemCategories = r1,
@@ -245,7 +245,7 @@ namespace Application.System.SavePost
             Save save = new()
             {
                 Date = DateTime.Now,
-                BuilderPostId = request.BuiderPostId,
+                BuilderPostId = request.BuilderPostId,
                 ContractorPostId = request.ContractorPostId,
                 UserId = Guid.Parse(userID)
             };
@@ -271,12 +271,12 @@ namespace Application.System.SavePost
             dynamic save;
             if (request.BuilderPostId == null)
             {
-                save = await _context.Saves.FirstOrDefaultAsync(x => x.ContractorPostId == request.ContractorPostId && x.UserId.Equals(userID));
+                save = await _context.Saves.FirstOrDefaultAsync(x => x.ContractorPostId == request.ContractorPostId && x.UserId.ToString().Equals(userID.ToString()));
 
             }
             else
             {
-                save = await _context.Saves.FirstOrDefaultAsync(x => x.BuilderPostId == request.BuilderPostId && x.UserId.Equals(userID));
+                save = await _context.Saves.FirstOrDefaultAsync(x => x.BuilderPostId == request.BuilderPostId && x.UserId.ToString().Equals(userID.ToString()));
             }
 
             if (save == null)

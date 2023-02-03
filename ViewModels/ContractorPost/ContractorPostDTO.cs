@@ -24,6 +24,8 @@ namespace ViewModels.ContractorPost
 
         public DateTime EndDate { get; set; }
 
+        public bool? IsSave { get; set; }
+
         public Place Place { get; set; }
 
         public PostCategories PostCategories { get; set; }

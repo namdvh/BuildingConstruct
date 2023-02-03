@@ -8,8 +8,9 @@ namespace Data.Enum
 {
     public enum TypeEnum
     {
-        FROM,
-        MATERIAL,
-        SHAPE
+        GACH,
+        GO,
+        SON,
+        VAT_LIEU_THO
     }
 }

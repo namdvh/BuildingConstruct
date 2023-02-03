@@ -31,7 +31,7 @@ namespace Application.System.MaterialStores
             Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
             var userID = identifierClaim.Value.ToString();
             var roles = _accessor.HttpContext.User.FindFirst(ClaimTypes.Role).Value.ToString();
-            if (!roles.Equals("store"))
+            if (!roles.ToLower().Equals(("store")))
             {
                 return false;
             }
@@ -45,6 +45,7 @@ namespace Application.System.MaterialStores
             products.Image = request.Image;
             products.SoldQuantities = 0;
             products.MaterialStoreID = storeID;
+            products.CreatedBy = Guid.Parse(userID);
             await _context.Products.AddAsync(products);
             await _context.SaveChangesAsync();
             if (request.CategoriesId != null)
@@ -165,8 +166,15 @@ namespace Application.System.MaterialStores
                 dto.SoldQuantities = item.SoldQuantities;
                 
                 string img = item?.Image;
-                string[] firstImg = img.Split(",");
-                dto.Image = firstImg[0].Trim();
+                if(img != null)
+                {
+                    string[] firstImg = img.Split(",");
+                    dto.Image = firstImg[0].Trim();
+                }
+                else
+                {
+                    dto.Image = "";
+                }
                 dto.StoreName = item.MaterialStore?.User?.FirstName + item.MaterialStore?.User?.LastName;
                 dto.StoreID = item.MaterialStoreID;
                 dto.StoreImage = item.MaterialStore?.Image;
@@ -362,6 +370,7 @@ namespace Application.System.MaterialStores
             productDetail.SoldQuantities = rs.SoldQuantities;
             productDetail.Store = await GetStore((int)rs.MaterialStoreID);
             productDetail.ProductCategories = await GetCategory(rs.ProductCategories);
+            productDetail.CreatedBy=rs.CreatedBy;
             response.Data = productDetail;
             response.Code = BaseCode.SUCCESS;
             response.Message = "SUCCESS";

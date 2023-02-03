@@ -216,9 +216,10 @@ namespace Application.System.BuilderPosts
             }
             if (rsSkill.Where(x => x.Skills.TypeId == null).ToList().Any())
             {
-                var t = new TypeModels();
+
                 foreach (var i in rsSkill.Where(x => x.Skills.TypeId == null).ToList())
                 {
+                    var t = new TypeModels();
                     t.SkillArr = new();
                     var skillArr = new SkillArr();
                     skillArr.id = i.SkillID;
@@ -248,7 +249,7 @@ namespace Application.System.BuilderPosts
             final.RoleName = await _context.Roles.Where(x => x.Id.Equals(roleid)).Select(x => x.Name).SingleOrDefaultAsync();
             return final;
         }
-        public async Task<BasePagination<List<BuilderPostDTO>>> GetPost(PaginationFilter filter)
+        public async Task<BasePagination<List<BuilderPostDTO>>> GetPost(PaginationFilter filter,Guid id)
         {
             BasePagination<List<BuilderPostDTO>> response;
             var orderBy = filter._orderBy.ToString();
@@ -467,6 +468,37 @@ namespace Application.System.BuilderPosts
                     Description = item.Description,
                     Id = item.Id,
                     Place = item.Place,
+                    PostCategories = item.PostCategories,
+                    Title = item.Title,
+                    LastModifiedAt = item.LastModifiedAt,
+                    BuilderID = item.BuilderID,
+                };
+                result.Add(dto);
+            }
+            return result;
+        }
+
+        private List<BuilderPostDTO> MapListDTO(List<BuilderPost> list,Guid id)
+        {
+            List<BuilderPostDTO> result = new();
+
+            foreach (var item in list)
+            {
+                var isSaved = _context.Saves.Where(x => x.BuilderPostId == item.Id && x.UserId.Equals(id)).FirstOrDefault();
+                bool save = false;
+                if (isSaved != null)
+                {
+                    save = true;
+                }
+
+                BuilderPostDTO dto = new()
+                {
+                    Avatar = item.Builder.User.Avatar,
+                    AuthorName = item.Builder.User.FirstName + " " + item.Builder.User.LastName,
+                    Description = item.Description,
+                    Id = item.Id,
+                    Place = item.Place,
+                    IsSaved=save,
                     PostCategories = item.PostCategories,
                     Title = item.Title,
                     LastModifiedAt = item.LastModifiedAt,

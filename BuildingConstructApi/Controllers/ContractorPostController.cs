@@ -27,6 +27,7 @@ namespace BuildingConstructApi.Controllers
         public async Task<IActionResult> GetAll([FromBody] PaginationFilter request)
         {
             var validFilter = new PaginationFilter();
+            var id = User.FindFirst("UserID").Value;
 
             if (request.FilterRequest == null)
             {
@@ -38,7 +39,9 @@ namespace BuildingConstructApi.Controllers
 
             }
 
-            var result = await _contractorPostService.GetPost(request);
+
+
+            var result = await _contractorPostService.GetPost(request,Guid.Parse(id));
             return Ok(result);
         }
 

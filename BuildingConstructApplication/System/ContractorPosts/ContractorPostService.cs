@@ -257,9 +257,10 @@ namespace Application.System.ContractorPosts
             }
             if (rsSkill.Where(x => x.Skills.TypeId == null).ToList().Any())
             {
-                var t = new TypeModels();
+                
                 foreach (var i in rsSkill.Where(x => x.Skills.TypeId == null).ToList())
                 {
+                    var t = new TypeModels();
                     t.SkillArr = new();
                     var skillArr = new SkillArr();
                     skillArr.id = i.SkillID;
@@ -300,7 +301,7 @@ namespace Application.System.ContractorPosts
                         from r1 in rs2.DefaultIfEmpty()
                         join c in _context.Categories on r1.SystemCategoriesID equals c.ID into rs3
                         from r3 in rs3.DefaultIfEmpty()
-                        where cP.ContractorPostID == postID
+                        where r4.ContractorPostID == postID && cP.ContractorPostID == postID
                         select new
                         {
                             ProductSystemCategories = r1,
@@ -316,18 +317,21 @@ namespace Application.System.ContractorPosts
             }
             foreach (var x in result)
             {
-                ContractorPostProductDTO dto = new();
-                dto.Id = x.ProductSystem.Id;
-                dto.Name = x.ProductSystem.Name;
-                dto.Quantity = x.ContractorPostProduct.Quantity;
-                dto.Brand = x.ProductSystem.Brand;
-                dto.Description = x.ProductSystem.Description;
-                dto.Categories = x.Categories;
-                final.Add(dto);
+                if (x.ContractorPostProduct.ContractorPostID == postID)
+                {
+                    ContractorPostProductDTO dto = new();
+                    dto.Id = x.ProductSystem.Id;
+                    dto.Name = x.ProductSystem.Name;
+                    dto.Quantity = x.ContractorPostProduct.Quantity;
+                    dto.Brand = x.ProductSystem.Brand;
+                    dto.Description = x.ProductSystem.Description;
+                    dto.Categories = x.Categories;
+                    final.Add(dto);
+                }
             }
             return final;
         }
-        public async Task<BasePagination<List<ContractorPostDTO>>> GetPost(PaginationFilter filter)
+        public async Task<BasePagination<List<ContractorPostDTO>>> GetPost(PaginationFilter filter,Guid id)
         {
             BasePagination<List<ContractorPostDTO>> response;
             var orderBy = filter._orderBy.ToString();
@@ -346,10 +350,6 @@ namespace Application.System.ContractorPosts
 
             if (filter.FilterRequest != null)
             {
-
-
-
-
                 if (filter.FilterRequest.Salary.Any())
                 {
                     var count = filter.FilterRequest.Salary.Count;
@@ -453,7 +453,7 @@ namespace Application.System.ContractorPosts
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = MapListDTO(result),
+                    Data = MapListDTO(result,id),
                     Pagination = pagination
                 };
             }
@@ -692,13 +692,20 @@ namespace Application.System.ContractorPosts
             return response;
         }
 
-        private List<ContractorPostDTO> MapListDTO(List<ContractorPost> list)
+        private List<ContractorPostDTO> MapListDTO(List<ContractorPost> list,Guid id)
         {
             List<ContractorPostDTO> result = new();
 
             foreach (var item in list)
             {
                 //var user = _context.Users.Where(x => x.ContractorId.Equals(item.ContractorID)).FirstOrDefault();
+                var isSaved = _context.Saves.Where(x => x.ContractorPostId == item.Id && x.UserId.Equals(id)).FirstOrDefault();
+                bool save = false;
+                if (isSaved != null)
+                {
+                    save = true;
+                }
+
 
                 ContractorPostDTO dto = new()
                 {
@@ -713,7 +720,41 @@ namespace Application.System.ContractorPosts
                     ProjectName = item.ProjectName,
                     Salaries = item.Salaries,
                     StarDate = item.StarDate,
-                    AuthorName=item.Contractor.User.FirstName +" "+ item.Contractor.User.LastName,
+                    AuthorName = item.Contractor.User.FirstName + " " + item.Contractor.User.LastName,
+                    Title = item.Title,
+                    IsSave = save,
+                    ViewCount = item.ViewCount,
+                    LastModifiedAt = item.LastModifiedAt,
+                };
+                result.Add(dto);
+            }
+            return result;
+        }
+
+        private List<ContractorPostDTO> MapListDTO(List<ContractorPost> list)
+        {
+            List<ContractorPostDTO> result = new();
+
+            foreach (var item in list)
+            {
+                //var user = _context.Users.Where(x => x.ContractorId.Equals(item.ContractorID)).FirstOrDefault();
+                
+
+
+                ContractorPostDTO dto = new()
+                {
+                    Avatar = item.Contractor.User.Avatar,
+                    ContractorID = item.ContractorID,
+                    Description = item.Description,
+                    EndDate = item.EndDate,
+                    Id = item.Id,
+                    NumberPeople = item.NumberPeople,
+                    Place = item.Place,
+                    PostCategories = item.PostCategories,
+                    ProjectName = item.ProjectName,
+                    Salaries = item.Salaries,
+                    StarDate = item.StarDate,
+                    AuthorName = item.Contractor.User.FirstName + " " + item.Contractor.User.LastName,
                     Title = item.Title,
                     ViewCount = item.ViewCount,
                     LastModifiedAt = item.LastModifiedAt,
