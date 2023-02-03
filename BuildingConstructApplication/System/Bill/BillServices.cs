@@ -36,8 +36,9 @@ namespace Application.System.Bill
                 EndDate = requests.EndDate,
                 TotalPrice = requests.TotalPrice,
                 Type = requests.BillType,
-                ContractorId = (int)(contracID == null ? null : contracID),
-                StoreID = (int)(storeID == null ? null : storeID),
+                MonthOfInstallment = requests.MonthOfInstallment,
+                ContractorId = contracID,
+                StoreID = storeID,
             };
             await _context.AddAsync(bill);
             var rs = await _context.SaveChangesAsync();
@@ -69,6 +70,27 @@ namespace Application.System.Bill
                         var result = _context.SaveChanges();
                         if (result > 0)
                         {
+                            if (item.SmallProductDetail != null)
+                            {
+                                foreach (var i in item.SmallProductDetail)
+                                {
+                                    var smallBillDetail = new BillDetail();
+                                    smallBillDetail.SmallBillID = smallBill.Id;
+                                    smallBillDetail.ProductID = i.ProductId;
+
+
+                                    smallBillDetail.Quantity = i.Quantity;
+                                    smallBillDetail.Price = i.Price;
+                                    _context.BillDetails.Add(smallBillDetail);
+                                    _context.SaveChanges();
+                                    //if (check > 0)
+                                    //{
+                                    //    var update = await _context.Products.Where(x => x.Id == i.ProductId).FirstOrDefaultAsync();
+                                    //    update.UnitInStock = update.UnitInStock - i.Quantity;
+                                    //    update.SoldQuantities = update.SoldQuantities + i.Quantity;
+                                    //}
+                                }
+                            }
                         }
                     }
 

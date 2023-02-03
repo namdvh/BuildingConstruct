@@ -26,7 +26,7 @@ namespace Data.Entities
 
         public decimal TotalPrice { get; set; }
 
-        public int ContractorId { get; set; }
+        public int? ContractorId { get; set; }
 
         public Contractor? Contractor { get; set; }
 

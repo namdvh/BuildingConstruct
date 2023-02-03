@@ -1,7 +1,9 @@
 ﻿using Application.System.Bill;
 using Data.Enum;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using ViewModels.BillModels;
 using ViewModels.Response;
 
@@ -9,6 +11,7 @@ namespace BuildingConstructApi.Controllers
 {
     [Route("api/billController")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class BillController : ControllerBase
     {
         private readonly IBillServices _billServices;
