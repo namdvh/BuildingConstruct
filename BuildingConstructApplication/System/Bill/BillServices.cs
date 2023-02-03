@@ -4,10 +4,7 @@ using Data.Enum;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using System.Security.Cryptography.X509Certificates;
 using ViewModels.BillModels;
-using ViewModels.Carts;
-using ViewModels.Pagination;
 using ViewModels.Response;
 
 namespace Application.System.Bill
@@ -129,42 +126,7 @@ namespace Application.System.Bill
 
         }
 
-        public async Task<BaseResponse<List<SmallBillDetailDTO>>> GetSmallBillDetail(int smallBillID)
-        {
-            BaseResponse<List<SmallBillDetailDTO>> response;
-
-            var rs = await _context.SmallBillDetails
-                .Include(x => x.SmallBill)
-                    .ThenInclude(x => x.Bill)
-                        .ThenInclude(x=>x.Contractor)
-                            .ThenInclude(x => x.User)
-                .Include(x => x.SmallBill)
-                    .ThenInclude(x => x.Bill)
-                        .ThenInclude(x => x.Contractor)
-                .Include(x => x.Products)
-                .Where(x => x.SmallBillID==smallBillID)
-                .ToListAsync();
-            if (!rs.Any())
-            {
-                response = new()
-                {
-                    Code = BaseCode.SUCCESS,
-                    Data = new(),
-                    Message = BaseCode.NOTFOUND_MESSAGE
-                };
-                return response;
-            }
-
-
-            response = new()
-            {
-                Code = BaseCode.SUCCESS,
-                Message = BaseCode.SUCCESS_MESSAGE,
-                Data = MapListSmallBillDetailDTO(rs),
-            };
-
-            return response;
-        }
+        
 
         public List<BillDetailDTO> MapListDetailDTO(List<BillDetail> list)
         {
@@ -193,31 +155,6 @@ namespace Application.System.Bill
             return rs;
         }
 
-        public List<SmallBillDetailDTO> MapListSmallBillDetailDTO(List<SmallBillDetail> list)
-        {
-            List<SmallBillDetailDTO> rs = new();
-
-            foreach (var item in list)
-            {
-                SmallBillDetailDTO dto = new()
-                {
-                    ContractorID = item.SmallBill.Bill.ContractorId,
-                    EndDate = item.SmallBill.Bill.EndDate,
-                    Id = item.Id,
-                    Image = item.Products.Image,
-                    Note = item.SmallBill.Bill.Note,
-                    ProductBrand = item.Products.Brand,
-                    ProductDescription = item.Products.Description,
-                    ProductName = item.Products.Name,
-                    StartDate = item.SmallBill.Bill.StartDate,
-                    StoreID = item.SmallBill.Bill.StoreID,
-                    StoreName = item.SmallBill.Bill.MaterialStore.User.FirstName + " " + item.SmallBill.Bill.MaterialStore.User.LastName,
-                    TotalPrice = item.SmallBill.Bill.TotalPrice,
-                    UnitPrice = item.Products.UnitPrice
-                };
-                rs.Add(dto);
-            }
-            return rs;
-        }
+        
     }
 }
