@@ -190,8 +190,8 @@ namespace Application.System.ContractorPosts
             Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
             var userID = identifierClaim.Value.ToString();
             bool IsSave = false;
-            var save = await _context.Saves.Where(x => x.UserId.ToString().Equals(userID) && x.ContractorPostId == post.Id).ToListAsync();
-            if (save.Any())
+            var save = await _context.Saves.Where(x => x.UserId.ToString().Equals(userID) && x.ContractorPostId == post.Id).FirstOrDefaultAsync();
+            if (save != null)
             {
                 IsSave = true;
             }
