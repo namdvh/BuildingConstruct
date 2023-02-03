@@ -47,7 +47,7 @@ namespace Application.System.Bill
                 foreach (var item in requests.ProductBillDetail)
                 {
                     var billDetail = new BillDetail();
-                    billDetail.BillId = bill.Id;
+                    billDetail.BillID = bill.Id;
                     billDetail.ProductID = item.ProductId;
                     billDetail.Quantity = item.Quantity;
                     billDetail.Price = item.Price;
@@ -69,16 +69,6 @@ namespace Application.System.Bill
                         var result = _context.SaveChanges();
                         if (result > 0)
                         {
-                            foreach (var i in item.SmallProductDetail)
-                            {
-                                var smallBillDetail = new SmallBillDetail();
-                                smallBillDetail.SmallBillID = smallBill.Id;
-                                smallBillDetail.ProductID = i.ProductId;
-                                smallBillDetail.Quantity = i.Quantity;
-                                smallBillDetail.Price = i.Price;
-                                _context.SmallBillDetails.Add(smallBillDetail);
-                                _context.SaveChanges();
-                            }
                         }
                     }
 
@@ -108,13 +98,13 @@ namespace Application.System.Bill
             BaseResponse<List<BillDetailDTO>> response;
 
             var rs = await _context.BillDetails
-                .Include(x => x.Bill)
+                .Include(x => x.Bills)
                     .ThenInclude(x => x.MaterialStore)
                     .ThenInclude(x => x.User)
-                .Include(x => x.Bill)
+                .Include(x => x.Bills)
                     .ThenInclude(x => x.Contractor)
                 .Include(x => x.Products)
-                .Where(x => x.BillId == billID)
+                .Where(x => x.BillID == billID)
                 .ToListAsync();
             if (!rs.Any())
             {
@@ -147,18 +137,18 @@ namespace Application.System.Bill
             {
                 BillDetailDTO dto = new()
                 {
-                    ContractorID = item.Bill.ContractorId,
-                    EndDate = item.Bill.EndDate,
+                    ContractorID = item.Bills.ContractorId,
+                    EndDate = item.Bills.EndDate,
                     Id = item.Id,
                     Image = item.Products.Image,
-                    Note = item.Bill.Note,
+                    Note = item.Bills.Note,
                     ProductBrand = item.Products.Brand,
                     ProductDescription = item.Products.Description,
                     ProductName = item.Products.Name,
-                    StartDate = item.Bill.StartDate,
-                    StoreID = item.Bill.StoreID,
-                    StoreName = item.Bill.MaterialStore.User.FirstName + " " + item.Bill.MaterialStore.User.LastName,
-                    TotalPrice = item.Bill.TotalPrice,
+                    StartDate = item.Bills.StartDate,
+                    StoreID = item.Bills.StoreID,
+                    StoreName = item.Bills.MaterialStore.User.FirstName + " " + item.Bills.MaterialStore.User.LastName,
+                    TotalPrice = item.Bills.TotalPrice,
                     UnitPrice = item.Products.UnitPrice
                 };
                 rs.Add(dto);

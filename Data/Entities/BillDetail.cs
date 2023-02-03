@@ -10,11 +10,14 @@ namespace Data.Entities
     {
         public int Id { get; set; } 
 
-        public int BillId { get; set; }
+        public int? BillID { get; set; }
 
-        public Bill? Bill { get; set; }
+        public Bill? Bills { get; set; }
+        public int? SmallBillID { get; set; }
 
-        public int ProductID { get; set; }
+        public SmallBill? SmallBills { get; set; }
+
+        public int? ProductID { get; set; }
 
         public Products? Products { get; set; }  
 
