@@ -12,7 +12,7 @@ namespace Application.System.Bill
     {
         Task<bool> CreateBill(BillDTO requests);
 
-        Task<BaseResponse<List<BillDetailDTO>>> GetDetail(int billID);
+        Task<BaseResponse<BillDetailDTO>> GetDetail(int billID);
 
     }
 }

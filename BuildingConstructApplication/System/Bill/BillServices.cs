@@ -90,9 +90,9 @@ namespace Application.System.Bill
             return false;
         }
 
-        public async Task<BaseResponse<List<BillDetailDTO>>> GetDetail(int billID)
+        public async Task<BaseResponse<BillDetailDTO>> GetDetail(int billID)
         {
-            BaseResponse<List<BillDetailDTO>> response;
+            BaseResponse<BillDetailDTO> response;
 
             var rs = await _context.BillDetails
                 .Include(x => x.Bills)
@@ -119,42 +119,59 @@ namespace Application.System.Bill
             {
                 Code = BaseCode.SUCCESS,
                 Message = BaseCode.SUCCESS_MESSAGE,
-                Data = MapListDetailDTO(rs),
+                Data = MapDetailDTO(rs),
             };
 
             return response;
 
         }
 
-        
 
-        public List<BillDetailDTO> MapListDetailDTO(List<BillDetail> list)
+
+        public BillDetailDTO MapDetailDTO(List<BillDetail> list)
         {
-            List<BillDetailDTO> rs = new();
+            List<ProductBillDetail> product = new();
 
             foreach (var item in list)
             {
-                BillDetailDTO dto = new()
+                ProductBillDetail pro = new()
                 {
-                    ContractorID = item.Bills.ContractorId,
-                    EndDate = item.Bills.EndDate,
-                    Id = item.Id,
                     Image = item.Products.Image,
-                    Note = item.Bills.Note,
                     ProductBrand = item.Products.Brand,
                     ProductDescription = item.Products.Description,
                     ProductName = item.Products.Name,
-                    StartDate = item.Bills.StartDate,
-                    StoreID = item.Bills.StoreID,
-                    StoreName = item.Bills.MaterialStore.User.FirstName + " " + item.Bills.MaterialStore.User.LastName,
-                    TotalPrice = item.Bills.TotalPrice,
-                    UnitPrice = item.Products.UnitPrice
+                    UnitPrice = item.Products.UnitPrice,
                 };
-                rs.Add(dto);
+                product.Add(pro);
             }
-            return rs;
-        }
 
-        
+
+            BigBillDetail bill = new()
+            {
+                ContractorId = list.First().Bills.ContractorId,
+                EndDate = list.First().Bills.EndDate,
+                Id = list.First().Bills.Id,
+                MonthOfInstallment = list.First().Bills.MonthOfInstallment,
+                Note = list.First().Bills.Note,
+                PaymentDate = list.First().Bills.PaymentDate,
+                StartDate = list.First().Bills.StartDate,
+                Status = list.First().Bills.Status,
+                StoreID = list.First().Bills.StoreID,
+                StoreName = list.First().Bills.MaterialStore.User.FirstName + " " + list.First().Bills.MaterialStore.User.LastName,
+                TotalPrice = list.First().Bills.TotalPrice,
+                Type = list.First().Bills.Type
+
+            };
+
+
+            BillDetailDTO dto = new()
+            {
+                Bill = bill,
+                Products = product,
+            };
+            return dto;
+        }
     }
+
+
 }
