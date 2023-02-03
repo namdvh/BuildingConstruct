@@ -27,7 +27,7 @@ namespace Data.Entities
 
         public Bill? Bill { get; set; }
 
-        public List<SmallBillDetail>? Details { get; set; }
+        public List<BillDetail>? BillDetails { get; set; }
 
     }
 }

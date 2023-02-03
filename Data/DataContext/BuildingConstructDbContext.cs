@@ -22,6 +22,11 @@ namespace Data.DataContext
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                relationship.DeleteBehavior = DeleteBehavior.Restrict;
+            }
             modelBuilder.ApplyConfiguration(new ContractorPostConfiguration());
             modelBuilder.ApplyConfiguration(new MaterialStoreConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
@@ -49,9 +54,8 @@ namespace Data.DataContext
             modelBuilder.ApplyConfiguration(new SaveConfiguration());
             modelBuilder.ApplyConfiguration(new SystemCategoriesConfiguration());
             modelBuilder.ApplyConfiguration(new BillConfigurations());
-            modelBuilder.ApplyConfiguration(new BillDetailConfigurations());
             modelBuilder.ApplyConfiguration(new SmallBillConfiguration());
-            modelBuilder.ApplyConfiguration(new SmallBillDetailConfiguration());
+            modelBuilder.ApplyConfiguration(new BillDetailConfiguration());
 
             modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("UserLogins").HasKey(x => x.UserId);
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("UserRoles").HasKey(x => new { x.UserId, x.RoleId });
@@ -89,6 +93,5 @@ namespace Data.DataContext
         public DbSet<Bill> Bills { get; set; }    
         public DbSet<BillDetail> BillDetails { get; set; }    
         public DbSet<SmallBill> SmallBills { get; set; }    
-        public DbSet<SmallBillDetail> SmallBillDetails { get; set; }    
     }
 }
