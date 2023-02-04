@@ -126,7 +126,42 @@ namespace Application.System.Bill
 
         }
 
+        public async Task<BaseResponse<SmallBillDetailDTO>> GetDetailBySmallBill(int billID)
+        {
+            BaseResponse<SmallBillDetailDTO> response;
 
+
+            var rs = await _context.SmallBills
+                .Include(x => x.Bill)
+                    .ThenInclude(x => x.MaterialStore)
+                    .ThenInclude(x => x.User)
+                .Include(x => x.Bill)
+                    .ThenInclude(x => x.Contractor)
+                .Where(x => x.BillID == billID)
+                .ToListAsync();
+
+
+            if (!rs.Any())
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Data = new(),
+                    Message = BaseCode.NOTFOUND_MESSAGE
+                };
+                return response;
+            }
+
+
+            response = new()
+            {
+                Code = BaseCode.SUCCESS,
+                Message = BaseCode.SUCCESS_MESSAGE,
+                Data = MapSmallDetailDTO(rs),
+            };
+
+            return response;
+        }
 
         public BillDetailDTO MapDetailDTO(List<BillDetail> list)
         {
@@ -141,6 +176,8 @@ namespace Application.System.Bill
                     ProductDescription = item.Products.Description,
                     ProductName = item.Products.Name,
                     UnitPrice = item.Products.UnitPrice,
+                    BillDetailQuantity = item.Quantity,
+                    BillDetailTotalPrice = item.Price
                 };
                 product.Add(pro);
             }
@@ -170,6 +207,81 @@ namespace Application.System.Bill
                 Products = product,
             };
             return dto;
+        }
+
+        private SmallBillDetailDTO MapSmallDetailDTO(List<Data.Entities.SmallBill> list)
+        {
+            List<SmallBillDTO> smallDetails = new();
+
+            BigBillDetail bill = new()
+            {
+                ContractorId = list.First().Bill.ContractorId,
+                EndDate = list.First().Bill.EndDate,
+                Id = list.First().Bill.Id,
+                MonthOfInstallment = list.First().Bill.MonthOfInstallment,
+                Note = list.First().Bill.Note,
+                PaymentDate = list.First().Bill.PaymentDate,
+                StartDate = list.First().Bill.StartDate,
+                Status = list.First().Bill.Status,
+                StoreID = list.First().Bill.StoreID,
+                StoreName = list.First().Bill.MaterialStore.User.FirstName + " " + list.First().Bill.MaterialStore.User.LastName,
+                TotalPrice = list.First().Bill.TotalPrice,
+                Type = list.First().Bill.Type
+
+            };
+
+            foreach (var item in list)
+            {
+
+                SmallBillDTO small = new()
+                {
+                    EndDate = item.EndDate,
+                    Id = item.Id,
+                    Note = item.Note,
+                    PaymentDate = item.PaymentDate,
+                    StartDate = item.StartDate,
+                    Status = item.Status,
+                    TotalPrice = item.TotalPrice,
+                    ProductBillDetail = MapProductDTO(item.Id)
+                };
+                smallDetails.Add(small);
+            }
+
+
+
+            SmallBillDetailDTO dto = new()
+            {
+                Bill = bill,
+                Details= smallDetails
+            };
+            return dto;
+        }
+
+        private List<ProductBillDetail> MapProductDTO(int id)
+        {
+            List<ProductBillDetail> list = new();   
+
+            var rs = _context.BillDetails
+                .Include(x=>x.Products)
+                .Where(x=>x.SmallBillID==id)
+                .ToList();
+
+            foreach (var item in rs)
+            {
+                ProductBillDetail pro = new()
+                {
+                    Image = item.Products.Image,
+                    ProductBrand = item.Products.Brand,
+                    ProductDescription = item.Products.Description,
+                    ProductName = item.Products.Name,
+                    UnitPrice = item.Products.UnitPrice,
+                    BillDetailQuantity = item.Quantity,
+                    BillDetailTotalPrice = item.Price
+                };
+                list.Add(pro);
+            }
+
+            return list;
         }
     }
 

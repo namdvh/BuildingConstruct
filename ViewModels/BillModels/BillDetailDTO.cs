@@ -24,6 +24,8 @@ namespace ViewModels.BillModels
         public string? Image { get; set; }
         public string? ProductDescription { get; set; }
         public string? ProductBrand { get; set; }
+        public decimal? BillDetailTotalPrice { get; set; }
+        public decimal? BillDetailQuantity { get; set; }
     }
 
     public class BigBillDetail

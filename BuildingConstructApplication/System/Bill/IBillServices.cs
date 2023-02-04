@@ -14,5 +14,7 @@ namespace Application.System.Bill
 
         Task<BaseResponse<BillDetailDTO>> GetDetail(int billID);
 
+        Task<BaseResponse<SmallBillDetailDTO>> GetDetailBySmallBill(int billID);
+
     }
 }
