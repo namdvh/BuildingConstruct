@@ -51,7 +51,7 @@ namespace ViewModels.BillModels
 
         public int? StoreID { get; set; }
 
-        public string? StoreName { get; set; }
+        //public string? StoreName { get; set; }
 
     }
 }

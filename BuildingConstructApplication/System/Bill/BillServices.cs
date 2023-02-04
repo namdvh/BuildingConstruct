@@ -194,7 +194,7 @@ namespace Application.System.Bill
                 StartDate = list.First().Bills.StartDate,
                 Status = list.First().Bills.Status,
                 StoreID = list.First().Bills.StoreID,
-                StoreName = list.First().Bills.MaterialStore.User.FirstName + " " + list.First().Bills.MaterialStore.User.LastName,
+                //StoreName = list.First().Bills.MaterialStore.User.FirstName + " " + list.First().Bills.MaterialStore.User.LastName,
                 TotalPrice = list.First().Bills.TotalPrice,
                 Type = list.First().Bills.Type
 
@@ -224,10 +224,18 @@ namespace Application.System.Bill
                 StartDate = list.First().Bill.StartDate,
                 Status = list.First().Bill.Status,
                 StoreID = list.First().Bill.StoreID,
-                StoreName = list.First().Bill.MaterialStore.User.FirstName + " " + list.First().Bill.MaterialStore.User.LastName,
                 TotalPrice = list.First().Bill.TotalPrice,
                 Type = list.First().Bill.Type
 
+            };
+
+
+            StoreDTO store = new()
+            {
+                Avatar = list.First().Bill.MaterialStore.User.Avatar,
+                Email = list.First().Bill.MaterialStore.User.Email,
+                Id = list.First().Bill.StoreID,
+                StoreName = list.First().Bill.MaterialStore.User.FirstName + " " + list.First().Bill.MaterialStore.User.LastName,
             };
 
             foreach (var item in list)
@@ -252,18 +260,19 @@ namespace Application.System.Bill
             SmallBillDetailDTO dto = new()
             {
                 Bill = bill,
-                Details= smallDetails
+                Details = smallDetails,
+                Store=store
             };
             return dto;
         }
 
         private List<ProductBillDetail> MapProductDTO(int id)
         {
-            List<ProductBillDetail> list = new();   
+            List<ProductBillDetail> list = new();
 
             var rs = _context.BillDetails
-                .Include(x=>x.Products)
-                .Where(x=>x.SmallBillID==id)
+                .Include(x => x.Products)
+                .Where(x => x.SmallBillID == id)
                 .ToList();
 
             foreach (var item in rs)
