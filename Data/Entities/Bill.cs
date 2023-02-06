@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Data.Entities
 {
-    public class Bill
+    public class Bill:BaseEntity
     {
         public int Id { get; set; }
 

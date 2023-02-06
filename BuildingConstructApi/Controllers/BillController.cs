@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using ViewModels.BillModels;
+using ViewModels.Pagination;
 using ViewModels.Response;
 
 namespace BuildingConstructApi.Controllers
@@ -38,9 +39,27 @@ namespace BuildingConstructApi.Controllers
             }
             return Ok(response);
         }
+        [HttpPost("getAll")]
+        public async Task<IActionResult> GetAllBill([FromQuery] PaginationFilter request)
+        {
+            var validFilter = new PaginationFilter();
+
+            if (request.FilterRequest == null)
+            {
+                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
+            }
+            else
+            {
+                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy, request.FilterRequest);
+
+            }
+
+            var result = await _billServices.GetAllBill(request);
+            return Ok(result);
+        }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetBillDetail([FromRoute] int id )
+        public async Task<IActionResult> GetBillDetail([FromRoute] int id)
         {
             var rs = await _billServices.GetDetail(id);
 

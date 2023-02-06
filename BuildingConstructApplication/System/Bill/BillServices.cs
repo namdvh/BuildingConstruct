@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using ViewModels.BillModels;
+using System.Linq.Dynamic.Core;
 using ViewModels.Carts;
 using ViewModels.Pagination;
 using ViewModels.Response;
@@ -39,6 +40,9 @@ namespace Application.System.Bill
                 MonthOfInstallment = requests.MonthOfInstallment,
                 ContractorId = contracID,
                 StoreID = storeID,
+                CreateBy=Guid.Parse(usID),
+                LastModifiedAt=DateTime.Now
+
             };
             await _context.AddAsync(bill);
             var rs = await _context.SaveChangesAsync();
@@ -113,6 +117,99 @@ namespace Application.System.Bill
                 return true;
             }
             return false;
+        }
+
+        public async Task<BasePagination<List<BillDTO>>> GetAllBill(PaginationFilter filter)
+        {
+            Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
+            var usID = identifierClaim.Value;
+            var storeID = _context.Users.Where(x => x.Id.ToString().Equals(usID)).FirstOrDefault().MaterialStoreID;
+            var contracID = _context.Users.Where(x => x.Id.ToString().Equals(usID)).FirstOrDefault().ContractorId;
+            BasePagination<List<BillDTO>> response;
+            var orderBy = filter._orderBy.ToString();
+            int totalRecord;
+
+            if (string.IsNullOrEmpty(filter._sortBy))
+            {
+                filter._sortBy = "Id";
+            }
+            orderBy = orderBy switch
+            {
+                "1" => "ascending",
+                "-1" => "descending",
+                _ => orderBy
+            };
+
+            IQueryable<Data.Entities.Bill> query = _context.Bills;
+            var data = await query
+             
+             .OrderBy(filter._sortBy + " " + orderBy)
+             .Skip((filter.PageNumber - 1) * filter.PageSize)
+             .Take(filter.PageSize)
+             .ToListAsync();
+            if (storeID != null)
+            {
+                data = data.Where(x => x.StoreID == storeID).ToList();
+            }
+            if (contracID != null)
+            {
+                data = data.Where(x => x.ContractorId == contracID).ToList();
+
+            }
+
+            var totalRecords = await _context.Bills.CountAsync();
+
+            if (!data.Any())
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.EMPTY_MESSAGE,
+                    Data = new List<BillDTO>(),
+                };
+            }
+            else
+            {
+                double totalPages;
+
+                totalPages = totalRecords / (double)filter.PageSize;
+
+                var roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
+                Pagination pagination = new()
+                {
+                    CurrentPage = filter.PageNumber,
+                    PageSize = filter.PageSize,
+                    TotalPages = roundedTotalPages,
+                    TotalRecords = totalRecords
+                };
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = await MapListDTO(data),
+                    Pagination = pagination
+                };
+            }
+
+            return response;
+        }
+
+        private async Task<List<BillDTO>> MapListDTO(List<Data.Entities.Bill> data)
+        {
+            List<BillDTO> rs = new();
+            foreach (var item in data)
+            {
+                BillDTO bill = new();
+                bill.Notes = item.Note;
+                bill.StartDate = (DateTime)item.StartDate;
+                bill.EndDate = item.EndDate;
+                bill.Status = item.Status;
+                bill.BillType = item.Type;
+                bill.MonthOfInstallment = item.MonthOfInstallment;
+                rs.Add(bill);
+            }
+            return rs;
         }
 
         public async Task<BaseResponse<List<BillDetailDTO>>> GetDetail(int billID)
