@@ -29,21 +29,18 @@ namespace Application.System.Bill
             var usID = identifierClaim.Value;
             var storeID = _context.Users.Where(x => x.Id.ToString().Equals(usID)).FirstOrDefault().MaterialStoreID;
             var contracID = _context.Users.Where(x => x.Id.ToString().Equals(usID)).FirstOrDefault().ContractorId;
-            var bill = new Data.Entities.Bill()
-            {
-                Note = requests.Notes,
-                Status = requests.Status,
-                StartDate = requests.StartDate,
-                EndDate = requests.EndDate,
-                TotalPrice = requests.TotalPrice,
-                Type = requests.BillType,
-                MonthOfInstallment = requests.MonthOfInstallment,
-                ContractorId = contracID,
-                StoreID = storeID,
-                CreateBy=Guid.Parse(usID),
-                LastModifiedAt=DateTime.Now
-
-            };
+            var bill = new Data.Entities.Bill();
+            bill.Note = requests.Notes;
+            bill.Status = requests.Status;
+            bill.StartDate = DateTime.Now;
+            bill.EndDate = DateTime.Now.AddMonths((int)requests.MonthOfInstallment);
+            bill.TotalPrice = requests.TotalPrice;
+            bill.Type = requests.BillType;
+            bill.MonthOfInstallment = requests.MonthOfInstallment;
+            bill.ContractorId = contracID;
+            bill.StoreID = storeID;
+            bill.CreateBy = Guid.Parse(usID);
+            bill.LastModifiedAt = DateTime.Now;
             await _context.AddAsync(bill);
             var rs = await _context.SaveChangesAsync();
             if (rs > 0)
@@ -56,43 +53,51 @@ namespace Application.System.Bill
                     billDetail.ProductID = item.ProductId;
                     billDetail.Quantity = item.Quantity;
                     billDetail.Price = item.Price;
+
                     _context.BillDetails.Add(billDetail);
                     _context.SaveChanges();
                 }
                 if (requests.SmallBill != null && requests.BillType == Data.Enum.BillType.Type2)
                 {
-                    foreach (var item in requests.SmallBill)
+                    //foreach (var item in requests.SmallBill)
+                    //{
+                    for (int i = 0; i < requests.SmallBill.Count; i++)
                     {
                         var smallBill = new Data.Entities.SmallBill();
-                        smallBill.Note = item.Notes;
-                        smallBill.Status = item.Status;
-                        smallBill.StartDate = item.StartDate;
-                        smallBill.EndDate = item.EndDate;
-                        smallBill.TotalPrice = item.TotalPrice;
+                        smallBill.Note = requests.SmallBill[i].Notes;
+                        smallBill.Status = requests.SmallBill[i].Status;
+                        if (i == 0)
+                        {
+                            smallBill.StartDate = DateTime.Now;
+                            smallBill.EndDate = DateTime.Now.AddMonths(1);
+                            requests.SmallBill[i].EndDate = DateTime.Now.AddMonths(1);
+                        }
+                        else
+                        {
+                            smallBill.StartDate = requests.SmallBill[i - 1].EndDate;
+                            smallBill.EndDate = DateTime.Parse(requests.SmallBill[i - 1].EndDate.ToString()).AddMonths(1);
+                            requests.SmallBill[i].EndDate = DateTime.Parse(requests.SmallBill[i - 1].EndDate.ToString()).AddMonths(1);
+
+                        }
+                        smallBill.TotalPrice = requests.SmallBill[i].TotalPrice;
                         smallBill.BillID = bill.Id;
                         _context.SmallBills.Add(smallBill);
                         var result = _context.SaveChanges();
                         if (result > 0)
                         {
-                            if (item.SmallProductDetail != null)
+                            if (requests.SmallBill[i].SmallProductDetail != null)
                             {
-                                foreach (var i in item.SmallProductDetail)
+                                foreach (var item in requests.SmallBill[i].SmallProductDetail)
                                 {
                                     var smallBillDetail = new BillDetail();
                                     smallBillDetail.SmallBillID = smallBill.Id;
-                                    smallBillDetail.ProductID = i.ProductId;
+                                    smallBillDetail.ProductID = item.ProductId;
 
 
-                                    smallBillDetail.Quantity = i.Quantity;
-                                    smallBillDetail.Price = i.Price;
+                                    smallBillDetail.Quantity = item.Quantity;
+                                    smallBillDetail.Price = item.Price;
                                     _context.BillDetails.Add(smallBillDetail);
                                     _context.SaveChanges();
-                                    //if (check > 0)
-                                    //{
-                                    //    var update = await _context.Products.Where(x => x.Id == i.ProductId).FirstOrDefaultAsync();
-                                    //    update.UnitInStock = update.UnitInStock - i.Quantity;
-                                    //    update.SoldQuantities = update.SoldQuantities + i.Quantity;
-                                    //}
                                 }
                             }
                         }
@@ -101,13 +106,24 @@ namespace Application.System.Bill
                 }
                 if (requests.BillType == Data.Enum.BillType.Type3)
                 {
-                    foreach (var item in requests.SmallBill)
+
+                    foreach (var (item,i) in requests.SmallBill.Select((value,i)=>(value,i)))
                     {
                         var smallBill = new Data.Entities.SmallBill();
                         smallBill.Note = item.Notes;
                         smallBill.Status = item.Status;
-                        smallBill.StartDate = item.StartDate;
-                        smallBill.EndDate = item.EndDate;
+                        if (i==0)
+                        {
+                            smallBill.StartDate = DateTime.Now;
+                            smallBill.EndDate = DateTime.Now.AddMonths(1);
+                            requests.SmallBill[i].EndDate = DateTime.Now.AddMonths(1);
+                        }
+                        else
+                        {
+                            smallBill.StartDate = requests.SmallBill[i-1].EndDate;
+                            smallBill.EndDate = DateTime.Parse(requests.SmallBill[i - 1].EndDate.ToString()).AddMonths(1);
+                            requests.SmallBill[i].EndDate = DateTime.Parse(requests.SmallBill[i-1].EndDate.ToString()).AddMonths(1);
+                        }
                         smallBill.TotalPrice = item.TotalPrice;
                         smallBill.BillID = bill.Id;
                         _context.SmallBills.Add(smallBill);
@@ -142,7 +158,7 @@ namespace Application.System.Bill
 
             IQueryable<Data.Entities.Bill> query = _context.Bills;
             var data = await query
-             
+
              .OrderBy(filter._sortBy + " " + orderBy)
              .Skip((filter.PageNumber - 1) * filter.PageSize)
              .Take(filter.PageSize)

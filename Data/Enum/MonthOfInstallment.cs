@@ -8,9 +8,9 @@ namespace Data.Enum
 {
     public enum MonthOfInstallment
     {
-        _3=1,
-        _6,
-        _9,
-        _12
+        _3=3,
+        _6=6,
+        _9=9,
+        _12=12
     }
 }
