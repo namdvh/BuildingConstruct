@@ -36,6 +36,7 @@ namespace Application.System.Users
             _context = context;
         }
 
+
         public async Task<BaseResponse<UserModels>> UpdateRole(UpdateRoleRequest request)
         {
             BaseResponse<UserModels> response = new();
@@ -180,9 +181,12 @@ namespace Application.System.Users
         }
 
 
-        public async Task<BaseResponse<UserModels>> Login(LoginRequestDTO request)
+        
+
+        public async Task<BaseResponse<UserDTO>> Login(LoginRequestDTO request)
+
         {
-            BaseResponse<UserModels> response = new();
+            BaseResponse<UserDTO> response = new();
             dynamic rs;
             //var user = await _userService.FindByNameAsync(request.UserName);
             rs = await _signInManager.PasswordSignInAsync(request.UserName, request.Password, request.RememberMe, true);// hàm login
@@ -218,7 +222,21 @@ namespace Application.System.Users
                         us.Token = token.Data.RefreshToken;
                         us.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;
                         await _userService.UpdateAsync(us);
-                        response.Data = userDTO;
+                        response.Data = new()
+                        {
+                            UserName = us.UserName,
+                            Phone = us.PhoneNumber,
+                            FirstName = us.FirstName,
+                            LastName = us.LastName,
+                            Status = us.Status,
+                            Id = us.Id,
+                            Address = us.Address,
+                            Avatar = us.Avatar,
+                            DOB = us.DOB,
+                            Gender = us.Gender,
+                            Role = roleName
+                        };
+
                     }
                 }
                 return response;
@@ -251,7 +269,21 @@ namespace Application.System.Users
                 user.Token = token.Data.RefreshToken;
                 user.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;
                 await _userService.UpdateAsync(user);
-                response.Data = userDTO;
+                response.Data = new()
+                {
+                    UserName = user.UserName,
+                    Phone = user.PhoneNumber,
+                    FirstName = user.LastName,
+                    LastName = user.PhoneNumber,
+                    Status = user.Status,
+                    Id = user.Id,
+                    Address = user.Address,
+                    Avatar = user.Avatar,
+                    DOB = user.DOB,
+                    Gender = user.Gender,
+                    Role = roleName
+                };
+
             }
 
 
@@ -320,11 +352,11 @@ namespace Application.System.Users
                     {
                         var store = new MaterialStore();
                         store.CreateBy = user.Id;
-                        
+
                         await _context.MaterialStores.AddAsync(store);
                         _context.SaveChanges();
 
-                        user.MaterialStoreID =store.Id;
+                        user.MaterialStoreID = store.Id;
                         _context.Entry(store).State = EntityState.Modified;
                         await _context.SaveChangesAsync();
                     }
@@ -332,7 +364,7 @@ namespace Application.System.Users
                     {
                         var ctor = new Contractor();
                         ctor.CreateBy = user.Id;
-                      
+
                         await _context.Contractors.AddAsync(ctor);
                         _context.SaveChanges();
                         user.ContractorId = ctor.Id;
@@ -372,7 +404,7 @@ namespace Application.System.Users
             var refreshtoken = new JwtSecurityToken(_config["Tokens:Issuer"],
                 _config["Tokens:Issuer"],
                 claims,
-                expires: DateTime.Now.AddDays(7),
+                expires: DateTime.Now.AddYears(1),
                 signingCredentials: creds);
             var ReturnToken = new JwtSecurityTokenHandler().WriteToken(accesstoken);
             var ReturnRFToken = new JwtSecurityTokenHandler().WriteToken(refreshtoken);
@@ -390,8 +422,6 @@ namespace Application.System.Users
         {
             BaseResponse<string> response = new();
             var tokenHandler = new JwtSecurityTokenHandler();
-
-
 
             dynamic principal = null;
             try
@@ -428,15 +458,10 @@ namespace Application.System.Users
             string username = principal.Identity.Name;
             var user = await _userService.FindByNameAsync(username);
 
-            if (user == null || user.Token != refreshToken.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
-            {
-                response.Code = "901";
-                response.Message = "Expired Token";
-                return response;
-            }
             var roles = await _userService.GetRolesAsync(user);
             var claims = new[]
             {
+                new Claim("UserID",user.Id.ToString()),
                 new Claim(ClaimTypes.Name,user.UserName),
                 new Claim(ClaimTypes.Role,string.Join(";",roles))
                 };
@@ -448,7 +473,7 @@ namespace Application.System.Users
             var accesstoken = new JwtSecurityToken(_config["Tokens:Issuer"],
                 _config["Tokens:Issuer"],
                 claims,
-                expires: DateTime.Now.AddMinutes(1),
+                expires: DateTime.Now.AddHours(1),
                 signingCredentials: creds);
             TokenResponse token = new();
             var newAccessToken = new JwtSecurityTokenHandler().WriteToken(accesstoken);
@@ -477,24 +502,553 @@ namespace Application.System.Users
                     ValidAudience = issuer,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ClockSkew = TimeSpan.Zero,
                     IssuerSigningKey = new SymmetricSecurityKey(signingKeyBytes),
                 };
                 principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
             }
-            catch (SecurityTokenExpiredException ex)
+            catch (SecurityTokenExpiredException )
             {
                 throw new SecurityTokenExpiredException();
             }
-            catch (SecurityTokenInvalidSignatureException e)
+            catch (SecurityTokenInvalidSignatureException )
             {
                 throw new SecurityTokenInvalidSignatureException();
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException )
             {
                 throw new ArgumentException();
             }
             return principal;
+        }
+
+
+
+
+
+        private UserDetailDTO MapToDetailDTO(User user, int status)
+        {
+            //1 Builder
+            //2 Ctor
+            //3 Material Store
+
+            UserDetailDTO userDetail;
+
+            if (status == 1)
+            {
+
+                var tmp = _context.BuilderSkills.Include(x => x.Skill).Where(x => x.BuilderSkillID == user.BuilderId).ToList();
+
+
+
+                DetailBuilder detailBuilder = new()
+                {
+                    BuilderSkills = MapToSkillDTO(tmp),
+                    Id = user.Builder.Id,
+                    Place = user.Builder.Place,
+                    TypeName = user.Builder.Type.Name,
+                    TypeID=user.Builder.TypeID,
+                    ExperienceDetail = user.Builder.ExperienceDetail,
+                    Certificate = user.Builder.Certificate,
+                    Experience=user.Builder.Experience
+                };
+
+
+                userDetail = new()
+                {
+                    Address = user.Address,
+                    Avatar = user.Avatar,
+                    DOB = user.DOB,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    Gender = user.Gender,
+                    IdNumber = user.IdNumber,
+                    LastName = user.LastName,
+                    Status = user.Status,
+                    Phone=user.PhoneNumber,
+                    Builder = detailBuilder,
+                };
+
+            }
+            else if (status == 2)
+            {
+                DetailContractor detailContractor = new()
+                {
+                    CompanyName = user.Contractor.CompanyName,
+                    Description = user.Contractor.Description,
+                    Id = user.Contractor.Id,
+                    Website = user.Contractor.Website
+                };
+
+
+                userDetail = new()
+                {
+                    Address = user.Address,
+                    Avatar = user.Avatar,
+                    DOB = user.DOB,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    Gender = user.Gender,
+                    IdNumber = user.IdNumber,
+                    LastName = user.LastName,
+                    Status = user.Status,
+                    Phone = user.PhoneNumber,
+                    Contractor = detailContractor,
+                };
+            }
+            else
+            {
+                DetailMaterialStore detailMaterial = new()
+                {
+                    Description = user.MaterialStore.Description,
+                    Id = user.MaterialStore.Id,
+                    Website = user.MaterialStore.Website,
+                    Experience = user.MaterialStore.Experience,
+                    Image = user.MaterialStore.Image,
+                    Place = user.MaterialStore.Place,
+                    TaxCode = user.MaterialStore.TaxCode
+                };
+
+
+                userDetail = new()
+                {
+                    Address = user.Address,
+                    Avatar = user.Avatar,
+                    DOB = user.DOB,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    Gender = user.Gender,
+                    IdNumber = user.IdNumber,
+                    LastName = user.LastName,
+                    Status = user.Status,
+                    Phone = user.PhoneNumber,
+                    DetailMaterialStore = detailMaterial,
+                };
+            }
+
+
+            return userDetail;
+        }
+
+        private List<BuilderSkillsDTO> MapToSkillDTO(List<BuilderSkill> skills)
+        {
+            List<BuilderSkillsDTO> ls = new();
+
+            foreach (var x in skills)
+            {
+                BuilderSkillsDTO dto = new()
+                {
+                    Id = x.SkillID,
+                    Name = x.Skill.Name
+                };
+                ls.Add(dto);
+            }
+            return ls;
+        }
+
+        public async Task<BaseResponse<UserDetailDTO>> GetProfile(Guid userID)
+        {
+            BaseResponse<UserDetailDTO> response;
+            var user = await _context.Users.Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                response = new()
+                {
+                    Code = BaseCode.ERROR,
+                    Message = BaseCode.NOTFOUND_MESSAGE
+                };
+                return response;
+            }
+
+            var rolename = _userService.GetRolesAsync(user).Result;
+
+
+            if (rolename.First().Equals("User"))
+            {
+                var result = await _context.Users
+                                    .Include(x => x.Builder)
+                                        .ThenInclude(x => x.Type)
+                                    .Where(x => x.Id.Equals(userID))
+                                    .FirstOrDefaultAsync();
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Data = MapToDetailDTO(result, 1),
+                    Message = BaseCode.SUCCESS_MESSAGE
+                };
+                return response;
+
+            }
+            else if (rolename.First().Equals("Contractor"))
+            {
+                var result = await _context.Users.Include(x => x.Contractor).Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Data = MapToDetailDTO(result, 2),
+                    Message = BaseCode.SUCCESS_MESSAGE
+                };
+                return response;
+            }
+            else
+            {
+                var result = await _context.Users.Include(x => x.MaterialStore).Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Data = MapToDetailDTO(result, 3),
+                    Message = BaseCode.SUCCESS_MESSAGE
+                };
+                return response;
+
+            }
+
+        }
+        public async Task<BaseResponse<string>> UpdateBuilderProfile(UpdateBuilderRequest request, Guid userID)
+        {
+            BaseResponse<string> response;
+
+            var user = await _context.Users.Include(x => x.Builder).FirstOrDefaultAsync(x => x.Id.Equals(userID));
+
+            if (user != null)
+            {
+                if (!string.IsNullOrEmpty(request.FirstName))
+                {
+                    user.FirstName = request.FirstName;
+                }
+
+                if (!string.IsNullOrEmpty(request.LastName))
+                {
+                    user.LastName = request.LastName;
+
+                }
+                if (!string.IsNullOrEmpty(request.Email))
+                {
+                    user.Email = request.Email;
+
+                }
+                if (!string.IsNullOrEmpty(request.Address))
+                {
+                    user.Address = request.Address;
+
+                }
+                if (!string.IsNullOrEmpty(request.Gender.ToString()))
+                {
+                    user.Gender = request.Gender;
+
+                }
+                if (!string.IsNullOrEmpty(request.IdNumber))
+                {
+                    user.IdNumber = request.IdNumber;
+
+                }
+
+                if (!string.IsNullOrEmpty(request.DOB.ToString()))
+                {
+                    user.DOB = request.DOB;
+
+                }
+                if (!string.IsNullOrEmpty(request.Avatar))
+                {
+                    user.Avatar = request.Avatar;
+
+                }
+                if (!string.IsNullOrEmpty(request.Phone))
+                {
+                    user.PhoneNumber = request.Phone;
+
+                }
+                if (string.IsNullOrEmpty(request.ExperienceDetail))
+                {
+                    user.Builder.ExperienceDetail =null;
+
+                }
+                else
+                {
+                    user.Builder.ExperienceDetail = request.ExperienceDetail;
+                }
+                if (!string.IsNullOrEmpty(request.Experience.ToString()))
+                {
+                    user.Builder.Experience = request.Experience;
+
+                }
+                if (string.IsNullOrEmpty(request.Certificate))
+                {
+                    user.Builder.Certificate = null;
+
+                }
+                else
+                {
+                    user.Builder.Certificate = request.Certificate;
+
+                }
+                if (!string.IsNullOrEmpty(request.TypeID.ToString()))
+                {
+                    user.Builder.TypeID = request.TypeID;
+
+                }
+                if (!string.IsNullOrEmpty(request.Place.ToString()))
+                {
+                    user.Builder.Place = request.Place;
+
+                }
+
+                if (request.Skills != null)
+                {
+                    var skills = await _context.BuilderSkills.Where(x => x.BuilderSkillID.Equals(user.BuilderId)).ToListAsync();
+                    if (skills.Any())
+                    {
+                        _context.RemoveRange(skills);
+                        await _context.SaveChangesAsync();
+                    }
+
+
+                    foreach (var x in request.Skills)
+                    {
+                        BuilderSkill newSkills = new()
+                        {
+                            BuilderSkillID = user.BuilderId.Value,
+                            SkillID = x
+                        };
+                        await _context.BuilderSkills.AddAsync(newSkills);
+                        await _context.SaveChangesAsync();
+                    }
+
+
+                }
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE
+                };
+
+
+            }
+            else
+            {
+                response = new()
+                {
+                    Message = BaseCode.NOTFOUND_MESSAGE,
+                    Code = BaseCode.ERROR
+                };
+            }
+            return response;
+        }
+
+        public async Task<BaseResponse<string>> UpdateContractorProfile(UpdateContractorRequest request, Guid userID)
+        {
+            BaseResponse<string> response;
+
+            var user = await _context.Users.Include(x => x.Contractor).FirstOrDefaultAsync(x => x.Id.Equals(userID));
+
+            if (user != null)
+            {
+
+                if (!string.IsNullOrEmpty(request.FirstName))
+                {
+                    user.FirstName = request.FirstName;
+                }
+
+                if (!string.IsNullOrEmpty(request.LastName))
+                {
+                    user.LastName = request.LastName;
+
+                }
+                if (!string.IsNullOrEmpty(request.Email))
+                {
+                    user.Email = request.Email;
+
+                }
+                if (!string.IsNullOrEmpty(request.Address))
+                {
+                    user.Address = request.Address;
+
+                }
+                if (!string.IsNullOrEmpty(request.Gender.ToString()))
+                {
+                    user.Gender = request.Gender;
+
+                }
+                if (!string.IsNullOrEmpty(request.IdNumber))
+                {
+                    user.IdNumber = request.IdNumber;
+
+                }
+                if (!string.IsNullOrEmpty(request.DOB.ToString()))
+                {
+                    user.DOB = request.DOB;
+
+                }
+                if (!string.IsNullOrEmpty(request.Avatar))
+                {
+                    user.Avatar = request.Avatar;
+
+                }
+                if (!string.IsNullOrEmpty(request.Phone))
+                {
+                    user.PhoneNumber = request.Phone;
+
+                }
+
+                if (!string.IsNullOrEmpty(request.CompanyName))
+                {
+                    user.Contractor.CompanyName = request.CompanyName;
+
+
+                }
+                if (!string.IsNullOrEmpty(request.Description))
+                {
+                    user.Contractor.Description = request.Description;
+
+                }
+                if (!string.IsNullOrEmpty(request.Website))
+                {
+                    user.Contractor.Website = request.Website;
+                }
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE
+                };
+
+
+            }
+            else
+            {
+                response = new()
+                {
+                    Message = BaseCode.NOTFOUND_MESSAGE,
+                    Code = BaseCode.ERROR
+                };
+            }
+            return response;
+        }
+
+        public async Task<BaseResponse<string>> UpdateStoreProfile(UpdateStoreRequest request, Guid userID)
+        {
+            BaseResponse<string> response;
+
+            var user = await _context.Users.Include(x => x.MaterialStore).FirstOrDefaultAsync(x => x.Id.Equals(userID));
+
+            if (user != null)
+            {
+                if (!string.IsNullOrEmpty(request.FirstName))
+                {
+                    user.FirstName = request.FirstName;
+                }
+
+                if (!string.IsNullOrEmpty(request.LastName))
+                {
+                    user.LastName = request.LastName;
+
+                }
+                if (!string.IsNullOrEmpty(request.Address))
+                {
+                    user.Address = request.Address;
+
+                }
+                if (!string.IsNullOrEmpty(request.Email))
+                {
+                    user.Email = request.Email;
+
+                }
+                if (!string.IsNullOrEmpty(request.Gender.ToString()))
+                {
+                    user.Gender = request.Gender;
+
+                }
+                if (!string.IsNullOrEmpty(request.IdNumber))
+                {
+                    user.IdNumber = request.IdNumber;
+
+                }
+                if (!string.IsNullOrEmpty(request.DOB.ToString()))
+                {
+                    user.DOB = request.DOB;
+
+                }
+                if (!string.IsNullOrEmpty(request.Avatar))
+                {
+                    user.Avatar = request.Avatar;
+
+                }
+                if (!string.IsNullOrEmpty(request.Phone))
+                {
+                    user.PhoneNumber = request.Phone;
+
+                }
+                if (!string.IsNullOrEmpty(request.TaxCode))
+                {
+                    user.MaterialStore.TaxCode = request.TaxCode;
+
+                }
+                if (!string.IsNullOrEmpty(request.Description))
+                {
+                    user.MaterialStore.Description = request.Description;
+
+
+                }
+                if (!string.IsNullOrEmpty(request.Website))
+                {
+                    user.MaterialStore.Website = request.Website;
+
+
+                }
+                if (!string.IsNullOrEmpty(request.Experience))
+                {
+                    user.MaterialStore.Experience = request.Experience;
+
+
+                }
+                if (!string.IsNullOrEmpty(request.Image))
+                {
+                    user.MaterialStore.Image = request.Image;
+
+
+                }
+                if (!string.IsNullOrEmpty(request.Place.ToString()))
+                {
+                    user.MaterialStore.Place = request.Place;
+
+
+                }
+
+
+
+
+
+
+
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE
+                };
+
+
+            }
+            else
+            {
+                response = new()
+                {
+                    Message = BaseCode.NOTFOUND_MESSAGE,
+                    Code = BaseCode.ERROR
+                };
+            }
+            return response;
         }
     }
 }

@@ -1,5 +1,6 @@
-﻿using Data.Configuration;
+using Data.Configuration;
 using Data.Entities;
+using Data.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -21,12 +22,19 @@ namespace Data.DataContext
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                relationship.DeleteBehavior = DeleteBehavior.Restrict;
+            }
             modelBuilder.ApplyConfiguration(new ContractorPostConfiguration());
             modelBuilder.ApplyConfiguration(new MaterialStoreConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.ApplyConfiguration(new ContractorConfiguration());
             modelBuilder.ApplyConfiguration(new SkillConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductSystemCategoriesConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductSystemConfiguration());
             modelBuilder.ApplyConfiguration(new VerifyConfiguration());
             modelBuilder.ApplyConfiguration(new BuilderSkillConfiguration());
             modelBuilder.ApplyConfiguration(new ContractorPostSkillConfiguration());
@@ -38,15 +46,22 @@ namespace Data.DataContext
             modelBuilder.ApplyConfiguration(new ContractorPostProductsConfiguration());
             modelBuilder.ApplyConfiguration(new ProductCategoriesConfiguration());
             modelBuilder.ApplyConfiguration(new AppliedPostConfiguration());
-            modelBuilder.ApplyConfiguration(new CommitmentConfiguration());
             modelBuilder.ApplyConfiguration(new PostCommitmentsConfigurations());
             modelBuilder.ApplyConfiguration(new ContractorPostTypeConfiguration());
             modelBuilder.ApplyConfiguration(new BuilderPostTypeConfiguration());
             modelBuilder.ApplyConfiguration(new BuilderPostSkillConfigurations());
+            modelBuilder.ApplyConfiguration(new CartConfiguration());
+            modelBuilder.ApplyConfiguration(new SaveConfiguration());
+            modelBuilder.ApplyConfiguration(new SystemCategoriesConfiguration());
+            modelBuilder.ApplyConfiguration(new BillConfigurations());
+            modelBuilder.ApplyConfiguration(new SmallBillConfiguration());
+            modelBuilder.ApplyConfiguration(new BillDetailConfiguration());
 
             modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("UserLogins").HasKey(x => x.UserId);
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("UserRoles").HasKey(x => new { x.UserId, x.RoleId });
             modelBuilder.Entity<IdentityUserToken<Guid>>().ToTable("UserTokens").HasKey(x => x.UserId);
+
+            modelBuilder.Seed();
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Builder> Builders { get; set; }
@@ -65,11 +80,18 @@ namespace Data.DataContext
         public DbSet<ContractorPostProduct> ContractorPostProducts { get; set; }    
         public DbSet<Categories> Categories { get; set; }    
         public DbSet<ProductCategories> ProductCategories { get; set; }    
+        public DbSet<ProductSystem> ProductSystems { get; set; }    
+        public DbSet<ProductSystemCategories> ProductSystemCategories { get; set; }    
         public DbSet<AppliedPost> AppliedPosts { get; set; }    
         public DbSet<PostCommitment> PostCommitments { get; set; }    
-        public DbSet<Commitment> Commitments { get; set; }    
         public DbSet<ContractorPostType> ContractorPostTypes { get; set; }    
         public DbSet<BuilderPostType> BuilderPostTypes { get; set; }    
         public DbSet<BuilderPostSkill> BuilderPostSkills { get; set; }    
+        public DbSet<Cart> Carts { get; set; }    
+        public DbSet<Save> Saves { get; set; }    
+        public DbSet<SystemCategories> SystemCategories { get; set; }    
+        public DbSet<Bill> Bills { get; set; }    
+        public DbSet<BillDetail> BillDetails { get; set; }    
+        public DbSet<SmallBill> SmallBills { get; set; }    
     }
 }

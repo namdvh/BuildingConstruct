@@ -10,6 +10,8 @@ namespace Data.Entities
         public string ProjectName { get; set; }
 
         public string Description { get; set; }
+        public string? Benefit { get; set; }
+        public string? Required { get; set; }
 
         public List<ContractorPostSkill> PostSkills { get; set; }
         public List<ContractorPostProduct>? ContractorPostProducts { get; set; }
@@ -17,6 +19,7 @@ namespace Data.Entities
 
         public List<PostCommitment>? PostCommitments { get; set; }
         public List<AppliedPost>? AppliedPosts { get; set; }
+        public List<Save>? Saves { get; set; }
 
 
         public DateTime StarDate { get; set; }
@@ -28,13 +31,14 @@ namespace Data.Entities
 
         public PostCategories PostCategories { get; set; }
 
-        public string? Salaries { get; set; }
+        public string Salaries { get; set; }
 
         public int ViewCount { get; set; }
 
         public int NumberPeople { get; set; }
 
         public int PeopeRemained { get; set; }
+        public bool? isApplied { get; set; }
 
         public int ContractorID { get; set; }
 

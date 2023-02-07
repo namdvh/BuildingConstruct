@@ -13,6 +13,7 @@ namespace ViewModels.Users
         {
             RuleFor(x => x.Phone).NotNull().NotEmpty().WithMessage("Phone is required!");
             RuleFor(x => x.Password).NotNull().NotEmpty().WithMessage("Password is required!");
+
         }
     }
 }

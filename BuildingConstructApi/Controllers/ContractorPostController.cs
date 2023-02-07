@@ -1,4 +1,4 @@
-﻿using Application.System.ContractorPosts;
+using Application.System.ContractorPosts;
 using Data.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -12,6 +12,7 @@ namespace BuildingConstructApi.Controllers
 {
     [Route("api/contractorpost")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class ContractorPostController : ControllerBase
     {
         private readonly IContractorPostService _contractorPostService;
@@ -22,9 +23,11 @@ namespace BuildingConstructApi.Controllers
         }
 
         [HttpPost("getAll")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll([FromBody] PaginationFilter request)
         {
             var validFilter = new PaginationFilter();
+            var id = User.FindFirst("UserID").Value;
 
             if (request.FilterRequest == null)
             {
@@ -36,7 +39,26 @@ namespace BuildingConstructApi.Controllers
 
             }
 
-            var result = await _contractorPostService.GetPost(request);
+
+
+            var result = await _contractorPostService.GetPost(request,Guid.Parse(id));
+            return Ok(result);
+        }
+
+        [HttpPost("applied")]
+        public async Task<IActionResult> AppliedPost([FromBody] AppliedPostRequest request)
+        {
+            var rs = User.FindFirst("UserID").Value;
+
+            var result = await _contractorPostService.AppliedPost(request,Guid.Parse(rs));
+            return Ok(result);
+        }
+
+        [HttpGet("applied/{id}")]
+        public async Task<IActionResult> AppliedPost(int id, [FromQuery] PaginationFilter request)
+        {
+            var validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
+            var result = await _contractorPostService.ViewAppliedPost(id,validFilter);
             return Ok(result);
         }
 
@@ -73,8 +95,8 @@ namespace BuildingConstructApi.Controllers
             }
             return Ok(response);
         }
-        [HttpGet("id")]
-        public async Task<IActionResult> GetPost(int id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPost([FromRoute]int id)
         {
             var rs = await _contractorPostService.GetDetailPost(id);
             return Ok(rs);

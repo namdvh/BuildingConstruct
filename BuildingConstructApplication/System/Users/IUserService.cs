@@ -11,12 +11,21 @@ namespace Application.System.Users
 {
     public interface IUserService
     {
+
         public Task<BaseResponse<UserModels>> LoginGoogle(LoginGoogleRequest request);
         public Task<BaseResponse<UserModels>> UpdateRole(UpdateRoleRequest request);
-        public Task<BaseResponse<UserModels>> Login(LoginRequestDTO request);
+        
+
+        public Task<BaseResponse<UserDTO>> Login(LoginRequestDTO request);
+
         Task<RegisterResponseDTO> Register(RegisterRequestDTO request);
         public Task<BaseResponse<Token>> GenerateToken(UserModels request);
         Task<BaseResponse<string>> RefreshToken(RefreshTokenResponse refreshToken);
+        Task<BaseResponse<UserDetailDTO>> GetProfile(Guid userID);
+
+        Task<BaseResponse<string>> UpdateBuilderProfile(UpdateBuilderRequest request, Guid userID);
+        Task<BaseResponse<string>> UpdateContractorProfile(UpdateContractorRequest request, Guid userID);
+        Task<BaseResponse<string>> UpdateStoreProfile(UpdateStoreRequest request, Guid userID);
 
 
     }

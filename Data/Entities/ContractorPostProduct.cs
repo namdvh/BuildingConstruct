@@ -10,10 +10,11 @@ namespace Data.Entities
     {
         public int ContractorPostID { get; set; }
 
-        public int ProductID { get; set; }
+        public int ProductSystemID { get; set; }
+        public int Quantity { get; set; }
 
         public ContractorPost ContractorPost { get; set; }
 
-        public Products Products { get; set; }
+        public ProductSystem ProductSystem { get; set; }
     }
 }

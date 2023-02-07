@@ -1,11 +1,16 @@
 
+using Application.System.Bill;
 using Application.System.BuilderPosts;
+using Application.System.Carts;
+using Application.System.Category;
 using Application.System.Commitments;
 using Application.System.ContractorPosts;
 using Application.System.MaterialStores;
+using Application.System.ProductSystems;
+using Application.System.SavePost;
+using Application.System.Skills;
 using Application.System.Types;
 using Application.System.Users;
-using Constants;
 using Data.DataContext;
 using Data.Entities;
 using FluentValidation;
@@ -15,6 +20,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using ViewModels.ContractorPost;
 using ViewModels.Users;
 using static Constants.Constants;
 
@@ -140,11 +146,18 @@ builder.Services.AddScoped<SignInManager<User>, SignInManager<User>>();
 builder.Services.AddScoped<RoleManager<Role>, RoleManager<Role>>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITypeService, TypeService>();
+builder.Services.AddScoped<ISaveService, SaveService>();
 builder.Services.AddScoped<IValidator<RegisterRequestDTO>, RegisterRequestValidatorDTO>();
+builder.Services.AddScoped<IValidator<ContractorPostModels>, ContractorPostValidator>();
 builder.Services.AddTransient<IContractorPostService, ContractorPostService>();
 builder.Services.AddScoped<IBuilderPostService, BuilderPostServices>(); 
 builder.Services.AddScoped<IMaterialStoreService, MaterialStoreService>();
 builder.Services.AddScoped<ICommitmentService, CommitmentService>();
+builder.Services.AddScoped<IProductSystemService, ProductSystemService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ISkillService, SkillServices>();
+builder.Services.AddTransient<ICartService, CartService>();
+builder.Services.AddScoped<IBillServices, BillServices>();
 
 var app = builder.Build();
 

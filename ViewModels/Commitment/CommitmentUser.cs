@@ -10,6 +10,9 @@ namespace ViewModels.Commitment
     {
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-        public string? IDNumber { get; set; }
+        public string? VerifyId { get; set; }
+        public string? PhoneNumber { get; set; }
+        public string? CompanyName { get; set; }
+        public string? TypeName { get; set; }
     }
 }

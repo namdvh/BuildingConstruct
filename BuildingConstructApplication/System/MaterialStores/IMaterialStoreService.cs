@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ViewModels.ContractorPost;
+﻿using Data.Entities;
 using ViewModels.MaterialStore;
 using ViewModels.Pagination;
+using ViewModels.Response;
 
 namespace Application.System.MaterialStores
 {
@@ -14,5 +10,10 @@ namespace Application.System.MaterialStores
         Task<BasePagination<List<MaterialStoreDTO>>> GetList(PaginationFilter filter);
 
         Task<BasePagination<List<MaterialStoreDTO>>> Search(PaginationFilter filter, string keyword);
+        Task<bool> CreateProduct(ProductDTO request);
+        Task<BasePagination<List<ProductStoreDTO>>> GetAllProductStore(PaginationFilter filter,bool isAll,int? storeID);
+        Task<BaseResponse<ProductDetailDTO>> GetProductDetail(int productId);
+        Task<bool> DeleteProduct(int productID);
+        Task<BaseResponse<ProductStoreDTO>> UpdateProduct(ProductDTO request,int productId);
     }
 }

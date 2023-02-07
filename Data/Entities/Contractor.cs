@@ -13,5 +13,10 @@
         public User? User { get; set; }
 
         public List<ContractorPost> ContractorPosts { get; set; }
+
+        public List<PostCommitment>? PostCommitments { get; set; }
+
+        public List<Bill>? Bills { get; set; }
+
     }
 }

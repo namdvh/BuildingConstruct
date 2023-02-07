@@ -1,13 +1,20 @@
 ﻿using Application.System.BuilderPosts;
 using Application.System.ContractorPosts;
+using Data.Enum;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using ViewModels.BuilderPosts;
 using ViewModels.Pagination;
+using ViewModels.Response;
 
 namespace BuildingConstructApi.Controllers
 {
     [Route("api/builderpost")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Bearer")]
+
     public class BuilderPostController : ControllerBase
     {
         private readonly IBuilderPostService _builderPostService;
@@ -21,6 +28,8 @@ namespace BuildingConstructApi.Controllers
         public async Task<IActionResult> GetAll([FromBody] PaginationFilter request)
         {
             var validFilter = new PaginationFilter();
+            var id = User.FindFirst("UserID").Value;
+
 
             if (request.FilterRequest == null)
             {
@@ -32,7 +41,7 @@ namespace BuildingConstructApi.Controllers
 
             }
 
-            var result = await _builderPostService.GetPost(request);
+            var result = await _builderPostService.GetPost(request,Guid.Parse(id));
             return Ok(result);
         }
 
@@ -50,6 +59,30 @@ namespace BuildingConstructApi.Controllers
             var validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
             var result = await _builderPostService.GetPostByViews(validFilter);
             return Ok(result);
+        }
+        [HttpPost("createPost")]
+        public async Task<IActionResult> CreateBuilderPost([FromBody] BuilderPostRequestDTO builderPost)
+        {
+            BaseResponse<BuilderPostRequestDTO> response = new();
+            var rs = await _builderPostService.CreateBuilderPost(builderPost);
+            if (rs)
+            {
+                response.Code = BaseCode.SUCCESS;
+                response.Message = "Create Post success";
+                response.Data = builderPost;
+            }
+            else
+            {
+                response.Code = BaseCode.ERROR;
+                response.Message = "Create Post fail";
+            }
+            return Ok(response);
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPost([FromRoute] int id)
+        {
+            var rs = await _builderPostService.GetDetailPost(id);
+            return Ok(rs);
         }
     }
 }

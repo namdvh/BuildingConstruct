@@ -18,9 +18,13 @@ namespace ViewModels.ContractorPost
 
         public string? Description { get; set; }
 
+        public string? AuthorName { get; set; }
+
         public DateTime StarDate { get; set; }
 
         public DateTime EndDate { get; set; }
+
+        public bool? IsSave { get; set; }
 
         public Place Place { get; set; }
 

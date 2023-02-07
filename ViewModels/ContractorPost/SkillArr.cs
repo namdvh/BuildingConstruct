@@ -11,6 +11,6 @@ namespace ViewModels.ContractorPost
         public int id { get; set; }
         public string name { get; set; }
         public bool fromSystem { get; set; }
-        public int? TypeId { get; set; }
+        public Guid? TypeId { get; set; }
     }
 }

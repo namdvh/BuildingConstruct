@@ -12,6 +12,7 @@ namespace ViewModels.ContractorPost
         public int Id { get; set; }
 
         public string? Name { get; set; }
+        public int? Quantity { get; set; }
 
         public decimal UnitPrice { get; set; }
 
@@ -23,10 +24,6 @@ namespace ViewModels.ContractorPost
 
         public string? Brand { get; set; }
 
-        public int? MaterialStoreID { get; set; }
-
-        public Data.Entities.MaterialStore MaterialStore { get; set; }
-
-        public List<ProductCategories>? ProductCategories { get; set; }
+        public Data.Entities.Categories? Categories { get; set; }
     }
 }

@@ -21,5 +21,9 @@ namespace Data.Entities
         public User? User { get; set; }
 
         public List<Products> Products { get; set; }
+
+        public List<Bill>? Bills { get; set; }
+
+
     }
 }

@@ -16,22 +16,20 @@ namespace ViewModels.ContractorPost
         public List<TypeModels>? type { get; set; }
 
         public string Description { get; set; }
+        public string? Benefit { get; set; }
+        public string? Required { get; set; }
 
         public DateTime StarDate { get; set; }
 
         public DateTime EndDate { get; set; }
 
         public Place Place { get; set; }
-        public List<int> ProductId { get; set; }
-        //public List<ContractorPostProductModels> contractorPostProducts { get; set; }
+        public List<ProductPost> ProductPost { get; set; }
 
         public PostCategories PostCategories { get; set; }
 
-        public string? Salaries { get; set; }
+        public string Salaries { get; set; }
 
         public int NumberPeople { get; set; }
-        //public string? Image { get; set; }
-
-        public DateTime LastModifiedAt { get; set; }
     }
 }

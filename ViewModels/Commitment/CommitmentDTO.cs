@@ -9,7 +9,7 @@ namespace ViewModels.Commitment
 {
     public class CommitmentDTO
     {
-        public int CommitmentId { get; set; }
+        public int? Id { get; set; }
 
         public string? OptionalTerm { get; set; }
 
@@ -20,6 +20,11 @@ namespace ViewModels.Commitment
         public string? Title { get; set; }
 
         public string? ProjectName { get; set; }
+        public int? PostID { get; set; }
+
+        public string? BuilderName { get; set; }
+        public string? BuilderTypeName { get; set; }
+        public string? BuilderPhone { get; set; }
 
     }
 }

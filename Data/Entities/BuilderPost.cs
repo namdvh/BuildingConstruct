@@ -9,11 +9,12 @@ namespace Data.Entities
         public PostCategories PostCategories { get; set; }
         public List<BuilderPostType>? BuilderPostTypes { get; set; }
         public List<BuilderPostSkill>? BuilderPostSkills { get; set; }
+        public List<Save>? Saves { get; set; }
         public Place Place { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public string Field { get; set; }
-
+        public string Salaries { get; set; }
+        public Status Status { get; set; }
         public int Views { get; set; }
 
         public int BuilderID { get; set; }

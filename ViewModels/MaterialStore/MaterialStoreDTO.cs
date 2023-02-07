@@ -4,6 +4,11 @@ namespace ViewModels.MaterialStore
 {
     public class MaterialStoreDTO
     {
+
+        public string? FirstName { get; set; }  
+        public string? LastName { get; set; }
+        public string? Avatar { get; set; }
+
         public int Id { get; set; }
 
         public string? Webstie { get; set; }
@@ -17,7 +22,5 @@ namespace ViewModels.MaterialStore
         public string? Image { get; set; }
 
         public Place Place { get; set; }
-
-        public string Avatar { get; set; }
     }
 }
