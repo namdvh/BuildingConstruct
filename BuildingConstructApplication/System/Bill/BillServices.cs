@@ -25,6 +25,7 @@ namespace Application.System.Bill
 
         public async Task<bool> CreateBill(List<BillDTO> requests)
         {
+            bool flag = false;
             foreach (var r in requests)
             {
                 Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
@@ -128,6 +129,10 @@ namespace Application.System.Bill
                         }
                     }
                 }
+                flag = true;
+            }
+            if (flag == true)
+            {
                 return true;
             }
             return false;
