@@ -11,7 +11,7 @@ namespace Application.System.Bill
 {
     public interface IBillServices
     {
-        Task<bool> CreateBill(BillDTO requests);
+        Task<bool> CreateBill(List<BillDTO> requests);
         Task<BasePagination<List<BillDTO>>> GetAllBill(PaginationFilter filter);
 
         Task<BaseResponse<List<BillDetailDTO>>> GetDetail(int billID);
