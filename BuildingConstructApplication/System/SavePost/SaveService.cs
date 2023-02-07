@@ -1,15 +1,13 @@
-﻿using Application.System.ContractorPosts;
-using Data.DataContext;
+﻿using Data.DataContext;
 using Data.Entities;
 using Data.Enum;
+using Emgu.CV;
+using Emgu.CV.CvEnum;
+using Emgu.CV.Structure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Drawing;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 using ViewModels.BuilderPosts;
 using ViewModels.ContractorPost;
 using ViewModels.Pagination;
@@ -55,7 +53,7 @@ namespace Application.System.SavePost
             }
             else
             {
-                response.Message =BaseCode.ERROR_MESSAGE;
+                response.Message = BaseCode.ERROR_MESSAGE;
                 response.Code = BaseCode.ERROR;
             }
             return response;
@@ -68,7 +66,8 @@ namespace Application.System.SavePost
                 dto.UserId = save.UserId;
                 dto.ContractorPost = await GetContractorPost(save.ContractorPost);
                 dto.CreatedDate = save.Date;
-            }else if (dto.ContractorPost == null)
+            }
+            else if (dto.ContractorPost == null)
             {
                 dto.UserId = save.UserId;
                 dto.BuilderPost = await GetBuilderPost(save.BuilderPost);
@@ -190,7 +189,7 @@ namespace Application.System.SavePost
                         from r1 in rs2.DefaultIfEmpty()
                         join c in _context.Categories on r1.SystemCategoriesID equals c.ID into rs3
                         from r3 in rs3.DefaultIfEmpty()
-                        where r4.ContractorPostID == postID && cP.ContractorPostID==postID
+                        where r4.ContractorPostID == postID && cP.ContractorPostID == postID
                         select new
                         {
                             ProductSystemCategories = r1,
@@ -289,5 +288,64 @@ namespace Application.System.SavePost
 
             return true;
         }
+
+        public bool CompareFaces(Mat IDCardFace, Mat LiveFace)
+        {
+            // Convert images to grayscale for processing
+            IDCardFace = IDCardFace.ToImage<Gray, byte>().Mat;
+            LiveFace = LiveFace.ToImage<Gray, byte>().Mat;
+
+            // Detect faces in both images
+            var IDCardFaceDetected = DetectFace(IDCardFace);
+            var LiveFaceDetected = DetectFace(LiveFace);
+
+            // If both faces were detected, compare them
+            if (IDCardFaceDetected != null && LiveFaceDetected != null)
+            {
+                // Calculate Euclidean distance between the two face descriptors
+                double distance = CvInvoke.Norm(IDCardFaceDetected, LiveFaceDetected, NormType.L2);
+
+                // Return true if the distance is within a threshold, indicating a match
+                return distance < 0.6;
+            }
+
+            // Return false if one or both faces were not detected
+            return false;
+        }
+
+        public Mat DetectFace(Mat image)
+        {
+            // Load the face detection model
+            using (var faceDetector = new CascadeClassifier("D:\\SPRING_2023 (Ky 9)\\Capstone\\BuildingConstruct\\BuildingConstructApplication\\System\\SavePost\\haarcascade_frontalface_default.xml"))
+            {
+                // Detect faces in the image
+                Rectangle[] faces = faceDetector.DetectMultiScale(
+                    image,
+                    scaleFactor: 1.1,
+                    minNeighbors: 10,
+                    minSize: new Size(20, 20)
+                );
+
+                // If a face was detected, extract its descriptor
+                if (faces.Length > 0)
+                {
+                    // Use the first detected face
+                    Rectangle face = faces[0];
+
+                    // Crop the face from the image
+                    Mat faceImage = new Mat(image, face);
+
+                    // Resize the face image to a standard size
+                    CvInvoke.Resize(faceImage, faceImage, new Size(300, 300));
+
+                    // Return the face descriptor
+                    return faceImage.ToImage<Gray, byte>().Mat;
+                }
+            }
+
+            // Return null if no face was detected
+            return null;
+        }
+
     }
 }

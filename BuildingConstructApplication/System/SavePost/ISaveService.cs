@@ -1,4 +1,5 @@
 ﻿using Data.Entities;
+using Emgu.CV;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,9 @@ namespace Application.System.SavePost
         public Task<BaseResponse<string>> SavePost(SavePostRequest request);
         public Task<BaseResponse<List<SavePostDetailDTO>>> GetSavePostByUsID();
         public Task<bool> DeleteSave(DeleteSaveRequest request);
+
+        public Mat DetectFace(Mat image);
+
+        public bool CompareFaces(Mat IDCardFace, Mat LiveFace);
     }
 }

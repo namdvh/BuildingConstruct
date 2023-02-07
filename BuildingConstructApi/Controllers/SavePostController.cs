@@ -1,6 +1,11 @@
 ﻿using Application.System.SavePost;
+using Emgu.CV;
+using Emgu.CV.Structure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
+using System.Drawing;
+using System.Reflection.PortableExecutable;
 using ViewModels.Response;
 using ViewModels.SavePost;
 
@@ -8,7 +13,7 @@ namespace BuildingConstructApi.Controllers
 {
     [Route("api/savepost")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Bearer")]
+    //[Authorize(AuthenticationSchemes = "Bearer")]
     public class SavePostController : ControllerBase
     {
         private readonly ISaveService _saveService;
@@ -46,6 +51,62 @@ namespace BuildingConstructApi.Controllers
                 response.Message = "Delete repost unsuccesfully";
             }
             return Ok(response);
+        }
+
+        [HttpPost("test")]
+        public async Task<IActionResult> Test(List<IFormFile> image)
+        {
+            Mat front;
+            Mat face;
+
+            using (var memoryStream = new MemoryStream())
+            {
+                await image[0].CopyToAsync(memoryStream);
+                using (var img = Image.FromStream(memoryStream))
+                {
+                    front = GetMatFromSDImage(img);
+
+                }
+            }
+
+            using (var memoryStream = new MemoryStream())
+            {
+                await image[1].CopyToAsync(memoryStream);
+                using (var img = Image.FromStream(memoryStream))
+                {
+                    face = GetMatFromSDImage(img);
+
+                }
+            }
+
+
+            return Ok(_saveService.CompareFaces(front,face));
+        }
+
+
+        private Mat GetMatFromSDImage(System.Drawing.Image image)
+        {
+            int stride = 0;
+            Bitmap bmp = new Bitmap(image);
+
+            System.Drawing.Rectangle rect = new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height);
+            System.Drawing.Imaging.BitmapData bmpData = bmp.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+
+            System.Drawing.Imaging.PixelFormat pf = bmp.PixelFormat;
+            if (pf == System.Drawing.Imaging.PixelFormat.Format32bppArgb)
+            {
+                stride = bmp.Width * 4;
+            }
+            else
+            {
+                stride = bmp.Width * 3;
+            }
+
+            Image<Bgra, byte> cvImage = new Image<Bgra, byte>(bmp.Width, bmp.Height, stride, (IntPtr)bmpData.Scan0);
+
+            bmp.UnlockBits(bmpData);
+
+            return cvImage.Mat;
         }
     }
 }
