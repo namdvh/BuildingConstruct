@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq.Dynamic.Core;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
@@ -34,12 +35,161 @@ namespace Application.System.Users
             _config = config;
             _context = context;
         }
+
+
+        public async Task<BaseResponse<UserModels>> UpdateRole(UpdateRoleRequest request)
+        {
+            BaseResponse<UserModels> response = new();
+            var users = await _userService.FindByNameAsync(request.Email);
+            var roleNames = await _context.Roles.Where(x => x.Id.ToString().Equals(request.RoleId)).Select(x => x.Name).SingleOrDefaultAsync();
+                
+                if (request.RoleId == BaseCode.UsRole)
+                {
+                    var builder = new Builder();
+                    builder.CreateBy = users.Id;
+                    await _context.Builders.AddAsync(builder);
+                    _context.SaveChanges();
+
+                    users.BuilderId = builder.Id;
+                    _context.Entry<User>(users).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                }
+                    else if (request.RoleId == BaseCode.StoreRole)
+                {
+                    var store = new MaterialStore();
+                    store.CreateBy = users.Id;
+
+                    await _context.MaterialStores.AddAsync(store);
+                    _context.SaveChanges();
+
+                    users.MaterialStoreID = store.Id;
+                    _context.Entry(store).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                }
+                else if (request.RoleId == BaseCode.ContractorRole)
+                {
+                    var ctor = new Contractor();
+                    ctor.CreateBy = users.Id;
+
+                    await _context.Contractors.AddAsync(ctor);
+                    _context.SaveChanges();
+                    users.ContractorId = ctor.Id;
+                    _context.Entry(ctor).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                }
+                
+                    await _userService.AddToRoleAsync(users, roleNames);
+                
+                    var roleName = (from usr in _context.Users
+                                join userRole in _context.UserRoles on users.Id equals userRole.UserId
+                                join role in _context.Roles on userRole.RoleId equals role.Id
+                                select role.Name).FirstOrDefault();
+            UserModels u = new()
+            {
+                Id = users.Id,
+                Avatar = users.Avatar,
+                FirstName = users.FirstName,
+                LastName = users.LastName,
+                Role=roleName,
+                UserName=users.UserName
+            };
+                var userDTO = MapToDto(users, roleName);
+                var token = await GenerateToken(userDTO);
+                users.Token = token.Data.RefreshToken;
+                users.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;
+                await _userService.UpdateAsync(users);
+                response.Data = u;
+                    
+            return response;
+        }
+
+        public async Task<BaseResponse<UserModels>> LoginGoogle(LoginGoogleRequest request)
+        {
+            BaseResponse<UserModels> response = new();
+            
+            var users = await _userService.FindByNameAsync(request.Email.ToUpper());// check email exist or not
+            
+            if (users == null) 
+            {
+                var user = new User()
+                {
+                    FirstName = request.FirstName,
+                    LastName = request.LastName,
+                    UserName = request.Email,
+                    Avatar = request.Avatar,
+                    Provider = Provider.GOOGLE,
+                    Status = Status.Level1,
+                    Email = request.Email,
+                };
+                var rs = await _userService.CreateAsync(user, request.Email);
+
+                UserModels us = new()
+                {
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    Avatar = user.Avatar,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                };
+                
+                    response.Data = us;
+                    response.Code = "201";
+                    response.Message = "Regist successfully but haven't got role";
+                    return response;
+            }
+            else
+            {
+                var roleName = (from usr in _context.Users
+                                join userRole in _context.UserRoles on users.Id equals userRole.UserId
+                                join role in _context.Roles on userRole.RoleId equals role.Id
+                                select role.Name).FirstOrDefault();  //get roleName from db
+                if (roleName == null)
+                {
+                    UserModels us = new()
+                    {
+                        UserName = users.UserName,
+                        Avatar = users.Avatar,
+                        FirstName = users.FirstName,
+                        LastName = users.LastName,
+                    };
+                    response.Data = us; 
+                    response.Code = "202";
+                    response.Message = "Role Name is null";
+                    return response;
+                }
+                UserModels u = new()
+                {
+                    Id = users.Id,
+                    UserName = users.UserName,
+                    Avatar = users.Avatar,
+                    FirstName = users.FirstName,
+                    LastName = users.LastName,
+                    Role = roleName
+                };
+                var userDTO = MapToDto(users, roleName);
+                var token = await GenerateToken(userDTO);
+                users.Token = token.Data.RefreshToken;
+                users.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;
+                await _userService.UpdateAsync(users);
+
+                response.Data = userDTO;
+                response.Data = u;
+                response.Code = "200";
+                response.Message = "Login Success";
+            }
+            return response;
+        }
+
+
+        
+
         public async Task<BaseResponse<UserDTO>> Login(LoginRequestDTO request)
+
         {
             BaseResponse<UserDTO> response = new();
             dynamic rs;
             //var user = await _userService.FindByNameAsync(request.UserName);
-            rs = await _signInManager.PasswordSignInAsync(request.UserName, request.Password, request.RememberMe, true);
+            rs = await _signInManager.PasswordSignInAsync(request.UserName, request.Password, request.RememberMe, true);// hàm login
 
             if (!rs.Succeeded)
             {
@@ -90,6 +240,7 @@ namespace Application.System.Users
                     }
                 }
                 return response;
+                
 
             }
             else
@@ -110,6 +261,7 @@ namespace Application.System.Users
                     response.Message = "Role Name is null";
                     return response;
                 }
+                
 
                 var roles = await _userService.GetRolesAsync(user);
                 var userDTO = MapToDto(user, roleName);
@@ -238,7 +390,7 @@ namespace Application.System.Users
             var claims = new[]
             {
                 new Claim("UserID",request.Id.ToString()),
-                new Claim(ClaimTypes.Name,request.Phone),
+                new Claim(ClaimTypes.Name,request.Phone!=null?request.Phone:request.UserName),
                 new Claim(ClaimTypes.Role,string.Join(";",request.Role))
             };
 

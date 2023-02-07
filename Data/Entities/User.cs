@@ -43,7 +43,12 @@ namespace Data.Entities
 
         public List<PostCommitment>? PostCommitments { get; set; }
 
+        public Provider? Provider { get; set; }
+
+
+
         public List<Cart> Carts { get; set; }
         public List<Save>? Saves { get; set; }
+
     }
 }
