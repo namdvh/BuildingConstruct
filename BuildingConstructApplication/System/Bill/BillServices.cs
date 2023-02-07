@@ -27,7 +27,6 @@ namespace Application.System.Bill
         {
             Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
             var usID = identifierClaim.Value;
-            var storeID = _context.Users.Where(x => x.Id.ToString().Equals(usID)).FirstOrDefault().MaterialStoreID;
             var contracID = _context.Users.Where(x => x.Id.ToString().Equals(usID)).FirstOrDefault().ContractorId;
             var bill = new Data.Entities.Bill();
             bill.Note = requests.Notes;
@@ -38,7 +37,7 @@ namespace Application.System.Bill
             bill.Type = requests.BillType;
             bill.MonthOfInstallment = requests.MonthOfInstallment;
             bill.ContractorId = contracID;
-            bill.StoreID = storeID;
+            bill.StoreID = requests.StoreID;
             bill.CreateBy = Guid.Parse(usID);
             bill.LastModifiedAt = DateTime.Now;
             await _context.AddAsync(bill);
@@ -59,12 +58,9 @@ namespace Application.System.Bill
                 }
                 if (requests.SmallBill != null && requests.BillType == Data.Enum.BillType.Type2)
                 {
-                    //foreach (var item in requests.SmallBill)
-                    //{
                     for (int i = 0; i < requests.SmallBill.Count; i++)
                     {
                         var smallBill = new Data.Entities.SmallBill();
-                        smallBill.Note = requests.SmallBill[i].Notes;
                         smallBill.Status = requests.SmallBill[i].Status;
                         if (i == 0)
                         {
@@ -110,7 +106,6 @@ namespace Application.System.Bill
                     foreach (var (item,i) in requests.SmallBill.Select((value,i)=>(value,i)))
                     {
                         var smallBill = new Data.Entities.SmallBill();
-                        smallBill.Note = item.Notes;
                         smallBill.Status = item.Status;
                         if (i==0)
                         {

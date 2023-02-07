@@ -12,6 +12,7 @@ namespace ViewModels.BillModels
         public string? Notes { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        public int? StoreID { get; set; }
         public decimal TotalPrice { get; set; }
         public Status Status { get; set; }
         public BillType? BillType { get; set; }
