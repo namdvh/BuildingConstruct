@@ -16,8 +16,8 @@ namespace Application.System.SavePost
         public Task<BaseResponse<List<SavePostDetailDTO>>> GetSavePostByUsID();
         public Task<bool> DeleteSave(DeleteSaveRequest request);
 
-        public Mat DetectFace(Mat image);
+        public BaseResponse<string> DetectFace(Mat image);
 
-        public bool CompareFaces(Mat IDCardFace, Mat LiveFace);
+        //public bool CompareFaces(Mat IDCardFace, Mat LiveFace);
     }
 }

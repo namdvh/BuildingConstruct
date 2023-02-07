@@ -54,33 +54,33 @@ namespace BuildingConstructApi.Controllers
         }
 
         [HttpPost("test")]
-        public async Task<IActionResult> Test(List<IFormFile> image)
+        public async Task<IActionResult> Test(IFormFile image)
         {
             Mat front;
             Mat face;
 
             using (var memoryStream = new MemoryStream())
             {
-                await image[0].CopyToAsync(memoryStream);
+                await image.CopyToAsync(memoryStream);
                 using (var img = Image.FromStream(memoryStream))
                 {
                     front = GetMatFromSDImage(img);
+                    return Ok(_saveService.DetectFace(front));
 
                 }
             }
 
-            using (var memoryStream = new MemoryStream())
-            {
-                await image[1].CopyToAsync(memoryStream);
-                using (var img = Image.FromStream(memoryStream))
-                {
-                    face = GetMatFromSDImage(img);
+            //using (var memoryStream = new MemoryStream())
+            //{
+            //    await image[1].CopyToAsync(memoryStream);
+            //    using (var img = Image.FromStream(memoryStream))
+            //    {
+            //        face = GetMatFromSDImage(img);
 
-                }
-            }
+            //    }
+            //}
 
 
-            return Ok(_saveService.CompareFaces(front,face));
         }
 
 

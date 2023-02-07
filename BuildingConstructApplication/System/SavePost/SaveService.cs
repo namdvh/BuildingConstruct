@@ -289,32 +289,33 @@ namespace Application.System.SavePost
             return true;
         }
 
-        public bool CompareFaces(Mat IDCardFace, Mat LiveFace)
+        //public bool CompareFaces(Mat IDCardFace, Mat LiveFace)
+        //{
+        //    // Convert images to grayscale for processing
+        //    IDCardFace = IDCardFace.ToImage<Gray, byte>().Mat;
+        //    LiveFace = LiveFace.ToImage<Gray, byte>().Mat;
+
+        //    // Detect faces in both images
+        //    var IDCardFaceDetected = DetectFace(IDCardFace);
+        //    var LiveFaceDetected = DetectFace(LiveFace);
+
+        //    // If both faces were detected, compare them
+        //    if (IDCardFaceDetected != null && LiveFaceDetected != null)
+        //    {
+        //        // Calculate Euclidean distance between the two face descriptors
+        //        double distance = CvInvoke.Norm(IDCardFaceDetected, LiveFaceDetected, NormType.L2);
+
+        //        // Return true if the distance is within a threshold, indicating a match
+        //        return distance < 0.6;
+        //    }
+
+        //    // Return false if one or both faces were not detected
+        //    return false;
+        //}
+
+        public BaseResponse<string> DetectFace(Mat image)
         {
-            // Convert images to grayscale for processing
-            IDCardFace = IDCardFace.ToImage<Gray, byte>().Mat;
-            LiveFace = LiveFace.ToImage<Gray, byte>().Mat;
-
-            // Detect faces in both images
-            var IDCardFaceDetected = DetectFace(IDCardFace);
-            var LiveFaceDetected = DetectFace(LiveFace);
-
-            // If both faces were detected, compare them
-            if (IDCardFaceDetected != null && LiveFaceDetected != null)
-            {
-                // Calculate Euclidean distance between the two face descriptors
-                double distance = CvInvoke.Norm(IDCardFaceDetected, LiveFaceDetected, NormType.L2);
-
-                // Return true if the distance is within a threshold, indicating a match
-                return distance < 0.6;
-            }
-
-            // Return false if one or both faces were not detected
-            return false;
-        }
-
-        public Mat DetectFace(Mat image)
-        {
+            BaseResponse<string> response;
             // Load the face detection model
             using (var faceDetector = new CascadeClassifier("D:\\SPRING_2023 (Ky 9)\\Capstone\\BuildingConstruct\\BuildingConstructApplication\\System\\SavePost\\haarcascade_frontalface_default.xml"))
             {
@@ -339,12 +340,23 @@ namespace Application.System.SavePost
                     CvInvoke.Resize(faceImage, faceImage, new Size(300, 300));
 
                     // Return the face descriptor
-                    return faceImage.ToImage<Gray, byte>().Mat;
+                    //return faceImage.ToImage<Gray, byte>().Mat;
+                    response = new()
+                    {
+                        Code = BaseCode.SUCCESS,
+                        Message = "Detected"
+                    };
+                    return response;
                 }
             }
 
             // Return null if no face was detected
-            return null;
+            response = new()
+            {
+                Code = BaseCode.SUCCESS,
+                Message = "Not Detected"
+            };
+            return response;
         }
 
     }
