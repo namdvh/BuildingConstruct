@@ -130,8 +130,8 @@ namespace Application.System.Bill
         {
             BaseResponse<SmallBillDetailDTO> response;
             var check = await _context.Bills
-                .Include(x=>x.MaterialStore)
-                    .ThenInclude(x=>x.User)
+                .Include(x => x.MaterialStore)
+                    .ThenInclude(x => x.User)
                 .Where(x => x.Id == billID).FirstOrDefaultAsync();
 
             if (check.Type == BillType.Type1)
@@ -166,13 +166,25 @@ namespace Application.System.Bill
                 return response;
             }
 
-
-            response = new()
+            if (check.Type == BillType.Type3)
             {
-                Code = BaseCode.SUCCESS,
-                Message = BaseCode.SUCCESS_MESSAGE,
-                Data = MapSmallDetailDTO(rs),
-            };
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = MapSmallDetailDTO(rs, 3),
+                };
+            }
+            else
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = MapSmallDetailDTO(rs, 2),
+                };
+            }
 
             return response;
         }
@@ -223,7 +235,7 @@ namespace Application.System.Bill
             return dto;
         }
 
-        private SmallBillDetailDTO MapSmallDetailDTO(List<Data.Entities.SmallBill> list)
+        private SmallBillDetailDTO MapSmallDetailDTO(List<Data.Entities.SmallBill> list, int type)
         {
             List<SmallBillDTO> smallDetails = new();
 
@@ -252,22 +264,47 @@ namespace Application.System.Bill
                 StoreName = list.First().Bill.MaterialStore.User.FirstName + " " + list.First().Bill.MaterialStore.User.LastName,
             };
 
-            foreach (var item in list)
+            if (type == 2)
             {
 
-                SmallBillDTO small = new()
+                foreach (var item in list)
                 {
-                    EndDate = item.EndDate,
-                    Id = item.Id,
-                    Note = item.Note,
-                    PaymentDate = item.PaymentDate,
-                    StartDate = item.StartDate,
-                    Status = item.Status,
-                    TotalPrice = item.TotalPrice,
-                    ProductBillDetail = MapProductDTO(item.Id,false)
-                };
-                smallDetails.Add(small);
+
+                    SmallBillDTO small = new()
+                    {
+                        EndDate = item.EndDate,
+                        Id = item.Id,
+                        Note = item.Note,
+                        PaymentDate = item.PaymentDate,
+                        StartDate = item.StartDate,
+                        Status = item.Status,
+                        TotalPrice = item.TotalPrice,
+                        ProductBillDetail = MapProductDTO(item.Id, false)
+                    };
+                    smallDetails.Add(small);
+                }
             }
+
+            if (type == 3)
+            {
+                foreach (var item in list)
+                {
+
+                    SmallBillDTO small = new()
+                    {
+                        EndDate = item.EndDate,
+                        Id = item.Id,
+                        Note = item.Note,
+                        PaymentDate = item.PaymentDate,
+                        StartDate = item.StartDate,
+                        Status = item.Status,
+                        TotalPrice = item.TotalPrice,
+                        ProductBillDetail = MapProductDTO(item.Id, true)
+                    };
+                    smallDetails.Add(small);
+                }
+            }
+
 
 
 
@@ -309,11 +346,10 @@ namespace Application.System.Bill
                 StoreName = bill.MaterialStore.User.FirstName + " " + bill.MaterialStore.User.LastName,
             };
 
-
             SmallBillDTO small = new()
             {
 
-                ProductBillDetail = MapProductDTO(bill.Id,true)
+                ProductBillDetail = MapProductDTO(bill.Id, true)
             };
             smallDetails.Add(small);
 
