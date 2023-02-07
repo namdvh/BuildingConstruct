@@ -22,9 +22,9 @@ namespace BuildingConstructApi.Controllers
             _billServices = billServices;
         }
         [HttpPost("createBill")]
-        public async Task<IActionResult> CreateBill([FromBody] BillDTO request)
+        public async Task<IActionResult> CreateBill([FromBody] List<BillDTO> request)
         {
-            BaseResponse<BillDTO> response = new();
+            BaseResponse<List<BillDTO>> response = new();
             var rs = await _billServices.CreateBill(request);
             if (rs)
             {
