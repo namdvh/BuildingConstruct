@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Data.Entities
 {
-    public class Bill
+    public class Bill:BaseEntity
     {
         public int Id { get; set; }
 
@@ -26,7 +26,7 @@ namespace Data.Entities
 
         public decimal TotalPrice { get; set; }
 
-        public int ContractorId { get; set; }
+        public int? ContractorId { get; set; }
 
         public Contractor? Contractor { get; set; }
 

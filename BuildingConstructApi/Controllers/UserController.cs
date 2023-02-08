@@ -33,6 +33,102 @@ namespace BuildingConstructApi.Controllers
             _userService = userService;
         }
 
+        [HttpPost("loginOthers")]
+        [AllowAnonymous]
+        public async Task<IActionResult> LoginWithGoogle([FromBody] LoginGoogleRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var rs = await _userService.LoginGoogle(request);
+            //if (rs.Data == null)
+            //{
+            //    return Ok(new
+            //    {
+            //        code = BaseCode.ERROR,
+            //        Message = "Username or Password is Incorrect"
+            //    });
+            //}
+            //else
+            //{
+                var token = await _userService.GenerateToken(rs.Data);
+                if (token != null)
+                {
+                    try
+                    {
+                        var userPrincipalac = this.ValidateToken(token.Data.AccessToken);
+                        var authProperties = new AuthenticationProperties
+                        {
+                            ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(60),
+                            IsPersistent = true,
+                            AllowRefresh = true,
+                        };
+                        await HttpContext.SignInAsync(userPrincipalac, authProperties);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    //token.Message = "Login Success";
+                    //token.Code = BaseCode.SUCCESS;
+                    //rs.Code = token.Code;
+                    //rs.Message = token.Message;
+                    
+                    rs.Data.AccessToken = token.Data.AccessToken;
+                    rs.Data.RefreshToken = token.Data.RefreshToken;
+                    rs.Data.RefreshTokenExpiryTime = token.Data.RefreshTokenExpiryTime;
+                }
+                return Ok(rs);
+            //}
+        }
+
+        [HttpPost("SetRole")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateRole([FromBody] UpdateRoleRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var rs = await _userService.UpdateRole(request);
+            if (rs.Data == null)
+            {
+                return Ok(new
+                {
+                    code = BaseCode.ERROR,
+                    Message = "Username or Password is Incorrect"
+                });
+            }
+            else
+            {
+                var token = await _userService.GenerateToken(rs.Data);
+                if (token != null)
+                {
+                    try
+                    {
+                        var userPrincipalac = this.ValidateToken(token.Data.AccessToken);
+                        var authProperties = new AuthenticationProperties
+                        {
+                            ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(60),
+                            IsPersistent = true,
+                            AllowRefresh = true,
+                        };
+                        await HttpContext.SignInAsync(userPrincipalac, authProperties);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    rs.Data.AccessToken = token.Data.AccessToken;
+                    rs.Data.RefreshToken = token.Data.RefreshToken;
+                    rs.Message = "Update Success";
+                    rs.Code = BaseCode.SUCCESS;
+
+                }
+                return Ok(rs);
+
+            }
+        }
+
         [HttpPost("login")]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginRequestDTO request)
@@ -88,6 +184,7 @@ namespace BuildingConstructApi.Controllers
 
             }
         }
+
         [HttpPost("refresh")]
         [AllowAnonymous]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenResponse refreshToken)
@@ -96,6 +193,7 @@ namespace BuildingConstructApi.Controllers
 
             return Ok(rs);
         }
+
         private UserModels MapToDto(User user, string roleName)
         {
             var userDto = new UserModels()
@@ -106,6 +204,7 @@ namespace BuildingConstructApi.Controllers
             };
             return userDto;
         }
+
         [HttpPost("generate")]
         public async Task<IActionResult> GenerateToken([FromBody] UserModels request)
         {
@@ -134,6 +233,7 @@ namespace BuildingConstructApi.Controllers
 
             return principal;
         }
+
         [HttpPost("register")]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDTO request)
@@ -145,6 +245,7 @@ namespace BuildingConstructApi.Controllers
             RegisterResponseDTO rs = await _userService.Register(request);
             return Ok(rs);
         }
+
         [HttpGet("getUserID")]
         public async Task<IActionResult> Validate()
         {

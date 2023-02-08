@@ -11,8 +11,6 @@ namespace Data.Entities
     {
         public int Id { get; set; }
 
-        public string? Note { get; set; }
-
         public DateTime? PaymentDate { get; set; }
 
         public Status Status { get; set; }

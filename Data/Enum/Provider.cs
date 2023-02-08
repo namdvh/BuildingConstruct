@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace Data.Enum
 {
-    public enum MonthOfInstallment
+    public enum Provider
     {
-        _3=3,
-        _6=6,
-        _9=9,
-        _12=12
+        GOOGLE = 1,
     }
 }
