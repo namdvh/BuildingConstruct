@@ -22,7 +22,6 @@ namespace ViewModels.BillModels
         public DateTime? EndDate { get; set; }
         public decimal TotalPrice { get; set; }
         public int Id { get; set; }
-        public string? Note { get; set; }
         public DateTime? PaymentDate { get; set; }
 
         public List<ProductBillDetail>? ProductBillDetail { get; set; }

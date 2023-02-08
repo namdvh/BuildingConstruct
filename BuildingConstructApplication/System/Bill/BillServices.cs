@@ -230,7 +230,7 @@ namespace Application.System.Bill
             return rs;
         }
 
-        public async Task<BaseResponse<List<BillDetailDTO>>> GetDetail(int billID)
+        public async Task<BaseResponse<BillDetailDTO>> GetDetail(int billID)
         {
             BaseResponse<BillDetailDTO> response;
 
@@ -351,7 +351,7 @@ namespace Application.System.Bill
 
             BigBillDetail bill = new()
             {
-                ContractorId = list.First().Bills.ContractorId,
+                ContractorId = list.First().Bills.ContractorId.Value,
                 EndDate = list.First().Bills.EndDate,
                 Id = list.First().Bills.Id,
                 MonthOfInstallment = list.First().Bills.MonthOfInstallment,
@@ -381,7 +381,7 @@ namespace Application.System.Bill
 
             BigBillDetail bill = new()
             {
-                ContractorId = list.First().Bill.ContractorId,
+                ContractorId = list.First().Bill.ContractorId.Value,
                 EndDate = list.First().Bill.EndDate,
                 Id = list.First().Bill.Id,
                 MonthOfInstallment = list.First().Bill.MonthOfInstallment,
@@ -414,7 +414,6 @@ namespace Application.System.Bill
                     {
                         EndDate = item.EndDate,
                         Id = item.Id,
-                        Note = item.Note,
                         PaymentDate = item.PaymentDate,
                         StartDate = item.StartDate,
                         Status = item.Status,
@@ -434,7 +433,6 @@ namespace Application.System.Bill
                     {
                         EndDate = item.EndDate,
                         Id = item.Id,
-                        Note = item.Note,
                         PaymentDate = item.PaymentDate,
                         StartDate = item.StartDate,
                         Status = item.Status,
@@ -463,7 +461,7 @@ namespace Application.System.Bill
 
             BigBillDetail BillDTO = new()
             {
-                ContractorId = bill.ContractorId,
+                ContractorId = bill.ContractorId.Value,
                 EndDate = bill.EndDate,
                 Id = bill.Id,
                 MonthOfInstallment = bill.MonthOfInstallment,
