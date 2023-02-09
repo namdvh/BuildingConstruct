@@ -10,6 +10,7 @@ using System.Linq.Dynamic.Core;
 using ViewModels.Carts;
 using ViewModels.Pagination;
 using ViewModels.Response;
+using System.Text;
 
 namespace Application.System.Bill
 {
@@ -26,11 +27,11 @@ namespace Application.System.Bill
         public async Task<bool> CreateBill(List<BillDTO> requests)
         {
             bool flag = false;
+            Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
+            var usID = identifierClaim.Value;
+            var contracID = _context.Users.Where(x => x.Id.ToString().Equals(usID)).FirstOrDefault().ContractorId;
             foreach (var r in requests)
             {
-                Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
-                var usID = identifierClaim.Value;
-                var contracID = _context.Users.Where(x => x.Id.ToString().Equals(usID)).FirstOrDefault().ContractorId;
                 var bill = new Data.Entities.Bill();
                 bill.Note = r.Notes;
                 bill.Status = r.Status;
@@ -131,8 +132,31 @@ namespace Application.System.Bill
                 }
                 flag = true;
             }
+
+            IQueryable<Cart> query = _context.Carts.Where(x => x.UserID.ToString().Equals(usID.ToString()));
+            StringBuilder existed = new();
+            var count = requests.Count;
+
+            List<Cart> ls = new();
             if (flag == true)
             {
+                foreach (var item in requests)
+                {
+                    foreach (var pro in item.ProductBillDetail)
+                    {
+                        var product = _context.Carts.Where(x => x.ProductID == pro.ProductId && x.UserID.ToString().Equals(usID.ToString())).FirstOrDefault();
+                        ls.Add(product);
+                    }
+                }
+                try
+                {
+                    _context.RemoveRange(ls);
+                }
+                catch (Exception)
+                {
+
+                    return false;
+                }
                 return true;
             }
             return false;
@@ -227,8 +251,8 @@ namespace Application.System.Bill
                 bill.BillId = item.Id;
                 bill.TotalPrice = item.TotalPrice;
                 bill.StoreID = item.StoreID;
-                bill.StoreName = store.FirstName+" "+ store.LastName;
-                bill.Notes = item.Note; 
+                bill.StoreName = store.FirstName + " " + store.LastName;
+                bill.Notes = item.Note;
                 bill.StartDate = (DateTime)item.StartDate;
                 bill.EndDate = item.EndDate;
                 bill.Status = item.Status;
