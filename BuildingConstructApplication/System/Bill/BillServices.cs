@@ -219,8 +219,16 @@ namespace Application.System.Bill
             List<BillDTO> rs = new();
             foreach (var item in data)
             {
+                var store = await _context.Users.FirstOrDefaultAsync(x => x.MaterialStoreID == item.StoreID);
+
+
+
                 BillDTO bill = new();
-                bill.Notes = item.Note;
+                bill.BillId = item.Id;
+                bill.TotalPrice = item.TotalPrice;
+                bill.StoreID = item.StoreID;
+                bill.StoreName = store.FirstName+" "+ store.LastName;
+                bill.Notes = item.Note; 
                 bill.StartDate = (DateTime)item.StartDate;
                 bill.EndDate = item.EndDate;
                 bill.Status = item.Status;
