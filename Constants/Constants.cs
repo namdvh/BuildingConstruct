@@ -4,7 +4,8 @@
     {
         public class SystemsConstant
         {
-            public const string MainConnectionString = "ThinhDB";
+            public const string MainConnectionString = "DefaultDB";
+
         }
     }
 }
