@@ -42,6 +42,7 @@ namespace Data.Entities
         public MaterialStore MaterialStore { get; set; }
 
         public List<PostCommitment>? PostCommitments { get; set; }
+        public List<Notification>? Notifications { get; set; }
 
         public Provider? Provider { get; set; }
 
