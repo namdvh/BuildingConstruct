@@ -8,8 +8,8 @@ namespace Data.Enum
 {
     public enum BillType
     {
-        Type1, 
-        Type2, 
-        Type3,
+        Type1,
+        Type2,
+        Type3
     }
 }

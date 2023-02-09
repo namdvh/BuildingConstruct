@@ -14,5 +14,6 @@ namespace Data.Enum
         SUCCESS,
         DECLINED,
         NOT_RESPONSE,
+        PENDING
     }
 }

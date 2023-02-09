@@ -14,7 +14,9 @@ namespace Application.System.Bill
         Task<bool> CreateBill(List<BillDTO> requests);
         Task<BasePagination<List<BillDTO>>> GetAllBill(PaginationFilter filter);
 
-        Task<BaseResponse<List<BillDetailDTO>>> GetDetail(int billID);
+        Task<BaseResponse<BillDetailDTO>> GetDetail(int billID);
+
+        Task<BaseResponse<SmallBillDetailDTO>> GetDetailBySmallBill(int billID);
 
     }
 }
