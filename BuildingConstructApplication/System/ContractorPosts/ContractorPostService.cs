@@ -553,6 +553,7 @@ namespace Application.System.ContractorPosts
                 FirstName = applied.Builder.User.FirstName,
                 LastName = applied.Builder.User.LastName,
                 UserID = applied.Builder.User.Id,
+                WishSalary=applied.WishSalary,
                 AppliedDate = applied.AppliedDate
             };
             return rs;
@@ -569,6 +570,7 @@ namespace Application.System.ContractorPosts
                 FirstName = applied.Builder.User.FirstName,
                 LastName = applied.Builder.User.LastName,
                 UserID = applied.Builder.User.Id,
+                WishSalary=applied.WishSalary,
                 Groups = group,
                 AppliedDate = applied.AppliedDate
             };
@@ -814,6 +816,7 @@ namespace Application.System.ContractorPosts
                 {
                     BuilderID = user.BuilderId.Value,
                     PostID = request.PostId,
+                    WishSalary=request.WishSalary,
                     GroupID = group.Id,
                     Status = Status.NOT_RESPONSE,
                     AppliedDate = DateTime.Now
@@ -829,6 +832,7 @@ namespace Application.System.ContractorPosts
                 {
                     BuilderID = user.BuilderId.Value,
                     PostID = request.PostId,
+                    WishSalary=request.WishSalary,
                     Status = Status.NOT_RESPONSE,
                     AppliedDate = DateTime.Now
 
