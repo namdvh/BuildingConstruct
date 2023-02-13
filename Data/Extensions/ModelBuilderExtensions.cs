@@ -679,7 +679,7 @@ namespace Data.Extensions
 
             modelBuilder.Entity<SmallBill>().HasData(new SmallBill
             {
-               BillID=1,
+               BillID=2,
                EndDate=DateTime.Now,
                Id=1,
                PaymentDate = null,
@@ -693,7 +693,7 @@ namespace Data.Extensions
 
             modelBuilder.Entity<SmallBill>().HasData(new SmallBill
             {
-                BillID = 1,
+                BillID = 2,
                 EndDate = DateTime.Now,
                 Id = 2,
                 PaymentDate = null,
@@ -708,7 +708,7 @@ namespace Data.Extensions
             {
                 BillID = 2,
                 SmallBillID=1,
-                Id = 1,
+                Id = 5,
                 Price = 20000,
                 ProductID = 1,
                 Quantity = 5,
@@ -717,7 +717,7 @@ namespace Data.Extensions
             {
                 BillID = 2,
                 SmallBillID = 1,
-                Id = 2,
+                Id = 6,
                 Price = 150000,
                 ProductID = 2,
                 Quantity = 8,
@@ -726,7 +726,7 @@ namespace Data.Extensions
             {
                 BillID = 2,
                 SmallBillID = 2,
-                Id = 3,
+                Id = 7,
                 Price = 45000,
                 ProductID = 3,
                 Quantity = 7,

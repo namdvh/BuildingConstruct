@@ -15,5 +15,7 @@ namespace Data.Entities
         public Products Products { get; set; }
 
         public Categories Categories { get; set; }
+
+        public string? Name { get; set; }
     }
 }
