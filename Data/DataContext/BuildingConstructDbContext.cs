@@ -57,6 +57,7 @@ namespace Data.DataContext
             modelBuilder.ApplyConfiguration(new SmallBillConfiguration());
             modelBuilder.ApplyConfiguration(new BillDetailConfiguration());
             modelBuilder.ApplyConfiguration(new NotificationConfigurations());
+            modelBuilder.ApplyConfiguration(new ProductTypeConfigurations());
 
             modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("UserLogins").HasKey(x => x.UserId);
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("UserRoles").HasKey(x => new { x.UserId, x.RoleId });
@@ -95,5 +96,6 @@ namespace Data.DataContext
         public DbSet<BillDetail> BillDetails { get; set; }    
         public DbSet<SmallBill> SmallBills { get; set; }    
         public DbSet<Notification> Notifcations { get; set; }    
+        public DbSet<ProductType> ProductTypes { get; set; }    
     }
 }

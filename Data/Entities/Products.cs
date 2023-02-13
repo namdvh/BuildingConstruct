@@ -29,6 +29,8 @@
         public List<Cart> Carts { get; set; }
         public List<BillDetail>? BillDetails { get; set; }
 
+        public List<ProductType>? ProductTypes { get; set; }    
+
 
     }
 }
