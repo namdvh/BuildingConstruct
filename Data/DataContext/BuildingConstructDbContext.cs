@@ -33,8 +33,6 @@ namespace Data.DataContext
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.ApplyConfiguration(new ContractorConfiguration());
             modelBuilder.ApplyConfiguration(new SkillConfiguration());
-            modelBuilder.ApplyConfiguration(new ProductSystemCategoriesConfiguration());
-            modelBuilder.ApplyConfiguration(new ProductSystemConfiguration());
             modelBuilder.ApplyConfiguration(new VerifyConfiguration());
             modelBuilder.ApplyConfiguration(new BuilderSkillConfiguration());
             modelBuilder.ApplyConfiguration(new ContractorPostSkillConfiguration());
@@ -43,7 +41,6 @@ namespace Data.DataContext
             modelBuilder.ApplyConfiguration(new GroupConfiguration());
             modelBuilder.ApplyConfiguration(new GroupMemberConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
-            modelBuilder.ApplyConfiguration(new ContractorPostProductsConfiguration());
             modelBuilder.ApplyConfiguration(new ProductCategoriesConfiguration());
             modelBuilder.ApplyConfiguration(new AppliedPostConfiguration());
             modelBuilder.ApplyConfiguration(new PostCommitmentsConfigurations());
@@ -52,7 +49,6 @@ namespace Data.DataContext
             modelBuilder.ApplyConfiguration(new BuilderPostSkillConfigurations());
             modelBuilder.ApplyConfiguration(new CartConfiguration());
             modelBuilder.ApplyConfiguration(new SaveConfiguration());
-            modelBuilder.ApplyConfiguration(new SystemCategoriesConfiguration());
             modelBuilder.ApplyConfiguration(new BillConfigurations());
             modelBuilder.ApplyConfiguration(new SmallBillConfiguration());
             modelBuilder.ApplyConfiguration(new BillDetailConfiguration());
@@ -79,11 +75,8 @@ namespace Data.DataContext
         public DbSet<Group> Groups { get; set; }
         public DbSet<Products> Products { get; set; }
         public DbSet<GroupMember> GroupMembers { get; set; }    
-        public DbSet<ContractorPostProduct> ContractorPostProducts { get; set; }    
         public DbSet<Categories> Categories { get; set; }    
         public DbSet<ProductCategories> ProductCategories { get; set; }    
-        public DbSet<ProductSystem> ProductSystems { get; set; }    
-        public DbSet<ProductSystemCategories> ProductSystemCategories { get; set; }    
         public DbSet<AppliedPost> AppliedPosts { get; set; }    
         public DbSet<PostCommitment> PostCommitments { get; set; }    
         public DbSet<ContractorPostType> ContractorPostTypes { get; set; }    
@@ -91,7 +84,6 @@ namespace Data.DataContext
         public DbSet<BuilderPostSkill> BuilderPostSkills { get; set; }    
         public DbSet<Cart> Carts { get; set; }    
         public DbSet<Save> Saves { get; set; }    
-        public DbSet<SystemCategories> SystemCategories { get; set; }    
         public DbSet<Bill> Bills { get; set; }    
         public DbSet<BillDetail> BillDetails { get; set; }    
         public DbSet<SmallBill> SmallBills { get; set; }    

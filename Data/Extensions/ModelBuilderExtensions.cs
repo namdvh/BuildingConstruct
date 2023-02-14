@@ -567,56 +567,6 @@ namespace Data.Extensions
                 LastModifiedAt = DateTime.Now
             });
 
-            modelBuilder.Entity<ProductSystem>().HasData(new ProductSystem
-            {
-                Id=1,
-                Image=null,
-                Brand="Sony",
-                Description="Description 1",
-                Name="Gạch lát",
-                FromSystem=true,
-            });
-
-            modelBuilder.Entity<ProductSystem>().HasData(new ProductSystem
-            {
-                Id = 2,
-                Image = null,
-                Brand = "Sony",
-                Description = "Description 2",
-                Name = "Gạch ống",
-                FromSystem = true,
-            });
-
-            modelBuilder.Entity<ProductSystem>().HasData(new ProductSystem
-            {
-                Id = 3,
-                Image = null,
-                Brand = "Sony",
-                Description = "Description 3",
-                Name = "Xi măng",
-                FromSystem = true,
-            });
-
-            modelBuilder.Entity<ProductSystem>().HasData(new ProductSystem
-            {
-                Id = 5,
-                Image = null,
-                Brand = "Sony",
-                Description = "Description 4",
-                Name = "Thang ép ",
-                FromSystem = true,
-            });
-
-            modelBuilder.Entity<ProductSystem>().HasData(new ProductSystem
-            {
-                Id = 4,
-                Image = null,
-                Brand = "Sony",
-                Description = "Description 5",
-                Name = "Cột chống ",
-                FromSystem = true,
-            });
-
             //bill 1
             modelBuilder.Entity<Bill>().HasData(new Bill
             {

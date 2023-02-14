@@ -57,23 +57,6 @@ namespace Application.System.ContractorPosts
             await _context.SaveChangesAsync();
             //first
             var id = contractorPost.Id;
-            var cPostProduct = new ContractorPostProduct();
-            foreach (var item in contractorPostDTO.ProductPost)
-            {
-
-                cPostProduct.ProductSystemID = item.ProductId;
-                cPostProduct.Quantity = item.Quantity;
-                cPostProduct.ContractorPostID = contractorPost.Id;
-                _context.ContractorPostProducts.Add(cPostProduct);
-                var rs = _context.SaveChanges();
-                //second
-                if (rs < 0)
-                {
-                    _context.Remove(contractorPost);
-                    return false;
-                }
-
-            }
             var type = contractorPostDTO.type;
             foreach (var item in type)
             {
@@ -204,7 +187,6 @@ namespace Application.System.ContractorPosts
             {
                 post.isApplied = false;
             }
-            var product = await _context.ContractorPostProducts.Include(x => x.ProductSystem).Where(x => x.ContractorPostID == post.Id).Select(x => x.ProductSystemID).ToListAsync();
             ContractorPostDetailDTO postDTO = new()
             {
                 Title = post.Title,
@@ -213,7 +195,6 @@ namespace Application.System.ContractorPosts
                 Description = post.Description,
                 Benefit=post.Benefit,
                 Required=post.Required,
-                ProductSystem = await GetProductFromPost(post.Id),
                 StarDate = post.StarDate,
                 EndDate = post.EndDate,
                 LastModifiedAt = post.LastModifiedAt,
@@ -290,47 +271,7 @@ namespace Application.System.ContractorPosts
             final.RoleName = await _context.Roles.Where(x => x.Id.Equals(roleid)).Select(x => x.Name).SingleOrDefaultAsync();
             return final;
         }
-        private async Task<List<ContractorPostProductDTO>> GetProductFromPost(int postID)
-        {
-            var query = from cP in _context.ContractorPostProducts
-                        join pSys in _context.ProductSystems on cP.ProductSystemID equals pSys.Id into rs1
-                        from r in rs1.DefaultIfEmpty()
-                        join d in _context.ContractorPostProducts on r.Id equals d.ProductSystemID into rs4
-                        from r4 in rs4.DefaultIfEmpty()
-                        join cat in _context.ProductSystemCategories on r.Id equals cat.ProductSystemID into rs2
-                        from r1 in rs2.DefaultIfEmpty()
-                        join c in _context.Categories on r1.SystemCategoriesID equals c.ID into rs3
-                        from r3 in rs3.DefaultIfEmpty()
-                        where r4.ContractorPostID == postID && cP.ContractorPostID == postID
-                        select new
-                        {
-                            ProductSystemCategories = r1,
-                            ProductSystem = r,
-                            Categories = r3,
-                            ContractorPostProduct=r4
-                        };
-            var result = await query.AsNoTracking().ToListAsync();
-            var final = new List<ContractorPostProductDTO>();
-            if (result == null)
-            {
-                return final;
-            }
-            foreach (var x in result)
-            {
-                if (x.ContractorPostProduct.ContractorPostID == postID)
-                {
-                    ContractorPostProductDTO dto = new();
-                    dto.Id = x.ProductSystem.Id;
-                    dto.Name = x.ProductSystem.Name;
-                    dto.Quantity = x.ContractorPostProduct.Quantity;
-                    dto.Brand = x.ProductSystem.Brand;
-                    dto.Description = x.ProductSystem.Description;
-                    dto.Categories = x.Categories;
-                    final.Add(dto);
-                }
-            }
-            return final;
-        }
+  
         public async Task<BasePagination<List<ContractorPostDTO>>> GetPost(PaginationFilter filter,Guid id)
         {
             BasePagination<List<ContractorPostDTO>> response;

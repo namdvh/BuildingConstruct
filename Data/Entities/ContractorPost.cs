@@ -14,7 +14,6 @@ namespace Data.Entities
         public string? Required { get; set; }
 
         public List<ContractorPostSkill> PostSkills { get; set; }
-        public List<ContractorPostProduct>? ContractorPostProducts { get; set; }
         public List<ContractorPostType>? ContractorPostTypes { get; set; }
 
         public List<PostCommitment>? PostCommitments { get; set; }
