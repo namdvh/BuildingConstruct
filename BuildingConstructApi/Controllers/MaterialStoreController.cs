@@ -89,7 +89,7 @@ namespace BuildingConstructApi.Controllers
             return Ok(response);
         }
         [HttpPut("updateProduct")]
-        public async Task<IActionResult> UpdateProduct([FromBody] ProductDTO request, int productId)
+        public async Task<IActionResult> UpdateProduct([FromBody] UpdateProductDTO request, int productId)
         {
             var rs = await materialStoreService.UpdateProduct(request,productId);
             return Ok(rs);

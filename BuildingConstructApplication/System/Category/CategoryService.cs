@@ -27,7 +27,6 @@ namespace Application.System.Category
         {
             var category = new Data.Entities.Categories();
             category.Name= request.Name;
-            category.Type = request.Type;
             await _context.Categories.AddAsync(category);
             var rs =await _context.SaveChangesAsync();
             if (rs>0)
@@ -108,7 +107,6 @@ namespace Application.System.Category
                 {
                     Id = item.ID,
                     Name = item.Name,
-                    Type = item.Type
                 };
                 listcate.Add(cateDTO);
             }
@@ -126,7 +124,6 @@ namespace Application.System.Category
                 response.Data = new();
                 response.Data.Id = rs.ID;
                 response.Data.Name = rs.Name;
-                response.Data.Type = rs.Type;
             }
             else
             {

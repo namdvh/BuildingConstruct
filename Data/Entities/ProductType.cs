@@ -11,6 +11,7 @@ namespace Data.Entities
     {
         
         public int Id { get; set; }
+        public string Name { get; set; }
 
         public Products Products { get; set; }
 
@@ -18,8 +19,5 @@ namespace Data.Entities
 
         public int Quantity { get; set; }
 
-        public ProductTypeEnum Type { get; set; }
-
-        public string? TypeName { get; set; }
     }
 }
