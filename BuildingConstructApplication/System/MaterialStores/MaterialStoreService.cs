@@ -394,6 +394,7 @@ namespace Application.System.MaterialStores
             productDetail.UnitPrice = rs.UnitPrice;
             productDetail.Brand = rs.Brand;
             productDetail.SoldQuantities = rs.SoldQuantities;
+            productDetail.ProductType = await GetProductType(rs.ProductTypes);
             productDetail.Store = await GetStore((int)rs.MaterialStoreID);
             productDetail.ProductCategories = await GetCategory(rs.ProductCategories);
             productDetail.CreatedBy=rs.CreatedBy;
@@ -424,6 +425,20 @@ namespace Application.System.MaterialStores
                 var final = new CategoryDTO();
                 final.Id = results.ID;
                 final.Name = results.Name;
+                list.Add(final);
+            }
+            return list;
+        }
+        public async Task<List<ProductTypeDTO>> GetProductType(List<ProductType> productType)
+        {
+            List<ProductTypeDTO> list = new();
+            foreach (var c in productType)
+            {
+                var results = await _context.ProductTypes.Where(x => x.Id == c.Id).SingleOrDefaultAsync();
+                var final = new ProductTypeDTO();
+                final.Id = results.Id;
+                final.TypeName = results.Name;
+                final.Quantity = results.Quantity;
                 list.Add(final);
             }
             return list;
