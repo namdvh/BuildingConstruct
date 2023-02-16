@@ -1,4 +1,5 @@
 ﻿using Data.Entities;
+using Data.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,10 @@ namespace ViewModels.Carts
 
         public string? MaterialStoreName { get; set; }
 
-        public DateTime LastModifiedAt { get; set; } = DateTime.Now;
+        public DateTime LastModifiedAt { get; set; } 
+
+        public ProductTypeEnum? Type { get; set; }
+
+        public string? TypeName { get; set; }
     }
 }

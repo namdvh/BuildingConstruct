@@ -21,5 +21,7 @@ namespace Data.Entities
         public ProductTypeEnum Type { get; set; }
 
         public string? TypeName { get; set; }
+
+        public List<Cart>? Carts { get; set; }
     }
 }
