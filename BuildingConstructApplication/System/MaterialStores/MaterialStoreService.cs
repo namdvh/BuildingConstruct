@@ -461,21 +461,53 @@ namespace Application.System.MaterialStores
                 response.Data = null;
                 return response;
             }
-            products.Name = request.Name;
-            products.Description = request.Description;
-            products.UnitPrice = request.UnitPrice;
-            products.UnitInStock = request.UnitInStock;
-            products.Brand = request.Brand;
-            products.Image = request.Image;
+            if (!string.IsNullOrEmpty(request.Name.ToString()))
+            {
+                products.Name = request.Name;
+            }
+            if (!string.IsNullOrEmpty(request.Unit.ToString()))
+            {
+                products.Unit = request.Unit;
+            }
+            if (!string.IsNullOrEmpty(request.UnitPrice.ToString()))
+            {
+                products.UnitPrice = request.UnitPrice;
+
+            }
+            if (!string.IsNullOrEmpty(request.UnitInStock.ToString()))
+            {
+                products.UnitInStock = request.UnitInStock;
+
+            }
+            if (!string.IsNullOrEmpty(request.Description.ToString()))
+            {
+                products.Description = request.Description;
+
+            }
+            if (!string.IsNullOrEmpty(request.Brand.ToString()))
+            {
+                products.Brand = request.Brand;
+
+            }
+            if (!string.IsNullOrEmpty(request.Image.ToString()))
+            {
+                products.Image = request.Image;
+
+            }
+            _context.Entry<Products>(products).State = EntityState.Modified;
+
             var listcate = new List<CategoryDTO>();
             if (request.ProductTypes != null)
             {
                 foreach(var i in request.ProductTypes)
                 {
-                    var type = _context.ProductTypes.Find(i.Id);
+                    var type = _context.ProductTypes.AsNoTracking().FirstOrDefault(x=>x.Id==i.Id);
                     if (type != null)
                     {
-                        _mapper.Map(request.ProductTypes, type);
+                        type.ProductID = productId;
+                        type.Name = i.Name;
+                        type.Quantity = i.Quantity;
+                        _context.Entry<ProductType>(type).State = EntityState.Modified;
                     }
                     else
                     {
@@ -483,8 +515,10 @@ namespace Application.System.MaterialStores
                         productType.ProductID = products.Id;
                         productType.Name = i.Name;
                         productType.Quantity = i.Quantity;
+                        _context.Add(productType);
                     }
                 }
+                await _context.SaveChangesAsync();
             }
             if (request.Categories != null)
             {
@@ -526,14 +560,6 @@ namespace Application.System.MaterialStores
             {
                 response.Message = BaseCode.SUCCESS_MESSAGE;
                 response.Code = BaseCode.SUCCESS;
-                response.Data = new();
-                response.Data.Name = request.Name;
-                response.Data.Description = request.Description;
-                response.Data.Brand = request.Brand;
-                response.Data.UnitInStock = request.UnitInStock;
-                response.Data.UnitPrice = request.UnitPrice;
-                response.Data.Image = request.Image;
-                response.Data.ProductCategories = listcate;
             }
             return response;
         }

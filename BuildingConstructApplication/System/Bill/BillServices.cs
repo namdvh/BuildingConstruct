@@ -35,10 +35,8 @@ namespace Application.System.Bill
                 bill.Note = r.Notes;
                 bill.Status = r.Status;
                 bill.StartDate = DateTime.Now;
-                bill.EndDate = DateTime.Now.AddMonths((int)r.MonthOfInstallment);
+                bill.EndDate = r.EndDate;
                 bill.TotalPrice = r.TotalPrice;
-                bill.Type = r.BillType;
-                bill.MonthOfInstallment = r.MonthOfInstallment;
                 bill.ContractorId = contracID;
                 bill.StoreID = r.StoreID;
                 bill.CreateBy = Guid.Parse(usID);
@@ -53,80 +51,12 @@ namespace Application.System.Bill
                         var billDetail = new BillDetail();
                         billDetail.BillID = bill.Id;
                         billDetail.ProductID = item.ProductId;
+                        billDetail.ProductTypeId = r.ProductTypeId;
                         billDetail.Quantity = item.Quantity;
                         billDetail.Price = item.Price;
 
                         _context.BillDetails.Add(billDetail);
                         _context.SaveChanges();
-                    }
-                    if (r.SmallBill != null && r.BillType == Data.Enum.BillType.Type2)
-                    {
-                        for (int i = 0; i < r.SmallBill.Count; i++)
-                        {
-                            var smallBill = new Data.Entities.SmallBill();
-                            smallBill.Status = r.SmallBill[i].Status;
-                            if (i == 0)
-                            {
-                                smallBill.StartDate = DateTime.Now;
-                                smallBill.EndDate = DateTime.Now.AddMonths(1);
-                                r.SmallBill[i].EndDate = DateTime.Now.AddMonths(1);
-                            }
-                            else
-                            {
-                                smallBill.StartDate = r.SmallBill[i - 1].EndDate;
-                                smallBill.EndDate = DateTime.Parse(r.SmallBill[i - 1].EndDate.ToString()).AddMonths(1);
-                                r.SmallBill[i].EndDate = DateTime.Parse(r.SmallBill[i - 1].EndDate.ToString()).AddMonths(1);
-
-                            }
-                            smallBill.TotalPrice = r.SmallBill[i].TotalPrice;
-                            smallBill.BillID = bill.Id;
-                            _context.SmallBills.Add(smallBill);
-                            var result = _context.SaveChanges();
-                            if (result > 0)
-                            {
-                                if (r.SmallBill[i].SmallProductDetail != null)
-                                {
-                                    foreach (var item in r.SmallBill[i].SmallProductDetail)
-                                    {
-                                        var smallBillDetail = new BillDetail();
-                                        smallBillDetail.SmallBillID = smallBill.Id;
-                                        smallBillDetail.ProductID = item.ProductId;
-
-
-                                        smallBillDetail.Quantity = item.Quantity;
-                                        smallBillDetail.Price = item.Price;
-                                        _context.BillDetails.Add(smallBillDetail);
-                                        _context.SaveChanges();
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-                    if (r.BillType == Data.Enum.BillType.Type3)
-                    {
-
-                        foreach (var (item, i) in r.SmallBill.Select((value, i) => (value, i)))
-                        {
-                            var smallBill = new Data.Entities.SmallBill();
-                            smallBill.Status = item.Status;
-                            if (i == 0)
-                            {
-                                smallBill.StartDate = DateTime.Now;
-                                smallBill.EndDate = DateTime.Now.AddMonths(1);
-                                r.SmallBill[i].EndDate = DateTime.Now.AddMonths(1);
-                            }
-                            else
-                            {
-                                smallBill.StartDate = r.SmallBill[i - 1].EndDate;
-                                smallBill.EndDate = DateTime.Parse(r.SmallBill[i - 1].EndDate.ToString()).AddMonths(1);
-                                r.SmallBill[i].EndDate = DateTime.Parse(r.SmallBill[i - 1].EndDate.ToString()).AddMonths(1);
-                            }
-                            smallBill.TotalPrice = item.TotalPrice;
-                            smallBill.BillID = bill.Id;
-                            _context.SmallBills.Add(smallBill);
-                            var result = _context.SaveChanges();
-                        }
                     }
                 }
                 flag = true;
@@ -255,8 +185,6 @@ namespace Application.System.Bill
                 bill.StartDate = (DateTime)item.StartDate;
                 bill.EndDate = item.EndDate;
                 bill.Status = item.Status;
-                bill.BillType = item.Type;
-                bill.MonthOfInstallment = item.MonthOfInstallment;
                 rs.Add(bill);
             }
             return rs;
@@ -386,7 +314,6 @@ namespace Application.System.Bill
                 ContractorId = list.First().Bills.ContractorId.Value,
                 EndDate = list.First().Bills.EndDate,
                 Id = list.First().Bills.Id,
-                MonthOfInstallment = list.First().Bills.MonthOfInstallment,
                 Note = list.First().Bills.Note,
                 PaymentDate = list.First().Bills.PaymentDate,
                 StartDate = list.First().Bills.StartDate,
@@ -416,7 +343,6 @@ namespace Application.System.Bill
                 ContractorId = list.First().Bill.ContractorId.Value,
                 EndDate = list.First().Bill.EndDate,
                 Id = list.First().Bill.Id,
-                MonthOfInstallment = list.First().Bill.MonthOfInstallment,
                 Note = list.First().Bill.Note,
                 PaymentDate = list.First().Bill.PaymentDate,
                 StartDate = list.First().Bill.StartDate,
@@ -496,7 +422,6 @@ namespace Application.System.Bill
                 ContractorId = bill.ContractorId.Value,
                 EndDate = bill.EndDate,
                 Id = bill.Id,
-                MonthOfInstallment = bill.MonthOfInstallment,
                 Note = bill.Note,
                 PaymentDate = bill.PaymentDate,
                 StartDate = bill.StartDate,

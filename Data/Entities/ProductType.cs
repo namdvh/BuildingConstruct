@@ -16,6 +16,8 @@ namespace Data.Entities
         public Products Products { get; set; }
 
         public int ProductID { get; set; }
+        public BillDetail? BillDetails { get; set; }
+
 
         public int Quantity { get; set; }
 

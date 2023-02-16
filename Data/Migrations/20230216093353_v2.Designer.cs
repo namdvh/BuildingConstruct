@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(BuildingConstructDbContext))]
-    [Migration("20230215062006_v3")]
-    partial class v3
+    [Migration("20230216093353_v2")]
+    partial class v2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -73,9 +73,6 @@ namespace Data.Migrations
                     b.Property<DateTime>("LastModifiedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("MonthOfInstallment")
-                        .HasColumnType("int");
-
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
@@ -111,9 +108,8 @@ namespace Data.Migrations
                             Id = 1,
                             ContractorId = 1,
                             CreateBy = new Guid("d7285fb7-835b-4680-a18c-673bd71f63d7"),
-                            EndDate = new DateTime(2023, 2, 15, 13, 20, 4, 637, DateTimeKind.Local).AddTicks(5494),
-                            LastModifiedAt = new DateTime(2023, 2, 15, 13, 20, 4, 637, DateTimeKind.Local).AddTicks(5495),
-                            MonthOfInstallment = 3,
+                            EndDate = new DateTime(2023, 2, 16, 16, 33, 52, 169, DateTimeKind.Local).AddTicks(2532),
+                            LastModifiedAt = new DateTime(2023, 2, 16, 16, 33, 52, 169, DateTimeKind.Local).AddTicks(2532),
                             Note = "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
                             Status = 3,
                             StoreID = 1,
@@ -125,9 +121,8 @@ namespace Data.Migrations
                             Id = 2,
                             ContractorId = 1,
                             CreateBy = new Guid("d7285fb7-835b-4680-a18c-673bd71f63d7"),
-                            EndDate = new DateTime(2023, 2, 15, 13, 20, 4, 637, DateTimeKind.Local).AddTicks(5544),
-                            LastModifiedAt = new DateTime(2023, 2, 15, 13, 20, 4, 637, DateTimeKind.Local).AddTicks(5545),
-                            MonthOfInstallment = 3,
+                            EndDate = new DateTime(2023, 2, 16, 16, 33, 52, 169, DateTimeKind.Local).AddTicks(2577),
+                            LastModifiedAt = new DateTime(2023, 2, 16, 16, 33, 52, 169, DateTimeKind.Local).AddTicks(2578),
                             Note = "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
                             Status = 3,
                             StoreID = 1,
@@ -151,6 +146,9 @@ namespace Data.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("ProductID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProductTypeId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -263,14 +261,14 @@ namespace Data.Migrations
                         {
                             Id = 1,
                             CreateBy = new Guid("d7285fb7-835b-4680-a18c-673bd71f63d9"),
-                            LastModifiedAt = new DateTime(2023, 2, 15, 13, 20, 4, 599, DateTimeKind.Local).AddTicks(2823),
+                            LastModifiedAt = new DateTime(2023, 2, 16, 16, 33, 52, 132, DateTimeKind.Local).AddTicks(8166),
                             Place = 60
                         },
                         new
                         {
                             Id = 2,
                             CreateBy = new Guid("d39ae0a6-9b2d-4421-be4a-cc294cec054f"),
-                            LastModifiedAt = new DateTime(2023, 2, 15, 13, 20, 4, 606, DateTimeKind.Local).AddTicks(8868),
+                            LastModifiedAt = new DateTime(2023, 2, 16, 16, 33, 52, 140, DateTimeKind.Local).AddTicks(1406),
                             Place = 61
                         });
                 });
@@ -329,7 +327,7 @@ namespace Data.Migrations
                             BuilderID = 1,
                             CreateBy = new Guid("d7285fb7-835b-4680-a18c-673bd71f63d9"),
                             Description = "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
-                            LastModifiedAt = new DateTime(2023, 2, 15, 13, 20, 4, 637, DateTimeKind.Local).AddTicks(5452),
+                            LastModifiedAt = new DateTime(2023, 2, 16, 16, 33, 52, 169, DateTimeKind.Local).AddTicks(2490),
                             Place = 52,
                             PostCategories = 1,
                             Salaries = "10.000.000 - 15.000.000",
@@ -343,7 +341,7 @@ namespace Data.Migrations
                             BuilderID = 1,
                             CreateBy = new Guid("d7285fb7-835b-4680-a18c-673bd71f63d9"),
                             Description = "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
-                            LastModifiedAt = new DateTime(2023, 2, 15, 13, 20, 4, 637, DateTimeKind.Local).AddTicks(5464),
+                            LastModifiedAt = new DateTime(2023, 2, 16, 16, 33, 52, 169, DateTimeKind.Local).AddTicks(2501),
                             Place = 50,
                             PostCategories = 2,
                             Salaries = "10.000.000 - 15.000.000",
@@ -357,7 +355,7 @@ namespace Data.Migrations
                             BuilderID = 1,
                             CreateBy = new Guid("d7285fb7-835b-4680-a18c-673bd71f63d9"),
                             Description = "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
-                            LastModifiedAt = new DateTime(2023, 2, 15, 13, 20, 4, 637, DateTimeKind.Local).AddTicks(5475),
+                            LastModifiedAt = new DateTime(2023, 2, 16, 16, 33, 52, 169, DateTimeKind.Local).AddTicks(2510),
                             Place = 51,
                             PostCategories = 1,
                             Salaries = "10.000.000 - 15.000.000",
@@ -484,13 +482,13 @@ namespace Data.Migrations
                         {
                             Id = 1,
                             CreateBy = new Guid("d7285fb7-835b-4680-a18c-673bd71f63d7"),
-                            LastModifiedAt = new DateTime(2023, 2, 15, 13, 20, 4, 614, DateTimeKind.Local).AddTicks(4360)
+                            LastModifiedAt = new DateTime(2023, 2, 16, 16, 33, 52, 147, DateTimeKind.Local).AddTicks(3881)
                         },
                         new
                         {
                             Id = 2,
                             CreateBy = new Guid("d7285fb7-835b-4680-a18c-673bd71f63d6"),
-                            LastModifiedAt = new DateTime(2023, 2, 15, 13, 20, 4, 622, DateTimeKind.Local).AddTicks(382)
+                            LastModifiedAt = new DateTime(2023, 2, 16, 16, 33, 52, 154, DateTimeKind.Local).AddTicks(6206)
                         });
                 });
 
@@ -577,7 +575,7 @@ namespace Data.Migrations
                             CreateBy = new Guid("d7285fb7-835b-4680-a18c-673bd71f63d7"),
                             Description = "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
                             EndDate = new DateTime(2023, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastModifiedAt = new DateTime(2023, 2, 15, 13, 20, 4, 637, DateTimeKind.Local).AddTicks(5295),
+                            LastModifiedAt = new DateTime(2023, 2, 16, 16, 33, 52, 169, DateTimeKind.Local).AddTicks(2352),
                             NumberPeople = 20,
                             PeopeRemained = 0,
                             Place = 52,
@@ -598,7 +596,7 @@ namespace Data.Migrations
                             CreateBy = new Guid("d7285fb7-835b-4680-a18c-673bd71f63d6"),
                             Description = "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
                             EndDate = new DateTime(2023, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastModifiedAt = new DateTime(2023, 2, 15, 13, 20, 4, 637, DateTimeKind.Local).AddTicks(5312),
+                            LastModifiedAt = new DateTime(2023, 2, 16, 16, 33, 52, 169, DateTimeKind.Local).AddTicks(2368),
                             NumberPeople = 20,
                             PeopeRemained = 0,
                             Place = 52,
@@ -619,7 +617,7 @@ namespace Data.Migrations
                             CreateBy = new Guid("d7285fb7-835b-4680-a18c-673bd71f63d6"),
                             Description = "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
                             EndDate = new DateTime(2023, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastModifiedAt = new DateTime(2023, 2, 15, 13, 20, 4, 637, DateTimeKind.Local).AddTicks(5325),
+                            LastModifiedAt = new DateTime(2023, 2, 16, 16, 33, 52, 169, DateTimeKind.Local).AddTicks(2380),
                             NumberPeople = 20,
                             PeopeRemained = 0,
                             Place = 52,
@@ -640,7 +638,7 @@ namespace Data.Migrations
                             CreateBy = new Guid("d7285fb7-835b-4680-a18c-673bd71f63d7"),
                             Description = "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
                             EndDate = new DateTime(2023, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastModifiedAt = new DateTime(2023, 2, 15, 13, 20, 4, 637, DateTimeKind.Local).AddTicks(5344),
+                            LastModifiedAt = new DateTime(2023, 2, 16, 16, 33, 52, 169, DateTimeKind.Local).AddTicks(2390),
                             NumberPeople = 20,
                             PeopeRemained = 0,
                             Place = 20,
@@ -661,7 +659,7 @@ namespace Data.Migrations
                             CreateBy = new Guid("d7285fb7-835b-4680-a18c-673bd71f63d6"),
                             Description = "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
                             EndDate = new DateTime(2024, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastModifiedAt = new DateTime(2023, 2, 15, 13, 20, 4, 637, DateTimeKind.Local).AddTicks(5356),
+                            LastModifiedAt = new DateTime(2023, 2, 16, 16, 33, 52, 169, DateTimeKind.Local).AddTicks(2400),
                             NumberPeople = 30,
                             PeopeRemained = 0,
                             Place = 14,
@@ -682,7 +680,7 @@ namespace Data.Migrations
                             CreateBy = new Guid("d7285fb7-835b-4680-a18c-673bd71f63d7"),
                             Description = "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
                             EndDate = new DateTime(2024, 5, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastModifiedAt = new DateTime(2023, 2, 15, 13, 20, 4, 637, DateTimeKind.Local).AddTicks(5368),
+                            LastModifiedAt = new DateTime(2023, 2, 16, 16, 33, 52, 169, DateTimeKind.Local).AddTicks(2412),
                             NumberPeople = 30,
                             PeopeRemained = 0,
                             Place = 14,
@@ -826,7 +824,7 @@ namespace Data.Migrations
                             Id = 1,
                             CreateBy = new Guid("b57b172a-a044-11ed-a8fc-0242ac120002"),
                             Description = "Với mục tiêu cung cấp nhiều gói sản phẩm phong phú về mẫu mã và các tính năng linh hoạt cho nhiều loại hình website như giới thiệu công ty, bán hàng, trang tin tức, thương mại điện tử… cùng với nhiều giao diện phong phú đa dạng độc đáo đã được VNS lọc chọn và đúc kết nhằm giới thiệu tới khách hàng với mong muốn có một website nhanh, đẹp, hiệu quả và giá cả hợp lý.",
-                            LastModifiedAt = new DateTime(2023, 2, 15, 13, 20, 4, 629, DateTimeKind.Local).AddTicks(7973),
+                            LastModifiedAt = new DateTime(2023, 2, 16, 16, 33, 52, 161, DateTimeKind.Local).AddTicks(9360),
                             Place = 0,
                             Website = "https://vinasoftware.com.vn/"
                         },
@@ -834,7 +832,7 @@ namespace Data.Migrations
                         {
                             Id = 2,
                             CreateBy = new Guid("be21b564-a044-11ed-a8fc-0242ac120002"),
-                            LastModifiedAt = new DateTime(2023, 2, 15, 13, 20, 4, 637, DateTimeKind.Local).AddTicks(5108),
+                            LastModifiedAt = new DateTime(2023, 2, 16, 16, 33, 52, 169, DateTimeKind.Local).AddTicks(2191),
                             Place = 0
                         });
                 });
@@ -1119,8 +1117,12 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("Name")
+                    b.Property<int?>("BillDetailsId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ProductID")
                         .HasColumnType("int");
@@ -1130,9 +1132,11 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BillDetailsId");
+
                     b.HasIndex("ProductID");
 
-                    b.ToTable("ProductType", (string)null);
+                    b.ToTable("ProductTypes", (string)null);
                 });
 
             modelBuilder.Entity("Data.Entities.Role", b =>
@@ -1163,7 +1167,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("52ec6e78-6732-43bf-adab-9cfa2e5da268"),
-                            ConcurrencyStamp = "e3e72414-b1c3-455d-8009-bfd284553d0b",
+                            ConcurrencyStamp = "8d8868c3-85f7-47ed-9731-423156df0ada",
                             Description = "Admin",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
@@ -1171,7 +1175,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("dc48ba58-ddcb-41de-96fe-e41327e5f313"),
-                            ConcurrencyStamp = "2de0c7dd-d154-493e-b27f-231534001c77",
+                            ConcurrencyStamp = "f8d06531-2006-406b-a874-ab5e6c9e8360",
                             Description = "User",
                             Name = "User",
                             NormalizedName = "USER"
@@ -1179,7 +1183,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("20efd516-f16c-41b3-b11d-bc908cd2056b"),
-                            ConcurrencyStamp = "1b7803d9-9f27-4dfb-98c8-62ef034b6840",
+                            ConcurrencyStamp = "b2f69e57-d3bc-45eb-a506-cd4efb154315",
                             Description = "Contractor",
                             Name = "Contractor",
                             NormalizedName = "CONTRACTOR"
@@ -1187,7 +1191,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("a4fbc29e-9749-4ea0-bcaa-67fc9f104bd1"),
-                            ConcurrencyStamp = "f3140b69-3829-46cf-ac12-936b4abb95af",
+                            ConcurrencyStamp = "4fe2a976-ba0b-469f-9985-a77f8d1da694",
                             Description = "Store",
                             Name = "Store",
                             NormalizedName = "STORE"
@@ -1310,15 +1314,15 @@ namespace Data.Migrations
 
                     b.HasIndex("BillID");
 
-                    b.ToTable("SmallBill", (string)null);
+                    b.ToTable("SmallBills");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
                             BillID = 2,
-                            EndDate = new DateTime(2023, 2, 15, 13, 20, 4, 637, DateTimeKind.Local).AddTicks(5561),
-                            StartDate = new DateTime(2023, 2, 15, 13, 20, 4, 637, DateTimeKind.Local).AddTicks(5562),
+                            EndDate = new DateTime(2023, 2, 16, 16, 33, 52, 169, DateTimeKind.Local).AddTicks(2591),
+                            StartDate = new DateTime(2023, 2, 16, 16, 33, 52, 169, DateTimeKind.Local).AddTicks(2593),
                             Status = 3,
                             TotalPrice = 20000m
                         },
@@ -1326,8 +1330,8 @@ namespace Data.Migrations
                         {
                             Id = 2,
                             BillID = 2,
-                            EndDate = new DateTime(2023, 2, 15, 13, 20, 4, 637, DateTimeKind.Local).AddTicks(5575),
-                            StartDate = new DateTime(2023, 2, 15, 13, 20, 4, 637, DateTimeKind.Local).AddTicks(5576),
+                            EndDate = new DateTime(2023, 2, 16, 16, 33, 52, 169, DateTimeKind.Local).AddTicks(2604),
+                            StartDate = new DateTime(2023, 2, 16, 16, 33, 52, 169, DateTimeKind.Local).AddTicks(2606),
                             Status = 3,
                             TotalPrice = 45000m
                         });
@@ -1503,17 +1507,17 @@ namespace Data.Migrations
                             AccessFailedCount = 0,
                             Address = "18, Phuoc Thien, Nhon Trach, Dong Nai",
                             BuilderId = 1,
-                            ConcurrencyStamp = "8e244eec-3124-4666-b547-506e1b17ef2e",
+                            ConcurrencyStamp = "370866dd-f4e3-4a64-8058-d10b58261010",
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             DOB = new DateTime(2001, 4, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "namhoaidoan15@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Hoai",
                             Gender = 0,
-                            LastModifiedAt = new DateTime(2023, 2, 15, 13, 20, 4, 591, DateTimeKind.Local).AddTicks(7241),
+                            LastModifiedAt = new DateTime(2023, 2, 16, 16, 33, 52, 125, DateTimeKind.Local).AddTicks(5502),
                             LastName = "Nam",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEI4yq2I+ebVank1fEJTBOMcbTzNzEn6i4b2dBYvdlt0p07v2IggJm9TR3x0u/I12iw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMoGKw2rigHTzYclGiBsHf5slsxyj1eTByHlMNWEpTzjRmODPqM8SK6Il27IiIrHuQ==",
                             PhoneNumber = "0879411575",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1529,17 +1533,17 @@ namespace Data.Migrations
                             AccessFailedCount = 0,
                             Address = "18, Phuoc Thien, Nhon Trach, Dong Nai",
                             BuilderId = 2,
-                            ConcurrencyStamp = "97b886ea-98f8-461f-b01c-16f6a6706406",
+                            ConcurrencyStamp = "28483815-acd4-4a15-a6f5-b68740abd054",
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             DOB = new DateTime(2001, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "namhoaidoan1@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Thinh",
                             Gender = 0,
-                            LastModifiedAt = new DateTime(2023, 2, 15, 13, 20, 4, 599, DateTimeKind.Local).AddTicks(2840),
+                            LastModifiedAt = new DateTime(2023, 2, 16, 16, 33, 52, 132, DateTimeKind.Local).AddTicks(8179),
                             LastName = "Nguyen",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEKw3HqgJovYnxulVW6QGZYt8Mh6UsDexcU9hzxNK7AORrRIkZhxZ3pk7kf7oexOe5Q==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEPJj4MT+Y2eTtrovqZ+yrEKvDHbwBsYpE4H5IK/g1hYhdlQx0eBzc/t9ot43a2/xng==",
                             PhoneNumber = "0937341639",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1555,7 +1559,7 @@ namespace Data.Migrations
                             AccessFailedCount = 0,
                             Address = "Q2",
                             Avatar = "https://www.vietnamworks.com/_next/image?url=https%3A%2F%2Fimages.vietnamworks.com%2Fpictureofcompany%2F78%2F11127264.png&w=128&q=75",
-                            ConcurrencyStamp = "4a53f6e3-ef51-4403-9266-afe4da6901da",
+                            ConcurrencyStamp = "676c86be-ed63-4d69-8aa2-8b8084ec3928",
                             ContractorId = 1,
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             DOB = new DateTime(2001, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1563,10 +1567,10 @@ namespace Data.Migrations
                             EmailConfirmed = false,
                             FirstName = "Công Ty Cổ Phần Xây Dựng Và Công Nghiệp",
                             Gender = 0,
-                            LastModifiedAt = new DateTime(2023, 2, 15, 13, 20, 4, 606, DateTimeKind.Local).AddTicks(8889),
+                            LastModifiedAt = new DateTime(2023, 2, 16, 16, 33, 52, 140, DateTimeKind.Local).AddTicks(1423),
                             LastName = "NSN",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEC2PlsVaLYlEHN9GDK1sn+ntAhCKEtnRHLw8nsMxx1/g6IhWLs0jZPrluxxBfSICFA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEFk2MBOZe6aPbwOQbbvB2NGqUFEWG1cXg6H+Y0ptAw/fVEG8x+hVtgtkCEw15su8rA==",
                             PhoneNumber = "0912345678",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1582,7 +1586,7 @@ namespace Data.Migrations
                             AccessFailedCount = 0,
                             Address = "Q2",
                             Avatar = "https://www.vietnamworks.com/_next/image?url=https%3A%2F%2Fimages.vietnamworks.com%2Fpictureofcompany%2F69%2F11128477.png&w=128&q=75",
-                            ConcurrencyStamp = "0333b302-5692-4df6-938a-cc76efc6d827",
+                            ConcurrencyStamp = "be948b1c-8b8d-4d18-8a54-64732b719ffa",
                             ContractorId = 2,
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             DOB = new DateTime(2001, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1590,10 +1594,10 @@ namespace Data.Migrations
                             EmailConfirmed = false,
                             FirstName = "Công Ty Cổ Phần Đầu Tư Bất Động Sản",
                             Gender = 0,
-                            LastModifiedAt = new DateTime(2023, 2, 15, 13, 20, 4, 614, DateTimeKind.Local).AddTicks(4381),
+                            LastModifiedAt = new DateTime(2023, 2, 16, 16, 33, 52, 147, DateTimeKind.Local).AddTicks(3899),
                             LastName = "Taseco",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEEvz1pSS9h64/VoaSmwU+cgBNonJihIMcif7UXHHBtgW8pJ5FlxxWTCZge8xC5kxBw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAED4wGDZWl90NQYW23jc/HbBngLDJOMtqL54gZeaX1X8lo+cWPOZYon3PrfRtR6aU3w==",
                             PhoneNumber = "09987654321",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1608,18 +1612,18 @@ namespace Data.Migrations
                             Id = new Guid("b57b172a-a044-11ed-a8fc-0242ac120002"),
                             AccessFailedCount = 0,
                             Address = "Q2",
-                            ConcurrencyStamp = "c29d4e35-aaf9-4fbf-a884-8a18f10b4298",
+                            ConcurrencyStamp = "49bf7add-34af-412a-91be-574b2e2e4fa4",
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             DOB = new DateTime(2001, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "store@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Store",
                             Gender = 0,
-                            LastModifiedAt = new DateTime(2023, 2, 15, 13, 20, 4, 622, DateTimeKind.Local).AddTicks(420),
+                            LastModifiedAt = new DateTime(2023, 2, 16, 16, 33, 52, 154, DateTimeKind.Local).AddTicks(6218),
                             LastName = "Store",
                             LockoutEnabled = false,
                             MaterialStoreID = 1,
-                            PasswordHash = "AQAAAAEAACcQAAAAEJnv+ZE3/MmnTX8+TGFDneEozHW8G2Oj3Pki4liM+x88f767w7L6XACMLVvgz+Mm+g==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEFtcAJlI6+cbdFJfpsMho4M1De5AlY+eMB92we7vmyWTjLDh+GngbVcxa3UGhd3ECg==",
                             PhoneNumber = "0924516734",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1634,18 +1638,18 @@ namespace Data.Migrations
                             Id = new Guid("be21b564-a044-11ed-a8fc-0242ac120002"),
                             AccessFailedCount = 0,
                             Address = "Q2",
-                            ConcurrencyStamp = "53aaa77e-bfca-4959-a722-125089d33897",
+                            ConcurrencyStamp = "ee8b864d-2622-43a4-b641-6b772c1ec700",
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             DOB = new DateTime(2001, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "store2@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Store2",
                             Gender = 0,
-                            LastModifiedAt = new DateTime(2023, 2, 15, 13, 20, 4, 629, DateTimeKind.Local).AddTicks(7990),
+                            LastModifiedAt = new DateTime(2023, 2, 16, 16, 33, 52, 161, DateTimeKind.Local).AddTicks(9379),
                             LastName = "Store2",
                             LockoutEnabled = false,
                             MaterialStoreID = 2,
-                            PasswordHash = "AQAAAAEAACcQAAAAEIkBNbSyCFvu51YxdfSzxeajVE0pQHRDW6PBrDSMQtpxBnjq/+rVl8/NGUau55z0fw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDwycntz+y4bzdCsEKo6/sg2Saq3APlG/miXv0vTjbu1xk32P9vEjORid+yf9cAxwg==",
                             PhoneNumber = "09245167342",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1821,18 +1825,17 @@ namespace Data.Migrations
                     b.HasOne("Data.Entities.Builder", "Builder")
                         .WithMany("AppliedPosts")
                         .HasForeignKey("BuilderID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Data.Entities.Group", "Group")
                         .WithMany("AppliedPosts")
-                        .HasForeignKey("GroupID")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("GroupID");
 
                     b.HasOne("Data.Entities.ContractorPost", "ContractorPosts")
                         .WithMany("AppliedPosts")
                         .HasForeignKey("PostID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Builder");
@@ -1846,13 +1849,11 @@ namespace Data.Migrations
                 {
                     b.HasOne("Data.Entities.Contractor", "Contractor")
                         .WithMany("Bills")
-                        .HasForeignKey("ContractorId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("ContractorId");
 
                     b.HasOne("Data.Entities.MaterialStore", "MaterialStore")
                         .WithMany("Bills")
-                        .HasForeignKey("StoreID")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("StoreID");
 
                     b.Navigation("Contractor");
 
@@ -1863,18 +1864,15 @@ namespace Data.Migrations
                 {
                     b.HasOne("Data.Entities.Bill", "Bills")
                         .WithMany("BillDetails")
-                        .HasForeignKey("BillID")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("BillID");
 
                     b.HasOne("Data.Entities.Products", "Products")
                         .WithMany("BillDetails")
-                        .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("ProductID");
 
                     b.HasOne("Data.Entities.SmallBill", "SmallBills")
                         .WithMany("BillDetails")
-                        .HasForeignKey("SmallBillID")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("SmallBillID");
 
                     b.Navigation("Bills");
 
@@ -1887,8 +1885,7 @@ namespace Data.Migrations
                 {
                     b.HasOne("Data.Entities.Type", "Type")
                         .WithMany("Builder")
-                        .HasForeignKey("TypeID")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("TypeID");
 
                     b.Navigation("Type");
                 });
@@ -1898,7 +1895,7 @@ namespace Data.Migrations
                     b.HasOne("Data.Entities.Builder", "Builder")
                         .WithMany("Posts")
                         .HasForeignKey("BuilderID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Builder");
@@ -1909,13 +1906,13 @@ namespace Data.Migrations
                     b.HasOne("Data.Entities.BuilderPost", "BuilderPost")
                         .WithMany("BuilderPostSkills")
                         .HasForeignKey("BuilderPostID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Data.Entities.Skill", "Skills")
                         .WithMany("BuilderPostSkills")
                         .HasForeignKey("SkillID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("BuilderPost");
@@ -1928,13 +1925,13 @@ namespace Data.Migrations
                     b.HasOne("Data.Entities.BuilderPost", "BuilderPosts")
                         .WithMany("BuilderPostTypes")
                         .HasForeignKey("BuilderPostID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Data.Entities.Type", "Types")
                         .WithMany("BuilderPostTypes")
                         .HasForeignKey("TypeID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("BuilderPosts");
@@ -1947,13 +1944,13 @@ namespace Data.Migrations
                     b.HasOne("Data.Entities.Builder", "Builder")
                         .WithMany("BuilderSkills")
                         .HasForeignKey("BuilderSkillID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Data.Entities.Skill", "Skill")
                         .WithMany("BuilderSkills")
                         .HasForeignKey("SkillID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Builder");
@@ -1966,13 +1963,13 @@ namespace Data.Migrations
                     b.HasOne("Data.Entities.Products", "Products")
                         .WithMany("Carts")
                         .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Data.Entities.User", "User")
                         .WithMany("Carts")
                         .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Products");
@@ -1985,7 +1982,7 @@ namespace Data.Migrations
                     b.HasOne("Data.Entities.Contractor", "Contractor")
                         .WithMany("ContractorPosts")
                         .HasForeignKey("ContractorID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Contractor");
@@ -1996,13 +1993,13 @@ namespace Data.Migrations
                     b.HasOne("Data.Entities.ContractorPost", "ContractorPost")
                         .WithMany("PostSkills")
                         .HasForeignKey("ContractorPostID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Data.Entities.Skill", "Skills")
                         .WithMany("ContractorPostSkills")
                         .HasForeignKey("SkillID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ContractorPost");
@@ -2015,13 +2012,13 @@ namespace Data.Migrations
                     b.HasOne("Data.Entities.ContractorPost", "ContractorPost")
                         .WithMany("ContractorPostTypes")
                         .HasForeignKey("ContractorPostID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Data.Entities.Type", "Type")
                         .WithMany("ContractorPostTypes")
                         .HasForeignKey("TypeID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ContractorPost");
@@ -2033,8 +2030,7 @@ namespace Data.Migrations
                 {
                     b.HasOne("Data.Entities.Builder", "Builder")
                         .WithMany("Groups")
-                        .HasForeignKey("BuilderID")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("BuilderID");
 
                     b.Navigation("Builder");
                 });
@@ -2043,13 +2039,12 @@ namespace Data.Migrations
                 {
                     b.HasOne("Data.Entities.Group", "Group")
                         .WithMany("GroupMembers")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("GroupId");
 
                     b.HasOne("Data.Entities.Type", "Type")
                         .WithMany()
                         .HasForeignKey("TypeID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Group");
@@ -2062,7 +2057,7 @@ namespace Data.Migrations
                     b.HasOne("Data.Entities.User", "User")
                         .WithMany("Notifications")
                         .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -2073,7 +2068,7 @@ namespace Data.Migrations
                     b.HasOne("Data.Entities.Builder", "Builder")
                         .WithMany("PostCommitments")
                         .HasForeignKey("BuilderID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Data.Entities.Contractor", "Contractor")
@@ -2084,19 +2079,17 @@ namespace Data.Migrations
 
                     b.HasOne("Data.Entities.Group", "Group")
                         .WithMany("PostCommitments")
-                        .HasForeignKey("GroupID")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("GroupID");
 
                     b.HasOne("Data.Entities.ContractorPost", "ContractorPosts")
                         .WithMany("PostCommitments")
                         .HasForeignKey("PostID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Data.Entities.User", null)
                         .WithMany("PostCommitments")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Builder");
 
@@ -2112,13 +2105,13 @@ namespace Data.Migrations
                     b.HasOne("Data.Entities.Categories", "Categories")
                         .WithMany("ProductCategories")
                         .HasForeignKey("CategoriesID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Data.Entities.Products", "Products")
                         .WithMany("ProductCategories")
                         .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Categories");
@@ -2130,19 +2123,24 @@ namespace Data.Migrations
                 {
                     b.HasOne("Data.Entities.MaterialStore", "MaterialStore")
                         .WithMany("Products")
-                        .HasForeignKey("MaterialStoreID")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("MaterialStoreID");
 
                     b.Navigation("MaterialStore");
                 });
 
             modelBuilder.Entity("Data.Entities.ProductType", b =>
                 {
+                    b.HasOne("Data.Entities.BillDetail", "BillDetails")
+                        .WithMany("ProductTypes")
+                        .HasForeignKey("BillDetailsId");
+
                     b.HasOne("Data.Entities.Products", "Products")
                         .WithMany("ProductTypes")
                         .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("BillDetails");
 
                     b.Navigation("Products");
                 });
@@ -2151,13 +2149,11 @@ namespace Data.Migrations
                 {
                     b.HasOne("Data.Entities.BuilderPost", "BuilderPost")
                         .WithMany("Saves")
-                        .HasForeignKey("BuilderPostId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("BuilderPostId");
 
                     b.HasOne("Data.Entities.ContractorPost", "ContractorPost")
                         .WithMany("Saves")
-                        .HasForeignKey("ContractorPostId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("ContractorPostId");
 
                     b.HasOne("Data.Entities.User", "User")
                         .WithMany("Saves")
@@ -2176,8 +2172,7 @@ namespace Data.Migrations
                 {
                     b.HasOne("Data.Entities.Type", "Type")
                         .WithMany("Skill")
-                        .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("TypeId");
 
                     b.Navigation("Type");
                 });
@@ -2185,9 +2180,9 @@ namespace Data.Migrations
             modelBuilder.Entity("Data.Entities.SmallBill", b =>
                 {
                     b.HasOne("Data.Entities.Bill", "Bill")
-                        .WithMany("SmallBills")
+                        .WithMany()
                         .HasForeignKey("BillID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Bill");
@@ -2197,23 +2192,19 @@ namespace Data.Migrations
                 {
                     b.HasOne("Data.Entities.Builder", "Builder")
                         .WithOne("User")
-                        .HasForeignKey("Data.Entities.User", "BuilderId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("Data.Entities.User", "BuilderId");
 
                     b.HasOne("Data.Entities.Contractor", "Contractor")
                         .WithOne("User")
-                        .HasForeignKey("Data.Entities.User", "ContractorId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("Data.Entities.User", "ContractorId");
 
                     b.HasOne("Data.Entities.MaterialStore", "MaterialStore")
                         .WithOne("User")
-                        .HasForeignKey("Data.Entities.User", "MaterialStoreID")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("Data.Entities.User", "MaterialStoreID");
 
                     b.HasOne("Data.Entities.Verify", "Verify")
                         .WithOne("User")
-                        .HasForeignKey("Data.Entities.User", "VerifyID")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("Data.Entities.User", "VerifyID");
 
                     b.Navigation("Builder");
 
@@ -2227,8 +2218,11 @@ namespace Data.Migrations
             modelBuilder.Entity("Data.Entities.Bill", b =>
                 {
                     b.Navigation("BillDetails");
+                });
 
-                    b.Navigation("SmallBills");
+            modelBuilder.Entity("Data.Entities.BillDetail", b =>
+                {
+                    b.Navigation("ProductTypes");
                 });
 
             modelBuilder.Entity("Data.Entities.Builder", b =>

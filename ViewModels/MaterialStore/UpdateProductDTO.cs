@@ -8,7 +8,7 @@ namespace ViewModels.MaterialStore
 {
     public class UpdateProductDTO
     {
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
         public decimal UnitPrice { get; set; }
 

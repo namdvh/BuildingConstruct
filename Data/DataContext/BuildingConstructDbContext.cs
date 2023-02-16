@@ -50,7 +50,6 @@ namespace Data.DataContext
             modelBuilder.ApplyConfiguration(new CartConfiguration());
             modelBuilder.ApplyConfiguration(new SaveConfiguration());
             modelBuilder.ApplyConfiguration(new BillConfigurations());
-            modelBuilder.ApplyConfiguration(new SmallBillConfiguration());
             modelBuilder.ApplyConfiguration(new BillDetailConfiguration());
             modelBuilder.ApplyConfiguration(new NotificationConfigurations());
             modelBuilder.ApplyConfiguration(new ProductTypeConfigurations());
