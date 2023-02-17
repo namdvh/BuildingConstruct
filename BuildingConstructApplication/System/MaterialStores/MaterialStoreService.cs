@@ -367,7 +367,7 @@ namespace Application.System.MaterialStores
         public async Task<BaseResponse<ProductDetailDTO>> GetProductDetail(int productId)
         {
             BaseResponse<ProductDetailDTO> response = new();
-            var rs = await _context.Products.Include(x => x.ProductCategories).SingleOrDefaultAsync(x => x.Id == productId);
+            var rs = await _context.Products.Include(x => x.ProductCategories).Include(x=>x.ProductTypes).SingleOrDefaultAsync(x => x.Id == productId);
             if (rs == null)
             {
 
