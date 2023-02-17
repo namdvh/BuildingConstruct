@@ -85,7 +85,6 @@ namespace Data.DataContext
         public DbSet<Save> Saves { get; set; }    
         public DbSet<Bill> Bills { get; set; }    
         public DbSet<BillDetail> BillDetails { get; set; }    
-        public DbSet<SmallBill> SmallBills { get; set; }    
         public DbSet<Notification> Notifcations { get; set; }    
         public DbSet<ProductType> ProductTypes { get; set; }    
     }

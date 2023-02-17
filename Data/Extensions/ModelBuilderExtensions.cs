@@ -624,38 +624,11 @@ namespace Data.Extensions
                 TotalPrice = 2000,
 
             });
-
-            modelBuilder.Entity<SmallBill>().HasData(new SmallBill
-            {
-               BillID=2,
-               EndDate=DateTime.Now,
-               Id=1,
-               PaymentDate = null,
-               Status=Enum.Status.SUCCESS,
-               TotalPrice=20000,
-               StartDate=DateTime.Now
-
-
-
-            });
-
-            modelBuilder.Entity<SmallBill>().HasData(new SmallBill
-            {
-                BillID = 2,
-                EndDate = DateTime.Now,
-                Id = 2,
-                PaymentDate = null,
-                Status = Enum.Status.SUCCESS,
-                TotalPrice = 45000,
-                StartDate = DateTime.Now
-
-            });
-
+          
 
             modelBuilder.Entity<BillDetail>().HasData(new BillDetail
             {
                 BillID = 2,
-                SmallBillID=1,
                 Id = 5,
                 Price = 20000,
                 ProductID = 1,
@@ -664,7 +637,6 @@ namespace Data.Extensions
             modelBuilder.Entity<BillDetail>().HasData(new BillDetail
             {
                 BillID = 2,
-                SmallBillID = 1,
                 Id = 6,
                 Price = 150000,
                 ProductID = 2,
@@ -673,12 +645,44 @@ namespace Data.Extensions
             modelBuilder.Entity<BillDetail>().HasData(new BillDetail
             {
                 BillID = 2,
-                SmallBillID = 2,
                 Id = 7,
                 Price = 45000,
                 ProductID = 3,
                 Quantity = 7,
             });
+
+
+            modelBuilder.Entity<ProductType>().HasData(new ProductType
+            {
+               Name="Maù xanh",
+               Id=1,
+               ProductID=20,
+               Quantity=10,
+            });
+
+            modelBuilder.Entity<ProductType>().HasData(new ProductType
+            {
+                Name = "Maù đỏ",
+                Id = 2,
+                ProductID = 20,
+                Quantity = 10,
+            });
+
+            modelBuilder.Entity<ProductType>().HasData(new ProductType
+            {
+                Name = "Sắt",
+                Id = 3,
+                ProductID = 21,
+                Quantity = 10,
+            });
+            modelBuilder.Entity<ProductType>().HasData(new ProductType
+            {
+                Name = "Gỗ",
+                Id = 4,
+                ProductID = 21,
+                Quantity = 10,
+            });
+
 
 
 

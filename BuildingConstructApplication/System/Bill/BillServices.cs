@@ -229,64 +229,32 @@ namespace Application.System.Bill
         public async Task<BaseResponse<SmallBillDetailDTO>> GetDetailBySmallBill(int billID)
         {
             BaseResponse<SmallBillDetailDTO> response;
-            var check = await _context.Bills
+
+            var result = await _context.Bills
                 .Include(x => x.MaterialStore)
                     .ThenInclude(x => x.User)
                 .Where(x => x.Id == billID).FirstOrDefaultAsync();
 
-            if (check.Type == BillType.Type1)
-            {
-                response = new()
-                {
-                    Code = BaseCode.SUCCESS,
-                    Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = MapSmallDetailDTOFirstType(check),
-                };
-                return response;
-            }
-
-            var rs = await _context.SmallBills
-                .Include(x => x.Bill)
-                    .ThenInclude(x => x.MaterialStore)
-                    .ThenInclude(x => x.User)
-                .Include(x => x.Bill)
-                    .ThenInclude(x => x.Contractor)
-                .Where(x => x.BillID == billID)
-                .ToListAsync();
-
-
-            if (!rs.Any())
-            {
-                response = new()
-                {
-                    Code = BaseCode.SUCCESS,
-                    Data = new(),
-                    Message = BaseCode.NOTFOUND_MESSAGE
-                };
-                return response;
-            }
-
-            if (check.Type == BillType.Type3)
+            if (result != null)
             {
 
                 response = new()
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = MapSmallDetailDTO(rs, 3),
+                    Data = MapSmallDetailDTOFirstType(result),
                 };
             }
             else
             {
                 response = new()
                 {
-                    Code = BaseCode.SUCCESS,
-                    Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = MapSmallDetailDTO(rs, 2),
+                    Code = BaseCode.ERROR,
+                    Message = BaseCode.ERROR_MESSAGE,
                 };
             }
-
             return response;
+
         }
 
         public BillDetailDTO MapDetailDTO(List<BillDetail> list)
@@ -334,84 +302,7 @@ namespace Application.System.Bill
             return dto;
         }
 
-        private SmallBillDetailDTO MapSmallDetailDTO(List<Data.Entities.SmallBill> list, int type)
-        {
-            List<SmallBillDTO> smallDetails = new();
 
-            BigBillDetail bill = new()
-            {
-                ContractorId = list.First().Bill.ContractorId.Value,
-                EndDate = list.First().Bill.EndDate,
-                Id = list.First().Bill.Id,
-                Note = list.First().Bill.Note,
-                PaymentDate = list.First().Bill.PaymentDate,
-                StartDate = list.First().Bill.StartDate,
-                Status = list.First().Bill.Status,
-                StoreID = list.First().Bill.StoreID,
-                TotalPrice = list.First().Bill.TotalPrice,
-                Type = list.First().Bill.Type
-
-            };
-
-
-            StoreDTO store = new()
-            {
-                Avatar = list.First().Bill.MaterialStore.User.Avatar,
-                Email = list.First().Bill.MaterialStore.User.Email,
-                Id = list.First().Bill.StoreID,
-                StoreName = list.First().Bill.MaterialStore.User.FirstName + " " + list.First().Bill.MaterialStore.User.LastName,
-            };
-
-            if (type == 2)
-            {
-
-                foreach (var item in list)
-                {
-
-                    SmallBillDTO small = new()
-                    {
-                        EndDate = item.EndDate,
-                        Id = item.Id,
-                        PaymentDate = item.PaymentDate,
-                        StartDate = item.StartDate,
-                        Status = item.Status,
-                        TotalPrice = item.TotalPrice,
-                        ProductBillDetail = MapProductDTO(item.Id, false)
-                    };
-                    smallDetails.Add(small);
-                }
-            }
-
-            if (type == 3)
-            {
-                foreach (var item in list)
-                {
-
-                    SmallBillDTO small = new()
-                    {
-                        EndDate = item.EndDate,
-                        Id = item.Id,
-                        PaymentDate = item.PaymentDate,
-                        StartDate = item.StartDate,
-                        Status = item.Status,
-                        TotalPrice = item.TotalPrice,
-                        ProductBillDetail = MapProductDTO(item.Id, true)
-                    };
-                    smallDetails.Add(small);
-                }
-            }
-
-
-
-
-            SmallBillDetailDTO dto = new()
-            {
-                Bill = bill,
-                Details = smallDetails,
-                Store = store
-            };
-            return dto;
-        }
 
         private SmallBillDetailDTO MapSmallDetailDTOFirstType(Data.Entities.Bill bill)
         {
@@ -444,7 +335,7 @@ namespace Application.System.Bill
             SmallBillDTO small = new()
             {
 
-                ProductBillDetail = MapProductDTO(bill.Id, true)
+                ProductBillDetail = MapProductDTO(bill.Id)
             };
             smallDetails.Add(small);
 
@@ -459,64 +350,31 @@ namespace Application.System.Bill
             return dto;
         }
 
-
-
-
-
-
-        private List<ProductBillDetail> MapProductDTO(int id, bool status)
+        private List<ProductBillDetail> MapProductDTO(int id)
         {
             List<ProductBillDetail> list = new();
 
+            var rs = _context.BillDetails
+                .Include(x => x.Products)
+                .Include(x => x.ProductTypes)
+                .Where(x => x.BillID == id)
+                .ToList();
 
-            if (status == true)
+            foreach (var item in rs)
             {
-                var rs = _context.BillDetails
-                    .Include(x => x.Products)
-                    .Where(x => x.BillID == id)
-                    .ToList();
-
-                foreach (var item in rs)
+                ProductBillDetail pro = new()
                 {
-                    ProductBillDetail pro = new()
-                    {
-                        Image = item.Products.Image,
-                        ProductBrand = item.Products.Brand,
-                        ProductDescription = item.Products.Description,
-                        ProductName = item.Products.Name,
-                        UnitPrice = item.Products.UnitPrice,
-                        BillDetailQuantity = item.Quantity,
-                        BillDetailTotalPrice = item.Price
-                    };
-                    list.Add(pro);
-                }
+                    Image = item.Products.Image,
+                    ProductBrand = item.Products.Brand,
+                    ProductDescription = item.Products.Description,
+                    ProductName = item.Products.Name,
+                    UnitPrice = item.Products.UnitPrice,
+                    BillDetailQuantity = item.Quantity,
+                    BillDetailTotalPrice = item.Price,
+                    TypeName = item.ProductTypes?.Name
+                };
+                list.Add(pro);
             }
-            else
-            {
-
-                var rs = _context.BillDetails
-                    .Include(x => x.Products)
-                    .Where(x => x.SmallBillID == id)
-                    .ToList();
-
-                foreach (var item in rs)
-                {
-                    ProductBillDetail pro = new()
-                    {
-                        Image = item.Products.Image,
-                        ProductBrand = item.Products.Brand,
-                        ProductDescription = item.Products.Description,
-                        ProductName = item.Products.Name,
-                        UnitPrice = item.Products.UnitPrice,
-                        BillDetailQuantity = item.Quantity,
-                        BillDetailTotalPrice = item.Price
-                    };
-                    list.Add(pro);
-                }
-            }
-
-
-
             return list;
         }
     }
