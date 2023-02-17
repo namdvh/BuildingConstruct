@@ -31,6 +31,8 @@ namespace ViewModels.Carts
 
         //public ProductTypeEnum? Type { get; set; }
 
+        public int? TypeID { get; set; }
+
         public string? TypeName { get; set; }
     }
 }
