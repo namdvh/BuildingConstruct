@@ -38,6 +38,11 @@ namespace Application.System.ContractorPosts
                 Description = contractorPostDTO.Description,
                 StarDate = contractorPostDTO.StarDate,
                 EndDate = contractorPostDTO.EndDate,
+                ConstructionType= contractorPostDTO.ConstructionType,
+                StartTime= contractorPostDTO.StartTime,
+                EndTime=contractorPostDTO.EndTime,
+                Accommodation= contractorPostDTO.Accommodation,
+                Transport=contractorPostDTO.Transport,
                 Place = contractorPostDTO.Place,
                 Salaries = contractorPostDTO.Salaries,
                 ViewCount = 0,
@@ -190,6 +195,11 @@ namespace Application.System.ContractorPosts
             ContractorPostDetailDTO postDTO = new()
             {
                 Title = post.Title,
+                Accommodation=post.Accommodation,
+                ConstructionType=post.ConstructionType,
+                EndTime=post.EndTime,
+                StartTime=post.StartTime,
+                Transport=post.Transport,
                 ProjectName = post.ProjectName,
                 Salaries = post.Salaries,
                 Description = post.Description,

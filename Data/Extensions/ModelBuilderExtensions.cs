@@ -319,6 +319,43 @@ namespace Data.Extensions
                 FromSystem = true,
                 TypeId = Guid.Parse("ce9fa65b-d005-46b6-953e-e6462a59cfb3")
             });
+
+            modelBuilder.Entity<Entities.Skill>().HasData(new Entities.Skill
+            {
+                Id = 5,
+                Name = "Điện",
+                FromSystem = true,
+                TypeId = Guid.Parse("ce9fa65b-d005-46b6-953e-e6462a59cfb3")
+            });
+
+            modelBuilder.Entity<Entities.Skill>().HasData(new Entities.Skill
+            {
+                Id = 6,
+                Name = "Nước",
+                FromSystem = true,
+                TypeId = Guid.Parse("ce9fa65b-d005-46b6-953e-e6462a59cfb3")
+            });
+
+            modelBuilder.Entity<Entities.Skill>().HasData(new Entities.Skill
+            {
+                Id = 7,
+                Name = "Hàn Sắt",
+                FromSystem = true,
+                TypeId = Guid.Parse("ce9fa65b-d005-46b6-953e-e6462a59cfb3")
+            });
+
+            modelBuilder.Entity<Entities.Skill>().HasData(new Entities.Skill
+            {
+                Id = 8,
+                Name = "Ốp lát",
+                FromSystem = true,
+                TypeId = Guid.Parse("ce9fa65b-d005-46b6-953e-e6462a59cfb3")
+            });
+
+
+
+
+
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
             {
                 Id=1,

@@ -31,5 +31,16 @@ namespace ViewModels.ContractorPost
         public string Salaries { get; set; }
 
         public int NumberPeople { get; set; }
+
+        public string? ConstructionType { get; set; }
+
+        public string? StartTime { get; set; }
+
+        public string? EndTime { get; set; }
+
+        public bool Accommodation { get; set; }
+
+        public bool Transport { get; set; }
+
     }
 }

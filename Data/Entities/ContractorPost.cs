@@ -1,4 +1,5 @@
 ﻿using Data.Enum;
+using System.Security.Cryptography.Xml;
 
 namespace Data.Entities
 {
@@ -38,6 +39,17 @@ namespace Data.Entities
 
         public int PeopeRemained { get; set; }
         public bool? isApplied { get; set; }
+
+
+        public string? ConstructionType { get; set; }
+        
+        public string? StartTime { get; set; }
+
+        public string? EndTime { get; set; }    
+
+        public bool Accommodation { get; set; }
+
+        public bool Transport { get; set; }
 
         public int ContractorID { get; set; }
 
