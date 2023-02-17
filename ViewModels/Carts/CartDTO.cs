@@ -29,7 +29,7 @@ namespace ViewModels.Carts
 
         public DateTime LastModifiedAt { get; set; } 
 
-        public ProductTypeEnum? Type { get; set; }
+        //public ProductTypeEnum? Type { get; set; }
 
         public string? TypeName { get; set; }
     }

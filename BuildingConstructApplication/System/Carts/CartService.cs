@@ -303,8 +303,7 @@ namespace Application.System.Carts
                 Quantity = cart.Quantity,
                 UnitInStock = cart.Products.UnitInStock,
                 UnitPrice = cart.Products.UnitPrice,
-                Type=cart.ProductType?.Type != null ? cart.ProductType.Type : null,
-                TypeName=cart.ProductType?.TypeName != null ? cart.ProductType.TypeName : null
+                TypeName=cart.ProductType?.Name != null ? cart.ProductType.Name : null
             };
             return dto;
         }
