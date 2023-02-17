@@ -591,6 +591,7 @@ namespace Data.Extensions
                Price=20000,
                ProductID=20,
                Quantity=5,
+               ProductTypeId=1
             });
             modelBuilder.Entity<BillDetail>().HasData(new BillDetail
             {
@@ -599,6 +600,7 @@ namespace Data.Extensions
                 Price = 150000,
                 ProductID = 21,
                 Quantity = 8,
+                ProductTypeId=3
             });
             modelBuilder.Entity<BillDetail>().HasData(new BillDetail
             {
