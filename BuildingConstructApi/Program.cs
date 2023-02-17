@@ -1,4 +1,5 @@
 
+using Application.Mapping;
 using Application.System.Bill;
 using Application.System.BuilderPosts;
 using Application.System.Carts;
@@ -6,7 +7,6 @@ using Application.System.Category;
 using Application.System.Commitments;
 using Application.System.ContractorPosts;
 using Application.System.MaterialStores;
-using Application.System.ProductSystems;
 using Application.System.SavePost;
 using Application.System.Skills;
 using Application.System.Types;
@@ -143,6 +143,7 @@ builder.Services.AddIdentity<User, Role>(
     }
     ).AddEntityFrameworkStores<BuildingConstructDbContext>().AddDefaultTokenProviders();
 builder.Services.AddScoped<UserManager<User>, UserManager<User>>();
+builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 builder.Services.AddScoped<SignInManager<User>, SignInManager<User>>();
 builder.Services.AddScoped<RoleManager<Role>, RoleManager<Role>>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -155,7 +156,6 @@ builder.Services.AddTransient<IContractorPostService, ContractorPostService>();
 builder.Services.AddScoped<IBuilderPostService, BuilderPostServices>(); 
 builder.Services.AddScoped<IMaterialStoreService, MaterialStoreService>();
 builder.Services.AddScoped<ICommitmentService, CommitmentService>();
-builder.Services.AddScoped<IProductSystemService, ProductSystemService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ISkillService, SkillServices>();
 builder.Services.AddTransient<ICartService, CartService>();

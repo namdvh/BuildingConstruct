@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ViewModels.MaterialStore
 {
-    public class ProductDTO
+    public class UpdateProductDTO
     {
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
         public decimal UnitPrice { get; set; }
 
@@ -24,6 +24,6 @@ namespace ViewModels.MaterialStore
         public string? Brand { get; set; }
 
         public List<CategoryProductDTO>? Categories { get; set; }
-        public List<ProductTypeDTO>? ProductTypes { get; set; }
+        public List<UpdateProductType>? ProductTypes { get; set; }
     }
 }

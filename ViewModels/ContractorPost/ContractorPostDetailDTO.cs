@@ -26,7 +26,6 @@ namespace ViewModels.ContractorPost
         public DateTime EndDate { get; set; }
 
         public Place Place { get; set; }
-        public List<ContractorPostProductDTO> ProductSystem { get; set; }
 
         public PostCategories PostCategories { get; set; }
 

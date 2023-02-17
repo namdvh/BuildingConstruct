@@ -20,6 +20,7 @@ namespace ViewModels.MaterialStore
         public List<string>? Image { get; set; }
 
         public string? Description { get; set; }
+        public List<ProductTypeDTO>? ProductType { get; set; }
 
         public string? Brand { get; set; }
 

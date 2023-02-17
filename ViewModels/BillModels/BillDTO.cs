@@ -18,10 +18,8 @@ namespace ViewModels.BillModels
         public int? StoreID { get; set; }
         public decimal TotalPrice { get; set; }
         public Status Status { get; set; }
-        public BillType? BillType { get; set; }
-        public MonthOfInstallment? MonthOfInstallment { get; set; }
+        public int? ProductTypeId { get; set; }
         public List<ProductBillDTO> ProductBillDetail { get; set; } 
-        public List<SmallBill>? SmallBill { get; set; }
 
     }
 }
