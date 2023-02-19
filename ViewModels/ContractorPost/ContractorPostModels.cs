@@ -4,12 +4,12 @@ namespace ViewModels.ContractorPost
 {
     public class ContractorPostModels
     {
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
 
-        public string ProjectName { get; set; }
+        public string ProjectName { get; set; } = string.Empty;
         public List<TypeModels>? type { get; set; }
 
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
         public string? Benefit { get; set; }
         public string? Required { get; set; }
 
@@ -18,11 +18,11 @@ namespace ViewModels.ContractorPost
         public DateTime EndDate { get; set; }
 
         public Place Place { get; set; }
-        public List<ProductPost> ProductPost { get; set; }
+        public List<ProductPost>? ProductPost { get; set; }
 
         public PostCategories PostCategories { get; set; }
 
-        public string Salaries { get; set; }
+        public string Salaries { get; set; } = string.Empty;
 
         public int NumberPeople { get; set; }
 
