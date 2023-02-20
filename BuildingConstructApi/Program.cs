@@ -1,7 +1,6 @@
 
 using Application.Mapping;
 using Application.System.Bill;
-using Application.System.BuilderPosts;
 using Application.System.Carts;
 using Application.System.Category;
 using Application.System.Commitments;
@@ -153,7 +152,6 @@ builder.Services.AddScoped<IVnPayService, VnPayService>();
 builder.Services.AddScoped<IValidator<RegisterRequestDTO>, RegisterRequestValidatorDTO>();
 builder.Services.AddScoped<IValidator<ContractorPostModels>, ContractorPostValidator>();
 builder.Services.AddTransient<IContractorPostService, ContractorPostService>();
-builder.Services.AddScoped<IBuilderPostService, BuilderPostServices>(); 
 builder.Services.AddScoped<IMaterialStoreService, MaterialStoreService>();
 builder.Services.AddScoped<ICommitmentService, CommitmentService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();

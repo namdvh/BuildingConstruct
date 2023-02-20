@@ -9,6 +9,5 @@ namespace ViewModels.SavePost
     public class DeleteSaveRequest
     {
         public int? ContractorPostId { get; set; }
-        public int? BuilderPostId { get; set; }
     }
 }

@@ -10,6 +10,8 @@ namespace ViewModels.Carts
     {
         public int ProductID { get; set; }
 
+        public int? TypeID { get; set; }    
+
         public int Quantity { get; set; }
     }
 }

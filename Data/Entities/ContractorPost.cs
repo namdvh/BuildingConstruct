@@ -1,19 +1,20 @@
 ﻿using Data.Enum;
+using System.Security.Cryptography.Xml;
 
 namespace Data.Entities
 {
     public class ContractorPost : BaseEntity
     {
         public int Id { get; set; }
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
 
-        public string ProjectName { get; set; }
+        public string ProjectName { get; set; } = string.Empty;
 
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
         public string? Benefit { get; set; }
         public string? Required { get; set; }
 
-        public List<ContractorPostSkill> PostSkills { get; set; }
+        public List<ContractorPostSkill>? PostSkills { get; set; }
         public List<ContractorPostType>? ContractorPostTypes { get; set; }
 
         public List<PostCommitment>? PostCommitments { get; set; }
@@ -30,7 +31,7 @@ namespace Data.Entities
 
         public PostCategories PostCategories { get; set; }
 
-        public string Salaries { get; set; }
+        public string Salaries { get; set; } = string.Empty;
 
         public int ViewCount { get; set; }
 
@@ -39,9 +40,20 @@ namespace Data.Entities
         public int PeopeRemained { get; set; }
         public bool? isApplied { get; set; }
 
+
+        public string? ConstructionType { get; set; }
+        
+        public string? StartTime { get; set; }
+
+        public string? EndTime { get; set; }    
+
+        public bool Accommodation { get; set; }
+
+        public bool Transport { get; set; }
+
         public int ContractorID { get; set; }
 
-        public Contractor Contractor { get; set; }
+        public Contractor? Contractor { get; set; }
 
     }
 }

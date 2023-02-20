@@ -15,7 +15,6 @@ namespace Data.Configuration
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
 
-            builder.HasOne(x => x.SmallBills).WithMany(x => x.BillDetails).HasForeignKey(x => x.SmallBillID);
             builder.HasOne(x => x.Bills).WithMany(x => x.BillDetails).HasForeignKey(x => x.BillID);
             builder.HasOne(x => x.Products).WithMany(x => x.BillDetails).HasForeignKey(x => x.ProductID);
 

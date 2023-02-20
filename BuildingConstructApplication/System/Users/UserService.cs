@@ -42,74 +42,74 @@ namespace Application.System.Users
             BaseResponse<UserModels> response = new();
             var users = await _userService.FindByNameAsync(request.Email);
             var roleNames = await _context.Roles.Where(x => x.Id.ToString().Equals(request.RoleId)).Select(x => x.Name).SingleOrDefaultAsync();
-                
-                if (request.RoleId == BaseCode.UsRole)
-                {
-                    var builder = new Builder();
-                    builder.CreateBy = users.Id;
-                    await _context.Builders.AddAsync(builder);
-                    _context.SaveChanges();
 
-                    users.BuilderId = builder.Id;
-                    _context.Entry<User>(users).State = EntityState.Modified;
-                    await _context.SaveChangesAsync();
-                }
-                    else if (request.RoleId == BaseCode.StoreRole)
-                {
-                    var store = new MaterialStore();
-                    store.CreateBy = users.Id;
+            if (request.RoleId == BaseCode.UsRole)
+            {
+                var builder = new Builder();
+                builder.CreateBy = users.Id;
+                await _context.Builders.AddAsync(builder);
+                _context.SaveChanges();
 
-                    await _context.MaterialStores.AddAsync(store);
-                    _context.SaveChanges();
+                users.BuilderId = builder.Id;
+                _context.Entry<User>(users).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+            else if (request.RoleId == BaseCode.StoreRole)
+            {
+                var store = new MaterialStore();
+                store.CreateBy = users.Id;
 
-                    users.MaterialStoreID = store.Id;
-                    _context.Entry(store).State = EntityState.Modified;
-                    await _context.SaveChangesAsync();
-                }
-                else if (request.RoleId == BaseCode.ContractorRole)
-                {
-                    var ctor = new Contractor();
-                    ctor.CreateBy = users.Id;
+                await _context.MaterialStores.AddAsync(store);
+                _context.SaveChanges();
 
-                    await _context.Contractors.AddAsync(ctor);
-                    _context.SaveChanges();
-                    users.ContractorId = ctor.Id;
-                    _context.Entry(ctor).State = EntityState.Modified;
-                    await _context.SaveChangesAsync();
-                }
-                
-                    await _userService.AddToRoleAsync(users, roleNames);
-                
-                    var roleName = (from usr in _context.Users
-                                join userRole in _context.UserRoles on users.Id equals userRole.UserId
-                                join role in _context.Roles on userRole.RoleId equals role.Id
-                                select role.Name).FirstOrDefault();
+                users.MaterialStoreID = store.Id;
+                _context.Entry(store).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+            else if (request.RoleId == BaseCode.ContractorRole)
+            {
+                var ctor = new Contractor();
+                ctor.CreateBy = users.Id;
+
+                await _context.Contractors.AddAsync(ctor);
+                _context.SaveChanges();
+                users.ContractorId = ctor.Id;
+                _context.Entry(ctor).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+
+            await _userService.AddToRoleAsync(users, roleNames);
+
+            var roleName = (from usr in _context.Users
+                            join userRole in _context.UserRoles on users.Id equals userRole.UserId
+                            join role in _context.Roles on userRole.RoleId equals role.Id
+                            select role.Name).FirstOrDefault();
             UserModels u = new()
             {
                 Id = users.Id,
                 Avatar = users.Avatar,
                 FirstName = users.FirstName,
                 LastName = users.LastName,
-                Role=roleName,
-                UserName=users.UserName
+                Role = roleName,
+                UserName = users.UserName
             };
-                var userDTO = MapToDto(users, roleName);
-                var token = await GenerateToken(userDTO);
-                users.Token = token.Data.RefreshToken;
-                users.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;
-                await _userService.UpdateAsync(users);
-                response.Data = u;
-                    
+            var userDTO = MapToDto(users, roleName);
+            var token = await GenerateToken(userDTO);
+            users.Token = token.Data.RefreshToken;
+            users.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;
+            await _userService.UpdateAsync(users);
+            response.Data = u;
+
             return response;
         }
 
         public async Task<BaseResponse<UserModels>> LoginGoogle(LoginGoogleRequest request)
         {
             BaseResponse<UserModels> response = new();
-            
+
             var users = await _userService.FindByNameAsync(request.Email.ToUpper());// check email exist or not
-            
-            if (users == null) 
+
+            if (users == null)
             {
                 var user = new User()
                 {
@@ -131,11 +131,11 @@ namespace Application.System.Users
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                 };
-                
-                    response.Data = us;
-                    response.Code = "201";
-                    response.Message = "Regist successfully but haven't got role";
-                    return response;
+
+                response.Data = us;
+                response.Code = "201";
+                response.Message = "Regist successfully but haven't got role";
+                return response;
             }
             else
             {
@@ -152,7 +152,7 @@ namespace Application.System.Users
                         FirstName = users.FirstName,
                         LastName = users.LastName,
                     };
-                    response.Data = us; 
+                    response.Data = us;
                     response.Code = "202";
                     response.Message = "Role Name is null";
                     return response;
@@ -181,7 +181,7 @@ namespace Application.System.Users
         }
 
 
-        
+
 
         public async Task<BaseResponse<UserDTO>> Login(LoginRequestDTO request)
 
@@ -240,7 +240,7 @@ namespace Application.System.Users
                     }
                 }
                 return response;
-                
+
 
             }
             else
@@ -261,7 +261,7 @@ namespace Application.System.Users
                     response.Message = "Role Name is null";
                     return response;
                 }
-                
+
 
                 var roles = await _userService.GetRolesAsync(user);
                 var userDTO = MapToDto(user, roleName);
@@ -506,15 +506,15 @@ namespace Application.System.Users
                 };
                 principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
             }
-            catch (SecurityTokenExpiredException )
+            catch (SecurityTokenExpiredException)
             {
                 throw new SecurityTokenExpiredException();
             }
-            catch (SecurityTokenInvalidSignatureException )
+            catch (SecurityTokenInvalidSignatureException)
             {
                 throw new SecurityTokenInvalidSignatureException();
             }
-            catch (ArgumentException )
+            catch (ArgumentException)
             {
                 throw new ArgumentException();
             }
@@ -546,10 +546,10 @@ namespace Application.System.Users
                     Id = user.Builder.Id,
                     Place = user.Builder.Place,
                     TypeName = user.Builder.Type.Name,
-                    TypeID=user.Builder.TypeID,
+                    TypeID = user.Builder.TypeID,
                     ExperienceDetail = user.Builder.ExperienceDetail,
                     Certificate = user.Builder.Certificate,
-                    Experience=user.Builder.Experience
+                    Experience = user.Builder.Experience
                 };
 
 
@@ -564,7 +564,7 @@ namespace Application.System.Users
                     IdNumber = user.IdNumber,
                     LastName = user.LastName,
                     Status = user.Status,
-                    Phone=user.PhoneNumber,
+                    Phone = user.PhoneNumber,
                     Builder = detailBuilder,
                 };
 
@@ -759,9 +759,12 @@ namespace Application.System.Users
                     user.PhoneNumber = request.Phone;
 
                 }
-                if (string.IsNullOrEmpty(request.ExperienceDetail))
+                if (request.ExperienceDetail != null)
                 {
-                    user.Builder.ExperienceDetail =null;
+                    if (request.ExperienceDetail.Length == 0)
+                    {
+                        user.Builder.ExperienceDetail = null;
+                    }
 
                 }
                 else
@@ -773,10 +776,13 @@ namespace Application.System.Users
                     user.Builder.Experience = request.Experience;
 
                 }
-                if (string.IsNullOrEmpty(request.Certificate))
+                if (request.Certificate != null)
                 {
+                    if (request.Certificate.Length == 0)
+                    {
+                        user.Builder.ExperienceDetail = null;
+                    }
                     user.Builder.Certificate = null;
-
                 }
                 else
                 {

@@ -19,7 +19,6 @@ namespace Data.Configuration
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
 
-            builder.HasOne(x => x.BuilderPost).WithMany(x => x.Saves).HasForeignKey(x => x.BuilderPostId);
             builder.HasOne(x => x.ContractorPost).WithMany(x => x.Saves).HasForeignKey(x => x.ContractorPostId);
             builder.HasOne(x => x.User).WithMany(x => x.Saves).HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Restrict);
         }

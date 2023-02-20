@@ -22,9 +22,9 @@ namespace Application.System.Carts
 
         public async Task<BaseResponse<CartDTO>> Create(Guid userID, CreateCartRequest requests)
         {
-            BaseResponse<CartDTO>? response=null;
-
-            var existed = await _context.Carts.Where(x => x.UserID.Equals(userID) && x.ProductID == requests.ProductID).FirstOrDefaultAsync();
+            BaseResponse<CartDTO>? response = null;
+            Cart cart;
+            var existed = await _context.Carts.Where(x => x.UserID.Equals(userID) && x.ProductID == requests.ProductID && x.TypeID==requests.TypeID).FirstOrDefaultAsync();
 
             if (existed != null)
             {
@@ -45,12 +45,28 @@ namespace Application.System.Carts
 
             }
 
-            var cart = new Cart()
+            if (requests.TypeID != null)
             {
-                ProductID = requests.ProductID,
-                Quantity = requests.Quantity,
-                UserID = userID
-            };
+                cart = new Cart()
+                {
+                    ProductID = requests.ProductID,
+                    Quantity = requests.Quantity,
+                    TypeID=requests.TypeID.Value,
+                    UserID = userID
+                };
+
+            }
+            else
+            {
+                cart = new Cart()
+                {
+                    ProductID = requests.ProductID,
+                    Quantity = requests.Quantity,
+                    UserID = userID
+                };
+            }
+
+
             await _context.Carts.AddAsync(cart);
             var rs = await _context.SaveChangesAsync();
 
@@ -60,6 +76,7 @@ namespace Application.System.Carts
                .Include(x => x.Products)
                    .ThenInclude(x => x.MaterialStore)
                        .ThenInclude(x => x.User)
+                .Include(x=>x.ProductType)
                .Where(x => x.UserID.Equals(userID) && x.ProductID == requests.ProductID).FirstOrDefaultAsync();
 
                 if (result != null)
@@ -104,6 +121,7 @@ namespace Application.System.Carts
                 .Include(x => x.Products)
                     .ThenInclude(x => x.MaterialStore)
                         .ThenInclude(x => x.User)
+                .Include(x=>x.ProductType)
                 .Where(x => x.UserID.Equals(UserID))
                 .OrderBy(filter._sortBy + " " + orderBy)
                 .Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -242,6 +260,7 @@ namespace Application.System.Carts
                 {
                     ProductID = item.ProductID,
                     Quantity = item.Quantity,
+                    TypeID= item.TypeID,
                     UserID = userID
                 };
                 await _context.Carts.AddAsync(cart);
@@ -284,6 +303,8 @@ namespace Application.System.Carts
                 Quantity = cart.Quantity,
                 UnitInStock = cart.Products.UnitInStock,
                 UnitPrice = cart.Products.UnitPrice,
+                TypeName=cart.ProductType?.Name != null ? cart.ProductType.Name : null,
+                TypeID=cart.ProductType?.Id != null ? cart.ProductType.Id : null
             };
             return dto;
         }

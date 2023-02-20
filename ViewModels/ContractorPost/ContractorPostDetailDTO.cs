@@ -1,10 +1,4 @@
-﻿using Data.Entities;
-using Data.Enum;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Data.Enum;
 using ViewModels.Users;
 
 namespace ViewModels.ContractorPost
@@ -39,5 +33,15 @@ namespace ViewModels.ContractorPost
         public DateTime LastModifiedAt { get; set; }
         public Guid CreatedBy { get; set; }
         public UserModelsDTO Author { get; set; }
+
+        public string? ConstructionType { get; set; }
+
+        public string? StartTime { get; set; }
+
+        public string? EndTime { get; set; }
+
+        public bool Accommodation { get; set; }
+
+        public bool Transport { get; set; }
     }
 }

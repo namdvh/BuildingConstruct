@@ -58,13 +58,13 @@ namespace BuildingConstructApi.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetBillDetail([FromRoute] int id)
-        {
-            var rs = await _billServices.GetDetail(id);
+        //[HttpGet("{id}")]
+        //public async Task<IActionResult> GetBillDetail([FromRoute] int id)
+        //{
+        //    var rs = await _billServices.GetDetail(id);
 
-            return Ok(rs);
-        }
+        //    return Ok(rs);
+        //}
 
         [HttpGet("small/{id}")]
         public async Task<IActionResult> GetSmallBill([FromRoute] int id)
