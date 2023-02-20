@@ -419,6 +419,34 @@ namespace Application.System.Commitments
 
                 if (rs > 0)
                 {
+                    if (commitment.GroupID != null)
+                    {
+                        var groupCount = await _context.GroupMembers.CountAsync(x=>x.GroupId== commitment.GroupID);
+                        
+                        var contractorPost = await _context.ContractorPosts.Where(x=>x.Id==commitment.PostID).FirstOrDefaultAsync();
+
+                        var count = contractorPost.PeopeRemained - groupCount;
+
+                        contractorPost.PeopeRemained = count;
+
+
+                        _context.ContractorPosts.Update(contractorPost);
+                       await _context.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        var contractorPost = await _context.ContractorPosts.Where(x => x.Id == commitment.PostID).FirstOrDefaultAsync();
+
+                        var count = contractorPost.PeopeRemained - 1;
+
+                        contractorPost.PeopeRemained = count;
+
+
+                        _context.ContractorPosts.Update(contractorPost);
+                        await _context.SaveChangesAsync();
+                    }
+
+
                     response = new()
                     {
                         Code = BaseCode.SUCCESS,
