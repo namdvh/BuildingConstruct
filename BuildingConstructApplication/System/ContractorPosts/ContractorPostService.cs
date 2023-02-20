@@ -564,7 +564,7 @@ namespace Application.System.ContractorPosts
                            .Take(filter.PageSize)
                            .ToListAsync();
 
-            totalRecord = await _context.BuilderPosts.CountAsync();
+            totalRecord = await _context.ContractorPosts.CountAsync();
 
 
             if (!result.Any())

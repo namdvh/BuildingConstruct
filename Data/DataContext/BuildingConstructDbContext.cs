@@ -45,8 +45,6 @@ namespace Data.DataContext
             modelBuilder.ApplyConfiguration(new AppliedPostConfiguration());
             modelBuilder.ApplyConfiguration(new PostCommitmentsConfigurations());
             modelBuilder.ApplyConfiguration(new ContractorPostTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new BuilderPostTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new BuilderPostSkillConfigurations());
             modelBuilder.ApplyConfiguration(new CartConfiguration());
             modelBuilder.ApplyConfiguration(new SaveConfiguration());
             modelBuilder.ApplyConfiguration(new BillConfigurations());
@@ -62,7 +60,6 @@ namespace Data.DataContext
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Builder> Builders { get; set; }
-        public DbSet<BuilderPost> BuilderPosts { get; set; }
         public DbSet<BuilderSkill> BuilderSkills { get; set; }
         public DbSet<Skill> Skills { get; set; }
         public DbSet<Verify> Verifies { get; set; }
@@ -78,9 +75,7 @@ namespace Data.DataContext
         public DbSet<ProductCategories> ProductCategories { get; set; }    
         public DbSet<AppliedPost> AppliedPosts { get; set; }    
         public DbSet<PostCommitment> PostCommitments { get; set; }    
-        public DbSet<ContractorPostType> ContractorPostTypes { get; set; }    
-        public DbSet<BuilderPostType> BuilderPostTypes { get; set; }    
-        public DbSet<BuilderPostSkill> BuilderPostSkills { get; set; }    
+        public DbSet<ContractorPostType> ContractorPostTypes { get; set; }     
         public DbSet<Cart> Carts { get; set; }    
         public DbSet<Save> Saves { get; set; }    
         public DbSet<Bill> Bills { get; set; }    

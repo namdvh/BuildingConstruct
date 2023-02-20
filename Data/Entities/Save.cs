@@ -11,10 +11,8 @@ namespace Data.Entities
         public int Id { get; set; }
         public Guid UserId { get; set; }
         public int? ContractorPostId { get; set; }
-        public int? BuilderPostId { get; set; }
         public User User { get; set; }
         public ContractorPost? ContractorPost { get; set; }
-        public BuilderPost? BuilderPost { get; set; }
 
         public DateTime Date { get; set; }
 
