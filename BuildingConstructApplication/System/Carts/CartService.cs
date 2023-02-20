@@ -24,7 +24,7 @@ namespace Application.System.Carts
         {
             BaseResponse<CartDTO>? response = null;
             Cart cart;
-            var existed = await _context.Carts.Where(x => x.UserID.Equals(userID) && x.ProductID == requests.ProductID && x.TypeID==requests.TypeID).FirstOrDefaultAsync();
+            var existed = await _context.Carts.Where(x => x.UserID.Equals(userID) && x.ProductID == requests.ProductID && x.TypeID == requests.TypeID).FirstOrDefaultAsync();
 
             if (existed != null)
             {
@@ -51,7 +51,7 @@ namespace Application.System.Carts
                 {
                     ProductID = requests.ProductID,
                     Quantity = requests.Quantity,
-                    TypeID=requests.TypeID.Value,
+                    TypeID = requests.TypeID.Value,
                     UserID = userID
                 };
 
@@ -76,7 +76,7 @@ namespace Application.System.Carts
                .Include(x => x.Products)
                    .ThenInclude(x => x.MaterialStore)
                        .ThenInclude(x => x.User)
-                .Include(x=>x.ProductType)
+                .Include(x => x.ProductType)
                .Where(x => x.UserID.Equals(userID) && x.ProductID == requests.ProductID).FirstOrDefaultAsync();
 
                 if (result != null)
@@ -121,7 +121,7 @@ namespace Application.System.Carts
                 .Include(x => x.Products)
                     .ThenInclude(x => x.MaterialStore)
                         .ThenInclude(x => x.User)
-                .Include(x=>x.ProductType)
+                .Include(x => x.ProductType)
                 .Where(x => x.UserID.Equals(UserID))
                 .OrderBy(filter._sortBy + " " + orderBy)
                 .Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -260,7 +260,7 @@ namespace Application.System.Carts
                 {
                     ProductID = item.ProductID,
                     Quantity = item.Quantity,
-                    TypeID= item.TypeID,
+                    TypeID = item.TypeID,
                     UserID = userID
                 };
                 await _context.Carts.AddAsync(cart);
@@ -292,6 +292,21 @@ namespace Application.System.Carts
 
         private CartDTO MapToDTO(Cart cart)
         {
+            var listType = _context.ProductTypes.Where(x => x.ProductID == cart.ProductID).ToList();
+            List<CartProductType> types = new();
+
+            if (listType.Any())
+            {
+                foreach (var item in listType)
+                {
+                    CartProductType tmp = new()
+                    {
+                        TypeID = item.Id,
+                        TypeName = item.Name,
+                    };
+                    types.Add(tmp);
+                }
+            }
             CartDTO dto = new()
             {
                 Image = cart.Products.Image,
@@ -303,8 +318,9 @@ namespace Application.System.Carts
                 Quantity = cart.Quantity,
                 UnitInStock = cart.Products.UnitInStock,
                 UnitPrice = cart.Products.UnitPrice,
-                TypeName=cart.ProductType?.Name != null ? cart.ProductType.Name : null,
-                TypeID=cart.ProductType?.Id != null ? cart.ProductType.Id : null
+                TypeName = cart.ProductType?.Name != null ? cart.ProductType.Name : null,
+                TypeID = cart.ProductType?.Id != null ? cart.ProductType.Id : null,
+                ListType = listType.Any() ? types : null,
             };
             return dto;
         }

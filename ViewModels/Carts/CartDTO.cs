@@ -29,10 +29,21 @@ namespace ViewModels.Carts
 
         public DateTime LastModifiedAt { get; set; } 
 
+        public List<CartProductType>? ListType { get; set; } 
+
         //public ProductTypeEnum? Type { get; set; }
 
         public int? TypeID { get; set; }
 
         public string? TypeName { get; set; }
+    }
+
+
+    public class CartProductType
+    {
+        public int? TypeID { get; set; }
+
+        public string? TypeName { get; set; }
+
     }
 }
