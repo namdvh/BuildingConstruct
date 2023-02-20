@@ -234,7 +234,10 @@ namespace Application.System.Users
                             Avatar = us.Avatar,
                             DOB = us.DOB,
                             Gender = us.Gender,
-                            Role = roleName
+                            Role = roleName,
+                            BuilderID=us.BuilderId,
+                            ContractorID=us.ContractorId,
+                            StoreID=us.MaterialStoreID
                         };
 
                     }
@@ -296,7 +299,10 @@ namespace Application.System.Users
             {
                 Id = user.Id,
                 UserName = user.UserName,
-                Phone = user.PhoneNumber
+                Phone = user.PhoneNumber,
+                BuilderID=user.BuilderId,
+                StoreID=user.MaterialStoreID,
+                ContractorID=user.ContractorId
             };
             return userDto;
         }
