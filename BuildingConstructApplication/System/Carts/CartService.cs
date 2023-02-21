@@ -208,7 +208,7 @@ namespace Application.System.Carts
             {
                 foreach (var item in requests)
                 {
-                    var remove = _context.Carts.Where(x => x.UserID.Equals(userID) && x.ProductID == item.ProductID).FirstOrDefault();
+                    var remove = _context.Carts.Where(x => x.UserID.Equals(userID) && x.Id == item.Id).FirstOrDefault();
                     if (remove != null)
                     {
                         _context.Carts.Remove(remove);
@@ -241,10 +241,10 @@ namespace Application.System.Carts
             {
                 if (i == count - 1)
                 {
-                    existed.Append("ProductID=" + requests[i].ProductID);
+                    existed.Append("Id=" + requests[i].ProductID);
                     break;
                 }
-                existed.Append("ProductID=" + requests[i].ProductID + "|");
+                existed.Append("Id=" + requests[i].ProductID + "|");
             }
             query = query.ApplyFiltering(existed.ToString());
 
@@ -258,6 +258,7 @@ namespace Application.System.Carts
             {
                 var cart = new Cart()
                 {
+                    Id=item.Id.Value,
                     ProductID = item.ProductID,
                     Quantity = item.Quantity,
                     TypeID = item.TypeID,
