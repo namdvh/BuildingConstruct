@@ -228,9 +228,10 @@ namespace Application.System.Carts
 
         }
 
-        public async Task<BaseResponse<string>> Update(Guid userID, List<CreateCartRequest> requests)
+        public async Task<BaseResponse<List<CartDTO>>> Update(Guid userID, List<CreateCartRequest> requests)
         {
-            BaseResponse<string> response;
+            BaseResponse<List<CartDTO>> response;
+            List<CartDTO> ls = new();
             int rs = 0;
 
             IQueryable<Cart> query = _context.Carts.Where(x => x.UserID.Equals(userID));
@@ -258,7 +259,6 @@ namespace Application.System.Carts
             {
                 var cart = new Cart()
                 {
-                    Id=item.Id.Value,
                     ProductID = item.ProductID,
                     Quantity = item.Quantity,
                     TypeID = item.TypeID,
@@ -272,8 +272,16 @@ namespace Application.System.Carts
 
             if (rs > 0)
             {
+                var cart = await _context.Carts.Where(x=>x.UserID.Equals(userID)).ToListAsync();
+
+                foreach (var item in cart)
+                {
+                    ls.Add(MapToDTO(item));
+                }
+
                 response = new()
                 {
+                    Data = ls,
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
                 };

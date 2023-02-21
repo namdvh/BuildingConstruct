@@ -18,7 +18,7 @@ namespace Application.System.Carts
 
         Task<BaseResponse<CartDTO>> Create(Guid userID, CreateCartRequest requests);
 
-        Task<BaseResponse<string>> Update(Guid userID, List<CreateCartRequest> requests);
+        Task<BaseResponse<List<CartDTO>>> Update(Guid userID, List<CreateCartRequest> requests);
 
         Task<BaseResponse<string>> Remove(Guid userID, List<RemoveCartRequest> requests);
 

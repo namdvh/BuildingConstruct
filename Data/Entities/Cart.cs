@@ -1,4 +1,6 @@
-﻿namespace Data.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Data.Entities
 {
     public class Cart
     {

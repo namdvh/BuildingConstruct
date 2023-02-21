@@ -20,6 +20,8 @@ namespace Data.Configuration
             builder.Property(x => x.Id)
                   .ValueGeneratedOnAdd();
 
+          
+
 
 
             builder.HasOne(x => x.User).WithMany(x => x.Carts).HasForeignKey(x => x.UserID);
