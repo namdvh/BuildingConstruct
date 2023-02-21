@@ -272,7 +272,12 @@ namespace Application.System.Carts
 
             if (rs > 0)
             {
-                var cart = await _context.Carts.Where(x=>x.UserID.Equals(userID)).ToListAsync();
+                var cart = await _context.Carts
+                     .Include(x => x.Products)
+                    .ThenInclude(x => x.MaterialStore)
+                        .ThenInclude(x => x.User)
+                .Include(x => x.ProductType)
+                    .Where(x => x.UserID.Equals(userID)).ToListAsync();
 
                 foreach (var item in cart)
                 {
@@ -312,7 +317,7 @@ namespace Application.System.Carts
                     {
                         Id = item.Id,
                         TypeName = item.Name,
-                        Quantity=item.Quantity,
+                        Quantity = item.Quantity,
                     };
                     types.Add(tmp);
                 }
