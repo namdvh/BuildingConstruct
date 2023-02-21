@@ -301,7 +301,7 @@ namespace Application.System.Carts
                 {
                     CartProductType tmp = new()
                     {
-                        TypeID = item.Id,
+                        Id = item.Id,
                         TypeName = item.Name,
                         Quantity=item.Quantity,
                     };
@@ -321,7 +321,7 @@ namespace Application.System.Carts
                 UnitPrice = cart.Products.UnitPrice,
                 TypeName = cart.ProductType?.Name != null ? cart.ProductType.Name : null,
                 TypeID = cart.ProductType?.Id != null ? cart.ProductType.Id : null,
-                ListType = listType.Any() ? types : null,
+                ProductType = listType.Any() ? types : null,
             };
             return dto;
         }
