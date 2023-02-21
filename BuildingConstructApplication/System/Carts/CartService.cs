@@ -274,11 +274,11 @@ namespace Application.System.Carts
             {
                 var cart = await _context.Carts
                      .Include(x => x.Products)
-                    .ThenInclude(x => x.MaterialStore)
-                        .ThenInclude(x => x.User)
-                .Include(x => x.ProductType)
+                            .ThenInclude(x => x.MaterialStore)
+                                .ThenInclude(x => x.User)
+                    .Include(x => x.ProductType)
                     .Where(x => x.UserID.Equals(userID))
-                    .OrderByDescending(x=>x.Id)
+                    .OrderBy("Id" + " " + "descending")
                     .ToListAsync();
 
                 foreach (var item in cart)
