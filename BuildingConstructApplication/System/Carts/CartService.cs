@@ -277,7 +277,9 @@ namespace Application.System.Carts
                     .ThenInclude(x => x.MaterialStore)
                         .ThenInclude(x => x.User)
                 .Include(x => x.ProductType)
-                    .Where(x => x.UserID.Equals(userID)).ToListAsync();
+                    .Where(x => x.UserID.Equals(userID))
+                    .OrderByDescending(x=>x.Id)
+                    .ToListAsync();
 
                 foreach (var item in cart)
                 {
