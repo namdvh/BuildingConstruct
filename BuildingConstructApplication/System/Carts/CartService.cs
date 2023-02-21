@@ -242,10 +242,10 @@ namespace Application.System.Carts
             {
                 if (i == count - 1)
                 {
-                    existed.Append("Id=" + requests[i].ProductID);
+                    existed.Append("ProductID=" + requests[i].ProductID);
                     break;
                 }
-                existed.Append("Id=" + requests[i].ProductID + "|");
+                existed.Append("ProductID=" + requests[i].ProductID + "|");
             }
             query = query.ApplyFiltering(existed.ToString());
 

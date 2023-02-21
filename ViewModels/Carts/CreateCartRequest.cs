@@ -8,7 +8,6 @@ namespace ViewModels.Carts
 {
     public class CreateCartRequest
     {
-        public int? Id { get; set; }
 
         public int ProductID { get; set; }
 
