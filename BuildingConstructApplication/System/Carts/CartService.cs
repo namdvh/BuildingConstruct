@@ -310,6 +310,7 @@ namespace Application.System.Carts
             }
             CartDTO dto = new()
             {
+                Id = cart.Id,
                 Image = cart.Products.Image,
                 LastModifiedAt = cart.LastModifiedAt,
                 MaterialStoreID = cart.Products.MaterialStoreID,
