@@ -45,5 +45,7 @@ namespace ViewModels.Carts
 
         public string? TypeName { get; set; }
 
+        public int? Quantity { get; set; }
+
     }
 }

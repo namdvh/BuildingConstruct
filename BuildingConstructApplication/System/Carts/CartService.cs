@@ -303,6 +303,7 @@ namespace Application.System.Carts
                     {
                         TypeID = item.Id,
                         TypeName = item.Name,
+                        Quantity=item.Quantity,
                     };
                     types.Add(tmp);
                 }
