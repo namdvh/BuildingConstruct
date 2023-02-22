@@ -371,7 +371,6 @@ namespace Application.System.Bill
                     UnitPrice = item.Products.UnitPrice,
                     BillDetailQuantity = item.Quantity,
                     BillDetailTotalPrice = item.Price,
-                    TypeName = item.ProductTypes?.Name
                 };
                 list.Add(pro);
             }
