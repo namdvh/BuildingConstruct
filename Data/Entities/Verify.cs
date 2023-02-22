@@ -1,22 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Data.Enum;
 
 namespace Data.Entities
 {
-    public class Verify:BaseEntity
+    public class Verify : BaseEntity
     {
-        public int Id { get; set; } 
+        public int Id { get; set; }
 
-        public string? FaceImage { get; set; }  
+        public string? FaceImage { get; set; }
 
         public string? FrontID { get; set; }
 
         public string? BackID { get; set; }
 
+        public string? BusinessLicense { get; set; }
+
         public User? User { get; set; }
+
+        public IdentificateType IdentificateType { get; set; }
 
 
     }
