@@ -416,14 +416,28 @@ namespace Application.System.MaterialStores
             final.Place = results.Place;
             return final;
         }
+       
         public async Task<List<CategoryDTO>> GetCategory(List<ProductCategories> productCategories)
         {
             List<CategoryDTO> list = new();
             foreach (var c in productCategories)
             {
-                var results = await _context.Categories.Where(x => x.ID == c.CategoriesID).SingleOrDefaultAsync();
+                var results = await _context.Categories.Where(x => x.ID == c.CategoriesID).Include(x=>x.ProductCategories).SingleOrDefaultAsync();
                 var final = new CategoryDTO();
                 final.Id = results.ID;
+                final.CategoryName = results.Name;
+                final.Name = await GetProductCategoryName(results.ProductCategories);
+                list.Add(final);
+            }
+            return list;
+        }
+        public async Task<List<ProductCategoryDTO>> GetProductCategoryName(List<ProductCategories> productCategories)
+        {
+            List<ProductCategoryDTO> list = new();
+            foreach (var c in productCategories)
+            {
+                var results = await _context.ProductCategories.Where(x => x.ProductID == c.ProductID).SingleOrDefaultAsync();
+                var final = new ProductCategoryDTO();
                 final.Name = results.Name;
                 list.Add(final);
             }
@@ -550,7 +564,7 @@ namespace Application.System.MaterialStores
                         var productcate = new ProductCategories();
 
                         category.Id = cate.ID;
-                        category.Name = cate.Name;
+                        category.CategoryName = cate.Name;
                         productcate.CategoriesID = cate.ID;
                         productcate.ProductID = productId;
                         productcate.Name = item.Name;
