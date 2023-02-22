@@ -73,19 +73,12 @@ namespace Application.System.Bill
                 {
                     foreach (var pro in item.ProductBillDetail)
                     {
-                        var product = _context.Carts.Where(x => x.ProductID == pro.ProductId && x.UserID.ToString().Equals(usID.ToString())).FirstOrDefault();
+                        var product = _context.Carts.Where(x => x.ProductID == pro.ProductId && x.UserID.ToString().Equals(usID.ToString()) && x.TypeID==pro.TypeID).FirstOrDefault();
                         ls.Add(product);
                     }
                 }
-                try
-                {
-                    _context.RemoveRange(ls);
-                }
-                catch (Exception)
-                {
-
-                    return false;
-                }
+                _context.RemoveRange(ls);
+                await _context.SaveChangesAsync();
                 return true;
             }
             return false;
