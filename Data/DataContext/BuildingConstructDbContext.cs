@@ -50,6 +50,7 @@ namespace Data.DataContext
             modelBuilder.ApplyConfiguration(new BillConfigurations());
             modelBuilder.ApplyConfiguration(new BillDetailConfiguration());
             modelBuilder.ApplyConfiguration(new NotificationConfigurations());
+            modelBuilder.ApplyConfiguration(new WorkerConstructionTypeConfiguration());
             modelBuilder.ApplyConfiguration(new ProductTypeConfigurations());
 
             modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("UserLogins").HasKey(x => x.UserId);
@@ -65,6 +66,7 @@ namespace Data.DataContext
         public DbSet<Verify> Verifies { get; set; }
         public DbSet<MaterialStore> MaterialStores { get; set; }
         public DbSet<Contractor> Contractors { get; set; }
+        public DbSet<WorkerContructionType> WorkerContructionTypes { get; set; }
         public DbSet<ContractorPost> ContractorPosts { get; set; }
         public DbSet<ContractorPostSkill> ContractorPostSkills { get; set; }
         public DbSet<Entities.Type> Types { get; set; }
