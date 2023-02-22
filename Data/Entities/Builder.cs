@@ -27,6 +27,7 @@ namespace Data.Entities
         public List<AppliedPost>? AppliedPosts { get; set; }
 
         public List<PostCommitment>? PostCommitments { get; set; }
+        public List<WorkerContructionType>? WorkerContructionTypes { get; set; }
 
 
     }
