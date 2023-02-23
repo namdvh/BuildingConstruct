@@ -355,6 +355,17 @@ namespace Application.System.ContractorPosts
                 {
                     query = query.Include(x => x.Contractor).Where(x => x.Title.Contains(filter.FilterRequest.Title) || x.Contractor.CompanyName.Contains(filter.FilterRequest.Title));
                 }
+                if (filter.FilterRequest.Transport == true)
+                {
+                    query = query.Where(x => x.Transport == true);
+
+                }
+                if (filter.FilterRequest.Accommodation == true)
+                {
+                    query = query.Where(x => x.Accommodation == true);
+
+                }
+
             }
 
             var result = await query
