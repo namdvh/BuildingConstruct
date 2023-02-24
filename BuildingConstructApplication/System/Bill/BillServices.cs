@@ -51,7 +51,7 @@ namespace Application.System.Bill
                         var billDetail = new BillDetail();
                         billDetail.BillID = bill.Id;
                         billDetail.ProductID = item.ProductId;
-                        billDetail.ProductTypeId = r.ProductTypeId;
+                        billDetail.ProductTypeId = item.TypeID;
                         billDetail.Quantity = item.Quantity;
                         billDetail.Price = item.Price;
 
