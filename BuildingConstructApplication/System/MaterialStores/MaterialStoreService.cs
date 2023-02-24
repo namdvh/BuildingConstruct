@@ -422,11 +422,10 @@ namespace Application.System.MaterialStores
             List<CategoryDTO> list = new();
             foreach (var c in productCategories)
             {
-                var results = await _context.Categories.Where(x => x.ID == c.CategoriesID).Include(x=>x.ProductCategories).SingleOrDefaultAsync();
                 var final = new CategoryDTO();
-                final.Id = results.ID;
-                final.CategoryName = results.Name;
-                final.Name = await GetProductCategoryName(results.ProductCategories);
+                final.Id = c.CategoriesID;
+                final.CategoryName = c.Name;
+                final.Name = c.Name;
                 list.Add(final);
             }
             return list;
