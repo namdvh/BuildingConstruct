@@ -369,6 +369,34 @@ namespace Application.System.Bill
             }
             return list;
         }
+
+        public async Task<BaseResponse<string>> UpdateStatusBill(Status status, int billID)
+        {
+            BaseResponse<string> response;
+            var bill = await _context.Bills.FirstOrDefaultAsync(x=>x.Id== billID);
+
+            if (bill != null)
+            {
+                bill.Status = status;
+                _context.Update(bill);
+                await _context.SaveChangesAsync();
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE
+                };
+                return response;
+            }
+
+            response = new()
+            {
+                Code = BaseCode.ERROR,
+                Message = BaseCode.ERROR_MESSAGE
+            };
+            return response;
+
+        }
     }
 
 

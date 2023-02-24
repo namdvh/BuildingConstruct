@@ -17,7 +17,10 @@ namespace ViewModels.Filter
 
         public List<PostCategories>? Categories { get; set; }
 
-        public int? Participant { get; set; }   
+        public int? Participant { get; set; }
 
+        public bool? Accommodation { get; set; }
+
+        public bool? Transport { get; set; }
     }
 }

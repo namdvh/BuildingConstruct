@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Data.Enum;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,5 +19,6 @@ namespace Application.System.Bill
 
         Task<BaseResponse<SmallBillDetailDTO>> GetDetailBySmallBill(int billID);
 
+        Task<BaseResponse<string>> UpdateStatusBill(Status status, int billID);
     }
 }
