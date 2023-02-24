@@ -356,7 +356,8 @@ namespace Application.System.MaterialStores
                     Experience = item.Experience,
                     Image = item.Image,
                     TaxCode = item.TaxCode,
-                    Webstie = item.Website
+                    Webstie = item.Website,
+                    UserId = item.User.Id,
 
                 };
                 result.Add(dto);
