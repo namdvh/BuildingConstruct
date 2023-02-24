@@ -229,48 +229,7 @@ namespace Data.Extensions
             });
 
 
-            modelBuilder.Entity<Products>().HasData(new Products
-            {
-                Id=20,
-                Name="Product 1",
-                UnitPrice=4000,
-                UnitInStock=1000,
-                Image=null,
-                Description="Description 1",
-                Brand="Kangaroo",
-                SoldQuantities=100,
-                Unit="ton",
-                MaterialStoreID=1
-            });
-
-            modelBuilder.Entity<Products>().HasData(new Products
-            {
-                Id = 21,
-                Name = "Product 2",
-                UnitPrice = 5000,
-                UnitInStock = 1200,
-                Image = null,
-                Description = "Description 2",
-                Brand = "Sony",
-                Unit = "ton",
-                SoldQuantities = 1000,
-                MaterialStoreID = 1
-            });
-
-            modelBuilder.Entity<Products>().HasData(new Products
-            {
-
-                Id = 22,
-                Name = "Product 3",
-                UnitPrice = 6000,
-                UnitInStock = 100,
-                Image = null,
-                Description = "Description 3",
-                Brand = "Samsung",
-                Unit = "ton",
-                SoldQuantities = 100,
-                MaterialStoreID = 1
-            });
+         
             modelBuilder.Entity<Entities.Type>().HasData(new Entities.Type
             {
                 Id = Guid.Parse("4ace8fcb-95eb-48c0-9deb-240e8b4e10e0"),
@@ -467,19 +426,439 @@ namespace Data.Extensions
                 CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7")
 
             });
+
+            //Categories
+
+            modelBuilder.Entity<Categories>().HasData(new Categories
+            {
+
+                ID=1,
+                Name="Xuất xứ"
+            });
+            modelBuilder.Entity<Categories>().HasData(new Categories
+            {
+
+                ID = 2,
+                Name = "Chất liệu"
+            });
+            modelBuilder.Entity<Categories>().HasData(new Categories
+            {
+
+                ID = 3,
+                Name = "Phong cách "
+            });
+            modelBuilder.Entity<Categories>().HasData(new Categories
+            {
+
+                ID = 4,
+                Name = "Vị trí "
+            });
+
+            //PRODUCT 1
+
             modelBuilder.Entity<Products>().HasData(new Products
             {
                 Id=7,
-                Name="Gạch Hoa Cổ Điển",
-                UnitInStock=30000,
-                UnitPrice=50000,
-                Image= "http://anhduongphat.vn/wp-content/uploads/2020/03/gach-bong-trang-tri-hoa-van.jpg",
+                Name= "Sơn Ngoại Thất Bóng Cao Cấp CMC ARMOS07 1 - 4.5L",
+                UnitInStock= 200,
+                UnitPrice= 857000,
+                Image= "https://admin.mingstores.com/core/public/themes/mingstores/products/vx9kXzl3FacoKvdbZLki3kWM6nO3PimJ.jpg",
                 SoldQuantities=1500,
-                Description="Gạch hoa lát cổ điển, màu trắng đen tương thích với các kiến trúc cổ",
+                Description= "- Màng sơn mịn có độ phủ cao, siêu bóng sang trọng,bám dính tốt\r\n\r\n- Hạn chế vết bẩn, vết nứt nhỏ, chống rêu mốc, độ bền màu cao\r\n\r\n- Thân thiện môi trường và an toàn cho sức khỏe\r\n\r\n- Bảo vệ 10 năm\r\n\r\n- Độ phủ lý thuyết: 12-14m2/lít/ lớp",
                 MaterialStoreID=1,
-                Unit="ton",
-                Brand="Pháp"
+                Unit="Lít",
+                Brand= "CMC"
             });
+
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+               CategoriesID=1,
+               ProductID=7,
+               Name="Mỹ",
+              
+            });
+
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 2,
+                ProductID = 7,
+                Name = "Sơn ngoại thất",
+
+            });
+
+
+            //PRODUCT 2
+
+            modelBuilder.Entity<Products>().HasData(new Products
+            {
+                Id = 30,
+                Name = "Gạch GCA-Clay Art 60x60",
+                UnitInStock = 200,
+                UnitPrice = 400000,
+                Image = "https://admin.mingstores.com/core/public/themes/mingstores/products/Elgda4SYGE52gAn2wi5AEXipIEMqiYiB.jpg",
+                SoldQuantities = 1500,
+                Description = "Gạch cao cấp đến từ thương hiệu nổi tiếng NIRO GRANITE",
+                MaterialStoreID = 1,
+                Unit = "Gạch",
+                Brand = "NIRO GRANITE"
+            });
+
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 1,
+                ProductID = 30,
+                Name = "Mỹ",
+
+            });
+
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 2,
+                ProductID = 30,
+                Name = "Gạch bóng",
+            });
+
+            //PRODUCT 3
+
+            modelBuilder.Entity<Products>().HasData(new Products
+            {
+                Id = 31,
+                Name = "Aures Smart Round RMC-45E-VN",
+                UnitInStock = 200,
+                UnitPrice = 3200000,
+                Image = "https://admin.mingstores.com/core/public/themes/mingstores/products/MbcC070BBSf4q97sgghpjBbqFiNr7JEP.jpg",
+                SoldQuantities = 1500,
+                Description = "Công suất định mức: 4500(W)\r\nHình dáng: Hình tròn\r\nĐiện năng: 220V\r\nChế độ vòi sen: 5\r\nÁp lực nước tối thiểu: 30/0,3 Kpa/bar\r\nÁp lực nước tối đa: 380/3.8 Kpa/bar\r\nKích thước (DxCxR): 350 X 80\r\nTrọng lượng: 2 kg\r\nKhông có bơm trợ lực",
+                MaterialStoreID = 1,
+                Unit = "Bộ",
+                Brand = "ARISTON"
+            });
+
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 1,
+                ProductID = 31,
+                Name = "Mỹ",
+
+            });
+
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 2,
+                ProductID = 31,
+                Name = "Thép",
+            });
+
+
+            //PRODUCT 4
+
+            modelBuilder.Entity<Products>().HasData(new Products
+            {
+                Id = 32,
+                Name = "Bồn cầu một khối TOTO MS904E4",
+                UnitInStock = 200,
+                UnitPrice = 19037000,
+                Image = "https://admin.mingstores.com/core/public/themes/mingstores/products/UYZ61ie7Z7i5Hmjd6D7XyUWhBZVL7y8v.jpg",
+                SoldQuantities = 1500,
+                Description = "Thiết kế nguyên khối sang trọng, hiện đại\r\nNắp bàn cầu đóng êm, kèm vòi rửa nước lạnh Eco-washer\r\nBề mặt nước rộng giúp ngăn mùi hiệu quả\r\nThiết kế thân kín, vành kín tiện dụng cho việc vệ sinh hàng ngày\r\nCông nghệ CeFiONtect giúp lòng bàn cầu siêu nhẵn, hạn chế tối đa các vết bẩn, vi khuẩn\r\nCông nghệ xả G-Max êm, mạnh mẽ hiệu quả",
+                MaterialStoreID = 1,
+                Unit = "Bộ",
+                Brand = "TOTO"
+            });
+
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 1,
+                ProductID = 32,
+                Name = "Mỹ",
+
+            });
+
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 2,
+                ProductID = 32,
+                Name = "Cái",
+            });
+
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 4,
+                ProductID = 32,
+                Name = "Nhà vệ sinh",
+            });
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 3,
+                ProductID = 32,
+                Name = "Ý",
+            });
+
+            //PRODUCT 5
+
+            modelBuilder.Entity<Products>().HasData(new Products
+            {
+                Id = 33,
+                Name = "Bồn Cầu Thông Minh INAX AC-1017R/CW-KA22AVN",
+                UnitInStock = 200,
+                UnitPrice = 26301000,
+                Image = "https://admin.mingstores.com/core/public/themes/mingstores/products/ryBdemssBcpSt6vbeQdirRUMcBszbZKt.jpg",
+                SoldQuantities = 1500,
+                Description = "Dòng sản phẩm bồn cầu INAX AC-1017R 1 khối cao cấp đến từ thương hiệu thiết bị vệ sinh INAX\r\nBệt Inax AC-1017R CW-KA22AVN 1 khối với thiết kế mới đơn giản, gọn gàng và sang trọng hơn kết hợp với những tính năng cải tiến\r\nCông nghệ ECO-X xã xoáy cuốn trôi mọi vết bẩn\r\nCông nghệ Aqua Ceramic giúp bề mạt men sứ trắng sáng trong suốt thời gian sữ dụng\r\nCông nghệ chống khuẩn HYPERKILAMIC kháng khuẩn độc quyền của INAX Nhật Bản. \r\nE-Clean: Chức năng phun rửa  tự động\r\nEvaClean: Chức năng vệ sinh phụ nữ\r\nCozyCare: Chức năng sưởi ấm bệ ngồi\r\nX-Fresh: Chức năng khử mùi nhanh \r\nEcoPower: Chức năng tiết kiệm điện “1 lần chạm” (8 tiếng sau tự khôi phục)\r\nDung tích két nước nóng: 0.67L (lít) Vòi phun rửa:\r\nVòi phun rửa và vòi phun dùng riêng cho phụ nữ đều là loại trượt tự động.  \r\nThiết bị an toàn: Rơ-le nhiệt, cảm ứng từ kiểm soát nhiệt độ cao, phao ngắt để thiết bị ngừng hoạt động khi không đủ nước, cảm ứng tự ngắt khi gặp sự cố. \r\nNước cấp: Nối trực tiếp từ đường ống nước ",
+                MaterialStoreID = 1,
+                Unit = "Bộ",
+                Brand = "INAX"
+            });
+
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 1,
+                ProductID = 33,
+                Name = "Mỹ",
+
+            });
+
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 2,
+                ProductID = 33,
+                Name = "Cái",
+            });
+
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 4,
+                ProductID = 33,
+                Name = "Nhà vệ sinh",
+            });
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 3,
+                ProductID = 33,
+                Name = "Ý",
+            });
+
+            //PRODUCT 6
+
+            modelBuilder.Entity<Products>().HasData(new Products
+            {
+                Id = 34,
+                Name = "GFS Gạch Granite Fusion Bán Bóng/Sần",
+                UnitInStock = 200,
+                UnitPrice = 520000,
+                Image = "https://admin.mingstores.com/core/public/themes/mingstores/products/U3SmJsX6rBhkAPyQ3Xym2wlyoNTH6pGz.jpg",
+                SoldQuantities = 1500,
+                Description= "Màu sắc: vàng, xám, trắng, đen\r\nKích thước: 30x60, 60x60",
+                MaterialStoreID = 1,
+                Unit = "Cái",
+                Brand = "NIRO GRANITE"
+            });
+
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 1,
+                ProductID = 34,
+                Name = "Niro – Indonesia",
+
+            });
+
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 2,
+                ProductID = 34,
+                Name = "Cái",
+            });
+
+            modelBuilder.Entity<ProductType>().HasData(new ProductType
+            {
+                Name = "Màu vàng",
+                Id = 6,
+                ProductID = 34,
+                Quantity = 5,
+            });
+
+            modelBuilder.Entity<ProductType>().HasData(new ProductType
+            {
+                Name = "Màu xám",
+                Id = 7,
+                ProductID = 34,
+                Quantity = 10,
+            });
+
+            modelBuilder.Entity<ProductType>().HasData(new ProductType
+            {
+                Name = "Màu trắng",
+                Id = 8,
+                ProductID = 34,
+                Quantity = 1220,
+            });
+
+
+            modelBuilder.Entity<ProductType>().HasData(new ProductType
+            {
+                Name = "Màu đen",
+                Id = 9,
+                ProductID = 34,
+                Quantity = 33,
+            });
+
+            
+            //PRODUCT 7
+
+            modelBuilder.Entity<Products>().HasData(new Products
+            {
+                Id = 35,
+                Name = "Tủ Lavabo JM843",
+                UnitInStock = 200,
+                UnitPrice = 9520000,
+                Image = "https://admin.mingstores.com/core/public/themes/mingstores/products/P5GERhsHMvYboHFoSTcetoIuHKJJApvD.jpg",
+                SoldQuantities = 1500,
+                Description = "ông nghệ sản xuất tủ lavabo của chúng tôi đã được chuyên nghiệp hóa qua nhiều năm phát triển, với phần khung bên ngoài được làm bằng nhôm, là cấu trúc chính hỗ trợ, giúp toàn bộ tủ chắc chắn, bên cạnh phần bản lề được làm bằng INOX 304 dày, giúp cho việc vận hành được trơn tru, ổn định.\r\n- Các bộ phận chính đều được làm bằng thép không gỉ 304 (INOX 304), tăng độ bền cho sản phẩm trong quá trình sử dụng.\r\n- Cấu hình cạnh và tay nắm cửa được làm bằng máy vát 45 độ đặc biệt, góc nhôm được gắn chặt vào thành bên trong tủ, để bề mặt sản phẩm mịn & tinh tế, tạo sự thoải mái khi sử dụng.\r\n\r\n- Việc sử dụng nhôm để làm vật liệu chính sản xuất tủ Lavabo là lựa chọn tối ưu nhất hiện nay, không chỉ có độ bền cao, nhôm hoàn toàn không độc hại với môi trường cũng như người sử dụng. Một số ưu điểm chính của nhôm:\r\n  + Trọng lượng nhẹ, độ bền cao, khả năng chịu lực lớn.\r\n  + Độ cứng tốt, không dễ biến dạng.\r\n  + Không thấm nước trong môi trường có độ ẩm cao, không bắt lửa và chịu được tác động mạnh.\r\n  + Lớp sơn phủ bền màu, chống ăn mòn do thời tiết hoặc hóa chất thông thường.\r\n  + Tạo không gian sang trọng, thoải mái và tiện lợi.",
+                MaterialStoreID = 1,
+                Unit = "Bộ",
+                Brand = "JINMEI"
+            });
+
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 1,
+                ProductID = 35,
+                Name = "Niro – Indonesia",
+
+            });
+
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 2,
+                ProductID = 35,
+                Name = "Bộ",
+            });
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 4,
+                ProductID = 35,
+                Name = "Nhà tắm",
+            });
+
+            //PRODUCT 8
+
+            modelBuilder.Entity<Products>().HasData(new Products
+            {
+                Id = 36,
+                Name = "K015 Sơn Kansai chống thấm Water Proof 4L, 17L",
+                UnitInStock = 200,
+                UnitPrice = 750000,
+                Image = "https://admin.mingstores.com/core/public/themes/mingstores/products/JnLYt6lx4OLgmoplQoxTPU1e9SBjZf9a.jpg",
+                SoldQuantities = 1500,
+                Description ="Sơn ngoại thất câo cấp đến từ thương hiệu Kansai nổi tiếng",
+                MaterialStoreID = 1,
+                Unit = "Lít",
+                Brand = "KANSAI PAINT"
+            });
+
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 1,
+                ProductID = 36,
+                Name = "Ý",
+
+            });
+
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 2,
+                ProductID = 36,
+                Name = "Bộ",
+            });
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 4,
+                ProductID = 36,
+                Name = "Sơn nội thất",
+            });
+
+            //PRODUCT 9
+
+            modelBuilder.Entity<Products>().HasData(new Products
+            {
+                Id = 37,
+                Name = "KARI SQUARE STEP LIGHT (3W)",
+                UnitInStock = 200,
+                UnitPrice = 460000,
+                Image = "https://admin.mingstores.com/core/public/themes/mingstores/products/N23c1P48S9v157cAYlNRc35gS92VeYVE.jpg",
+                SoldQuantities = 1500,
+                Description = "KARI SQUARE STEP LIGHT (3W) mang đến ánh sáng tinh tế đến gia đình bạn ",
+                MaterialStoreID = 1,
+                Unit = "Cái",
+                Brand = "COSMOS"
+            });
+
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 1,
+                ProductID = 37,
+                Name = "Ý",
+
+            });
+
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 2,
+                ProductID = 37,
+                Name = "Bộ",
+            });
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 4,
+                ProductID = 37,
+                Name = "Phòng khách",
+            });
+
+            //PRODUCT 10
+
+            modelBuilder.Entity<Products>().HasData(new Products
+            {
+                Id = 38,
+                Name = "GHR Gạch Granite Hardrock Mờ/Bán bóng",
+                UnitInStock = 200,
+                UnitPrice = 360000,
+                Image = "https://admin.mingstores.com/core/public/themes/mingstores/products/6TauBDiJiwnvQaJTuCl9D0SYHFayTRHk.jpg",
+                SoldQuantities = 1500,
+                Description = "GHR Gạch Granite Hardrock Mờ/Bán bóng ",
+                MaterialStoreID = 1,
+                Unit = "Viên",
+                Brand = "NIRO GRANITE"
+            });
+
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 1,
+                ProductID = 38,
+                Name = "Niro – Indonesia",
+
+            });
+
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 2,
+                ProductID = 38,
+                Name = "Cái",
+            });
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 4,
+                ProductID = 38,
+                Name = "Nội thất",
+            });
+
+
+
+
+
+
+
+
+
             modelBuilder.Entity<Products>().HasData(new Products
             {
                 Id=1,
@@ -559,7 +938,133 @@ namespace Data.Extensions
                 Brand = "Việt Nam"
             });
 
-           
+
+            modelBuilder.Entity<Products>().HasData(new Products
+            {
+                Id = 20,
+                Name = "K023 Sơn Kansai chống thấm Aqua Shield 5L, 18L",
+                UnitPrice = 960000,
+                UnitInStock = 1000,
+                Image = "https://admin.mingstores.com/core/public/themes/mingstores/products/OOUUL3p3xO6kV63bOCyr4qCMZBNDo2yc.jpg",
+                Description = "- Sơn chống thấm Một thành phần Aqua Shield\r\n\r\n- Chống thấm tuyệt hảo\r\n\r\n- Kháng nước tuyệt đối\r\n\r\n- Che phủ vết nứt, co giãn tốt, dễ thi công (không chứa xi măng)\r\n\r\n",
+                Brand = "KANSAI PAINT",
+                SoldQuantities = 100,
+                Unit = "Lít",
+                MaterialStoreID = 1
+            });
+
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 1,
+                ProductID = 20,
+                Name = "Niro – Indonesia",
+
+            });
+
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 2,
+                ProductID = 20,
+                Name = "Lít",
+            });
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 4,
+                ProductID = 20,
+                Name = "Sơn ngoại thất",
+            });
+
+            modelBuilder.Entity<ProductType>().HasData(new ProductType
+            {
+                Name = "5L",
+                Id = 1,
+                ProductID = 20,
+                Quantity = 10,
+            });
+
+            modelBuilder.Entity<ProductType>().HasData(new ProductType
+            {
+                Name = "10L",
+                Id = 2,
+                ProductID = 20,
+                Quantity = 10,
+            });
+
+
+
+
+            modelBuilder.Entity<Products>().HasData(new Products
+            {
+                Id = 21,
+                Name = "SEN TẮM CÂY INAX BFV-515S",
+                UnitPrice = 12485000,
+                UnitInStock = 1200,
+                Image = "https://admin.mingstores.com/core/public/themes/mingstores/products/Mjzhtin7lD3gCUXksET0srIdUnABPNE3.jpg",
+                Description = "Sen cây nóng lạnh INAX BFV-515S là sản phẩm sen cây INAX  được thiết kế tay sen cài liền cùng thân sen cây thay vì để gắn tường, giúp cho tổng thể bộ sen cây trở nên gọn gàng, linh hoạt, đặc biệt phù hợp cả với những căn phòng tắm kích thước nhỏ, quý khách hàng vẫn có thể lắp đặt mẫu sen cây này và cảm nhận trải nghiệm khác biệt khi tắm vòi sen cây với bát sen lớn.\r\nMẫu thiết kế sen cây thuộc dòng sản phẩm SEN VÒI INAX có thiết kế đẹp mắt, sáng tạo từ kiểu dáng đến tính năng thích hợp cho mọi loại hình phòng tắm từ những phòng tắm đơn giản, nhỏ hẹp, đến những căn phòng tắm hiện đại, tiện nghi. ",
+                Brand = "INAX",
+                Unit = "Cái",
+                SoldQuantities = 1000,
+                MaterialStoreID = 1
+            });
+
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 1,
+                ProductID = 21,
+                Name = "Nhật Bản",
+
+            });
+
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 2,
+                ProductID = 21,
+                Name = "Cái",
+            });
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 4,
+                ProductID = 21,
+                Name = "Nhà tắm",
+            });
+
+            modelBuilder.Entity<Products>().HasData(new Products
+            {
+
+                Id = 22,
+                Name = "Chậu Rửa Lavabo Inax AL-536V",
+                UnitPrice = 2046000,
+                UnitInStock = 100,
+                Image = "https://admin.mingstores.com/core/public/themes/mingstores/products/JnyguIQW8EMvvUqcZ6BZnGSLOeL5OgpK.jpg",
+                Description = "Là mẫu chậu rửa mặt Inax đặt bàn mới nhất 2017, sản phẩm tiêu biểu cho năm 2018",
+                Brand = "INAX",
+                Unit = "Cái",
+                SoldQuantities = 100,
+                MaterialStoreID = 1
+            });
+
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 1,
+                ProductID = 22,
+                Name = "Nhật Bản",
+
+            });
+
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 2,
+                ProductID = 22,
+                Name = "Cái",
+            });
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 4,
+                ProductID = 22,
+                Name = "Nhà tắm",
+            });
+
+
 
             //bill 1
             modelBuilder.Entity<Bill>().HasData(new Bill
@@ -648,32 +1153,18 @@ namespace Data.Extensions
             });
 
 
-            modelBuilder.Entity<ProductType>().HasData(new ProductType
-            {
-               Name="Maù xanh",
-               Id=1,
-               ProductID=20,
-               Quantity=10,
-            });
+         
 
             modelBuilder.Entity<ProductType>().HasData(new ProductType
             {
-                Name = "Maù đỏ",
-                Id = 2,
-                ProductID = 20,
-                Quantity = 10,
-            });
-
-            modelBuilder.Entity<ProductType>().HasData(new ProductType
-            {
-                Name = "Sắt",
+                Name = "Trắng",
                 Id = 3,
                 ProductID = 21,
                 Quantity = 10,
             });
             modelBuilder.Entity<ProductType>().HasData(new ProductType
             {
-                Name = "Gỗ",
+                Name = "Đen",
                 Id = 4,
                 ProductID = 21,
                 Quantity = 10,
