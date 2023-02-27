@@ -145,6 +145,7 @@ builder.Services.AddIdentity<User, Role>(
     ).AddEntityFrameworkStores<BuildingConstructDbContext>().AddDefaultTokenProviders();
 builder.Services.AddScoped<UserManager<User>, UserManager<User>>();
 builder.Services.AddScoped<SignInManager<User>, SignInManager<User>>();
+    builder.Services.AddScoped<IUserConnectionManager, UserConnectionManager>();
 builder.Services.AddScoped<RoleManager<Role>, RoleManager<Role>>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITypeService, TypeService>();
