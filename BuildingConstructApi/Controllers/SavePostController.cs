@@ -40,8 +40,7 @@ namespace BuildingConstructApi.Controllers
         public async Task<IActionResult> CreateSavePost([FromBody] SavePostRequest request)
         {
             var rs = await _saveService.SavePost(request);
-            var userID = User.FindFirst("UserID").Value;
-            var connections = _userConnectionManager.GetUserConnections(userID);
+            var connections = _userConnectionManager.GetUserConnections(rs.Data);
             if (connections != null && connections.Count > 0)
             {
                 foreach (var connectionId in connections)
