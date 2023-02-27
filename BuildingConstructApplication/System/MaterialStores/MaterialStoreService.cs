@@ -12,7 +12,6 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using ViewModels.Categories;
 using ViewModels.MaterialStore;
-using AutoMapper;
 
 namespace Application.System.MaterialStores
 {
@@ -20,13 +19,11 @@ namespace Application.System.MaterialStores
     {
         private readonly BuildingConstructDbContext _context;
         private IHttpContextAccessor _accessor;
-        private readonly IMapper _mapper;
 
-        public MaterialStoreService(BuildingConstructDbContext context, IHttpContextAccessor accessor, IMapper mapper)
+        public MaterialStoreService(BuildingConstructDbContext context, IHttpContextAccessor accessor)
         {
             _context = context;
             _accessor = accessor;
-            _mapper = mapper;
         }
 
         public async Task<bool> CreateProduct(ProductDTO request)

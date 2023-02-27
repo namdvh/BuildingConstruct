@@ -7,7 +7,7 @@ using ViewModels.Pagination;
 
 namespace BuildingConstructApi.Controllers
 {
-    [Route("api/[notification]")]
+    [Route("api/notification")]
     [ApiController]
     [Authorize(AuthenticationSchemes = "Bearer")]
     public class NotificationController : ControllerBase
