@@ -182,9 +182,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseAuthorization();
 
-app.MapControllers();
 app.UseEndpoints(endpoints =>
 {
+    endpoints.MapControllers(); 
     endpoints.MapHub<NotificationUserHub>("/NotificationUserHub");
 });
 
