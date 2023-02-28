@@ -10,6 +10,7 @@ namespace Data.Entities
     public class Notification:BaseEntity
     {
         public int Id { get; set; } 
+        public int? NavigateId { get; set; }
         public string Title { get; set; }
         public NotificationType Type { get; set; }
         public string? Message { get; set; }
