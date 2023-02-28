@@ -357,6 +357,7 @@ namespace Application.System.Bill
             {
                 ProductBillDetail pro = new()
                 {
+                    ProductId=item.ProductID,
                     Image = item.Products.Image,
                     ProductBrand = item.Products.Brand,
                     ProductDescription = item.Products.Description,
@@ -413,7 +414,7 @@ namespace Application.System.Bill
                     var tmpList = MapProductDTO(item.Id);
                     ls.AddRange(tmpList);
                 }
-                ls=ls.DistinctBy(x => x.ProductName).ToList();
+                ls=ls.DistinctBy(x => x.ProductId).ToList();
 
                 response = new()
                 {
