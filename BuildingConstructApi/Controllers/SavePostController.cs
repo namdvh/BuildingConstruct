@@ -1,8 +1,11 @@
-﻿using Application.System.SavePost;
+﻿using Application.System.Notifies;
+using Application.System.SavePost;
+using BuildingConstructApi.Hubs;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Hosting;
 using System.Drawing;
 using System.Reflection.PortableExecutable;
@@ -16,11 +19,15 @@ namespace BuildingConstructApi.Controllers
     //[Authorize(AuthenticationSchemes = "Bearer")]
     public class SavePostController : ControllerBase
     {
+        private readonly IHubContext<NotificationUserHub> _notificationUserHubContext;
+        private readonly IUserConnectionManager _userConnectionManager;
         private readonly ISaveService _saveService;
 
-        public SavePostController(ISaveService saveService)
+        public SavePostController(ISaveService saveService, IUserConnectionManager userConnectionManager, IHubContext<NotificationUserHub> notificationUserHubContext)
         {
             _saveService = saveService;
+            _userConnectionManager = userConnectionManager;
+            _notificationUserHubContext = notificationUserHubContext;
         }
 
         [HttpGet]
@@ -33,6 +40,14 @@ namespace BuildingConstructApi.Controllers
         public async Task<IActionResult> CreateSavePost([FromBody] SavePostRequest request)
         {
             var rs = await _saveService.SavePost(request);
+            var connections = _userConnectionManager.GetUserConnections(rs.Data);
+            if (connections != null && connections.Count > 0)
+            {
+                foreach (var connectionId in connections)
+                {
+                    await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("sendToUser", "sadasdasdasd");
+                }
+            }
             return Ok(rs);
         }
         [HttpPut]

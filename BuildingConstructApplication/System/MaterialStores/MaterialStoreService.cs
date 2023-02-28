@@ -12,7 +12,6 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using ViewModels.Categories;
 using ViewModels.MaterialStore;
-using AutoMapper;
 
 namespace Application.System.MaterialStores
 {
@@ -20,13 +19,11 @@ namespace Application.System.MaterialStores
     {
         private readonly BuildingConstructDbContext _context;
         private IHttpContextAccessor _accessor;
-        private readonly IMapper _mapper;
 
-        public MaterialStoreService(BuildingConstructDbContext context, IHttpContextAccessor accessor, IMapper mapper)
+        public MaterialStoreService(BuildingConstructDbContext context, IHttpContextAccessor accessor)
         {
             _context = context;
             _accessor = accessor;
-            _mapper = mapper;
         }
 
         public async Task<bool> CreateProduct(ProductDTO request)
@@ -356,7 +353,8 @@ namespace Application.System.MaterialStores
                     Experience = item.Experience,
                     Image = item.Image,
                     TaxCode = item.TaxCode,
-                    Webstie = item.Website
+                    Webstie = item.Website,
+                    UserId = item.User.Id,
 
                 };
                 result.Add(dto);
@@ -422,11 +420,10 @@ namespace Application.System.MaterialStores
             List<CategoryDTO> list = new();
             foreach (var c in productCategories)
             {
-                var results = await _context.Categories.Where(x => x.ID == c.CategoriesID).Include(x=>x.ProductCategories).SingleOrDefaultAsync();
                 var final = new CategoryDTO();
-                final.Id = results.ID;
-                final.CategoryName = results.Name;
-                final.Name = await GetProductCategoryName(results.ProductCategories);
+                final.Id = c.CategoriesID;
+                final.CategoryName = c.Name;
+                final.Name = c.Name;
                 list.Add(final);
             }
             return list;
