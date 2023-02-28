@@ -1184,9 +1184,44 @@ namespace Data.Extensions
                 ProductID = 21,
                 Quantity = 10,
             });
+            modelBuilder.Entity<Notification>().HasData(new Notification
+            {
+                Id = 1,
+                Type=Enum.NotificationType.TYPE_1,
+                Title="New Notification",
+                UserID=Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d6"),
+                CreateBy=Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d9"),
+                IsRead=false,
+                LastModifiedAt=DateTime.Now,
+                Message="Someone has saved your post",
+                NavigateId=1
+            });
 
+            modelBuilder.Entity<Notification>().HasData(new Notification
+            {
+                Id = 2,
+                Type = Enum.NotificationType.TYPE_2,
+                Title = "New Notification",
+                UserID = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d6"),
+                CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d9"),
+                IsRead = false,
+                LastModifiedAt = DateTime.Now,
+                Message = "Someone has applied your post",
+                NavigateId = 1
+            });
 
-
+            modelBuilder.Entity<Notification>().HasData(new Notification
+            {
+                Id = 3,
+                Type = Enum.NotificationType.TYPE_3,
+                Title = "New Notification",
+                UserID = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d6"),
+                CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d9"),
+                IsRead = false,
+                LastModifiedAt = DateTime.Now,
+                Message = "Create commitment successfully",
+                NavigateId = 1
+            });
 
         }
     }
