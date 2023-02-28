@@ -814,5 +814,60 @@ namespace Application.System.ContractorPosts
 
             return response;
         }
+
+        public async Task<BaseResponse<List<AppliedPostAll>>> ViewAllPostApplied(Guid userID)
+        {
+            BaseResponse<List<AppliedPostAll>> response;
+            List<AppliedPostAll> ls = new();
+            var user =await _context.Users.FirstOrDefaultAsync(x=>x.Id.Equals(userID));
+            if(user == null)
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.NOTFOUND_MESSAGE,
+                };
+                return response;
+            }
+            var rs=await _context.AppliedPosts
+                .Include(x=>x.ContractorPosts)
+                    .ThenInclude(x=>x.Contractor)
+                        .ThenInclude(x=>x.User)
+                .Where(x=>x.BuilderID==user.BuilderId)
+                .ToListAsync();
+
+            response = new()
+            {
+                Code = BaseCode.SUCCESS,
+                Data = MapListAppliedAllDTO(rs),
+                Message = BaseCode.SUCCESS_MESSAGE,
+            };
+            return response;
+        }
+
+        private List<AppliedPostAll> MapListAppliedAllDTO(List<AppliedPost> list)
+        {
+            List<AppliedPostAll> result = new();
+
+            foreach (var item in list)
+            {
+                AppliedPostAll dto = new()
+                {
+                    PostId=item.PostID,
+                    Avatar = item.ContractorPosts.Contractor?.User?.Avatar,
+                    Description = item.ContractorPosts.Description,
+                    EndDate = item.ContractorPosts.EndDate,
+                    Place = item.ContractorPosts.Place,
+                    ProjectName = item.ContractorPosts.ProjectName,
+                    StarDate = item.ContractorPosts.StarDate,
+                    AuthorName = item.ContractorPosts.Contractor?.User?.FirstName + " " + item.ContractorPosts.Contractor?.User?.LastName,
+                    Title = item.ContractorPosts.Title,
+                    AppliedDate=item.AppliedDate,
+                    WishSalary=item.WishSalary
+                };
+                result.Add(dto);
+            }
+            return result;
+        }
     }
 }
