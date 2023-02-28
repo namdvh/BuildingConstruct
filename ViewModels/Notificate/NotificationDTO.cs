@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ViewModels.NotificationModels
+namespace ViewModels.Notificate
 {
     public class NotificationDTO
     {
@@ -16,6 +16,7 @@ namespace ViewModels.NotificationModels
         public bool IsRead { get; set; }
         public Guid UserID { get; set; }
         public Guid CreateBy { get; set; }
+        public NotificateAuthor Author { get; set; }
         public DateTime LastModifiedAt { get; set; }
 
     }

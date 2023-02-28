@@ -1,6 +1,10 @@
 ﻿using Application.System.Notifies;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using ViewModels.Notificate;
+using Data.Entities;
+using Data.DataContext;
 
 namespace BuildingConstructApi.Hubs
 {
@@ -9,20 +13,20 @@ namespace BuildingConstructApi.Hubs
         private readonly IUserConnectionManager _userConnectionManager;
         private IHttpContextAccessor _accessor;
 
+
         public NotificationUserHub(IUserConnectionManager userConnectionManager, IHttpContextAccessor accessor)
         {
             _userConnectionManager = userConnectionManager;
             _accessor = accessor;
         }
-        public string GetConnectionId()
+        public async override Task OnConnectedAsync()
         {
-            Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
+            Claim identifierClaim = _accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
             var userID = identifierClaim.Value.ToString();
             _userConnectionManager.KeepUserConnection(userID, Context.ConnectionId);
-
-            return Context.ConnectionId;
+            await Task.CompletedTask;
         }
-
+        
         public async override Task OnDisconnectedAsync(Exception exception)
         {
             //get the connectionId

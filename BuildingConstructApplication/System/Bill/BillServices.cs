@@ -56,7 +56,16 @@ namespace Application.System.Bill
                         billDetail.Price = item.Price;
 
                         _context.BillDetails.Add(billDetail);
-                        _context.SaveChanges();
+                        var checkout=_context.SaveChanges();
+                        if (checkout > 0)
+                        {
+                            var product = await _context.Products.FindAsync(item.ProductId);
+                            product.UnitInStock = product.UnitInStock - item.Quantity;
+                            var pType = await _context.ProductTypes.FindAsync(item.TypeID);
+                            pType.Quantity-=item.Quantity;
+                            product.SoldQuantities+=item.Quantity;
+                            await _context.SaveChangesAsync();
+                        }
                     }
                 }
                 flag = true;
