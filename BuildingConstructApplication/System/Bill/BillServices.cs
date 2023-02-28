@@ -413,6 +413,7 @@ namespace Application.System.Bill
                     var tmpList = MapProductDTO(item.Id);
                     ls.AddRange(tmpList);
                 }
+                ls=ls.DistinctBy(x => x.ProductName).ToList();
 
                 response = new()
                 {
