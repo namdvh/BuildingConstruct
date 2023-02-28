@@ -101,6 +101,7 @@ namespace Application.System.Notifies
                 dto.IsRead = item.IsRead;
                 dto.CreateBy = item.CreateBy;
                 dto.LastModifiedAt = item.LastModifiedAt;
+                dto.NavigateId = item.NavigateId;
                 var user = await _context.Users.FindAsync(item.CreateBy);
                 if (user != null)
                 {
