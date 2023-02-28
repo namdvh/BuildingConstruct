@@ -331,7 +331,12 @@ namespace Data.Extensions
                 Salaries="10.000.000 - 15.000.000",
                 NumberPeople=20,
                 ContractorID=1,
-                CreateBy=Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7")
+                Accommodation=true,
+                ConstructionType= "Nhà ở",
+                Transport=true,
+                StartTime="8:00",
+                EndTime="17:30",
+                CreateBy=Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7"),
             });
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
             {
@@ -348,6 +353,11 @@ namespace Data.Extensions
                 PostCategories = Enum.PostCategories.Categories1,
                 Salaries = "10.000.000 - 15.000.000",
                 NumberPeople = 20,
+                Accommodation = true,
+                ConstructionType = "Tòa nhà/Chung cư",
+                Transport = true,
+                StartTime = "8:00",
+                EndTime = "17:30",
                 ContractorID = 2,
                 CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d6")
 
@@ -368,6 +378,11 @@ namespace Data.Extensions
                 Salaries = "10.000.000 - 15.000.000",
                 NumberPeople = 20,
                 ContractorID = 2,
+                Accommodation = true,
+                ConstructionType = "Công trình công cộng",
+                Transport = true,
+                StartTime = "8:00",
+                EndTime = "17:30",
                 CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d6")
 
             });
