@@ -8,7 +8,7 @@ namespace Data.Configuration
     {
         public void Configure(EntityTypeBuilder<ProductType> builder)
         {
-            builder.ToTable("ProductType");
+            builder.ToTable("ProductTypes");
 
             builder.HasKey(x => x.Id);
 

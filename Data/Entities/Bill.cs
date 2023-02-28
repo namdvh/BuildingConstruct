@@ -14,8 +14,6 @@ namespace Data.Entities
         public string? Note { get; set; }
 
         public DateTime? PaymentDate { get; set; }
-        public MonthOfInstallment? MonthOfInstallment { get; set; } 
-
         public BillType? Type { get; set; }
 
         public Status Status { get; set; }
@@ -35,8 +33,6 @@ namespace Data.Entities
         public MaterialStore? MaterialStore { get; set; }
 
         public List<BillDetail>? BillDetails { get; set; }
-
-        public List<SmallBill>? SmallBills { get; set; }
 
     }
 }

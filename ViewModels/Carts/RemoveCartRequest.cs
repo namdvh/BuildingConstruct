@@ -8,6 +8,6 @@ namespace ViewModels.Carts
 {
     public class RemoveCartRequest
     {
-        public int ProductID { get; set; }
+        public int Id { get; set; }
     }
 }

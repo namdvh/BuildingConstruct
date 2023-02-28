@@ -1,9 +1,7 @@
 ﻿using Application.System.Bill;
 using Data.Enum;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 using ViewModels.BillModels;
 using ViewModels.Pagination;
 using ViewModels.Response;
@@ -58,18 +56,40 @@ namespace BuildingConstructApi.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetBillDetail([FromRoute] int id)
-        {
-            var rs = await _billServices.GetDetail(id);
+        //[HttpGet("{id}")]
+        //public async Task<IActionResult> GetBillDetail([FromRoute] int id)
+        //{
+        //    var rs = await _billServices.GetDetail(id);
 
-            return Ok(rs);
-        }
+        //    return Ok(rs);
+        //}
 
         [HttpGet("small/{id}")]
         public async Task<IActionResult> GetSmallBill([FromRoute] int id)
         {
             var rs = await _billServices.GetDetailBySmallBill(id);
+
+            return Ok(rs);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateBillStatus([FromRoute] int id, Status status)
+        {
+            var rs = await _billServices.UpdateStatusBill(status, id);
+
+            return Ok(rs);
+        }
+
+        [HttpGet("history")]
+        public async Task<IActionResult> GetHistoryProductBill()
+        {
+            var userID = User.FindFirst("UserID").Value;
+
+            if (userID == null)
+            {
+                return BadRequest();
+            }
+            var rs = await _billServices.GetHistoryProductBill(Guid.Parse(userID));
 
             return Ok(rs);
         }

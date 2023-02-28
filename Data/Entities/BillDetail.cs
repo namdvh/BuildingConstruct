@@ -13,10 +13,6 @@ namespace Data.Entities
         public int? BillID { get; set; }
 
         public Bill? Bills { get; set; }
-        public int? SmallBillID { get; set; }
-
-        public SmallBill? SmallBills { get; set; }
-
         public int? ProductID { get; set; }
 
         public Products? Products { get; set; }  
@@ -24,6 +20,8 @@ namespace Data.Entities
         public int Quantity { get; set; }
 
         public decimal Price { get; set; }  
+        public int? ProductTypeId { get; set; }
+        public ProductType ProductTypes { get; set; }
     }
 
 }

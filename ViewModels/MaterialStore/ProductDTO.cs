@@ -15,6 +15,7 @@ namespace ViewModels.MaterialStore
         public int UnitInStock { get; set; }
 
         public string? Image { get; set; }
+        public string Unit { get; set; }
 
         public string? Description { get; set; }
         public int? SoldQuantities { get; set; }
@@ -22,6 +23,7 @@ namespace ViewModels.MaterialStore
 
         public string? Brand { get; set; }
 
-        public List<int>? CategoriesId { get; set; }
+        public List<CategoryProductDTO>? Categories { get; set; }
+        public List<ProductTypeDTO>? ProductTypes { get; set; }
     }
 }

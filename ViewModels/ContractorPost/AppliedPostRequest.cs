@@ -9,6 +9,7 @@ namespace ViewModels.ContractorPost
     public class AppliedPostRequest
     {
         public int PostId { get; set; }   
+        public decimal? WishSalary { get; set; }
         public List<AppliedGroup>? GroupMember { get; set; } 
     }
 

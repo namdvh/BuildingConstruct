@@ -13,7 +13,6 @@ namespace Data.Entities
 
         public string Name { get; set; }    
 
-        public Enum.TypeEnum Type { get; set; }
         [JsonIgnore]
         public List<ProductCategories> ProductCategories { get; set; }
     }

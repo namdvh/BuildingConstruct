@@ -10,6 +10,7 @@ namespace ViewModels.Categories
     {
         public int? Id { get; set; }
         public string Name { get; set; }
+        public string CategoryName { get; set; }
         public Data.Enum.TypeEnum Type { get; set; }
     }
 }

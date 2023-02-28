@@ -1,17 +1,16 @@
-
 using Application.System.Bill;
-using Application.System.BuilderPosts;
 using Application.System.Carts;
 using Application.System.Category;
 using Application.System.Commitments;
 using Application.System.ContractorPosts;
 using Application.System.MaterialStores;
-using Application.System.ProductSystems;
+using Application.System.Notifies;
 using Application.System.SavePost;
 using Application.System.Skills;
 using Application.System.Types;
 using Application.System.Users;
 using Application.System.VnPay;
+using BuildingConstructApi.Hubs;
 using Data.DataContext;
 using Data.Entities;
 using FluentValidation;
@@ -31,12 +30,14 @@ var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddSignalR();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "BakeryRecepi.Api", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "BuildingConstruct.Api", Version = "v1" });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n
@@ -144,6 +145,7 @@ builder.Services.AddIdentity<User, Role>(
     ).AddEntityFrameworkStores<BuildingConstructDbContext>().AddDefaultTokenProviders();
 builder.Services.AddScoped<UserManager<User>, UserManager<User>>();
 builder.Services.AddScoped<SignInManager<User>, SignInManager<User>>();
+    builder.Services.AddScoped<IUserConnectionManager, UserConnectionManager>();
 builder.Services.AddScoped<RoleManager<Role>, RoleManager<Role>>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITypeService, TypeService>();
@@ -152,10 +154,9 @@ builder.Services.AddScoped<IVnPayService, VnPayService>();
 builder.Services.AddScoped<IValidator<RegisterRequestDTO>, RegisterRequestValidatorDTO>();
 builder.Services.AddScoped<IValidator<ContractorPostModels>, ContractorPostValidator>();
 builder.Services.AddTransient<IContractorPostService, ContractorPostService>();
-builder.Services.AddScoped<IBuilderPostService, BuilderPostServices>(); 
 builder.Services.AddScoped<IMaterialStoreService, MaterialStoreService>();
+builder.Services.AddScoped<INotificationServices, NotificationServices>();
 builder.Services.AddScoped<ICommitmentService, CommitmentService>();
-builder.Services.AddScoped<IProductSystemService, ProductSystemService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ISkillService, SkillServices>();
 builder.Services.AddTransient<ICartService, CartService>();
@@ -172,11 +173,19 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
-app.UseCors(MyAllowSpecificOrigins);
+app.UseCors(x => x
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .SetIsOriginAllowed(origin => true) // allow any origin
+        .AllowCredentials());
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers(); 
+    endpoints.MapHub<NotificationUserHub>("/NotificationUserHub");
+});
 
 app.Run();

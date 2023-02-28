@@ -12,7 +12,6 @@ namespace ViewModels.SavePost
     {
         public Guid UserId { get; set; }
         public List<ContractorPostDetailDTO>? ContractorPost { get; set; }
-        public List<BuilderPostDetailDTO>? BuilderPost { get; set; }
         public DateTime CreatedDate { get; set; }
 
     }

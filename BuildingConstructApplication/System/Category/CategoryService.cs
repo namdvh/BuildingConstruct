@@ -26,8 +26,7 @@ namespace Application.System.Category
         public async Task<bool> CreateCategory(CategoryDTO request)
         {
             var category = new Data.Entities.Categories();
-            category.Name= request.Name;
-            category.Type = request.Type;
+            category.Name= request.CategoryName;
             await _context.Categories.AddAsync(category);
             var rs =await _context.SaveChangesAsync();
             if (rs>0)
@@ -107,8 +106,7 @@ namespace Application.System.Category
                 CategoryDTO cateDTO = new()
                 {
                     Id = item.ID,
-                    Name = item.Name,
-                    Type = item.Type
+                    CategoryName = item.Name,
                 };
                 listcate.Add(cateDTO);
             }
@@ -125,8 +123,7 @@ namespace Application.System.Category
                 response.Message = BaseCode.SUCCESS_MESSAGE;
                 response.Data = new();
                 response.Data.Id = rs.ID;
-                response.Data.Name = rs.Name;
-                response.Data.Type = rs.Type;
+                response.Data.CategoryName = rs.Name;
             }
             else
             {

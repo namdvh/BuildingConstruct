@@ -23,5 +23,9 @@ namespace ViewModels.Users
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }
         public DateTime? RefreshTokenExpiryTime { get; set; }
+
+        public int? StoreID { get; set; }
+        public int? BuilderID { get; set; }
+        public int? ContractorID { get; set; }
     }
 }

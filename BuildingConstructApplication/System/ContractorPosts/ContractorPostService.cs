@@ -38,6 +38,11 @@ namespace Application.System.ContractorPosts
                 Description = contractorPostDTO.Description,
                 StarDate = contractorPostDTO.StarDate,
                 EndDate = contractorPostDTO.EndDate,
+                ConstructionType= contractorPostDTO.ConstructionType,
+                StartTime= contractorPostDTO.StartTime,
+                EndTime=contractorPostDTO.EndTime,
+                Accommodation= contractorPostDTO.Accommodation,
+                Transport=contractorPostDTO.Transport,
                 Place = contractorPostDTO.Place,
                 Salaries = contractorPostDTO.Salaries,
                 ViewCount = 0,
@@ -190,6 +195,11 @@ namespace Application.System.ContractorPosts
             ContractorPostDetailDTO postDTO = new()
             {
                 Title = post.Title,
+                Accommodation=post.Accommodation,
+                ConstructionType=post.ConstructionType,
+                EndTime=post.EndTime,
+                StartTime=post.StartTime,
+                Transport=post.Transport,
                 ProjectName = post.ProjectName,
                 Salaries = post.Salaries,
                 Description = post.Description,
@@ -345,6 +355,17 @@ namespace Application.System.ContractorPosts
                 {
                     query = query.Include(x => x.Contractor).Where(x => x.Title.Contains(filter.FilterRequest.Title) || x.Contractor.CompanyName.Contains(filter.FilterRequest.Title));
                 }
+                if (filter.FilterRequest.Transport == true)
+                {
+                    query = query.Where(x => x.Transport == true);
+
+                }
+                if (filter.FilterRequest.Accommodation == true)
+                {
+                    query = query.Where(x => x.Accommodation == true);
+
+                }
+
             }
 
             var result = await query
@@ -494,6 +515,7 @@ namespace Application.System.ContractorPosts
                 FirstName = applied.Builder.User.FirstName,
                 LastName = applied.Builder.User.LastName,
                 UserID = applied.Builder.User.Id,
+                WishSalary=applied.WishSalary,
                 AppliedDate = applied.AppliedDate
             };
             return rs;
@@ -510,6 +532,7 @@ namespace Application.System.ContractorPosts
                 FirstName = applied.Builder.User.FirstName,
                 LastName = applied.Builder.User.LastName,
                 UserID = applied.Builder.User.Id,
+                WishSalary=applied.WishSalary,
                 Groups = group,
                 AppliedDate = applied.AppliedDate
             };
@@ -552,7 +575,7 @@ namespace Application.System.ContractorPosts
                            .Take(filter.PageSize)
                            .ToListAsync();
 
-            totalRecord = await _context.BuilderPosts.CountAsync();
+            totalRecord = await _context.ContractorPosts.CountAsync();
 
 
             if (!result.Any())
@@ -755,6 +778,7 @@ namespace Application.System.ContractorPosts
                 {
                     BuilderID = user.BuilderId.Value,
                     PostID = request.PostId,
+                    WishSalary=request.WishSalary,
                     GroupID = group.Id,
                     Status = Status.NOT_RESPONSE,
                     AppliedDate = DateTime.Now
@@ -770,6 +794,7 @@ namespace Application.System.ContractorPosts
                 {
                     BuilderID = user.BuilderId.Value,
                     PostID = request.PostId,
+                    WishSalary=request.WishSalary,
                     Status = Status.NOT_RESPONSE,
                     AppliedDate = DateTime.Now
 

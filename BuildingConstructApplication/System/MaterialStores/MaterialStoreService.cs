@@ -45,16 +45,37 @@ namespace Application.System.MaterialStores
             products.Image = request.Image;
             products.SoldQuantities = 0;
             products.MaterialStoreID = storeID;
+            products.Unit = request.Unit;
             products.CreatedBy = Guid.Parse(userID);
             await _context.Products.AddAsync(products);
             await _context.SaveChangesAsync();
-            if (request.CategoriesId != null)
+            if (request.ProductTypes != null)
+            {
+                List<ProductType> list = new();
+                foreach(var item in request.ProductTypes)
+                {
+                    var productType = new ProductType();
+                    productType.ProductID = products.Id;
+                    productType.Quantity = item.Quantity;
+                    productType.Name = item.TypeName;
+                    list.Add(productType);
+                    
+                }
+                await _context.AddRangeAsync(list);
+                var rs=await _context.SaveChangesAsync();
+                if (rs < 0)
+                {
+                     _context.Remove(products);
+                    return false;
+                }
+            }
+            if (request.Categories != null)
             {
                 var productcate = new ProductCategories();
 
-                foreach (var item in request.CategoriesId)
+                foreach (var item in request.Categories)
                 {
-                    var check = _context.Categories.Where(x => x.ID == item).SingleOrDefault();
+                    var check = _context.Categories.Where(x => x.ID == item.CategoryID).SingleOrDefault();
                     if (check == null)
                     {
                         _context.Products.Remove(products);
@@ -63,7 +84,8 @@ namespace Application.System.MaterialStores
                     }
                     var id = products.Id;
                     productcate.ProductID = id;
-                    productcate.CategoriesID = item;
+                    productcate.CategoriesID = item.CategoryID;
+                    productcate.Name = item.Name;
                     await _context.AddAsync(productcate);
                     var rs = await _context.SaveChangesAsync();
                     if (rs < 0)
@@ -72,6 +94,7 @@ namespace Application.System.MaterialStores
                         await _context.SaveChangesAsync();
                         return false;
                     }
+
                 }
 
             }
@@ -113,7 +136,7 @@ namespace Application.System.MaterialStores
                .Take(filter.PageSize)
                .ToListAsync();
             }
-            var totalRecords = await _context.ProductSystems.Where(x => x.FromSystem == true).CountAsync();
+            var totalRecords = await _context.Products.CountAsync();
 
             if (!data.Any())
             {
@@ -330,7 +353,8 @@ namespace Application.System.MaterialStores
                     Experience = item.Experience,
                     Image = item.Image,
                     TaxCode = item.TaxCode,
-                    Webstie = item.Website
+                    Webstie = item.Website,
+                    UserId = item.User.Id,
 
                 };
                 result.Add(dto);
@@ -341,7 +365,7 @@ namespace Application.System.MaterialStores
         public async Task<BaseResponse<ProductDetailDTO>> GetProductDetail(int productId)
         {
             BaseResponse<ProductDetailDTO> response = new();
-            var rs = await _context.Products.Include(x => x.ProductCategories).SingleOrDefaultAsync(x => x.Id == productId);
+            var rs = await _context.Products.Include(x => x.ProductCategories).Include(x=>x.ProductTypes).SingleOrDefaultAsync(x => x.Id == productId);
             if (rs == null)
             {
 
@@ -366,8 +390,10 @@ namespace Application.System.MaterialStores
             productDetail.Description = rs.Description;
             productDetail.UnitInStock = rs.UnitInStock;
             productDetail.UnitPrice = rs.UnitPrice;
+            productDetail.Unit = rs.Unit;
             productDetail.Brand = rs.Brand;
             productDetail.SoldQuantities = rs.SoldQuantities;
+            productDetail.ProductType = await GetProductType(rs.ProductTypes);
             productDetail.Store = await GetStore((int)rs.MaterialStoreID);
             productDetail.ProductCategories = await GetCategory(rs.ProductCategories);
             productDetail.CreatedBy=rs.CreatedBy;
@@ -389,16 +415,42 @@ namespace Application.System.MaterialStores
             final.Place = results.Place;
             return final;
         }
+       
         public async Task<List<CategoryDTO>> GetCategory(List<ProductCategories> productCategories)
         {
             List<CategoryDTO> list = new();
             foreach (var c in productCategories)
             {
-                var results = await _context.Categories.Where(x => x.ID == c.CategoriesID).SingleOrDefaultAsync();
                 var final = new CategoryDTO();
-                final.Id = results.ID;
+                final.Id = c.CategoriesID;
+                final.CategoryName = c.Name;
+                final.Name = c.Name;
+                list.Add(final);
+            }
+            return list;
+        }
+        public async Task<List<ProductCategoryDTO>> GetProductCategoryName(List<ProductCategories> productCategories)
+        {
+            List<ProductCategoryDTO> list = new();
+            foreach (var c in productCategories)
+            {
+                var results = await _context.ProductCategories.Where(x => x.ProductID == c.ProductID).SingleOrDefaultAsync();
+                var final = new ProductCategoryDTO();
                 final.Name = results.Name;
-                final.Type = results.Type;
+                list.Add(final);
+            }
+            return list;
+        }
+        public async Task<List<ProductTypeDTO>> GetProductType(List<ProductType> productType)
+        {
+            List<ProductTypeDTO> list = new();
+            foreach (var c in productType)
+            {
+                var results = await _context.ProductTypes.Where(x => x.Id == c.Id).SingleOrDefaultAsync();
+                var final = new ProductTypeDTO();
+                final.Id = results.Id;
+                final.TypeName = results.Name;
+                final.Quantity = results.Quantity;
                 list.Add(final);
             }
             return list;
@@ -422,7 +474,7 @@ namespace Application.System.MaterialStores
             return true;
         }
 
-        public async Task<BaseResponse<ProductStoreDTO>> UpdateProduct(ProductDTO request, int productId)
+        public async Task<BaseResponse<ProductStoreDTO>> UpdateProduct(UpdateProductDTO request, int productId)
         {
             Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
             var userID = identifierClaim.Value.ToString();
@@ -436,32 +488,84 @@ namespace Application.System.MaterialStores
                 response.Data = null;
                 return response;
             }
-            products.Name = request.Name;
-            products.Description = request.Description;
-            products.UnitPrice = request.UnitPrice;
-            products.UnitInStock = request.UnitInStock;
-            products.Brand = request.Brand;
-            products.Image = request.Image;
+            if (!string.IsNullOrEmpty(request.Name.ToString()))
+            {
+                products.Name = request.Name;
+            }
+            if (!string.IsNullOrEmpty(request.Unit.ToString()))
+            {
+                products.Unit = request.Unit;
+            }
+            if (!string.IsNullOrEmpty(request.UnitPrice.ToString()))
+            {
+                products.UnitPrice = request.UnitPrice;
+
+            }
+            if (!string.IsNullOrEmpty(request.UnitInStock.ToString()))
+            {
+                products.UnitInStock = request.UnitInStock;
+
+            }
+            if (!string.IsNullOrEmpty(request.Description.ToString()))
+            {
+                products.Description = request.Description;
+
+            }
+            if (!string.IsNullOrEmpty(request.Brand.ToString()))
+            {
+                products.Brand = request.Brand;
+
+            }
+            if (!string.IsNullOrEmpty(request.Image.ToString()))
+            {
+                products.Image = request.Image;
+
+            }
+             _context.Entry<Products>(products).State = EntityState.Modified;
+
             var listcate = new List<CategoryDTO>();
-            if (request.CategoriesId != null)
+            if (request.ProductTypes != null)
+            {
+                foreach(var i in request.ProductTypes)
+                {
+                    var type = _context.ProductTypes.AsNoTracking().FirstOrDefault(x=>x.Id==i.Id);
+                    if (type != null)
+                    {
+                        type.ProductID = productId;
+                        type.Name = i.Name;
+                        type.Quantity = i.Quantity;
+                        _context.Entry<ProductType>(type).State = EntityState.Modified;
+                    }
+                    else
+                    {
+                        var productType = new ProductType();
+                        productType.ProductID = products.Id;
+                        productType.Name = i.Name;
+                        productType.Quantity = i.Quantity;
+                        _context.Add(productType);
+                    }
+                }
+                await _context.SaveChangesAsync();
+            }
+            if (request.Categories != null)
             {
                 foreach (var i in products.ProductCategories)
                 {
                     _context.ProductCategories.Remove(i);
                 }
-                foreach (var item in request.CategoriesId)
+                foreach (var item in request.Categories)
                 {
-                    var cate = _context.Categories.Where(x => x.ID == item).SingleOrDefault();
+                    var cate = _context.Categories.Where(x => x.ID == item.CategoryID).SingleOrDefault();
                     if (cate != null)
                     {
                         var category = new CategoryDTO();
                         var productcate = new ProductCategories();
 
                         category.Id = cate.ID;
-                        category.Name = cate.Name;
-                        category.Type = cate.Type;
+                        category.CategoryName = cate.Name;
                         productcate.CategoriesID = cate.ID;
                         productcate.ProductID = productId;
+                        productcate.Name = item.Name;
                         await _context.ProductCategories.AddAsync(productcate);
 
                         var rs = _context.SaveChanges();
@@ -477,20 +581,12 @@ namespace Application.System.MaterialStores
                     }
                 }
             }
-            _context.Update(products);
+             _context.Update(products);
             var results = await _context.SaveChangesAsync();
             if (results > 0)
             {
                 response.Message = BaseCode.SUCCESS_MESSAGE;
                 response.Code = BaseCode.SUCCESS;
-                response.Data = new();
-                response.Data.Name = request.Name;
-                response.Data.Description = request.Description;
-                response.Data.Brand = request.Brand;
-                response.Data.UnitInStock = request.UnitInStock;
-                response.Data.UnitPrice = request.UnitPrice;
-                response.Data.Image = request.Image;
-                response.Data.ProductCategories = listcate;
             }
             return response;
         }

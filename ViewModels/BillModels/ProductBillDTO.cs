@@ -9,6 +9,7 @@ namespace ViewModels.BillModels
     public class ProductBillDTO
     {
         public int ProductId { get; set; }
+        public int? TypeID { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
     }

@@ -39,7 +39,7 @@ namespace Application.System.SavePost
                 return response;
             }
             var userID = identifierClaim.Value.ToString();
-            var result = await _context.Saves.Include(x => x.ContractorPost).Include(x => x.BuilderPost).Where(x => x.UserId.ToString().Equals(userID)).ToListAsync();
+            var result = await _context.Saves.Include(x => x.ContractorPost).Where(x => x.UserId.ToString().Equals(userID)).ToListAsync();
             List<SavePostDetailDTO> list = new();
             if (result != null)
             {
@@ -61,23 +61,16 @@ namespace Application.System.SavePost
         private async Task<SavePostDetailDTO> MapToDTO(Save save)
         {
             SavePostDetailDTO dto = new();
-            if (dto.BuilderPost == null)
+            if (dto.ContractorPost != null)
             {
                 dto.UserId = save.UserId;
                 dto.ContractorPost = await GetContractorPost(save.ContractorPost);
-                dto.CreatedDate = save.Date;
-            }
-            else if (dto.ContractorPost == null)
-            {
-                dto.UserId = save.UserId;
-                dto.BuilderPost = await GetBuilderPost(save.BuilderPost);
                 dto.CreatedDate = save.Date;
             }
             else
             {
                 dto.UserId = save.UserId;
                 dto.ContractorPost = await GetContractorPost(save.ContractorPost);
-                dto.BuilderPost = await GetBuilderPost(save.BuilderPost);
                 dto.CreatedDate = save.Date;
             }
             return dto;
@@ -154,29 +147,7 @@ namespace Application.System.SavePost
             }
             return final;
         }
-        private async Task<List<BuilderPostDetailDTO>> GetBuilderPost(BuilderPost post)
-        {
-            var results = _context.BuilderPosts.Where(x => x.Id == post.Id).ToList();
 
-            var final = new List<BuilderPostDetailDTO>();
-            BuilderPostDetailDTO dto = new();
-
-            foreach (var x in results)
-            {
-                dto.Id = x.Id;
-                dto.Title = x.Title;
-                dto.Description = x.Description;
-                dto.PostCategories = x.PostCategories;
-                dto.Status = x.Status;
-                dto.type = await GetTypeAndSkillFromPost(post.Id);
-                dto.LastModifiedAt = x.LastModifiedAt;
-                dto.Salaries = x.Salaries;
-                dto.Place = x.Place;
-                dto.Author = await GetUserProfile(post.CreateBy);
-                final.Add(dto);
-            }
-            return final;
-        }
         public async Task<UserModelsDTO> GetUserProfile(Guid userID)
         {
             var results = await _context.Users.Where(x => x.Id.ToString().Equals(userID.ToString())).SingleOrDefaultAsync();
@@ -205,11 +176,11 @@ namespace Application.System.SavePost
                 response.Code = "202";
                 return response;
             }
+            var authorId = await _context.ContractorPosts.Where(x => x.Id == request.ContractorPostId).Select(x => x.CreateBy).FirstOrDefaultAsync();
             var userID = identifierClaim.Value;
             Save save = new()
             {
                 Date = DateTime.Now,
-                BuilderPostId = request.BuilderPostId,
                 ContractorPostId = request.ContractorPostId,
                 UserId = Guid.Parse(userID)
             };
@@ -219,6 +190,7 @@ namespace Application.System.SavePost
             {
                 response.Message = BaseCode.SUCCESS_MESSAGE;
                 response.Code = "200";
+                response.Data = authorId.ToString();
             }
             else
             {
@@ -233,15 +205,10 @@ namespace Application.System.SavePost
             Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
             var userID = identifierClaim.Value.ToString();
             dynamic save;
-            if (request.BuilderPostId == null)
-            {
+
                 save = await _context.Saves.FirstOrDefaultAsync(x => x.ContractorPostId == request.ContractorPostId && x.UserId.ToString().Equals(userID.ToString()));
 
-            }
-            else
-            {
-                save = await _context.Saves.FirstOrDefaultAsync(x => x.BuilderPostId == request.BuilderPostId && x.UserId.ToString().Equals(userID.ToString()));
-            }
+            
 
             if (save == null)
             {

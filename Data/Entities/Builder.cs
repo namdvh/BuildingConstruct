@@ -13,12 +13,10 @@ namespace Data.Entities
         public int? Experience { get; set; }
 
         public Place? Place { get; set; }
-
+        public string? ConstructionType { get; set; }
         public List<BuilderSkill>? BuilderSkills { get; set; }
 
         public User? User { get; set; }
-
-        public List<BuilderPost>? Posts { get; set; }
 
         public Guid? TypeID { get; set; }
 
@@ -29,6 +27,7 @@ namespace Data.Entities
         public List<AppliedPost>? AppliedPosts { get; set; }
 
         public List<PostCommitment>? PostCommitments { get; set; }
+        public List<WorkerContructionType>? WorkerContructionTypes { get; set; }
 
 
     }

@@ -26,7 +26,7 @@ namespace Data.Entities
 
         public DateTime AppliedDate { get; set; }
 
-        public decimal? Salary { get; set; }
+        public decimal? WishSalary { get; set; }
 
 
 

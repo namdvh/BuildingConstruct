@@ -1,6 +1,6 @@
 ﻿using Data.Entities;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,18 +9,16 @@ using System.Threading.Tasks;
 
 namespace Data.Configuration
 {
-    public class SmallBillConfiguration : IEntityTypeConfiguration<SmallBill>
+    public class ConstructionTypeConfiguration : IEntityTypeConfiguration<ConstructionType>
     {
-        public void Configure(EntityTypeBuilder<SmallBill> builder)
+        public void Configure(EntityTypeBuilder<ConstructionType> builder)
         {
-            builder.ToTable("SmallBill");
+            builder.ToTable("ConstructionTypes");
 
             builder.HasKey(x => x.Id);
-
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
 
-            builder.HasOne(x => x.Bill).WithMany(x => x.SmallBills).HasForeignKey(x => x.BillID);
         }
 
     }
