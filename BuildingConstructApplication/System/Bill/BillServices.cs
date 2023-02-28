@@ -73,7 +73,7 @@ namespace Application.System.Bill
                 {
                     foreach (var pro in item.ProductBillDetail)
                     {
-                        var product = _context.Carts.Where(x => x.ProductID == pro.ProductId && x.UserID.ToString().Equals(usID.ToString()) && x.TypeID==pro.TypeID).FirstOrDefault();
+                        var product = _context.Carts.Where(x => x.ProductID == pro.ProductId && x.UserID.ToString().Equals(usID.ToString()) && x.TypeID == pro.TypeID).FirstOrDefault();
                         ls.Add(product);
                     }
                 }
@@ -373,7 +373,7 @@ namespace Application.System.Bill
         public async Task<BaseResponse<string>> UpdateStatusBill(Status status, int billID)
         {
             BaseResponse<string> response;
-            var bill = await _context.Bills.FirstOrDefaultAsync(x=>x.Id== billID);
+            var bill = await _context.Bills.FirstOrDefaultAsync(x => x.Id == billID);
 
             if (bill != null)
             {
@@ -397,6 +397,44 @@ namespace Application.System.Bill
             return response;
 
         }
+
+        public async Task<BaseResponse<List<ProductBillDetail>>> GetHistoryProductBill(Guid userID)
+        {
+            BaseResponse<List<ProductBillDetail>> response;
+            List<ProductBillDetail> ls = new();
+
+            var user = await _context.Users.Include(x => x.Contractor).FirstOrDefaultAsync(x => x.Id.Equals(userID));
+            if (user != null)
+            {
+                var bill = await _context.Bills.Where(x => x.ContractorId == user.ContractorId).ToListAsync();
+
+                foreach (var item in bill)
+                {
+                    var tmpList = MapProductDTO(item.Id);
+                    ls.AddRange(tmpList);
+                }
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Data = ls,
+                    Message = BaseCode.SUCCESS_MESSAGE
+                };
+                return response;
+                
+            }
+
+            response = new()
+            {
+                Code = BaseCode.SUCCESS,
+                Message = BaseCode.NOTFOUND_MESSAGE
+            };
+
+            return response;
+
+        }
+
+
     }
 
 

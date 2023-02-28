@@ -1,9 +1,7 @@
 ﻿using Application.System.Bill;
 using Data.Enum;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 using ViewModels.BillModels;
 using ViewModels.Pagination;
 using ViewModels.Response;
@@ -75,9 +73,23 @@ namespace BuildingConstructApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBillStatus([FromRoute] int id,Status status)
+        public async Task<IActionResult> UpdateBillStatus([FromRoute] int id, Status status)
         {
-            var rs = await _billServices.UpdateStatusBill(status,id);
+            var rs = await _billServices.UpdateStatusBill(status, id);
+
+            return Ok(rs);
+        }
+
+        [HttpGet("history")]
+        public async Task<IActionResult> GetHistoryProductBill()
+        {
+            var userID = User.FindFirst("UserID").Value;
+
+            if (userID == null)
+            {
+                return BadRequest();
+            }
+            var rs = await _billServices.GetHistoryProductBill(Guid.Parse(userID));
 
             return Ok(rs);
         }
