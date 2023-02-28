@@ -191,6 +191,7 @@ namespace Application.System.SavePost
                 response.Message = BaseCode.SUCCESS_MESSAGE;
                 response.Code = "200";
                 response.Data = authorId.ToString();
+                response.NavigateId = request.ContractorPostId;
             }
             else
             {

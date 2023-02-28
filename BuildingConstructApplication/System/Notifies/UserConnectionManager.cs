@@ -70,7 +70,8 @@ namespace Application.System.Notifies
                 IsRead = false,
                 LastModifiedAt = noti.LastModifiedAt,
                 Message = noti.Message,
-                Type = noti.NotificationType
+                Type = noti.NotificationType,
+                NavigateId=noti.NavigateId
             };
             await _context.Notifcations.AddAsync(notification);
             var rs = await _context.SaveChangesAsync();
