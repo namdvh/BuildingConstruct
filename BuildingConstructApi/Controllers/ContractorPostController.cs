@@ -102,5 +102,13 @@ namespace BuildingConstructApi.Controllers
             return Ok(rs);
         }
 
+        [HttpGet("post/applied")]
+        public async Task<IActionResult> ViewPostApplied()
+        {
+            var id = User.FindFirst("UserID").Value;
+            var result = await _contractorPostService.ViewAllPostApplied(Guid.Parse(id));
+            return Ok(result);
+        }
+
     }
 }
