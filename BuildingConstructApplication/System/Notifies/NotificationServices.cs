@@ -10,9 +10,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using ViewModels.NotificationModels;
 using ViewModels.Pagination;
 using ViewModels.Response;
+using ViewModels.Notificate;
 
 namespace Application.System.Notifies
 {
@@ -27,7 +27,7 @@ namespace Application.System.Notifies
             _accessor = accessor;
         }
 
-        public async Task<BasePagination<List<NotificationDTO>>> GetAllNotification(PaginationFilter filter,Guid UserId)
+        public async Task<BasePagination<List<NotificationDTO>>> GetAllNotification(PaginationFilter filter, Guid UserId)
         {
             Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
             var userID = identifierClaim.Value.ToString();
@@ -87,6 +87,15 @@ namespace Application.System.Notifies
                 dto.IsRead = item.IsRead;
                 dto.CreateBy = item.CreateBy;
                 dto.LastModifiedAt = item.LastModifiedAt;
+                var user = await _context.Users.FindAsync(item.CreateBy);
+                if (user != null)
+                {
+                    dto.Author = new();
+                    dto.Author.FirstName = user.FirstName;
+                    dto.Author.LastName = user.LastName;
+                    dto.Author.Avatar = user.Avatar;
+                }
+               
                 result.Add(dto);
             }
             return result;

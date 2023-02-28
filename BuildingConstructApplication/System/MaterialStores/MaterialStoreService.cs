@@ -390,6 +390,7 @@ namespace Application.System.MaterialStores
             productDetail.Description = rs.Description;
             productDetail.UnitInStock = rs.UnitInStock;
             productDetail.UnitPrice = rs.UnitPrice;
+            productDetail.Unit = rs.Unit;
             productDetail.Brand = rs.Brand;
             productDetail.SoldQuantities = rs.SoldQuantities;
             productDetail.ProductType = await GetProductType(rs.ProductTypes);
@@ -520,7 +521,7 @@ namespace Application.System.MaterialStores
                 products.Image = request.Image;
 
             }
-            _context.Entry<Products>(products).State = EntityState.Modified;
+             _context.Entry<Products>(products).State = EntityState.Modified;
 
             var listcate = new List<CategoryDTO>();
             if (request.ProductTypes != null)

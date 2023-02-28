@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Data.DataContext;
+using Data.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ViewModels.Notificate;
 
 namespace Application.System.Notifies
 {
@@ -10,6 +13,12 @@ namespace Application.System.Notifies
     {
         private static Dictionary<string, List<string>> userConnectionMap = new Dictionary<string, List<string>>();
         private static string userConnectionMapLocker = string.Empty;
+        private readonly BuildingConstructDbContext _context;
+
+        public UserConnectionManager(BuildingConstructDbContext context)
+        {
+            _context = context;
+        }
 
         public void KeepUserConnection(string userId, string connectionId)
         {
@@ -49,6 +58,27 @@ namespace Application.System.Notifies
                 conn = userConnectionMap[userId];
             }
             return conn;
+        }
+
+        public async Task<bool> SaveNotification(NotificationModels noti)
+        {
+            Notification notification = new Notification()
+            {
+                Title = "",
+                UserID = noti.CreateBy,
+                CreateBy = noti.CreateBy,
+                IsRead = false,
+                LastModifiedAt = noti.LastModifiedAt,
+                Message = noti.Message,
+                Type = noti.NotificationType
+            };
+            await _context.Notifcations.AddAsync(notification);
+            var rs = await _context.SaveChangesAsync();
+            if (rs > 0)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

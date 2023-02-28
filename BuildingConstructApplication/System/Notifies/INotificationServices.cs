@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ViewModels.NotificationModels;
+using ViewModels.Notificate;
 using ViewModels.Pagination;
 using ViewModels.Response;
 
