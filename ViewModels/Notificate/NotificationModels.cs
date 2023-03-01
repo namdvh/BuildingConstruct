@@ -11,6 +11,7 @@ namespace ViewModels.Notificate
     {
         public NotificationType NotificationType { get; set; }
         public string? Message { get; set; }
+        public int? NavigateId { get; set; }
         public DateTime LastModifiedAt { get; set; } = DateTime.Now;
 
         public Guid CreateBy { get; set; }

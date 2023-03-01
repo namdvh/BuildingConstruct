@@ -11,6 +11,7 @@ namespace ViewModels.Response
         public T Data { get; set; }
         public string Code { get; set; }
         public string Message { get; set; }
+        public int? NavigateId { get; set; }
 
         public BaseResponse()
         {
@@ -20,6 +21,7 @@ namespace ViewModels.Response
             Code = string.Empty;
             Message = string.Empty;
             Data = data;
+            NavigateId = 0;
         }
 
     }
