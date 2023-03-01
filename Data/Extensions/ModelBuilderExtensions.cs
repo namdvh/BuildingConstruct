@@ -482,7 +482,8 @@ namespace Data.Extensions
                 Description= "- Màng sơn mịn có độ phủ cao, siêu bóng sang trọng,bám dính tốt\r\n\r\n- Hạn chế vết bẩn, vết nứt nhỏ, chống rêu mốc, độ bền màu cao\r\n\r\n- Thân thiện môi trường và an toàn cho sức khỏe\r\n\r\n- Bảo vệ 10 năm\r\n\r\n- Độ phủ lý thuyết: 12-14m2/lít/ lớp",
                 MaterialStoreID=1,
                 Unit="Lít",
-                Brand= "CMC"
+                Brand= "CMC",
+                LastModifiedAt=DateTime.Parse("2022/12/2")
             });
 
             modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
@@ -515,7 +516,9 @@ namespace Data.Extensions
                 Description = "Gạch cao cấp đến từ thương hiệu nổi tiếng NIRO GRANITE",
                 MaterialStoreID = 1,
                 Unit = "Gạch",
-                Brand = "NIRO GRANITE"
+                Brand = "NIRO GRANITE",
+                LastModifiedAt = DateTime.Parse("2022/1/2")
+
             });
 
             modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
@@ -546,7 +549,8 @@ namespace Data.Extensions
                 Description = "Công suất định mức: 4500(W)\r\nHình dáng: Hình tròn\r\nĐiện năng: 220V\r\nChế độ vòi sen: 5\r\nÁp lực nước tối thiểu: 30/0,3 Kpa/bar\r\nÁp lực nước tối đa: 380/3.8 Kpa/bar\r\nKích thước (DxCxR): 350 X 80\r\nTrọng lượng: 2 kg\r\nKhông có bơm trợ lực",
                 MaterialStoreID = 1,
                 Unit = "Bộ",
-                Brand = "ARISTON"
+                Brand = "ARISTON",
+                LastModifiedAt = DateTime.Parse("2023/1/2")
             });
 
             modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
@@ -622,7 +626,8 @@ namespace Data.Extensions
                 Description = "Dòng sản phẩm bồn cầu INAX AC-1017R 1 khối cao cấp đến từ thương hiệu thiết bị vệ sinh INAX\r\nBệt Inax AC-1017R CW-KA22AVN 1 khối với thiết kế mới đơn giản, gọn gàng và sang trọng hơn kết hợp với những tính năng cải tiến\r\nCông nghệ ECO-X xã xoáy cuốn trôi mọi vết bẩn\r\nCông nghệ Aqua Ceramic giúp bề mạt men sứ trắng sáng trong suốt thời gian sữ dụng\r\nCông nghệ chống khuẩn HYPERKILAMIC kháng khuẩn độc quyền của INAX Nhật Bản. \r\nE-Clean: Chức năng phun rửa  tự động\r\nEvaClean: Chức năng vệ sinh phụ nữ\r\nCozyCare: Chức năng sưởi ấm bệ ngồi\r\nX-Fresh: Chức năng khử mùi nhanh \r\nEcoPower: Chức năng tiết kiệm điện “1 lần chạm” (8 tiếng sau tự khôi phục)\r\nDung tích két nước nóng: 0.67L (lít) Vòi phun rửa:\r\nVòi phun rửa và vòi phun dùng riêng cho phụ nữ đều là loại trượt tự động.  \r\nThiết bị an toàn: Rơ-le nhiệt, cảm ứng từ kiểm soát nhiệt độ cao, phao ngắt để thiết bị ngừng hoạt động khi không đủ nước, cảm ứng tự ngắt khi gặp sự cố. \r\nNước cấp: Nối trực tiếp từ đường ống nước ",
                 MaterialStoreID = 1,
                 Unit = "Bộ",
-                Brand = "INAX"
+                Brand = "INAX",
+                LastModifiedAt = DateTime.Parse("2022/5/22")
             });
 
             modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
@@ -666,7 +671,8 @@ namespace Data.Extensions
                 Description= "Màu sắc: vàng, xám, trắng, đen\r\nKích thước: 30x60, 60x60",
                 MaterialStoreID = 1,
                 Unit = "Cái",
-                Brand = "NIRO GRANITE"
+                Brand = "NIRO GRANITE",
+                LastModifiedAt = DateTime.Parse("2023/2/2")
             });
 
             modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
@@ -731,7 +737,8 @@ namespace Data.Extensions
                 Description = "ông nghệ sản xuất tủ lavabo của chúng tôi đã được chuyên nghiệp hóa qua nhiều năm phát triển, với phần khung bên ngoài được làm bằng nhôm, là cấu trúc chính hỗ trợ, giúp toàn bộ tủ chắc chắn, bên cạnh phần bản lề được làm bằng INOX 304 dày, giúp cho việc vận hành được trơn tru, ổn định.\r\n- Các bộ phận chính đều được làm bằng thép không gỉ 304 (INOX 304), tăng độ bền cho sản phẩm trong quá trình sử dụng.\r\n- Cấu hình cạnh và tay nắm cửa được làm bằng máy vát 45 độ đặc biệt, góc nhôm được gắn chặt vào thành bên trong tủ, để bề mặt sản phẩm mịn & tinh tế, tạo sự thoải mái khi sử dụng.\r\n\r\n- Việc sử dụng nhôm để làm vật liệu chính sản xuất tủ Lavabo là lựa chọn tối ưu nhất hiện nay, không chỉ có độ bền cao, nhôm hoàn toàn không độc hại với môi trường cũng như người sử dụng. Một số ưu điểm chính của nhôm:\r\n  + Trọng lượng nhẹ, độ bền cao, khả năng chịu lực lớn.\r\n  + Độ cứng tốt, không dễ biến dạng.\r\n  + Không thấm nước trong môi trường có độ ẩm cao, không bắt lửa và chịu được tác động mạnh.\r\n  + Lớp sơn phủ bền màu, chống ăn mòn do thời tiết hoặc hóa chất thông thường.\r\n  + Tạo không gian sang trọng, thoải mái và tiện lợi.",
                 MaterialStoreID = 1,
                 Unit = "Bộ",
-                Brand = "JINMEI"
+                Brand = "JINMEI",
+                LastModifiedAt = DateTime.Now
             });
 
             modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
@@ -768,7 +775,9 @@ namespace Data.Extensions
                 Description ="Sơn ngoại thất câo cấp đến từ thương hiệu Kansai nổi tiếng",
                 MaterialStoreID = 1,
                 Unit = "Lít",
-                Brand = "KANSAI PAINT"
+                Brand = "KANSAI PAINT",
+                LastModifiedAt = DateTime.Now
+
             });
 
             modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
@@ -805,7 +814,8 @@ namespace Data.Extensions
                 Description = "KARI SQUARE STEP LIGHT (3W) mang đến ánh sáng tinh tế đến gia đình bạn ",
                 MaterialStoreID = 1,
                 Unit = "Cái",
-                Brand = "COSMOS"
+                Brand = "COSMOS",
+                LastModifiedAt = DateTime.Parse("2023/10/1")
             });
 
             modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
@@ -842,7 +852,8 @@ namespace Data.Extensions
                 Description = "GHR Gạch Granite Hardrock Mờ/Bán bóng ",
                 MaterialStoreID = 1,
                 Unit = "Viên",
-                Brand = "NIRO GRANITE"
+                Brand = "NIRO GRANITE",
+                LastModifiedAt = DateTime.Now
             });
 
             modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories

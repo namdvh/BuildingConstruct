@@ -47,7 +47,7 @@ namespace Application.System.Notifies
             };
             var totalRecords = await _context.Notifcations.CountAsync();
 
-            IQueryable<Notification> query = (IQueryable<Notification>)_context.Notifcations.Include(x => x.User);
+            IQueryable<Notification> query = (IQueryable<Notification>)_context.Notifcations.Include(x => x.User).Where(x=>x.UserID.ToString().Equals(userID));
 
 
             var data = await query

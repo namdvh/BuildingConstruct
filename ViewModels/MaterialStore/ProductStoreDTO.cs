@@ -29,6 +29,7 @@ namespace ViewModels.MaterialStore
         public int SoldQuantities { get; set; }
         public bool? isAll { get; set; }
         public List<CategoryDTO>? ProductCategories { get; set; }
+        public DateTime LastModifiedAt { get; set; }
 
     }
 }
