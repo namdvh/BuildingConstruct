@@ -115,5 +115,32 @@ namespace Application.System.Notifies
             }
             return result;
         }
+
+        public async Task<BaseResponse<string>> UpdateIsRead(int Id)
+        {
+            BaseResponse<string> response;
+            var noti = await _context.Notifcations.FirstOrDefaultAsync(x => x.Id == Id);
+
+            if (noti != null)
+            {
+                noti.IsRead = true ;
+                _context.Update(noti);
+                await _context.SaveChangesAsync();
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE
+                };
+                return response;
+            }
+
+            response = new()
+            {
+                Code = BaseCode.ERROR,
+                Message = BaseCode.ERROR_MESSAGE
+            };
+            return response;
+        }
     }
 }

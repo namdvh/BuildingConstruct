@@ -12,5 +12,6 @@ namespace Application.System.Notifies
     public interface INotificationServices
     {
         Task<BasePagination<List<NotificationDTO>>> GetAllNotification(PaginationFilter filter,Guid UserId);
+        Task<BaseResponse<string>> UpdateIsRead(int Id);
     }
 }

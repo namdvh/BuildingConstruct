@@ -31,6 +31,12 @@ namespace BuildingConstructApi.Controllers
             var result = await _notificationServices.GetAllNotification(request,Guid.Parse(userID));
             return Ok(result);
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateIsReadNotification([FromRoute] int id)
+        {
+            var rs = await _notificationServices.UpdateIsRead(id);
 
+            return Ok(rs);
+        }
     }
 }
