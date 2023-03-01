@@ -13,6 +13,8 @@ namespace Application.System.ContractorPosts
     {
         Task<BasePagination<List<ContractorPostDTO>>> GetPost(PaginationFilter filter,Guid id);
 
+        Task<BasePagination<List<ContractorPostDTO>>> GetPostByContractor(PaginationFilter filter,Guid id);
+
         Task<BasePagination<List<ContractorPostDTO>>> GetPostByViews(PaginationFilter filter);
 
         Task<BasePagination<List<ContractorPostDTO>>> SearchPost(PaginationFilter filter, string keyword);

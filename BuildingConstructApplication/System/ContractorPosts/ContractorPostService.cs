@@ -906,5 +906,148 @@ namespace Application.System.ContractorPosts
             }
             return result;
         }
+
+        public async Task<BasePagination<List<ContractorPostDTO>>> GetPostByContractor(PaginationFilter filter, Guid id)
+        {
+            BasePagination<List<ContractorPostDTO>> response;
+            var orderBy = filter._orderBy.ToString();
+            int totalRecord;
+            orderBy = orderBy switch
+            {
+                "1" => "ascending",
+                "-1" => "descending",
+                _ => orderBy
+            };
+
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id.Equals(id));
+
+            IQueryable<ContractorPost> query = _context.ContractorPosts;
+            StringBuilder salariesSearch = new();
+            StringBuilder placeSearch = new();
+            StringBuilder categoriesSearch = new();
+
+            if (filter.FilterRequest != null)
+            {
+                if (filter.FilterRequest.Salary.Any())
+                {
+                    var count = filter.FilterRequest.Salary.Count;
+                    for (int i = 0; i < count; i++)
+                    {
+                        if (i == count - 1)
+                        {
+                            salariesSearch.Append("Salaries=*" + filter.FilterRequest.Salary[i]);
+                            break;
+                        }
+                        salariesSearch.Append("Salaries=*" + filter.FilterRequest.Salary[i] + "|");
+                    }
+                    query = query.ApplyFiltering(salariesSearch.ToString());
+                }
+
+                if (filter.FilterRequest.Places.Any())
+                {
+                    var count = filter.FilterRequest.Places.Count;
+                    for (int i = 0; i < count; i++)
+                    {
+                        if (i == count - 1)
+                        {
+                            placeSearch.Append("Place=" + filter.FilterRequest.Places[i]);
+                            break;
+                        }
+                        placeSearch.Append("Place=" + filter.FilterRequest.Places[i] + "|");
+                    }
+                    query = query.ApplyFiltering(placeSearch.ToString());
+                }
+
+                if (filter.FilterRequest.Categories.Any())
+                {
+                    var count = filter.FilterRequest.Categories.Count;
+                    for (int i = 0; i < count; i++)
+                    {
+                        if (i == count - 1)
+                        {
+                            categoriesSearch.Append("PostCategories=" + filter.FilterRequest.Categories[i]);
+                            break;
+                        }
+                        categoriesSearch.Append("PostCategories=" + filter.FilterRequest.Categories[i] + "|");
+                    }
+                    query = query.ApplyFiltering(categoriesSearch.ToString());
+                }
+
+                if (filter.FilterRequest.Participant.HasValue)
+                {
+                    query = query.Where(x => x.NumberPeople == filter.FilterRequest.Participant);
+                }
+
+                if (!string.IsNullOrEmpty(filter.FilterRequest.Title))
+                {
+                    query = query.Include(x => x.Contractor).Where(x => x.Title.Contains(filter.FilterRequest.Title) || x.Contractor.CompanyName.Contains(filter.FilterRequest.Title));
+                }
+                if (filter.FilterRequest.Transport == true)
+                {
+                    query = query.Where(x => x.Transport == true);
+
+                }
+                if (filter.FilterRequest.Accommodation == true)
+                {
+                    query = query.Where(x => x.Accommodation == true);
+
+                }
+
+            }
+
+            var result = await query
+                    .Include(x => x.Contractor)
+                        .ThenInclude(x => x.User)
+                     .OrderBy(filter._sortBy + " " + orderBy)
+                     .Skip((filter.PageNumber - 1) * filter.PageSize)
+                     .Take(filter.PageSize)
+                     .Where(x=>x.ContractorID==user.ContractorId)
+                     .ToListAsync();
+
+
+            if (filter.FilterRequest != null)
+            {
+                totalRecord = result.Count;
+            }
+            else
+            {
+                totalRecord = await _context.ContractorPosts.CountAsync();
+            }
+
+            if (!result.Any())
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.EMPTY_MESSAGE,
+                    Data = new(),
+                    Pagination = null
+                };
+            }
+            else
+            {
+                double totalPages;
+
+                totalPages = ((double)totalRecord / (double)filter.PageSize);
+
+                var roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
+                Pagination pagination = new()
+                {
+                    CurrentPage = filter.PageNumber,
+                    PageSize = filter.PageSize,
+                    TotalPages = roundedTotalPages,
+                    TotalRecords = totalRecord
+                };
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = MapListDTO(result, id),
+                    Pagination = pagination
+                };
+            }
+            return response;
+        }
     }
 }
