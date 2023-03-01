@@ -45,7 +45,7 @@ namespace Application.System.Notifies
                 "-1" => "descending",
                 _ => orderBy
             };
-            var totalRecords = await _context.Notifcations.CountAsync();
+            var totalRecords = await _context.Notifcations.Where(x => x.UserID.ToString().Equals(userID)).CountAsync();
 
             IQueryable<Notification> query = (IQueryable<Notification>)_context.Notifcations.Include(x => x.User).Where(x=>x.UserID.ToString().Equals(userID));
 
