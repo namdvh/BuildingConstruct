@@ -103,10 +103,12 @@ namespace BuildingConstructApi.Controllers
         }
 
         [HttpGet("post/applied")]
-        public async Task<IActionResult> ViewPostApplied()
+        public async Task<IActionResult> ViewPostApplied([FromQuery] PaginationFilter request)
         {
             var id = User.FindFirst("UserID").Value;
-            var result = await _contractorPostService.ViewAllPostApplied(Guid.Parse(id));
+            var validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
+
+            var result = await _contractorPostService.ViewAllPostApplied(Guid.Parse(id),validFilter);
             return Ok(result);
         }
 
