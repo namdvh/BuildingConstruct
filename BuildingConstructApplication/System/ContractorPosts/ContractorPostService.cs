@@ -294,6 +294,12 @@ namespace Application.System.ContractorPosts
                 "-1" => "descending",
                 _ => orderBy
             };
+            if (string.IsNullOrEmpty(filter._sortBy))
+            {
+                filter._sortBy = "LastModifiedAt";
+            }
+
+
 
             IQueryable<ContractorPost> query = _context.ContractorPosts;
             StringBuilder salariesSearch = new();
@@ -570,6 +576,12 @@ namespace Application.System.ContractorPosts
                 "-1" => "descending",
                 _ => orderBy
             };
+            if (string.IsNullOrEmpty(filter._sortBy))
+            {
+                filter._sortBy = "LastModifiedAt";
+            }
+
+
             var result = await _context.ContractorPosts
                            .OrderBy("Views" + " " + orderBy)
                            .Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -619,6 +631,8 @@ namespace Application.System.ContractorPosts
             BasePagination<List<ContractorPostDTO>> response;
 
             var result = await _context.ContractorPosts.Include(x => x.Contractor).Where(x => x.Title.Contains(keyword) || x.Contractor.CompanyName.Contains(keyword)).ToListAsync();
+
+
             var totalRecord = result.Count;
 
             if (!result.Any())
@@ -918,6 +932,11 @@ namespace Application.System.ContractorPosts
                 "-1" => "descending",
                 _ => orderBy
             };
+
+            if (string.IsNullOrEmpty(filter._sortBy))
+            {
+                filter._sortBy = "LastModifiedAt";
+            }
 
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Id.Equals(id));
 

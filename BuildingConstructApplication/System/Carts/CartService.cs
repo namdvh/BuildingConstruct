@@ -114,6 +114,14 @@ namespace Application.System.Carts
                 "-1" => "descending",
                 _ => orderBy
             };
+
+            if (string.IsNullOrEmpty(filter._sortBy))
+            {
+                filter._sortBy = "LastModifiedAt";
+            }
+
+
+
             List<CartDTO> ls = new();
 
 
