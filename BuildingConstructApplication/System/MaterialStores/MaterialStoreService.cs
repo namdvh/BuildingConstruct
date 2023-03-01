@@ -221,6 +221,13 @@ namespace Application.System.MaterialStores
                 _ => orderBy
             };
 
+            if (string.IsNullOrEmpty(filter._sortBy))
+            {
+                filter._sortBy = "LastModifiedAt";
+            }
+
+
+
             IQueryable<MaterialStore> query = _context.MaterialStores;
             StringBuilder placeSearch = new();
 

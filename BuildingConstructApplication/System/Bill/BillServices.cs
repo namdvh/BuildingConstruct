@@ -6,10 +6,14 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using ViewModels.BillModels;
 using System.Linq.Dynamic.Core;
-using ViewModels.Carts;
 using ViewModels.Pagination;
 using ViewModels.Response;
 using System.Text;
+using System.Linq;
+using Emgu.CV.OCR;
+using Microsoft.AspNetCore.Mvc;
+using ViewModels.Carts;
+using ZedGraph;
 
 namespace Application.System.Bill
 {
@@ -360,10 +364,37 @@ namespace Application.System.Bill
                 .Include(x => x.Products)
                 .Include(x => x.ProductTypes)
                 .Where(x => x.BillID == id)
-                .ToList();
+            .ToList();
+
+
+           
+           
+
+          
+
 
             foreach (var item in rs)
             {
+                List<CartProductType> types = new();
+                var listType = _context.ProductTypes.Where(x => x.ProductID == item.ProductID).ToList();
+
+                if (listType.Any())
+                {
+                    foreach (var type in listType)
+                    {
+                        CartProductType tmp = new()
+                        {
+                            Id = type.Id,
+                            TypeName = type.Name,
+                            Quantity = type.Quantity,
+                        };
+                        types.Add(tmp);
+                    }
+                }
+
+
+
+
                 ProductBillDetail pro = new()
                 {
                     ProductId=item.ProductID,
@@ -374,6 +405,9 @@ namespace Application.System.Bill
                     UnitPrice = item.Products.UnitPrice,
                     BillDetailQuantity = item.Quantity,
                     BillDetailTotalPrice = item.Price,
+                    TypeId=item.ProductTypeId,
+                    TypeName=item.ProductTypes?.Name,
+                    ProductType= listType.Any() ? types : null,
                 };
                 list.Add(pro);
             }
@@ -408,12 +442,27 @@ namespace Application.System.Bill
 
         }
 
-        public async Task<BaseResponse<List<ProductBillDetail>>> GetHistoryProductBill(Guid userID)
+        public async Task<BasePagination<List<ProductBillDetail>>> GetHistoryProductBill(Guid userID, PaginationFilter filter)
         {
-            BaseResponse<List<ProductBillDetail>> response;
+            BasePagination<List<ProductBillDetail>> response;
+            var orderBy = filter._orderBy.ToString();
+            int totalRecords;
+            orderBy = orderBy switch
+            {
+                "1" => "ascending",
+                "-1" => "descending",
+                _ => orderBy
+            };
+            if (string.IsNullOrEmpty(filter._sortBy))
+            {
+                filter._sortBy = "ProductId";
+            }
+            
+
             List<ProductBillDetail> ls = new();
 
             var user = await _context.Users.Include(x => x.Contractor).FirstOrDefaultAsync(x => x.Id.Equals(userID));
+
             if (user != null)
             {
                 var bill = await _context.Bills.Where(x => x.ContractorId == user.ContractorId).ToListAsync();
@@ -424,17 +473,39 @@ namespace Application.System.Bill
                     ls.AddRange(tmpList);
                 }
                 ls=ls.DistinctBy(x => x.ProductId).ToList();
+                IQueryable<ProductBillDetail> query = ls.AsQueryable();
+
+                var rs =  query.OrderBy(filter._sortBy + " " + orderBy)
+                     .Skip((filter.PageNumber - 1) * filter.PageSize)
+                     .Take(filter.PageSize)
+                     .ToList();
+
+                totalRecords = rs.Count;
+
+
+                double totalPages;
+
+                totalPages = totalRecords / (double)filter.PageSize;
+
+                var roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
+                Pagination pagination = new()
+                {
+                    CurrentPage = filter.PageNumber,
+                    PageSize = filter.PageSize,
+                    TotalPages = roundedTotalPages,
+                    TotalRecords = totalRecords
+                };
 
                 response = new()
                 {
                     Code = BaseCode.SUCCESS,
                     Data = ls,
-                    Message = BaseCode.SUCCESS_MESSAGE
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Pagination=pagination
                 };
                 return response;
                 
             }
-
             response = new()
             {
                 Code = BaseCode.SUCCESS,

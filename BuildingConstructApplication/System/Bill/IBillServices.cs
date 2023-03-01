@@ -1,4 +1,5 @@
 ﻿using Data.Enum;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,6 @@ namespace Application.System.Bill
 
         Task<BaseResponse<string>> UpdateStatusBill(Status status, int billID);
 
-        Task<BaseResponse<List<ProductBillDetail>>> GetHistoryProductBill(Guid userID);
+        Task<BasePagination<List<ProductBillDetail>>> GetHistoryProductBill(Guid userID, PaginationFilter request);
     }
 }

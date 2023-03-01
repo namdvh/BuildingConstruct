@@ -208,6 +208,8 @@ namespace Application.System.Commitments
                     PostID = item.ContractorPosts.Id,
                     BuilderName = item.Builder.User.FirstName + " " + item.Builder.User.LastName,
                     BuilderPhone = item.Builder.User.PhoneNumber,
+                    ConstructorName = item.Contractor.CompanyName,
+                    Salary = item.Salaries,
                     BuilderTypeName = item.Builder.Type.Name
                 };
                 result.Add(dto);

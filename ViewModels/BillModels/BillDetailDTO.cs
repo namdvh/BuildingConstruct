@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ViewModels.Carts;
 
 namespace ViewModels.BillModels
 {
@@ -28,6 +29,8 @@ namespace ViewModels.BillModels
         public decimal? BillDetailTotalPrice { get; set; }
         public decimal? BillDetailQuantity { get; set; }
         public string? TypeName { get; set; }
+        public int? TypeId { get; set; }
+        public List<CartProductType>? ProductType { get; set; }
     }
 
     public class BigBillDetail

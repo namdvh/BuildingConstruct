@@ -23,7 +23,13 @@ namespace ViewModels.Commitment
         public int? PostID { get; set; }
 
         public string? BuilderName { get; set; }
+
+        public string? ConstructorName { get; set; }
+
+        public string? Salary { get; set; }
+
         public string? BuilderTypeName { get; set; }
+
         public string? BuilderPhone { get; set; }
 
     }

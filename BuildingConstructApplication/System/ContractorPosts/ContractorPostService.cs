@@ -3,6 +3,7 @@ using Data.Entities;
 using Data.Enum;
 using Gridify;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 using System.Security.Claims;
@@ -38,11 +39,11 @@ namespace Application.System.ContractorPosts
                 Description = contractorPostDTO.Description,
                 StarDate = contractorPostDTO.StarDate,
                 EndDate = contractorPostDTO.EndDate,
-                ConstructionType= contractorPostDTO.ConstructionType,
-                StartTime= contractorPostDTO.StartTime,
-                EndTime=contractorPostDTO.EndTime,
-                Accommodation= contractorPostDTO.Accommodation,
-                Transport=contractorPostDTO.Transport,
+                ConstructionType = contractorPostDTO.ConstructionType,
+                StartTime = contractorPostDTO.StartTime,
+                EndTime = contractorPostDTO.EndTime,
+                Accommodation = contractorPostDTO.Accommodation,
+                Transport = contractorPostDTO.Transport,
                 Place = contractorPostDTO.Place,
                 Salaries = contractorPostDTO.Salaries,
                 ViewCount = 0,
@@ -50,8 +51,8 @@ namespace Application.System.ContractorPosts
                 PeopeRemained = contractorPostDTO.NumberPeople,
                 Status = Status.Level1,
                 PostCategories = PostCategories.Categories1,
-                Benefit=contractorPostDTO.Benefit,
-                Required=contractorPostDTO.Required,
+                Benefit = contractorPostDTO.Benefit,
+                Required = contractorPostDTO.Required,
                 LastModifiedAt = DateTime.Now,
                 CreateBy = Guid.Parse(userID),
                 ContractorID = (int)contracID
@@ -195,16 +196,16 @@ namespace Application.System.ContractorPosts
             ContractorPostDetailDTO postDTO = new()
             {
                 Title = post.Title,
-                Accommodation=post.Accommodation,
-                ConstructionType=post.ConstructionType,
-                EndTime=post.EndTime,
-                StartTime=post.StartTime,
-                Transport=post.Transport,
+                Accommodation = post.Accommodation,
+                ConstructionType = post.ConstructionType,
+                EndTime = post.EndTime,
+                StartTime = post.StartTime,
+                Transport = post.Transport,
                 ProjectName = post.ProjectName,
                 Salaries = post.Salaries,
                 Description = post.Description,
-                Benefit=post.Benefit,
-                Required=post.Required,
+                Benefit = post.Benefit,
+                Required = post.Required,
                 StarDate = post.StarDate,
                 EndDate = post.EndDate,
                 LastModifiedAt = post.LastModifiedAt,
@@ -212,11 +213,11 @@ namespace Application.System.ContractorPosts
                 PeopleRemained = post.PeopeRemained,
                 PostCategories = post.PostCategories,
                 Place = post.Place,
-                IsApplied =post.isApplied,
+                IsApplied = post.isApplied,
                 type = await GetTypeAndSkillFromPost(post.Id),
                 CreatedBy = post.CreateBy,
                 Author = await GetUserProfile(post.CreateBy),
-                IsSave=IsSave
+                IsSave = IsSave
             };
 
             return postDTO;
@@ -248,7 +249,7 @@ namespace Application.System.ContractorPosts
             }
             if (rsSkill.Where(x => x.Skills.TypeId == null).ToList().Any())
             {
-                
+
                 foreach (var i in rsSkill.Where(x => x.Skills.TypeId == null).ToList())
                 {
                     var t = new TypeModels();
@@ -281,8 +282,8 @@ namespace Application.System.ContractorPosts
             final.RoleName = await _context.Roles.Where(x => x.Id.Equals(roleid)).Select(x => x.Name).SingleOrDefaultAsync();
             return final;
         }
-  
-        public async Task<BasePagination<List<ContractorPostDTO>>> GetPost(PaginationFilter filter,Guid id)
+
+        public async Task<BasePagination<List<ContractorPostDTO>>> GetPost(PaginationFilter filter, Guid id)
         {
             BasePagination<List<ContractorPostDTO>> response;
             var orderBy = filter._orderBy.ToString();
@@ -293,6 +294,12 @@ namespace Application.System.ContractorPosts
                 "-1" => "descending",
                 _ => orderBy
             };
+            if (string.IsNullOrEmpty(filter._sortBy))
+            {
+                filter._sortBy = "LastModifiedAt";
+            }
+
+
 
             IQueryable<ContractorPost> query = _context.ContractorPosts;
             StringBuilder salariesSearch = new();
@@ -369,8 +376,8 @@ namespace Application.System.ContractorPosts
             }
 
             var result = await query
-                    .Include(x=>x.Contractor)
-                        .ThenInclude(x=>x.User)
+                    .Include(x => x.Contractor)
+                        .ThenInclude(x => x.User)
                      .OrderBy(filter._sortBy + " " + orderBy)
                      .Skip((filter.PageNumber - 1) * filter.PageSize)
                      .Take(filter.PageSize)
@@ -415,7 +422,7 @@ namespace Application.System.ContractorPosts
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = MapListDTO(result,id),
+                    Data = MapListDTO(result, id),
                     Pagination = pagination
                 };
             }
@@ -515,7 +522,7 @@ namespace Application.System.ContractorPosts
                 FirstName = applied.Builder.User.FirstName,
                 LastName = applied.Builder.User.LastName,
                 UserID = applied.Builder.User.Id,
-                WishSalary=applied.WishSalary,
+                WishSalary = applied.WishSalary,
                 AppliedDate = applied.AppliedDate
             };
             return rs;
@@ -532,7 +539,7 @@ namespace Application.System.ContractorPosts
                 FirstName = applied.Builder.User.FirstName,
                 LastName = applied.Builder.User.LastName,
                 UserID = applied.Builder.User.Id,
-                WishSalary=applied.WishSalary,
+                WishSalary = applied.WishSalary,
                 Groups = group,
                 AppliedDate = applied.AppliedDate
             };
@@ -569,6 +576,12 @@ namespace Application.System.ContractorPosts
                 "-1" => "descending",
                 _ => orderBy
             };
+            if (string.IsNullOrEmpty(filter._sortBy))
+            {
+                filter._sortBy = "LastModifiedAt";
+            }
+
+
             var result = await _context.ContractorPosts
                            .OrderBy("Views" + " " + orderBy)
                            .Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -618,6 +631,8 @@ namespace Application.System.ContractorPosts
             BasePagination<List<ContractorPostDTO>> response;
 
             var result = await _context.ContractorPosts.Include(x => x.Contractor).Where(x => x.Title.Contains(keyword) || x.Contractor.CompanyName.Contains(keyword)).ToListAsync();
+
+
             var totalRecord = result.Count;
 
             if (!result.Any())
@@ -656,7 +671,7 @@ namespace Application.System.ContractorPosts
             return response;
         }
 
-        private List<ContractorPostDTO> MapListDTO(List<ContractorPost> list,Guid id)
+        private List<ContractorPostDTO> MapListDTO(List<ContractorPost> list, Guid id)
         {
             List<ContractorPostDTO> result = new();
 
@@ -702,7 +717,7 @@ namespace Application.System.ContractorPosts
             foreach (var item in list)
             {
                 //var user = _context.Users.Where(x => x.ContractorId.Equals(item.ContractorID)).FirstOrDefault();
-                
+
 
 
                 ContractorPostDTO dto = new()
@@ -778,7 +793,7 @@ namespace Application.System.ContractorPosts
                 {
                     BuilderID = user.BuilderId.Value,
                     PostID = request.PostId,
-                    WishSalary=request.WishSalary,
+                    WishSalary = request.WishSalary,
                     GroupID = group.Id,
                     Status = Status.NOT_RESPONSE,
                     AppliedDate = DateTime.Now
@@ -794,7 +809,7 @@ namespace Application.System.ContractorPosts
                 {
                     BuilderID = user.BuilderId.Value,
                     PostID = request.PostId,
-                    WishSalary=request.WishSalary,
+                    WishSalary = request.WishSalary,
                     Status = Status.NOT_RESPONSE,
                     AppliedDate = DateTime.Now
 
@@ -815,12 +830,27 @@ namespace Application.System.ContractorPosts
             return response;
         }
 
-        public async Task<BaseResponse<List<AppliedPostAll>>> ViewAllPostApplied(Guid userID)
+        public async Task<BasePagination<List<AppliedPostAll>>> ViewAllPostApplied(Guid userID, PaginationFilter filter)
         {
-            BaseResponse<List<AppliedPostAll>> response;
+            BasePagination<List<AppliedPostAll>> response;
             List<AppliedPostAll> ls = new();
-            var user =await _context.Users.FirstOrDefaultAsync(x=>x.Id.Equals(userID));
-            if(user == null)
+            var orderBy = filter._orderBy.ToString();
+            int totalRecord;
+            orderBy = orderBy switch
+            {
+                "1" => "ascending",
+                "-1" => "descending",
+                _ => orderBy
+            };
+
+            if (string.IsNullOrEmpty(filter._sortBy))
+            {
+                filter._sortBy = "PostID";
+            }
+
+
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id.Equals(userID));
+            if (user == null)
             {
                 response = new()
                 {
@@ -829,18 +859,39 @@ namespace Application.System.ContractorPosts
                 };
                 return response;
             }
-            var rs=await _context.AppliedPosts
-                .Include(x=>x.ContractorPosts)
-                    .ThenInclude(x=>x.Contractor)
-                        .ThenInclude(x=>x.User)
-                .Where(x=>x.BuilderID==user.BuilderId)
+            var rs = await _context.AppliedPosts
+                .Include(x => x.ContractorPosts)
+                    .ThenInclude(x => x.Contractor)
+                        .ThenInclude(x => x.User)
+                 .OrderBy(filter._sortBy + " " + orderBy)
+                     .Skip((filter.PageNumber - 1) * filter.PageSize)
+                     .Take(filter.PageSize)
+                .Where(x => x.BuilderID == user.BuilderId)
                 .ToListAsync();
+
+            totalRecord = rs.Count;
+
+            double totalPages;
+
+            totalPages = ((double)totalRecord / (double)filter.PageSize);
+
+            var roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
+            Pagination pagination = new()
+            {
+                CurrentPage = filter.PageNumber,
+                PageSize = filter.PageSize,
+                TotalPages = roundedTotalPages,
+                TotalRecords = totalRecord
+            };
+
+
 
             response = new()
             {
                 Code = BaseCode.SUCCESS,
                 Data = MapListAppliedAllDTO(rs),
                 Message = BaseCode.SUCCESS_MESSAGE,
+                Pagination = pagination
             };
             return response;
         }
@@ -853,7 +904,7 @@ namespace Application.System.ContractorPosts
             {
                 AppliedPostAll dto = new()
                 {
-                    PostId=item.PostID,
+                    PostId = item.PostID,
                     Avatar = item.ContractorPosts.Contractor?.User?.Avatar,
                     Description = item.ContractorPosts.Description,
                     EndDate = item.ContractorPosts.EndDate,
@@ -862,12 +913,160 @@ namespace Application.System.ContractorPosts
                     StarDate = item.ContractorPosts.StarDate,
                     AuthorName = item.ContractorPosts.Contractor?.User?.FirstName + " " + item.ContractorPosts.Contractor?.User?.LastName,
                     Title = item.ContractorPosts.Title,
-                    AppliedDate=item.AppliedDate,
-                    WishSalary=item.WishSalary
+                    AppliedDate = item.AppliedDate,
+                    WishSalary = item.WishSalary
                 };
                 result.Add(dto);
             }
             return result;
+        }
+
+        public async Task<BasePagination<List<ContractorPostDTO>>> GetPostByContractor(PaginationFilter filter, Guid id)
+        {
+            BasePagination<List<ContractorPostDTO>> response;
+            var orderBy = filter._orderBy.ToString();
+            int totalRecord;
+            orderBy = orderBy switch
+            {
+                "1" => "ascending",
+                "-1" => "descending",
+                _ => orderBy
+            };
+
+            if (string.IsNullOrEmpty(filter._sortBy))
+            {
+                filter._sortBy = "LastModifiedAt";
+            }
+
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id.Equals(id));
+
+            IQueryable<ContractorPost> query = _context.ContractorPosts;
+            StringBuilder salariesSearch = new();
+            StringBuilder placeSearch = new();
+            StringBuilder categoriesSearch = new();
+
+            if (filter.FilterRequest != null)
+            {
+                if (filter.FilterRequest.Salary.Any())
+                {
+                    var count = filter.FilterRequest.Salary.Count;
+                    for (int i = 0; i < count; i++)
+                    {
+                        if (i == count - 1)
+                        {
+                            salariesSearch.Append("Salaries=*" + filter.FilterRequest.Salary[i]);
+                            break;
+                        }
+                        salariesSearch.Append("Salaries=*" + filter.FilterRequest.Salary[i] + "|");
+                    }
+                    query = query.ApplyFiltering(salariesSearch.ToString());
+                }
+
+                if (filter.FilterRequest.Places.Any())
+                {
+                    var count = filter.FilterRequest.Places.Count;
+                    for (int i = 0; i < count; i++)
+                    {
+                        if (i == count - 1)
+                        {
+                            placeSearch.Append("Place=" + filter.FilterRequest.Places[i]);
+                            break;
+                        }
+                        placeSearch.Append("Place=" + filter.FilterRequest.Places[i] + "|");
+                    }
+                    query = query.ApplyFiltering(placeSearch.ToString());
+                }
+
+                if (filter.FilterRequest.Categories.Any())
+                {
+                    var count = filter.FilterRequest.Categories.Count;
+                    for (int i = 0; i < count; i++)
+                    {
+                        if (i == count - 1)
+                        {
+                            categoriesSearch.Append("PostCategories=" + filter.FilterRequest.Categories[i]);
+                            break;
+                        }
+                        categoriesSearch.Append("PostCategories=" + filter.FilterRequest.Categories[i] + "|");
+                    }
+                    query = query.ApplyFiltering(categoriesSearch.ToString());
+                }
+
+                if (filter.FilterRequest.Participant.HasValue)
+                {
+                    query = query.Where(x => x.NumberPeople == filter.FilterRequest.Participant);
+                }
+
+                if (!string.IsNullOrEmpty(filter.FilterRequest.Title))
+                {
+                    query = query.Include(x => x.Contractor).Where(x => x.Title.Contains(filter.FilterRequest.Title) || x.Contractor.CompanyName.Contains(filter.FilterRequest.Title));
+                }
+                if (filter.FilterRequest.Transport == true)
+                {
+                    query = query.Where(x => x.Transport == true);
+
+                }
+                if (filter.FilterRequest.Accommodation == true)
+                {
+                    query = query.Where(x => x.Accommodation == true);
+
+                }
+
+            }
+
+            var result = await query
+                    .Include(x => x.Contractor)
+                        .ThenInclude(x => x.User)
+                     .OrderBy(filter._sortBy + " " + orderBy)
+                     .Skip((filter.PageNumber - 1) * filter.PageSize)
+                     .Take(filter.PageSize)
+                     .Where(x=>x.ContractorID==user.ContractorId)
+                     .ToListAsync();
+
+
+            if (filter.FilterRequest != null)
+            {
+                totalRecord = result.Count;
+            }
+            else
+            {
+                totalRecord = await _context.ContractorPosts.CountAsync();
+            }
+
+            if (!result.Any())
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.EMPTY_MESSAGE,
+                    Data = new(),
+                    Pagination = null
+                };
+            }
+            else
+            {
+                double totalPages;
+
+                totalPages = ((double)totalRecord / (double)filter.PageSize);
+
+                var roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
+                Pagination pagination = new()
+                {
+                    CurrentPage = filter.PageNumber,
+                    PageSize = filter.PageSize,
+                    TotalPages = roundedTotalPages,
+                    TotalRecords = totalRecord
+                };
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = MapListDTO(result, id),
+                    Pagination = pagination
+                };
+            }
+            return response;
         }
     }
 }

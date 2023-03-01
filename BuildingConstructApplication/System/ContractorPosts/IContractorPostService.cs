@@ -13,6 +13,8 @@ namespace Application.System.ContractorPosts
     {
         Task<BasePagination<List<ContractorPostDTO>>> GetPost(PaginationFilter filter,Guid id);
 
+        Task<BasePagination<List<ContractorPostDTO>>> GetPostByContractor(PaginationFilter filter,Guid id);
+
         Task<BasePagination<List<ContractorPostDTO>>> GetPostByViews(PaginationFilter filter);
 
         Task<BasePagination<List<ContractorPostDTO>>> SearchPost(PaginationFilter filter, string keyword);
@@ -22,7 +24,7 @@ namespace Application.System.ContractorPosts
         Task<BasePagination<List<AppliedPostDTO>>> ViewAppliedPost(int postID, PaginationFilter filter);
         Task<bool>CreateContractorPost(ContractorPostModels contractorPostDTO);
         Task<BaseResponse<ContractorPostDetailDTO>> GetDetailPost(int cPostid);
-        Task<BaseResponse<List<AppliedPostAll>>> ViewAllPostApplied(Guid userID);
+        Task<BasePagination<List<AppliedPostAll>>> ViewAllPostApplied(Guid userID, PaginationFilter request);
 
     }
 }
