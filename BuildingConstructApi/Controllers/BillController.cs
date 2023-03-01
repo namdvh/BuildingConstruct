@@ -81,15 +81,29 @@ namespace BuildingConstructApi.Controllers
         }
 
         [HttpGet("history")]
-        public async Task<IActionResult> GetHistoryProductBill()
+        public async Task<IActionResult> GetHistoryProductBill([FromQuery] PaginationFilter request)
         {
             var userID = User.FindFirst("UserID").Value;
+            var validFilter = new PaginationFilter();
+
 
             if (userID == null)
             {
                 return BadRequest();
             }
-            var rs = await _billServices.GetHistoryProductBill(Guid.Parse(userID));
+
+            if (request.FilterRequest == null)
+            {
+                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
+            }
+            else
+            {
+                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy, request.FilterRequest);
+
+            }
+
+
+            var rs = await _billServices.GetHistoryProductBill(Guid.Parse(userID), validFilter);
 
             return Ok(rs);
         }
