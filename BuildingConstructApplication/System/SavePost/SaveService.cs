@@ -169,7 +169,7 @@ namespace Application.System.SavePost
         public async Task<BaseResponse<string>> SavePost(SavePostRequest request)
         {
             BasePagination<string> response = new();
-            Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
+            Claim identifierClaim = _accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
             if (identifierClaim == null)
             {
                 response.Message = BaseCode.ERROR_MESSAGE;
