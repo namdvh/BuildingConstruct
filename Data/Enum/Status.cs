@@ -12,9 +12,11 @@ namespace Data.Enum
         Level2,
         Level3,
         SUCCESS,
-        DECLINED,
         NOT_RESPONSE,
         PENDING,
+        ACCEPTED,
+        DECLINED,
+        PAID,
         DELIVERED,
         RECEIVED
     }
