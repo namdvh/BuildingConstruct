@@ -340,7 +340,7 @@ namespace Application.System.Bill
 
             SmallBillDTO small = new()
             {
-
+                Status=bill.Status,
                 ProductBillDetail = MapProductDTO(bill.Id)
             };
             smallDetails.Add(small);
