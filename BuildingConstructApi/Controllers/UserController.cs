@@ -60,7 +60,7 @@ namespace BuildingConstructApi.Controllers
                         var userPrincipalac = this.ValidateToken(token.Data.AccessToken);
                         var authProperties = new AuthenticationProperties
                         {
-                            ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(60),
+                            ExpiresUtc = DateTimeOffset.UtcNow.AddDays(1),
                             IsPersistent = true,
                             AllowRefresh = true,
                         };

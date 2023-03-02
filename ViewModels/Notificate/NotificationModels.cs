@@ -9,6 +9,7 @@ namespace ViewModels.Notificate
 {
     public class NotificationModels
     {
+        public int? Id { get; set; }
         public NotificationType NotificationType { get; set; }
         public string? Message { get; set; }
         public int? NavigateId { get; set; }

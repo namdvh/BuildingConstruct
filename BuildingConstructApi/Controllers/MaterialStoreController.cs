@@ -97,8 +97,17 @@ namespace BuildingConstructApi.Controllers
         [HttpGet("getAllProduct")]
         public async Task<IActionResult> GetAllProduct([FromQuery] PaginationFilter request,bool isAll,int? storeID)
         {
+            var validFilter = new PaginationFilter();
 
-            var validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
+            if (request.FilterRequest == null)
+            {
+                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
+            }
+            else
+            {
+                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy, request.FilterRequest);
+
+            }
 
             var rs = await materialStoreService.GetAllProductStore(validFilter,isAll, storeID);
             return Ok(rs);

@@ -1,6 +1,6 @@
 ﻿namespace Data.Entities
 {
-    public class Products
+    public class Products:BaseEntity
     {
         public int Id { get; set; }
 

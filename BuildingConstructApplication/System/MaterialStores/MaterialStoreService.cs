@@ -187,6 +187,7 @@ namespace Application.System.MaterialStores
                 dto.UnitInStock = item.UnitInStock;
                 dto.UnitPrice = item.UnitPrice;
                 dto.SoldQuantities = item.SoldQuantities;
+                dto.LastModifiedAt = item.LastModifiedAt;
                 
                 string img = item?.Image;
                 if(img != null)

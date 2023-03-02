@@ -62,8 +62,13 @@ namespace BuildingConstructApi.Controllers
                     noti.Author.Avatar = author.Avatar;
                     noti.LastModifiedAt=DateTime.Now;
                     noti.NavigateId = rs.NavigateId;
-                    await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("sendToUser", noti.Message,noti.LastModifiedAt,noti.Author,rs.NavigateId);
-                    await _userConnectionManager.SaveNotification(noti);
+                    var check=await _userConnectionManager.SaveNotification(noti);
+                    if (check !=null)
+                    {
+                        noti.Id = check.Data.Id;
+                        await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("sendToUser", noti);
+
+                    }
                 }
             }     
             return Ok(rs);

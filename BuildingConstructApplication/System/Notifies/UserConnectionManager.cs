@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ViewModels.Notificate;
+using ViewModels.Response;
 
 namespace Application.System.Notifies
 {
@@ -60,8 +61,9 @@ namespace Application.System.Notifies
             return conn;
         }
 
-        public async Task<bool> SaveNotification(NotificationModels noti)
+        public async Task<BaseResponse<Notification>> SaveNotification(NotificationModels noti)
         {
+            BaseResponse<Notification> response = new();
             Notification notification = new Notification()
             {
                 Title = "",
@@ -71,15 +73,22 @@ namespace Application.System.Notifies
                 LastModifiedAt = noti.LastModifiedAt,
                 Message = noti.Message,
                 Type = noti.NotificationType,
-                NavigateId=noti.NavigateId
+                NavigateId = noti.NavigateId
             };
             await _context.Notifcations.AddAsync(notification);
             var rs = await _context.SaveChangesAsync();
             if (rs > 0)
             {
-                return true;
+                response.Data = notification;
             }
-            return false;
+            else
+            {
+                response.Data = null;
+
+            }
+            return response;
+
+
         }
     }
 }

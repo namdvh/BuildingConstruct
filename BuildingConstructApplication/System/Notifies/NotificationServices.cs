@@ -45,9 +45,9 @@ namespace Application.System.Notifies
                 "-1" => "descending",
                 _ => orderBy
             };
-            var totalRecords = await _context.Notifcations.CountAsync();
+            var totalRecords = await _context.Notifcations.Where(x => x.UserID.ToString().Equals(userID)).CountAsync();
 
-            IQueryable<Notification> query = (IQueryable<Notification>)_context.Notifcations.Include(x => x.User);
+            IQueryable<Notification> query = (IQueryable<Notification>)_context.Notifcations.Include(x => x.User).Where(x=>x.UserID.ToString().Equals(userID));
 
 
             var data = await query
@@ -114,6 +114,33 @@ namespace Application.System.Notifies
                 result.Add(dto);
             }
             return result;
+        }
+
+        public async Task<BaseResponse<string>> UpdateIsRead(int Id)
+        {
+            BaseResponse<string> response;
+            var noti = await _context.Notifcations.FirstOrDefaultAsync(x => x.Id == Id);
+
+            if (noti != null)
+            {
+                noti.IsRead = true ;
+                _context.Update(noti);
+                await _context.SaveChangesAsync();
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE
+                };
+                return response;
+            }
+
+            response = new()
+            {
+                Code = BaseCode.ERROR,
+                Message = BaseCode.ERROR_MESSAGE
+            };
+            return response;
         }
     }
 }
