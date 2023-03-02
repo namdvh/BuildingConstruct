@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using System.Drawing;
 using System.Reflection.PortableExecutable;
 using ViewModels.Notificate;
+using ViewModels.Pagination;
 using ViewModels.Response;
 using ViewModels.SavePost;
 
@@ -36,15 +37,10 @@ namespace BuildingConstructApi.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllTypeAndSkill()
-        {
-            var rs = await _saveService.GetSavePostByUsID();
-            return Ok(rs);
-        }
+
         [HttpPost]
         public async Task<IActionResult> CreateSavePost([FromBody] SavePostRequest request)
-        {
+         {
             var rs = await _saveService.SavePost(request);
             var connections = _userConnectionManager.GetUserConnections(rs.Data);
             if (connections != null && connections.Count > 0)
@@ -52,7 +48,7 @@ namespace BuildingConstructApi.Controllers
                 foreach (var connectionId in connections)
                 {
                     NotificationModels noti = new();
-                    noti.NotificationType = 0;
+                    noti.NotificationType = NotificationType.TYPE_1;
                     noti.Message = NotificationMessage.SAVENOTI;
                     noti.CreateBy = Guid.Parse(rs.Data);
                     var author = await _context.Users.FindAsync(noti.CreateBy);
@@ -71,6 +67,23 @@ namespace BuildingConstructApi.Controllers
                     }
                 }
             }     
+            return Ok(rs);
+        }
+        [HttpGet("getAllSave")]
+        public async Task<IActionResult> GetAllSavePost([FromQuery] PaginationFilter request)
+        {
+            var validFilter = new PaginationFilter();
+
+            if (request.FilterRequest == null)
+            {
+                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
+            }
+            else
+            {
+                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy, request.FilterRequest);
+
+            }
+            var rs = await _saveService.GetSavePostByUsID(validFilter);
             return Ok(rs);
         }
         [HttpPut]

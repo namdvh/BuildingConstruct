@@ -1,10 +1,15 @@
 using Application.System.ContractorPosts;
+using Application.System.Notifies;
+using BuildingConstructApi.Hubs;
+using Data.DataContext;
 using Data.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using ViewModels.ContractorPost;
 using ViewModels.Filter;
+using ViewModels.Notificate;
 using ViewModels.Pagination;
 using ViewModels.Response;
 
@@ -16,6 +21,9 @@ namespace BuildingConstructApi.Controllers
     public class ContractorPostController : ControllerBase
     {
         private readonly IContractorPostService _contractorPostService;
+        private readonly IHubContext<NotificationUserHub> _notificationUserHubContext;
+        private readonly IUserConnectionManager _userConnectionManager;
+        private readonly BuildingConstructDbContext _context;
 
         public ContractorPostController(IContractorPostService contractorPostService)
         {
@@ -75,8 +83,31 @@ namespace BuildingConstructApi.Controllers
         public async Task<IActionResult> AppliedPost([FromBody] AppliedPostRequest request)
         {
             var rs = User.FindFirst("UserID").Value;
-
-            var result = await _contractorPostService.AppliedPost(request,Guid.Parse(rs));
+            var result = await _contractorPostService.AppliedPost(request, Guid.Parse(rs));
+            var connections = _userConnectionManager.GetUserConnections(result.Data);
+            if (connections != null && connections.Count > 0)
+            {
+                foreach (var connectionId in connections)
+                {
+                    NotificationModels noti = new();
+                    noti.NotificationType = NotificationType.TYPE_1;
+                    noti.Message = NotificationMessage.SAVENOTI;
+                    noti.CreateBy = Guid.Parse(result.Data);
+                    var author = await _context.Users.FindAsync(noti.CreateBy);
+                    noti.Author = new();
+                    noti.Author.FirstName = author.FirstName;
+                    noti.Author.LastName = author.LastName;
+                    noti.Author.Avatar = author.Avatar;
+                    noti.LastModifiedAt = DateTime.Now;
+                    noti.NavigateId = result.NavigateId;
+                    var check = await _userConnectionManager.SaveNotification(noti);
+                    if (check != null)
+                    {
+                        noti.Id = check.Data.Id;
+                        await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("sendToUser", noti);
+                    }
+                }
+            }
             return Ok(result);
         }
 
