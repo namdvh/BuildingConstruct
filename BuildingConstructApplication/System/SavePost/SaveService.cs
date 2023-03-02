@@ -32,7 +32,7 @@ namespace Application.System.SavePost
         public async Task<BasePagination<List<SavePostDetailDTO>>> GetSavePostByUsID(PaginationFilter filter)
         {
             BasePagination<List<SavePostDetailDTO>> response = new();
-            Claim identifierClaim = _accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+            Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
 
             List<SavePostDetailDTO> list = new();
             var orderBy = filter._orderBy.ToString();
@@ -215,7 +215,7 @@ namespace Application.System.SavePost
         public async Task<BaseResponse<string>> SavePost(SavePostRequest request)
         {
             BasePagination<string> response = new();
-            Claim identifierClaim = _accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+            Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
             if (identifierClaim == null)
             {
                 response.Message = BaseCode.ERROR_MESSAGE;
@@ -250,7 +250,11 @@ namespace Application.System.SavePost
 
         public async Task<bool> DeleteSave(DeleteSaveRequest request)
         {
-            Claim identifierClaim = _accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+            Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
+            if (identifierClaim.Value == null)
+            {
+                return false;
+            }
             var userID = identifierClaim.Value.ToString();
             dynamic save;
 

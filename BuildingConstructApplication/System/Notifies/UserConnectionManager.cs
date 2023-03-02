@@ -1,6 +1,7 @@
 ﻿using Data.DataContext;
 using Data.Entities;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,8 +13,8 @@ namespace Application.System.Notifies
 {
     public class UserConnectionManager : IUserConnectionManager
     {
-        private static Dictionary<string, List<string>> userConnectionMap = new Dictionary<string, List<string>>();
-        private static string userConnectionMapLocker = string.Empty;
+        private static ConcurrentDictionary<string, ConcurrentBag<string>> userConnectionMap = new ConcurrentDictionary<string, ConcurrentBag<string>>();
+        private readonly ReaderWriterLockSlim userConnectionMapLock = new ReaderWriterLockSlim();
         private readonly BuildingConstructDbContext _context;
 
         public UserConnectionManager(BuildingConstructDbContext context)
@@ -23,43 +24,47 @@ namespace Application.System.Notifies
 
         public void KeepUserConnection(string userId, string connectionId)
         {
-            lock (userConnectionMapLocker)
-            {
-                if (!userConnectionMap.ContainsKey(userId))
-                {
-                    userConnectionMap[userId] = new List<string>();
-                }
-                userConnectionMap[userId].Add(connectionId);
-            }
+            var connections = userConnectionMap.GetOrAdd(userId, new ConcurrentBag<string>());
+            connections.Add(connectionId);
         }
 
         public void RemoveUserConnection(string connectionId)
         {
-            //Remove the connectionId of user 
-            lock (userConnectionMapLocker)
+            userConnectionMapLock.EnterWriteLock();
+            try
             {
-                foreach (var userId in userConnectionMap.Keys)
+                foreach (var connections in userConnectionMap.Values)
                 {
-                    if (userConnectionMap.ContainsKey(userId))
-                    {
-                        if (userConnectionMap[userId].Contains(connectionId))
-                        {
-                            userConnectionMap[userId].Remove(connectionId);
-                            break;
-                        }
-                    }
+                    connections.TryTake(out connectionId);
                 }
             }
+            finally
+            {
+                userConnectionMapLock.ExitWriteLock();
+            }
         }
+
         public List<string> GetUserConnections(string userId)
         {
-            var conn = new List<string>();
-            lock (userConnectionMapLocker)
+            userConnectionMapLock.EnterReadLock();
+            try
             {
-                conn = userConnectionMap[userId];
+                if (userConnectionMap.TryGetValue(userId, out ConcurrentBag<string> connections)!=null)
+                {
+                    return new List<string>(connections);
+                }
+                else
+                {
+                    return null;
+                }
             }
-            return conn;
+            finally
+            {
+                userConnectionMapLock.ExitReadLock();
+            }
         }
+
+
 
         public async Task<BaseResponse<Notification>> SaveNotification(NotificationModels noti)
         {

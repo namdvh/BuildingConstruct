@@ -9,6 +9,7 @@ using Emgu.CV.Structure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using System.Drawing;
 using System.Reflection.PortableExecutable;
@@ -43,23 +44,24 @@ namespace BuildingConstructApi.Controllers
          {
             var rs = await _saveService.SavePost(request);
             var connections = _userConnectionManager.GetUserConnections(rs.Data);
+            NotificationModels noti = new();
+            noti.NotificationType = NotificationType.TYPE_1;
+            noti.Message = NotificationMessage.SAVENOTI;
+            noti.CreateBy = Guid.Parse(rs.Data);
+            var userID = User.FindFirst("UserID").Value;
+            var author = await _context.Users.Where(x => x.Id.ToString().Equals(userID.ToString())).FirstOrDefaultAsync();
+            noti.Author = new();
+            noti.Author.FirstName = author.FirstName;
+            noti.Author.LastName = author.LastName;
+            noti.Author.Avatar = author.Avatar;
+            noti.LastModifiedAt = DateTime.Now;
+            noti.NavigateId = rs.NavigateId;
+            var check = await _userConnectionManager.SaveNotification(noti);
             if (connections != null && connections.Count > 0)
             {
                 foreach (var connectionId in connections)
                 {
-                    NotificationModels noti = new();
-                    noti.NotificationType = NotificationType.TYPE_1;
-                    noti.Message = NotificationMessage.SAVENOTI;
-                    noti.CreateBy = Guid.Parse(rs.Data);
-                    var userID = User.FindFirst("UserID").Value;
-                    var author = await _context.Users.FindAsync(Guid.Parse(User.ToString()));
-                    noti.Author = new();
-                    noti.Author.FirstName = author.FirstName;
-                    noti.Author.LastName = author.LastName;
-                    noti.Author.Avatar = author.Avatar;
-                    noti.LastModifiedAt=DateTime.Now;
-                    noti.NavigateId = rs.NavigateId;
-                    var check=await _userConnectionManager.SaveNotification(noti);
+                   
                     if (check !=null)
                     {
                         noti.Id = check.Data.Id;
