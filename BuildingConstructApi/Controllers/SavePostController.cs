@@ -21,7 +21,7 @@ namespace BuildingConstructApi.Controllers
 {
     [Route("api/savepost")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = "Bearer")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class SavePostController : ControllerBase
     {
         private readonly IHubContext<NotificationUserHub> _notificationUserHubContext;
@@ -51,7 +51,8 @@ namespace BuildingConstructApi.Controllers
                     noti.NotificationType = NotificationType.TYPE_1;
                     noti.Message = NotificationMessage.SAVENOTI;
                     noti.CreateBy = Guid.Parse(rs.Data);
-                    var author = await _context.Users.FindAsync(noti.CreateBy);
+                    var userID = User.FindFirst("UserID").Value;
+                    var author = await _context.Users.FindAsync(Guid.Parse(User.ToString()));
                     noti.Author = new();
                     noti.Author.FirstName = author.FirstName;
                     noti.Author.LastName = author.LastName;

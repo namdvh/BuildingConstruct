@@ -824,7 +824,7 @@ namespace Application.System.ContractorPosts
             {
                 Code = BaseCode.SUCCESS,
                 Message = BaseCode.SUCCESS_MESSAGE,
-                Data= user.Id.ToString(),
+                Data= userID.ToString(),
                 NavigateId= request.PostId
 
             };

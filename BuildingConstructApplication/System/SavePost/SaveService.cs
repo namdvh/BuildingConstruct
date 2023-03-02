@@ -222,7 +222,6 @@ namespace Application.System.SavePost
                 response.Code = "202";
                 return response;
             }
-            var authorId = await _context.ContractorPosts.Where(x => x.Id == request.ContractorPostId).Select(x => x.CreateBy).FirstOrDefaultAsync();
             var userID = identifierClaim.Value;
             Save save = new()
             {
@@ -230,13 +229,15 @@ namespace Application.System.SavePost
                 ContractorPostId = request.ContractorPostId,
                 UserId = Guid.Parse(userID)
             };
+            var sendID = await _context.ContractorPosts.Where(x => x.Id == request.ContractorPostId).Select(x => x.CreateBy).FirstOrDefaultAsync();
+
             await _context.Saves.AddAsync(save);
             var rs = await _context.SaveChangesAsync();
             if (rs > 0)
             {
                 response.Message = BaseCode.SUCCESS_MESSAGE;
                 response.Code = "200";
-                response.Data = authorId.ToString();
+                response.Data = sendID.ToString();
                 response.NavigateId = request.ContractorPostId;
             }
             else
