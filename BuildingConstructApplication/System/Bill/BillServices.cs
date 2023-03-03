@@ -390,9 +390,11 @@ namespace Application.System.Bill
         private List<ProductBillDetail> MapProductDTO(int id)
         {
             List<ProductBillDetail> list = new();
-
+            int cartID = 0;
             var rs = _context.BillDetails
                 .Include(x => x.Products)
+                .Include(x => x.Bills)
+                    .ThenInclude(x => x.Contractor)
                 .Include(x => x.ProductTypes)
                 .Where(x => x.BillID == id)
             .ToList();
@@ -415,6 +417,13 @@ namespace Application.System.Bill
                         types.Add(tmp);
                     }
                 }
+
+                if (item.Bills.Status == Status.CANCEL)
+                {
+                    cartID = _context.Carts.Where(x => x.ProductID == item.ProductID && x.UserID == item.Bills.Contractor.CreateBy).Select(x => x.Id).FirstOrDefault();
+                }
+
+
                 ProductBillDetail pro = new()
                 {
                     ProductId = item.ProductID,
@@ -429,16 +438,19 @@ namespace Application.System.Bill
                     TypeName = item.ProductTypes?.Name,
                     Unit = item.Products.Unit,
                     ProductType = listType.Any() ? types : null,
+                    CartId = item.Bills.Status == Status.CANCEL ? cartID : null
                 };
+
                 list.Add(pro);
             }
             return list;
         }
 
-        public async Task<BaseResponse<string>> UpdateStatusBill(Status status, int billID, string message, Guid userID)
+        public async Task<BaseResponse<List<Cart>>> UpdateStatusBill(Status status, int billID, string message, Guid userID)
         {
-            BaseResponse<string> response;
+            BaseResponse<List<Cart>> response;
             var bill = await _context.Bills.FirstOrDefaultAsync(x => x.Id == billID);
+            List<Cart> ls = new();
 
             if (bill != null)
             {
@@ -448,7 +460,6 @@ namespace Application.System.Bill
                     if (status == Status.CANCEL)
                     {
                         var billDetail = await _context.BillDetails.Where(x => x.BillID == billID).ToListAsync();
-                        List<Cart> ls = new();
                         foreach (var item in billDetail)
                         {
                             Cart cart = new()
@@ -473,7 +484,8 @@ namespace Application.System.Bill
                 response = new()
                 {
                     Code = BaseCode.SUCCESS,
-                    Message = BaseCode.SUCCESS_MESSAGE
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = ls.Any() ? ls : new()
                 };
                 return response;
             }

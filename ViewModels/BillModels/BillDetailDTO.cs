@@ -31,6 +31,7 @@ namespace ViewModels.BillModels
         public string? TypeName { get; set; }
         public int? TypeId { get; set; }
         public string? Unit { get; set; }
+        public int? CartId { get; set; }
         public List<CartProductType>? ProductType { get; set; }
     }
 

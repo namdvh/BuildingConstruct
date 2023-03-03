@@ -1,4 +1,5 @@
-﻿using Data.Enum;
+﻿using Data.Entities;
+using Data.Enum;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace Application.System.Bill
 
         Task<BaseResponse<SmallBillDetailDTO>> GetDetailBySmallBill(int billID);
 
-        Task<BaseResponse<string>> UpdateStatusBill(Status status, int billID, string message,Guid userID);
+        Task<BaseResponse<List<Cart>>> UpdateStatusBill(Status status, int billID, string message,Guid userID);
 
         Task<BasePagination<List<ProductBillDetail>>> GetHistoryProductBill(Guid userID, PaginationFilter request);
     }
