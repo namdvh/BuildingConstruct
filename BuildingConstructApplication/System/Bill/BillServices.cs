@@ -110,6 +110,7 @@ namespace Application.System.Bill
             BasePagination<List<BillDTO>> response;
             var orderBy = filter._orderBy.ToString();
             int totalRecord;
+            bool flag = false;
 
             List<Data.Entities.Bill>? data;
             IQueryable<Data.Entities.Bill> query = _context.Bills;
@@ -119,15 +120,7 @@ namespace Application.System.Bill
                 filter._sortBy = "Id";
             }
 
-            if (!filter.FilterRequest.Status.HasValue)
-            {
-                data = await query
-                        .OrderBy(filter._sortBy + " " + orderBy)
-                        .Skip((filter.PageNumber - 1) * filter.PageSize)
-                        .Take(filter.PageSize)
-                        .ToListAsync();
-            }
-            else
+            if (filter.FilterRequest != null && filter.FilterRequest.Status.HasValue)
             {
                 data = await query
 
@@ -137,6 +130,18 @@ namespace Application.System.Bill
                  .Where(x => x.Status == filter.FilterRequest.Status)
                  .ToListAsync();
             }
+            else
+            {
+                data = await query
+                        .OrderBy(filter._sortBy + " " + orderBy)
+                        .Skip((filter.PageNumber - 1) * filter.PageSize)
+                        .Take(filter.PageSize)
+                        .ToListAsync();
+            }
+
+
+
+
 
 
             orderBy = orderBy switch
