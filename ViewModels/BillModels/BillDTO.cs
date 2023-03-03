@@ -21,7 +21,7 @@ namespace ViewModels.BillModels
         public Status Status { get; set; }
         public int? ProductTypeId { get; set; }
         public List<ProductBillDTO>? ProductBillDetail { get; set; } 
-        public List<ProductBillDetail> ProductBillDetailGet { get; set; } 
+        public List<ProductBillDetail>? ProductBillDetailGet { get; set; } 
 
     }
 }
