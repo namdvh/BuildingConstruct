@@ -38,7 +38,7 @@ namespace BuildingConstructApi.Controllers
             return Ok(response);
         }
         [HttpPost("getAll")]
-        public async Task<IActionResult> GetAllBill([FromQuery] PaginationFilter request)
+        public async Task<IActionResult> GetAllBill([FromBody] PaginationFilter request)
         {
             var validFilter = new PaginationFilter();
 
