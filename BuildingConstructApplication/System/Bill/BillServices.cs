@@ -397,13 +397,6 @@ namespace Application.System.Bill
                 .Where(x => x.BillID == id)
             .ToList();
 
-
-
-
-
-
-
-
             foreach (var item in rs)
             {
                 List<CartProductType> types = new();
@@ -422,10 +415,6 @@ namespace Application.System.Bill
                         types.Add(tmp);
                     }
                 }
-
-
-
-
                 ProductBillDetail pro = new()
                 {
                     ProductId = item.ProductID,
@@ -446,7 +435,7 @@ namespace Application.System.Bill
             return list;
         }
 
-        public async Task<BaseResponse<string>> UpdateStatusBill(Status status, int billID, string message)
+        public async Task<BaseResponse<string>> UpdateStatusBill(Status status, int billID, string message, Guid userID)
         {
             BaseResponse<string> response;
             var bill = await _context.Bills.FirstOrDefaultAsync(x => x.Id == billID);
@@ -457,6 +446,22 @@ namespace Application.System.Bill
                 {
                     bill.Reason = message;
 
+                    var billDetail = await _context.BillDetails.Where(x => x.BillID == billID).ToListAsync();
+                    List<Cart> ls = new();
+                    foreach (var item in billDetail)
+                    {
+                        Cart cart = new()
+                        {
+                            LastModifiedAt = bill.LastModifiedAt,
+                            ProductID = item.ProductID.Value,
+                            TypeID = item.ProductTypeId,
+                            Quantity = item.Quantity,
+                            UserID = userID,
+                        };
+                        ls.Add(cart);
+                    }
+                    await _context.AddRangeAsync(ls);
+                    await _context.SaveChangesAsync();
                 }
                 bill.Status = status;
                 bill.LastModifiedAt = DateTime.Now;
