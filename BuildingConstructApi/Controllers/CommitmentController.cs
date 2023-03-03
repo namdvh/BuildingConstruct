@@ -98,7 +98,7 @@ namespace BuildingConstructApi.Controllers
             NotificationModels noti = new();
             noti.NotificationType = NotificationType.TYPE_2;
             noti.Message = NotificationMessage.SAVENOTI;
-            noti.CreateBy = Guid.Parse(result.Data);
+            noti.CreateBy = Guid.Parse(contractorID.ToString());
             var author = await _context.Users.Where(x=>x.Id.ToString().Equals(noti.CreateBy.ToString())).FirstOrDefaultAsync();
             noti.Author = new();
             noti.Author.FirstName = author.FirstName;
