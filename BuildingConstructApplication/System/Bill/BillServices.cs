@@ -66,8 +66,12 @@ namespace Application.System.Bill
                             var product = await _context.Products.FirstOrDefaultAsync(x=>x.Id==item.ProductId);
                             product.UnitInStock = product.UnitInStock - item.Quantity;
                             var pType = await _context.ProductTypes.FirstOrDefaultAsync(x=>x.Id==item.TypeID);
-                            pType.Quantity-=item.Quantity;
-                            product.SoldQuantities+=item.Quantity;
+                            if (pType != null)
+                            {
+                                pType.Quantity -= item.Quantity;
+                                product.SoldQuantities += item.Quantity;
+                            }
+                           
                             await _context.SaveChangesAsync();
                         }
                     }
