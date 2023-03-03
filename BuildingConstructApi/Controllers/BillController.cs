@@ -1,8 +1,14 @@
 ﻿using Application.System.Bill;
+using Application.System.Notifies;
+using BuildingConstructApi.Hubs;
+using Data.DataContext;
+using Data.Entities;
 using Data.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using ViewModels.BillModels;
+using ViewModels.Notificate;
 using ViewModels.Pagination;
 using ViewModels.Response;
 
@@ -76,7 +82,6 @@ namespace BuildingConstructApi.Controllers
         public async Task<IActionResult> UpdateBillStatus([FromRoute] int id, [FromBody]UpdateBillRequest request)
         {
             var rs = await _billServices.UpdateStatusBill(request.Status, id,request.Message);
-
             return Ok(rs);
         }
 
