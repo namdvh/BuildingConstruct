@@ -113,17 +113,22 @@ namespace Application.System.Bill
             bool flag = false;
 
             List<Data.Entities.Bill>? data;
-            IQueryable<Data.Entities.Bill> query = _context.Bills;
+            var query =_context.Bills;
 
             if (string.IsNullOrEmpty(filter._sortBy))
             {
                 filter._sortBy = "Id";
             }
-
+            orderBy = orderBy switch
+            {
+                "1" => "ascending",
+                "-1" => "descending",
+                _ => orderBy
+            };
             if (filter.FilterRequest != null && filter.FilterRequest.Status.HasValue)
             {
                 data = await query
-
+                    .Include(x=>x.BillDetails)
                  .OrderBy(filter._sortBy + " " + orderBy)
                  .Skip((filter.PageNumber - 1) * filter.PageSize)
                  .Take(filter.PageSize)
@@ -132,25 +137,12 @@ namespace Application.System.Bill
             }
             else
             {
-                data = await query
+                data = await query.Include(x => x.BillDetails)
                         .OrderBy(filter._sortBy + " " + orderBy)
                         .Skip((filter.PageNumber - 1) * filter.PageSize)
                         .Take(filter.PageSize)
                         .ToListAsync();
             }
-
-
-
-
-
-
-            orderBy = orderBy switch
-            {
-                "1" => "ascending",
-                "-1" => "descending",
-                _ => orderBy
-            };
-
 
             if (storeID != null)
             {
@@ -219,6 +211,11 @@ namespace Application.System.Bill
                 bill.StartDate = item.StartDate;
                 bill.EndDate = item.EndDate;
                 bill.Status = item.Status;
+                foreach(var i in item.BillDetails)
+                {
+                    bill.ProductBillDetailGet = MapProductDTO((int)i.BillID);
+
+                }
                 rs.Add(bill);
             }
             return rs;
@@ -253,12 +250,30 @@ namespace Application.System.Bill
             {
                 Code = BaseCode.SUCCESS,
                 Message = BaseCode.SUCCESS_MESSAGE,
-                Data = MapDetailDTO(rs),
+                Data = await MapDetailDTO(rs),
             };
 
             return response;
-
         }
+        private async Task<List<ProductBillDTO>> MapProductBillDetailDTO(List<Data.Entities.BillDetail> data)
+        {
+            List<ProductBillDTO> product = new();
+
+            foreach (var item in data)
+            {
+                ProductBillDTO pro = new()
+                {
+                    Id = item.Id,
+                    Price = item.Price,
+                    Quantity = item.Quantity,
+                    ProductBillDetail = MapProductDTO((int)item.ProductID),
+                };
+                product.Add(pro);
+            }
+            return product;
+        }
+
+
 
         public async Task<BaseResponse<SmallBillDetailDTO>> GetDetailBySmallBill(int billID)
         {
@@ -291,7 +306,7 @@ namespace Application.System.Bill
 
         }
 
-        public BillDetailDTO MapDetailDTO(List<BillDetail> list)
+        public async Task<BillDetailDTO> MapDetailDTO(List<BillDetail> list)
         {
             List<ProductBillDetail> product = new();
 

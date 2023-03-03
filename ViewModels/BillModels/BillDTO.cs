@@ -20,7 +20,8 @@ namespace ViewModels.BillModels
         public decimal TotalPrice { get; set; }
         public Status Status { get; set; }
         public int? ProductTypeId { get; set; }
-        public List<ProductBillDTO> ProductBillDetail { get; set; } 
+        public List<ProductBillDTO>? ProductBillDetail { get; set; } 
+        public List<ProductBillDetail> ProductBillDetailGet { get; set; } 
 
     }
 }
