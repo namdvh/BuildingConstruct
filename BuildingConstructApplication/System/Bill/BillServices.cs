@@ -445,16 +445,20 @@ namespace Application.System.Bill
             return list;
         }
 
-        public async Task<BaseResponse<string>> UpdateStatusBill(Status status, int billID, bool flag, string message)
+        public async Task<BaseResponse<string>> UpdateStatusBill(Status status, int billID, string message)
         {
             BaseResponse<string> response;
             var bill = await _context.Bills.FirstOrDefaultAsync(x => x.Id == billID);
 
-            if (bill != null && flag==true)
+            if (bill != null )
             {
+                if (!string.IsNullOrEmpty(message))
+                {
+                    bill.Reason = message;
+
+                }
                 bill.Status = status;
                 bill.LastModifiedAt = DateTime.Now;
-                bill.Reason= message;
                 _context.Update(bill);
                 await _context.SaveChangesAsync();
 

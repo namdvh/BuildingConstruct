@@ -75,7 +75,7 @@ namespace BuildingConstructApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBillStatus([FromRoute] int id, [FromBody]UpdateBillRequest request)
         {
-            var rs = await _billServices.UpdateStatusBill(request.Status, id,request.Flag,request.Message);
+            var rs = await _billServices.UpdateStatusBill(request.Status, id,request.Message);
 
             return Ok(rs);
         }

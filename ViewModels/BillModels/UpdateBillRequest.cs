@@ -10,9 +10,6 @@ namespace ViewModels.BillModels
     public class UpdateBillRequest
     {
         public Status Status { get; set; }
-
-        public bool Flag { get; set; }
-
         public string? Message { get; set; } = string.Empty;
     }
 }

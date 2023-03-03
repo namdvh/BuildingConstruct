@@ -20,7 +20,7 @@ namespace Application.System.Bill
 
         Task<BaseResponse<SmallBillDetailDTO>> GetDetailBySmallBill(int billID);
 
-        Task<BaseResponse<string>> UpdateStatusBill(Status status, int billID,bool flag , string message);
+        Task<BaseResponse<string>> UpdateStatusBill(Status status, int billID, string message);
 
         Task<BasePagination<List<ProductBillDetail>>> GetHistoryProductBill(Guid userID, PaginationFilter request);
     }
