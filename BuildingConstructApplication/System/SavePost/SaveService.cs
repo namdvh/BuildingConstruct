@@ -5,6 +5,7 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Microsoft.AspNetCore.Http;
+using System.Linq.Dynamic.Core;
 using Microsoft.EntityFrameworkCore;
 using System.Drawing;
 using System.Security.Claims;
@@ -28,26 +29,71 @@ namespace Application.System.SavePost
             _accessor = accessor;
         }
 
-        public async Task<BaseResponse<List<SavePostDetailDTO>>> GetSavePostByUsID()
+        public async Task<BasePagination<List<SavePostDetailDTO>>> GetSavePostByUsID(PaginationFilter filter)
         {
-            BaseResponse<List<SavePostDetailDTO>> response = new();
+            BasePagination<List<SavePostDetailDTO>> response = new();
             Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
+
+            List<SavePostDetailDTO> list = new();
+            var orderBy = filter._orderBy.ToString();
+            int totalRecord;
+            orderBy = orderBy switch
+            {
+                "1" => "ascending",
+                "-1" => "descending",
+                _ => orderBy
+            };
+
+            if (string.IsNullOrEmpty(filter._sortBy))
+            {
+                filter._sortBy = "Id";
+            }
             if (identifierClaim == null)
             {
                 response.Message = BaseCode.ERROR_MESSAGE;
                 response.Code = "202";
                 return response;
             }
-            var userID = identifierClaim.Value.ToString();
-            var result = await _context.Saves.Include(x => x.ContractorPost).Where(x => x.UserId.ToString().Equals(userID)).ToListAsync();
-            List<SavePostDetailDTO> list = new();
-            if (result != null)
+
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id.ToString().Equals(identifierClaim.Value.ToString()));
+            if (user == null)
             {
-                foreach (var item in result)
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.NOTFOUND_MESSAGE,
+                };
+                return response;
+            }
+            var rs = await _context.Saves.Include(x => x.ContractorPost).Where(x => x.UserId.ToString().Equals(user.Id.ToString()))
+                 .OrderBy(filter._sortBy + " " + orderBy)
+                     .Skip((filter.PageNumber - 1) * filter.PageSize)
+                     .Take(filter.PageSize)
+                .ToListAsync();
+
+            totalRecord = rs.Count;
+
+            double totalPages;
+
+            totalPages = ((double)totalRecord / (double)filter.PageSize);
+
+            var roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
+            Pagination pagination = new()
+            {
+                CurrentPage = filter.PageNumber,
+                PageSize = filter.PageSize,
+                TotalPages = roundedTotalPages,
+                TotalRecords = totalRecord
+            };
+
+            if (rs != null)
+            {
+                foreach (var item in rs)
                 {
                     list.Add(await MapToDTO(item));
                 }
                 response.Data = list;
+                response.Pagination = pagination;
                 response.Message = BaseCode.SUCCESS;
                 response.Code = BaseCode.SUCCESS_MESSAGE;
             }
@@ -169,14 +215,13 @@ namespace Application.System.SavePost
         public async Task<BaseResponse<string>> SavePost(SavePostRequest request)
         {
             BasePagination<string> response = new();
-            Claim identifierClaim = _accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+            Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
             if (identifierClaim == null)
             {
                 response.Message = BaseCode.ERROR_MESSAGE;
                 response.Code = "202";
                 return response;
             }
-            var authorId = await _context.ContractorPosts.Where(x => x.Id == request.ContractorPostId).Select(x => x.CreateBy).FirstOrDefaultAsync();
             var userID = identifierClaim.Value;
             Save save = new()
             {
@@ -184,13 +229,15 @@ namespace Application.System.SavePost
                 ContractorPostId = request.ContractorPostId,
                 UserId = Guid.Parse(userID)
             };
+            var sendID = await _context.ContractorPosts.Where(x => x.Id == request.ContractorPostId).Select(x => x.CreateBy).FirstOrDefaultAsync();
+
             await _context.Saves.AddAsync(save);
             var rs = await _context.SaveChangesAsync();
             if (rs > 0)
             {
                 response.Message = BaseCode.SUCCESS_MESSAGE;
                 response.Code = "200";
-                response.Data = authorId.ToString();
+                response.Data = sendID.ToString();
                 response.NavigateId = request.ContractorPostId;
             }
             else
@@ -203,13 +250,17 @@ namespace Application.System.SavePost
 
         public async Task<bool> DeleteSave(DeleteSaveRequest request)
         {
-            Claim identifierClaim = _accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+            Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
+            if (identifierClaim.Value == null)
+            {
+                return false;
+            }
             var userID = identifierClaim.Value.ToString();
             dynamic save;
 
-                save = await _context.Saves.FirstOrDefaultAsync(x => x.ContractorPostId == request.ContractorPostId && x.UserId.ToString().Equals(userID.ToString()));
+            save = await _context.Saves.FirstOrDefaultAsync(x => x.ContractorPostId == request.ContractorPostId && x.UserId.ToString().Equals(userID.ToString()));
 
-            
+
 
             if (save == null)
             {

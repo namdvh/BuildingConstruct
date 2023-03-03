@@ -457,7 +457,8 @@ namespace Application.System.Commitments
                     {
                         Code = BaseCode.SUCCESS,
                         Message = BaseCode.SUCCESS_MESSAGE,
-                        Data = null
+                        Data = builderID.ToString(),
+                        NavigateId= commitment.Id
                     };
                 }
                 else

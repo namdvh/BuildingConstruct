@@ -63,9 +63,9 @@ namespace Application.System.Bill
                         var checkout=_context.SaveChanges();
                         if (checkout > 0)
                         {
-                            var product = await _context.Products.FindAsync(item.ProductId);
+                            var product = await _context.Products.FirstOrDefaultAsync(x=>x.Id==item.ProductId);
                             product.UnitInStock = product.UnitInStock - item.Quantity;
-                            var pType = await _context.ProductTypes.FindAsync(item.TypeID);
+                            var pType = await _context.ProductTypes.FirstOrDefaultAsync(x=>x.Id==item.TypeID);
                             pType.Quantity-=item.Quantity;
                             product.SoldQuantities+=item.Quantity;
                             await _context.SaveChangesAsync();
