@@ -352,7 +352,7 @@ namespace Application.System.MaterialStores
                 MaterialStoreDTO dto = new()
                 {
 
-                    //Avatar = item.User.Avatar,
+                    Avatar = item.User.Avatar,
                     FirstName=item.User.FirstName,
                     LastName=item.User.LastName,
                     Description = item.Description,
