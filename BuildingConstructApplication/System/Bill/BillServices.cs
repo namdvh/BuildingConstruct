@@ -255,23 +255,7 @@ namespace Application.System.Bill
 
             return response;
         }
-        private async Task<List<ProductBillDTO>> MapProductBillDetailDTO(List<Data.Entities.BillDetail> data)
-        {
-            List<ProductBillDTO> product = new();
-
-            foreach (var item in data)
-            {
-                ProductBillDTO pro = new()
-                {
-                    Id = item.Id,
-                    Price = item.Price,
-                    Quantity = item.Quantity,
-                    ProductBillDetail = MapProductDTO((int)item.ProductID),
-                };
-                product.Add(pro);
-            }
-            return product;
-        }
+      
 
 
 
