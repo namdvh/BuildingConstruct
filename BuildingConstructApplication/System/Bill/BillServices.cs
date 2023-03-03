@@ -60,18 +60,18 @@ namespace Application.System.Bill
                         billDetail.Price = item.Price;
 
                         _context.BillDetails.Add(billDetail);
-                        var checkout=_context.SaveChanges();
+                        var checkout = _context.SaveChanges();
                         if (checkout > 0)
                         {
-                            var product = await _context.Products.FirstOrDefaultAsync(x=>x.Id==item.ProductId);
+                            var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == item.ProductId);
                             product.UnitInStock = product.UnitInStock - item.Quantity;
-                            var pType = await _context.ProductTypes.FirstOrDefaultAsync(x=>x.Id==item.TypeID);
+                            var pType = await _context.ProductTypes.FirstOrDefaultAsync(x => x.Id == item.TypeID);
                             if (pType != null)
                             {
                                 pType.Quantity -= item.Quantity;
                                 product.SoldQuantities += item.Quantity;
                             }
-                           
+
                             await _context.SaveChangesAsync();
                         }
                     }
@@ -111,6 +111,9 @@ namespace Application.System.Bill
             var orderBy = filter._orderBy.ToString();
             int totalRecord;
 
+            List<Data.Entities.Bill>? data;
+            IQueryable<Data.Entities.Bill> query = _context.Bills;
+
             if (string.IsNullOrEmpty(filter._sortBy))
             {
                 filter._sortBy = "Id";
@@ -118,7 +121,21 @@ namespace Application.System.Bill
 
             if (!filter.FilterRequest.Status.HasValue)
             {
-                filter.FilterRequest.Status = Status.PENDING;
+                data = await query
+                        .OrderBy(filter._sortBy + " " + orderBy)
+                        .Skip((filter.PageNumber - 1) * filter.PageSize)
+                        .Take(filter.PageSize)
+                        .ToListAsync();
+            }
+            else
+            {
+                data = await query
+
+                 .OrderBy(filter._sortBy + " " + orderBy)
+                 .Skip((filter.PageNumber - 1) * filter.PageSize)
+                 .Take(filter.PageSize)
+                 .Where(x => x.Status == filter.FilterRequest.Status)
+                 .ToListAsync();
             }
 
 
@@ -129,14 +146,6 @@ namespace Application.System.Bill
                 _ => orderBy
             };
 
-            IQueryable<Data.Entities.Bill> query = _context.Bills;
-            var data = await query
-
-             .OrderBy(filter._sortBy + " " + orderBy)
-             .Skip((filter.PageNumber - 1) * filter.PageSize)
-             .Take(filter.PageSize)
-             .Where(x=>x.Status==filter.FilterRequest.Status)
-             .ToListAsync();
 
             if (storeID != null)
             {
@@ -339,7 +348,7 @@ namespace Application.System.Bill
                 StoreID = bill.StoreID,
                 TotalPrice = bill.TotalPrice,
                 Type = bill.Type,
-                _lastModifiedAt=bill.LastModifiedAt
+                _lastModifiedAt = bill.LastModifiedAt
 
             };
 
@@ -350,12 +359,12 @@ namespace Application.System.Bill
                 Email = bill.MaterialStore.User.Email,
                 Id = bill.StoreID,
                 StoreName = bill.MaterialStore.User.FirstName + " " + bill.MaterialStore.User.LastName,
-                UserId=bill.MaterialStore.User.Id
+                UserId = bill.MaterialStore.User.Id
             };
 
             SmallBillDTO small = new()
             {
-                Status=bill.Status,
+                Status = bill.Status,
                 ProductBillDetail = MapProductDTO(bill.Id)
             };
             smallDetails.Add(small);
@@ -382,10 +391,10 @@ namespace Application.System.Bill
             .ToList();
 
 
-           
-           
 
-          
+
+
+
 
 
             foreach (var item in rs)
@@ -412,7 +421,7 @@ namespace Application.System.Bill
 
                 ProductBillDetail pro = new()
                 {
-                    ProductId=item.ProductID,
+                    ProductId = item.ProductID,
                     Image = item.Products.Image,
                     ProductBrand = item.Products.Brand,
                     ProductDescription = item.Products.Description,
@@ -420,10 +429,10 @@ namespace Application.System.Bill
                     UnitPrice = item.Products.UnitPrice,
                     BillDetailQuantity = item.Quantity,
                     BillDetailTotalPrice = item.Price,
-                    TypeId=item.ProductTypeId,
-                    TypeName=item.ProductTypes?.Name,
-                    Unit=item.Products.Unit,
-                    ProductType= listType.Any() ? types : null,
+                    TypeId = item.ProductTypeId,
+                    TypeName = item.ProductTypes?.Name,
+                    Unit = item.Products.Unit,
+                    ProductType = listType.Any() ? types : null,
                 };
                 list.Add(pro);
             }
@@ -438,7 +447,7 @@ namespace Application.System.Bill
             if (bill != null)
             {
                 bill.Status = status;
-                bill.LastModifiedAt=DateTime.Now;
+                bill.LastModifiedAt = DateTime.Now;
                 _context.Update(bill);
                 await _context.SaveChangesAsync();
 
@@ -474,7 +483,7 @@ namespace Application.System.Bill
             {
                 filter._sortBy = "ProductId";
             }
-            
+
 
             List<ProductBillDetail> ls = new();
 
@@ -489,10 +498,10 @@ namespace Application.System.Bill
                     var tmpList = MapProductDTO(item.Id);
                     ls.AddRange(tmpList);
                 }
-                ls=ls.DistinctBy(x => x.ProductId).ToList();
+                ls = ls.DistinctBy(x => x.ProductId).ToList();
                 IQueryable<ProductBillDetail> query = ls.AsQueryable();
 
-                var rs =  query.OrderBy(filter._sortBy + " " + orderBy)
+                var rs = query.OrderBy(filter._sortBy + " " + orderBy)
                      .Skip((filter.PageNumber - 1) * filter.PageSize)
                      .Take(filter.PageSize)
                      .ToList();
@@ -518,10 +527,10 @@ namespace Application.System.Bill
                     Code = BaseCode.SUCCESS,
                     Data = ls,
                     Message = BaseCode.SUCCESS_MESSAGE,
-                    Pagination=pagination
+                    Pagination = pagination
                 };
                 return response;
-                
+
             }
             response = new()
             {
