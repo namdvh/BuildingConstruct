@@ -1,4 +1,5 @@
-﻿using Data.Entities;
+﻿
+using Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -338,6 +339,20 @@ namespace Data.Extensions
                 EndTime="17:30",
                 CreateBy=Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7"),
             });
+
+            modelBuilder.Entity<ContractorPostSkill>().HasData(new ContractorPostSkill
+            {
+               ContractorPostID=1,
+               SkillID=1
+            });
+
+            modelBuilder.Entity<ContractorPostSkill>().HasData(new ContractorPostSkill
+            {
+                ContractorPostID = 1,
+                SkillID = 2
+            });
+
+
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
             {
                 Id = 2,
@@ -362,6 +377,28 @@ namespace Data.Extensions
                 CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d6")
 
             });
+
+
+            modelBuilder.Entity<ContractorPostSkill>().HasData(new ContractorPostSkill
+            {
+                ContractorPostID = 2,
+                SkillID = 1
+            });
+
+            modelBuilder.Entity<ContractorPostSkill>().HasData(new ContractorPostSkill
+            {
+                ContractorPostID = 2,
+                SkillID = 3
+            });
+            modelBuilder.Entity<ContractorPostSkill>().HasData(new ContractorPostSkill
+            {
+                ContractorPostID = 2,
+                SkillID = 5
+            });
+
+
+
+
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
             {
                 Id = 3,
@@ -386,6 +423,13 @@ namespace Data.Extensions
                 CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d6")
 
             });
+
+            modelBuilder.Entity<ContractorPostSkill>().HasData(new ContractorPostSkill
+            {
+                ContractorPostID = 3,
+                SkillID = 3
+            });
+
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
             {
                 Id = 4,
@@ -403,6 +447,16 @@ namespace Data.Extensions
                 NumberPeople = 20,
                 ContractorID = 1,
                 CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7")
+            });
+            modelBuilder.Entity<ContractorPostSkill>().HasData(new ContractorPostSkill
+            {
+                ContractorPostID = 4,
+                SkillID = 2
+            });
+            modelBuilder.Entity<ContractorPostSkill>().HasData(new ContractorPostSkill
+            {
+                ContractorPostID = 4,
+                SkillID = 3
             });
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
             {
@@ -422,6 +476,13 @@ namespace Data.Extensions
                 CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d6"),
                 ContractorID = 2
             });
+
+            modelBuilder.Entity<ContractorPostSkill>().HasData(new ContractorPostSkill
+            {
+                ContractorPostID = 5,
+                SkillID = 1
+            });
+
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
             {
                 Id = 6,
@@ -441,6 +502,13 @@ namespace Data.Extensions
                 CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7")
 
             });
+
+            modelBuilder.Entity<ContractorPostSkill>().HasData(new ContractorPostSkill
+            {
+                ContractorPostID = 6,
+                SkillID = 4
+            });
+
 
             //Categories
 
@@ -1105,7 +1173,7 @@ namespace Data.Extensions
               Note= "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
               StoreID=1,
               Type=Enum.BillType.Type1,
-              TotalPrice=2000,
+              TotalPrice=500000,
 
             });
 
@@ -1113,7 +1181,7 @@ namespace Data.Extensions
             {
                BillID=1,
                Id=1,
-               Price=20000,
+               Price=200000,
                ProductID=20,
                Quantity=5,
                ProductTypeId=1
@@ -1131,7 +1199,7 @@ namespace Data.Extensions
             {
                 BillID = 1,
                 Id = 3,
-                Price = 45000,
+                Price = 450000,
                 ProductID = 22,
                 Quantity = 7,
             });
@@ -1148,7 +1216,7 @@ namespace Data.Extensions
                 Note = "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
                 StoreID = 1,
                 Type = Enum.BillType.Type2,
-                TotalPrice = 2000,
+                TotalPrice = 60000000,
 
             });
           
