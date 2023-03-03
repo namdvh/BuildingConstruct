@@ -115,6 +115,13 @@ namespace Application.System.Bill
             {
                 filter._sortBy = "Id";
             }
+
+            if (!filter.FilterRequest.Status.HasValue)
+            {
+                filter.FilterRequest.Status = Status.PENDING;
+            }
+
+
             orderBy = orderBy switch
             {
                 "1" => "ascending",
@@ -128,7 +135,9 @@ namespace Application.System.Bill
              .OrderBy(filter._sortBy + " " + orderBy)
              .Skip((filter.PageNumber - 1) * filter.PageSize)
              .Take(filter.PageSize)
+             .Where(x=>x.Status==filter.FilterRequest.Status)
              .ToListAsync();
+
             if (storeID != null)
             {
                 data = data.Where(x => x.StoreID == storeID).ToList();

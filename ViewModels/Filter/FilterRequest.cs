@@ -22,5 +22,7 @@ namespace ViewModels.Filter
         public bool? Accommodation { get; set; }
 
         public bool? Transport { get; set; }
+
+        public Status? Status { get; set; }
     }
 }
