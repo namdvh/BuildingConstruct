@@ -185,15 +185,23 @@ namespace Application.System.ContractorPosts
                 IsSave = true;
             }
             var builder = await _context.Builders.Where(x => x.User.Id.ToString().Equals(userID)).FirstOrDefaultAsync();
-            var check = await _context.AppliedPosts.Where(x => x.BuilderID == builder.Id && x.ContractorPosts.Id == post.Id).FirstOrDefaultAsync();
-            if (check!=null)
+            if (builder != null)
             {
-                post.isApplied = true;
+                var check = await _context.AppliedPosts.Where(x => x.BuilderID == builder.Id && x.ContractorPosts.Id == post.Id).FirstOrDefaultAsync();
+                if (check != null)
+                {
+                    post.isApplied = true;
+                }
+                else
+                {
+                    post.isApplied = false;
+                }
             }
             else
             {
                 post.isApplied = false;
             }
+          
             ContractorPostDetailDTO postDTO = new()
             {
                 Title = post.Title,
