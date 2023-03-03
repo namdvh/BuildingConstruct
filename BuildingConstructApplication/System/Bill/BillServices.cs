@@ -363,6 +363,7 @@ namespace Application.System.Bill
                 EndDate = bill.EndDate,
                 Id = bill.Id,
                 Note = bill.Note,
+                Reason = bill.Reason,
                 PaymentDate = bill.PaymentDate,
                 StartDate = bill.StartDate,
                 Status = bill.Status,
@@ -404,19 +405,14 @@ namespace Application.System.Bill
         private List<ProductBillDetail> MapProductDTO(int id)
         {
             List<ProductBillDetail> list = new();
-
+            int cartID = 0;
             var rs = _context.BillDetails
                 .Include(x => x.Products)
+                .Include(x => x.Bills)
+                    .ThenInclude(x => x.Contractor)
                 .Include(x => x.ProductTypes)
                 .Where(x => x.BillID == id)
             .ToList();
-
-
-
-
-
-
-
 
             foreach (var item in rs)
             {
@@ -437,7 +433,10 @@ namespace Application.System.Bill
                     }
                 }
 
-
+                if (item.Bills.Status == Status.CANCEL)
+                {
+                    cartID = _context.Carts.Where(x => x.ProductID == item.ProductID && x.UserID == item.Bills.Contractor.CreateBy).Select(x => x.Id).FirstOrDefault();
+                }
 
 
                 ProductBillDetail pro = new()
@@ -454,22 +453,43 @@ namespace Application.System.Bill
                     TypeName = item.ProductTypes?.Name,
                     Unit = item.Products.Unit,
                     ProductType = listType.Any() ? types : null,
+                    CartId = item.Bills.Status == Status.CANCEL ? cartID : null
                 };
+
                 list.Add(pro);
             }
             return list;
         }
-        public async Task<BaseResponse<string>> UpdateStatusBill(Status status, int billID, string message)
+
+        public async Task<BaseResponse<List<Cart>>> UpdateStatusBill(Status status, int billID, string message, Guid userID)
         {
-            BaseResponse<string> response;
+            BaseResponse<List<Cart>> response;
             var bill = await _context.Bills.FirstOrDefaultAsync(x => x.Id == billID);
+            List<Cart> ls = new();
 
             if (bill != null)
             {
                 if (!string.IsNullOrEmpty(message))
                 {
                     bill.Reason = message;
-
+                    if (status == Status.CANCEL)
+                    {
+                        var billDetail = await _context.BillDetails.Where(x => x.BillID == billID).ToListAsync();
+                        foreach (var item in billDetail)
+                        {
+                            Cart cart = new()
+                            {
+                                LastModifiedAt = bill.LastModifiedAt,
+                                ProductID = item.ProductID.Value,
+                                TypeID = item.ProductTypeId,
+                                Quantity = item.Quantity,
+                                UserID = userID,
+                            };
+                            ls.Add(cart);
+                        }
+                        await _context.AddRangeAsync(ls);
+                        await _context.SaveChangesAsync();
+                    }
                 }
                 bill.Status = status;
                 bill.LastModifiedAt = DateTime.Now;
@@ -479,7 +499,8 @@ namespace Application.System.Bill
                 response = new()
                 {
                     Code = BaseCode.SUCCESS,
-                    Message = BaseCode.SUCCESS_MESSAGE
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = ls.Any() ? ls : new()
                 };
                 return response;
             }
