@@ -37,6 +37,8 @@ namespace ViewModels.Carts
         public int? TypeID { get; set; }
 
         public string? TypeName { get; set; }
+
+        public string? Unit { get; set; }
     }
 
 

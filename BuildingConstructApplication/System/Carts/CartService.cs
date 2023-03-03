@@ -344,6 +344,7 @@ namespace Application.System.Carts
                 Quantity = cart.Quantity,
                 UnitInStock = cart.Products.UnitInStock,
                 UnitPrice = cart.Products.UnitPrice,
+                Unit=cart.Products.Unit,
                 TypeName = cart.ProductType?.Name != null ? cart.ProductType.Name : null,
                 TypeID = cart.ProductType?.Id != null ? cart.ProductType.Id : null,
                 ProductType = listType.Any() ? types : null,
