@@ -2,6 +2,7 @@
 using Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 
 namespace Data.Extensions
 {
@@ -39,6 +40,17 @@ namespace Data.Extensions
                 Name = "Store",
                 NormalizedName = "STORE"
             });
+
+            //Contrucstion Type
+            modelBuilder.Entity<ConstructionType>().HasData(new ConstructionType
+            {
+                Id = 1,
+                Name = "Nhà ở"
+            }
+  
+
+
+
             //user
             modelBuilder.Entity<User>().HasData(new User
             {
