@@ -41,6 +41,7 @@ namespace ViewModels.BillModels
         public string? Note { get; set; }
 
         public DateTime? PaymentDate { get; set; }
+        public string? Reason { get; set; }
         public MonthOfInstallment? MonthOfInstallment { get; set; }
 
         public BillType? Type { get; set; }

@@ -348,6 +348,7 @@ namespace Application.System.Bill
                 EndDate = bill.EndDate,
                 Id = bill.Id,
                 Note = bill.Note,
+                Reason= bill.Reason,
                 PaymentDate = bill.PaymentDate,
                 StartDate = bill.StartDate,
                 Status = bill.Status,
