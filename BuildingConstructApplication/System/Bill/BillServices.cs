@@ -422,6 +422,7 @@ namespace Application.System.Bill
                     BillDetailTotalPrice = item.Price,
                     TypeId=item.ProductTypeId,
                     TypeName=item.ProductTypes?.Name,
+                    Unit=item.Products.Unit,
                     ProductType= listType.Any() ? types : null,
                 };
                 list.Add(pro);

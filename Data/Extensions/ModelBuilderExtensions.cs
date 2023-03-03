@@ -70,6 +70,18 @@ namespace Data.Extensions
                 Place=Enum.Place._60 
             }) ;
 
+            modelBuilder.Entity<WorkerContructionType>().HasData(new WorkerContructionType
+            {
+                BuilderId = 1,
+                ConstructionTypeId = 1
+            });
+
+            modelBuilder.Entity<WorkerContructionType>().HasData(new WorkerContructionType
+            {
+                BuilderId = 1,
+                ConstructionTypeId = 3
+            });
+
 
             //user 2 
 
@@ -102,6 +114,18 @@ namespace Data.Extensions
                 CreateBy = Guid.Parse("d39ae0a6-9b2d-4421-be4a-cc294cec054f"),
                 Place = Enum.Place._61
             });
+
+            modelBuilder.Entity<WorkerContructionType>().HasData(new WorkerContructionType
+            {
+                BuilderId = 2,
+                ConstructionTypeId = 1
+            });
+            modelBuilder.Entity<WorkerContructionType>().HasData(new WorkerContructionType
+            {
+                BuilderId = 2,
+                ConstructionTypeId = 2
+            });
+
 
 
 

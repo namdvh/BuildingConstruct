@@ -30,6 +30,7 @@ namespace ViewModels.BillModels
         public decimal? BillDetailQuantity { get; set; }
         public string? TypeName { get; set; }
         public int? TypeId { get; set; }
+        public string? Unit { get; set; }
         public List<CartProductType>? ProductType { get; set; }
     }
 
