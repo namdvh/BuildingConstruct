@@ -348,7 +348,7 @@ namespace Application.System.Bill
                 EndDate = bill.EndDate,
                 Id = bill.Id,
                 Note = bill.Note,
-                Reason= bill.Reason,
+                Reason = bill.Reason,
                 PaymentDate = bill.PaymentDate,
                 StartDate = bill.StartDate,
                 Status = bill.Status,
@@ -440,28 +440,30 @@ namespace Application.System.Bill
             BaseResponse<string> response;
             var bill = await _context.Bills.FirstOrDefaultAsync(x => x.Id == billID);
 
-            if (bill != null )
+            if (bill != null)
             {
                 if (!string.IsNullOrEmpty(message))
                 {
                     bill.Reason = message;
-
-                    var billDetail = await _context.BillDetails.Where(x => x.BillID == billID).ToListAsync();
-                    List<Cart> ls = new();
-                    foreach (var item in billDetail)
+                    if (status == Status.CANCEL)
                     {
-                        Cart cart = new()
+                        var billDetail = await _context.BillDetails.Where(x => x.BillID == billID).ToListAsync();
+                        List<Cart> ls = new();
+                        foreach (var item in billDetail)
                         {
-                            LastModifiedAt = bill.LastModifiedAt,
-                            ProductID = item.ProductID.Value,
-                            TypeID = item.ProductTypeId,
-                            Quantity = item.Quantity,
-                            UserID = userID,
-                        };
-                        ls.Add(cart);
+                            Cart cart = new()
+                            {
+                                LastModifiedAt = bill.LastModifiedAt,
+                                ProductID = item.ProductID.Value,
+                                TypeID = item.ProductTypeId,
+                                Quantity = item.Quantity,
+                                UserID = userID,
+                            };
+                            ls.Add(cart);
+                        }
+                        await _context.AddRangeAsync(ls);
+                        await _context.SaveChangesAsync();
                     }
-                    await _context.AddRangeAsync(ls);
-                    await _context.SaveChangesAsync();
                 }
                 bill.Status = status;
                 bill.LastModifiedAt = DateTime.Now;
