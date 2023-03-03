@@ -8,7 +8,10 @@ namespace ViewModels.BillModels
 {
     public class ProductBillDTO
     {
+        public int? Id { get; set; }
         public int ProductId { get; set; }
+
+        public List<ProductBillDetail> ProductBillDetail { get; set; }
         public int? TypeID { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
