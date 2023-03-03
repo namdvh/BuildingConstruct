@@ -215,6 +215,7 @@ namespace Application.System.Bill
                 bill.StoreID = item.StoreID;
                 bill.StoreName = store.FirstName + " " + store.LastName;
                 bill.Notes = item.Note;
+                bill.Reason = item.Reason;
                 bill.StartDate = item.StartDate;
                 bill.EndDate = item.EndDate;
                 bill.Status = item.Status;
@@ -444,15 +445,16 @@ namespace Application.System.Bill
             return list;
         }
 
-        public async Task<BaseResponse<string>> UpdateStatusBill(Status status, int billID)
+        public async Task<BaseResponse<string>> UpdateStatusBill(Status status, int billID, bool flag, string message)
         {
             BaseResponse<string> response;
             var bill = await _context.Bills.FirstOrDefaultAsync(x => x.Id == billID);
 
-            if (bill != null)
+            if (bill != null && flag==true)
             {
                 bill.Status = status;
                 bill.LastModifiedAt = DateTime.Now;
+                bill.Reason= message;
                 _context.Update(bill);
                 await _context.SaveChangesAsync();
 

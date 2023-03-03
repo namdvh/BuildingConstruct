@@ -15,6 +15,7 @@ namespace ViewModels.BillModels
 
         public int? BillId { get; set; }
         public string? StoreName { get; set; }
+        public string? Reason { get; set; }
         public int? StoreID { get; set; }
         public decimal TotalPrice { get; set; }
         public Status Status { get; set; }
