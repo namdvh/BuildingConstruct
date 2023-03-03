@@ -30,6 +30,7 @@ namespace ViewModels.BillModels
         public decimal? BillDetailQuantity { get; set; }
         public string? TypeName { get; set; }
         public int? TypeId { get; set; }
+        public string? Unit { get; set; }
         public List<CartProductType>? ProductType { get; set; }
     }
 
@@ -55,6 +56,8 @@ namespace ViewModels.BillModels
         public int ContractorId { get; set; }
 
         public int? StoreID { get; set; }
+
+        public DateTime? _lastModifiedAt { get; set; }  
 
         //public string? StoreName { get; set; }
 

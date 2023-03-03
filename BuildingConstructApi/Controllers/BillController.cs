@@ -38,7 +38,7 @@ namespace BuildingConstructApi.Controllers
             return Ok(response);
         }
         [HttpPost("getAll")]
-        public async Task<IActionResult> GetAllBill([FromQuery] PaginationFilter request)
+        public async Task<IActionResult> GetAllBill([FromBody] PaginationFilter request)
         {
             var validFilter = new PaginationFilter();
 
@@ -73,12 +73,13 @@ namespace BuildingConstructApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBillStatus([FromRoute] int id, Status status)
+        public async Task<IActionResult> UpdateBillStatus([FromRoute] int id, [FromBody]UpdateBillRequest request)
         {
-            var rs = await _billServices.UpdateStatusBill(status, id);
+            var rs = await _billServices.UpdateStatusBill(request.Status, id,request.Message);
 
             return Ok(rs);
         }
+
 
         [HttpGet("history")]
         public async Task<IActionResult> GetHistoryProductBill([FromQuery] PaginationFilter request)

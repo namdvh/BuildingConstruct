@@ -32,5 +32,9 @@ namespace ViewModels.Commitment
 
         public string? BuilderPhone { get; set; }
 
+        public string? BuilderAvatar { get; set; }
+
+        public string? ConstructorAvatar { get; set; }
+
     }
 }

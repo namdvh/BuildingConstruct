@@ -10,11 +10,12 @@ namespace ViewModels.BillModels
     public class BillDTO
     {
         public string? Notes { get; set; }
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
 
         public int? BillId { get; set; }
         public string? StoreName { get; set; }
+        public string? Reason { get; set; }
         public int? StoreID { get; set; }
         public decimal TotalPrice { get; set; }
         public Status Status { get; set; }

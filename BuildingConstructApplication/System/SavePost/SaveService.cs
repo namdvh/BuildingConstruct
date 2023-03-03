@@ -32,7 +32,7 @@ namespace Application.System.SavePost
         public async Task<BasePagination<List<SavePostDetailDTO>>> GetSavePostByUsID(PaginationFilter filter)
         {
             BasePagination<List<SavePostDetailDTO>> response = new();
-            Claim identifierClaim = _accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+            Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
 
             List<SavePostDetailDTO> list = new();
             var orderBy = filter._orderBy.ToString();
@@ -215,14 +215,13 @@ namespace Application.System.SavePost
         public async Task<BaseResponse<string>> SavePost(SavePostRequest request)
         {
             BasePagination<string> response = new();
-            Claim identifierClaim = _accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+            Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
             if (identifierClaim == null)
             {
                 response.Message = BaseCode.ERROR_MESSAGE;
                 response.Code = "202";
                 return response;
             }
-            var authorId = await _context.ContractorPosts.Where(x => x.Id == request.ContractorPostId).Select(x => x.CreateBy).FirstOrDefaultAsync();
             var userID = identifierClaim.Value;
             Save save = new()
             {
@@ -230,13 +229,15 @@ namespace Application.System.SavePost
                 ContractorPostId = request.ContractorPostId,
                 UserId = Guid.Parse(userID)
             };
+            var sendID = await _context.ContractorPosts.Where(x => x.Id == request.ContractorPostId).Select(x => x.CreateBy).FirstOrDefaultAsync();
+
             await _context.Saves.AddAsync(save);
             var rs = await _context.SaveChangesAsync();
             if (rs > 0)
             {
                 response.Message = BaseCode.SUCCESS_MESSAGE;
                 response.Code = "200";
-                response.Data = authorId.ToString();
+                response.Data = sendID.ToString();
                 response.NavigateId = request.ContractorPostId;
             }
             else
@@ -249,7 +250,11 @@ namespace Application.System.SavePost
 
         public async Task<bool> DeleteSave(DeleteSaveRequest request)
         {
-            Claim identifierClaim = _accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+            Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
+            if (identifierClaim.Value == null)
+            {
+                return false;
+            }
             var userID = identifierClaim.Value.ToString();
             dynamic save;
 

@@ -819,12 +819,12 @@ namespace Application.System.ContractorPosts
                 await _context.SaveChangesAsync();
             }
 
-
+            var postAuthor = await _context.ContractorPosts.Where(x => x.Id == request.PostId).Select(x => x.CreateBy).FirstOrDefaultAsync();
             response = new()
             {
                 Code = BaseCode.SUCCESS,
                 Message = BaseCode.SUCCESS_MESSAGE,
-                Data= user.Id.ToString(),
+                Data= postAuthor.ToString(),
                 NavigateId= request.PostId
 
             };

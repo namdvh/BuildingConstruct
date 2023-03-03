@@ -72,6 +72,8 @@ namespace Application.System.Commitments
                                     .ThenInclude(x => x.User)
                          .Include(x => x.Builder)
                             .ThenInclude(x => x.Type)
+                          .Include(x=>x.Contractor)
+                             .ThenInclude(x=>x.User)
                          .Where(x => (x.BuilderID.Equals(user.BuilderId)))
                          .OrderBy(filter._sortBy + " " + orderBy)
                          .Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -210,7 +212,9 @@ namespace Application.System.Commitments
                     BuilderPhone = item.Builder.User.PhoneNumber,
                     ConstructorName = item.Contractor.CompanyName,
                     Salary = item.Salaries,
-                    BuilderTypeName = item.Builder.Type.Name
+                    BuilderTypeName = item.Builder.Type.Name,
+                    BuilderAvatar=item.Builder.User.Avatar,
+                    ConstructorAvatar=item.Contractor.User.Avatar,
                 };
                 result.Add(dto);
             }
@@ -453,7 +457,7 @@ namespace Application.System.Commitments
                     {
                         Code = BaseCode.SUCCESS,
                         Message = BaseCode.SUCCESS_MESSAGE,
-                        Data = ctor.Id.ToString(),
+                        Data = builderID.ToString(),
                         NavigateId= commitment.Id
                     };
                 }

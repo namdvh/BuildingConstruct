@@ -6,6 +6,7 @@ using Data.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using ViewModels.Commitment;
 using ViewModels.Notificate;
 using ViewModels.Pagination;
@@ -22,11 +23,12 @@ namespace BuildingConstructApi.Controllers
         private readonly IUserConnectionManager _userConnectionManager;
         private readonly BuildingConstructDbContext _context;
 
-        public CommitmentController(ICommitmentService commitmentService, IUserConnectionManager userConnectionManager, BuildingConstructDbContext context)
+        public CommitmentController(ICommitmentService commitmentService, IUserConnectionManager userConnectionManager, BuildingConstructDbContext context, IHubContext<NotificationUserHub> notificationUserHubContext)
         {
             _commitmentService = commitmentService;
             _userConnectionManager = userConnectionManager;
             _context = context;
+            _notificationUserHubContext = notificationUserHubContext;
         }
 
         [HttpGet]
@@ -93,22 +95,22 @@ namespace BuildingConstructApi.Controllers
             }
             var result = await _commitmentService.CreateCommitment(request, Guid.Parse(contractorID));
             var connections = _userConnectionManager.GetUserConnections(result.Data);
+            NotificationModels noti = new();
+            noti.NotificationType = NotificationType.TYPE_2;
+            noti.Message = NotificationMessage.SAVENOTI;
+            noti.CreateBy = Guid.Parse(contractorID.ToString());
+            var author = await _context.Users.Where(x=>x.Id.ToString().Equals(noti.CreateBy.ToString())).FirstOrDefaultAsync();
+            noti.Author = new();
+            noti.Author.FirstName = author.FirstName;
+            noti.Author.LastName = author.LastName;
+            noti.Author.Avatar = author.Avatar;
+            noti.LastModifiedAt = DateTime.Now;
+            noti.NavigateId = result.NavigateId;
+            var check = await _userConnectionManager.SaveNotification(noti);
             if (connections != null && connections.Count > 0)
             {
                 foreach (var connectionId in connections)
                 {
-                    NotificationModels noti = new();
-                    noti.NotificationType = NotificationType.TYPE_2;
-                    noti.Message = NotificationMessage.SAVENOTI;
-                    noti.CreateBy = Guid.Parse(result.Data);
-                    var author = await _context.Users.FindAsync(noti.CreateBy);
-                    noti.Author = new();
-                    noti.Author.FirstName = author.FirstName;
-                    noti.Author.LastName = author.LastName;
-                    noti.Author.Avatar = author.Avatar;
-                    noti.LastModifiedAt = DateTime.Now;
-                    noti.NavigateId = result.NavigateId;
-                    var check = await _userConnectionManager.SaveNotification(noti);
                     if (check != null)
                     {
                         noti.Id = check.Data.Id;

@@ -352,7 +352,7 @@ namespace Application.System.MaterialStores
                 MaterialStoreDTO dto = new()
                 {
 
-                    //Avatar = item.User.Avatar,
+                    Avatar = item.User.Avatar,
                     FirstName=item.User.FirstName,
                     LastName=item.User.LastName,
                     Description = item.Description,
@@ -413,8 +413,11 @@ namespace Application.System.MaterialStores
         public async Task<MaterialStoreDTO> GetStore(int storeID)
         {
             var results = await _context.MaterialStores.Where(x => x.Id == storeID).SingleOrDefaultAsync();
+            var user = await _context.Users.Where(x => x.MaterialStoreID == storeID).FirstOrDefaultAsync();
             var final = new MaterialStoreDTO();
             final.Id = storeID;
+            final.FirstName = user.FirstName;
+            final.LastName = user.LastName;
             final.Webstie = results.Website;
             final.Description = results.Description;
             final.Image = results.Image;
