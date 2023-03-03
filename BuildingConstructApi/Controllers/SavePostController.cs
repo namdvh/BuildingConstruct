@@ -49,6 +49,7 @@ namespace BuildingConstructApi.Controllers
             noti.Message = NotificationMessage.SAVENOTI;
             var userID = User.FindFirst("UserID").Value;
             noti.CreateBy = Guid.Parse(userID.ToString());
+            noti.UserId=Guid.Parse(rs.Data.ToString());
             var author = await _context.Users.Where(x => x.Id.ToString().Equals(userID.ToString())).FirstOrDefaultAsync();
             noti.Author = new();
             noti.Author.FirstName = author.FirstName;
