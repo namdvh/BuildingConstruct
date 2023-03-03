@@ -47,8 +47,8 @@ namespace BuildingConstructApi.Controllers
             NotificationModels noti = new();
             noti.NotificationType = NotificationType.TYPE_1;
             noti.Message = NotificationMessage.SAVENOTI;
-            noti.CreateBy = Guid.Parse(rs.Data);
             var userID = User.FindFirst("UserID").Value;
+            noti.CreateBy = Guid.Parse(userID.ToString());
             var author = await _context.Users.Where(x => x.Id.ToString().Equals(userID.ToString())).FirstOrDefaultAsync();
             noti.Author = new();
             noti.Author.FirstName = author.FirstName;
