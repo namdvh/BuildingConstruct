@@ -144,14 +144,6 @@ namespace Application.System.Bill
                         .ToListAsync();
             }
 
-
-
-
-
-
-       
-
-
             if (storeID != null)
             {
                 data = data.Where(x => x.StoreID == storeID).ToList();
@@ -219,7 +211,11 @@ namespace Application.System.Bill
                 bill.StartDate = item.StartDate;
                 bill.EndDate = item.EndDate;
                 bill.Status = item.Status;
-                bill.ProductBillDetail = await MapProductBillDetailDTO(item.BillDetails);
+                foreach(var i in item.BillDetails)
+                {
+                    bill.ProductBillDetailGet = MapProductDTO((int)i.BillID);
+
+                }
                 rs.Add(bill);
             }
             return rs;
@@ -463,7 +459,6 @@ namespace Application.System.Bill
             }
             return list;
         }
-
         public async Task<BaseResponse<string>> UpdateStatusBill(Status status, int billID, string message)
         {
             BaseResponse<string> response;
