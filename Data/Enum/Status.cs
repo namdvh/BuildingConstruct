@@ -17,7 +17,6 @@ namespace Data.Enum
         ACCEPTED,
         DECLINED,
         PAID,
-        DELIVERED,
         RECEIVED,
         CANCEL
     }
