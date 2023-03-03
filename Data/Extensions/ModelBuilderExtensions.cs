@@ -46,8 +46,20 @@ namespace Data.Extensions
             {
                 Id = 1,
                 Name = "Nhà ở"
-            }
-  
+            });
+
+            modelBuilder.Entity<ConstructionType>().HasData(new ConstructionType
+            {
+                Id = 2,
+                Name = "Chung cư "
+            });
+
+            modelBuilder.Entity<ConstructionType>().HasData(new ConstructionType
+            {
+                Id = 3,
+                Name = "Công trình công cộng"
+            });
+
 
 
 
