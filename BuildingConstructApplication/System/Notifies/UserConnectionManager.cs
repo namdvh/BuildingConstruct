@@ -72,7 +72,7 @@ namespace Application.System.Notifies
             Notification notification = new Notification()
             {
                 Title = "",
-                UserID = noti.UserId,
+                UserID = (Guid)noti.UserId,
                 CreateBy = noti.CreateBy,
                 IsRead = false,
                 LastModifiedAt = noti.LastModifiedAt,
