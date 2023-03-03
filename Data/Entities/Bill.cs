@@ -16,6 +16,8 @@ namespace Data.Entities
         public DateTime? PaymentDate { get; set; }
         public BillType? Type { get; set; }
 
+        public string? Reason { get; set; }
+
         public Status Status { get; set; }
 
         public DateTime? StartDate { get; set; }

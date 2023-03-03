@@ -56,6 +56,8 @@ namespace ViewModels.BillModels
 
         public int? StoreID { get; set; }
 
+        public DateTime? _lastModifiedAt { get; set; }  
+
         //public string? StoreName { get; set; }
 
     }

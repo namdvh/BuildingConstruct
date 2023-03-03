@@ -30,6 +30,7 @@ namespace ViewModels.BillModels
     public class StoreDTO
     {
         public int? Id { get; set; }
+        public Guid? UserId { get; set; }   
         public string? StoreName { get; set; }
         public string? Avatar { get; set; }
         public string? Email { get; set; }

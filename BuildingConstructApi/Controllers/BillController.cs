@@ -80,6 +80,7 @@ namespace BuildingConstructApi.Controllers
             return Ok(rs);
         }
 
+
         [HttpGet("history")]
         public async Task<IActionResult> GetHistoryProductBill([FromQuery] PaginationFilter request)
         {

@@ -325,7 +325,8 @@ namespace Application.System.Bill
                 Status = bill.Status,
                 StoreID = bill.StoreID,
                 TotalPrice = bill.TotalPrice,
-                Type = bill.Type
+                Type = bill.Type,
+                _lastModifiedAt=bill.LastModifiedAt
 
             };
 
@@ -336,6 +337,7 @@ namespace Application.System.Bill
                 Email = bill.MaterialStore.User.Email,
                 Id = bill.StoreID,
                 StoreName = bill.MaterialStore.User.FirstName + " " + bill.MaterialStore.User.LastName,
+                UserId=bill.MaterialStore.User.Id
             };
 
             SmallBillDTO small = new()
@@ -422,6 +424,7 @@ namespace Application.System.Bill
             if (bill != null)
             {
                 bill.Status = status;
+                bill.LastModifiedAt=DateTime.Now;
                 _context.Update(bill);
                 await _context.SaveChangesAsync();
 
