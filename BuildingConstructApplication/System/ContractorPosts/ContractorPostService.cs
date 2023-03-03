@@ -184,7 +184,8 @@ namespace Application.System.ContractorPosts
             {
                 IsSave = true;
             }
-            var check = await _context.Builders.Where(x => x.User.Id.ToString().Equals(userID)).FirstOrDefaultAsync();
+            var builder = await _context.Builders.Where(x => x.User.Id.ToString().Equals(userID)).FirstOrDefaultAsync();
+            var check = await _context.AppliedPosts.Where(x => x.BuilderID == builder.Id && x.ContractorPosts.Id == post.Id).FirstOrDefaultAsync();
             if (check!=null)
             {
                 post.isApplied = true;
