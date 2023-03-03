@@ -192,7 +192,7 @@ namespace Application.System.Bill
                 bill.StoreID = item.StoreID;
                 bill.StoreName = store.FirstName + " " + store.LastName;
                 bill.Notes = item.Note;
-                bill.StartDate = (DateTime)item.StartDate;
+                bill.StartDate = item.StartDate;
                 bill.EndDate = item.EndDate;
                 bill.Status = item.Status;
                 rs.Add(bill);

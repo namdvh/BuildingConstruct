@@ -10,7 +10,7 @@ namespace ViewModels.BillModels
     public class BillDTO
     {
         public string? Notes { get; set; }
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
 
         public int? BillId { get; set; }
