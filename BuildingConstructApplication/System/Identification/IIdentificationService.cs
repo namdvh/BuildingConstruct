@@ -1,11 +1,5 @@
 ﻿using Data.Enum;
 using Emgu.CV;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ViewModels.Carts;
 using ViewModels.Identification;
 using ViewModels.Pagination;
 using ViewModels.Response;

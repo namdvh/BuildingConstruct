@@ -2,6 +2,7 @@
 using Data.Enum;
 using Emgu.CV;
 using Emgu.CV.Structure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Drawing;
 using ViewModels.Identification;
@@ -11,6 +12,7 @@ namespace BuildingConstructApi.Controllers
 {
     [Route("api/identification")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class IdentificationController : ControllerBase
     {
         private readonly IIdentificationService _identificationService;
@@ -19,8 +21,6 @@ namespace BuildingConstructApi.Controllers
         {
             _identificationService = identificationService;
         }
-
-
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] PaginationFilter request)
         {

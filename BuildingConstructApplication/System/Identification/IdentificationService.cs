@@ -2,21 +2,12 @@
 using Data.Entities;
 using Data.Enum;
 using Emgu.CV;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ViewModels.BillModels;
+using System.Linq.Dynamic.Core;
 using ViewModels.Identification;
 using ViewModels.Pagination;
 using ViewModels.Response;
-using System.Linq.Dynamic.Core;
-using Microsoft.AspNetCore.Mvc.ApplicationParts;
 
 namespace Application.System.Identification
 {
@@ -68,17 +59,17 @@ namespace Application.System.Identification
             var test = Path.GetDirectoryName("haarcascade_frontalface_default.xml");
 
             string path = Path.GetFullPath("haarcascade_frontalface_default.xml");
-            var f=path.Replace("\\BuildingConstructApi\\haarcascade_frontalface_default.xml", "\\BuildingConstructApplication\\Library\\haarcascade_frontalface_default.xml");
-        // Load the face detection model
+            var f = path.Replace("\\BuildingConstructApi\\haarcascade_frontalface_default.xml", "\\BuildingConstructApplication\\Library\\haarcascade_frontalface_default.xml");
+            // Load the face detection model
             using (var faceDetector = new CascadeClassifier(f))
             {
-            // Detect faces in the image
-            Rectangle[] faces = faceDetector.DetectMultiScale(
-                    image,
-                    scaleFactor: 1.1,
-                    minNeighbors: 10,
-                    minSize: new Size(20, 20)
-                );
+                // Detect faces in the image
+                Rectangle[] faces = faceDetector.DetectMultiScale(
+                        image,
+                        scaleFactor: 1.1,
+                        minNeighbors: 10,
+                        minSize: new Size(20, 20)
+                    );
 
                 // If a face was detected, extract its descriptor
                 if (faces.Length > 0)
@@ -140,7 +131,7 @@ namespace Application.System.Identification
                  .Where(x => x.Status == filter.FilterRequest.Status)
                  .ToListAsync();
 
-                totalRecords = await _context.Bills.Where(x => x.Status == filter.FilterRequest.Status).CountAsync();
+                totalRecords = await _context.Verifies.Where(x => x.Status == filter.FilterRequest.Status).CountAsync();
             }
             else
             {
@@ -149,7 +140,7 @@ namespace Application.System.Identification
                         .Skip((filter.PageNumber - 1) * filter.PageSize)
                         .Take(filter.PageSize)
                         .ToListAsync();
-                totalRecords = await _context.Bills.CountAsync();
+                totalRecords = await _context.Verifies.CountAsync();
             }
 
 
@@ -233,7 +224,7 @@ namespace Application.System.Identification
             if (rs != null)
             {
                 rs.Status = status;
-                rs.LastModifiedAt=DateTime.Now;
+                rs.LastModifiedAt = DateTime.Now;
                 _context.Update(rs);
                 await _context.SaveChangesAsync();
 

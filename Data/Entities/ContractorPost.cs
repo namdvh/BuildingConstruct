@@ -19,6 +19,7 @@ namespace Data.Entities
 
         public List<PostCommitment>? PostCommitments { get; set; }
         public List<AppliedPost>? AppliedPosts { get; set; }
+        public List<PostInvite>? PostInvites { get; set; }
         public List<Save>? Saves { get; set; }
 
 

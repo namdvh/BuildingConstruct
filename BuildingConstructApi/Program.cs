@@ -6,6 +6,7 @@ using Application.System.ContractorPosts;
 using Application.System.Identification;
 using Application.System.MaterialStores;
 using Application.System.Notifies;
+using Application.System.PostInvite;
 using Application.System.SavePost;
 using Application.System.Skills;
 using Application.System.Types;
@@ -163,6 +164,7 @@ builder.Services.AddScoped<ISkillService, SkillServices>();
 builder.Services.AddTransient<ICartService, CartService>();
 builder.Services.AddScoped<IBillServices, BillServices>();
 builder.Services.AddScoped<IIdentificationService, IdentificationService>();
+builder.Services.AddScoped<IPostInviteService, PostIniviteService>();
 
 var app = builder.Build();
 
