@@ -1,8 +1,14 @@
-﻿using Data.Enum;
+﻿using Data.Entities;
+using Data.Enum;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Data.Entities
+namespace ViewModels.Identification
 {
-    public class Verify : BaseEntity
+    public class IdentificationDTO
     {
         public int Id { get; set; }
 
@@ -14,8 +20,6 @@ namespace Data.Entities
 
         public string? BusinessLicense { get; set; }
 
-        public User? User { get; set; }
-
         public Guid? UserID { get; set; }
 
         public IdentificateType IdentificateType { get; set; }
@@ -23,6 +27,8 @@ namespace Data.Entities
         public bool PreCodition { get; set; }
 
         public Status Status { get; set; }
+
+        public DateTime LastModifiedAt { get; set; }
 
     }
 }

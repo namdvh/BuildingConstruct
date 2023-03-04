@@ -1,11 +1,14 @@
 ﻿using Data.Enum;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Data.Entities
+namespace ViewModels.Identification
 {
-    public class Verify : BaseEntity
+    public class CreateIndetificationRequest
     {
-        public int Id { get; set; }
-
         public string? FaceImage { get; set; }
 
         public string? FrontID { get; set; }
@@ -13,10 +16,6 @@ namespace Data.Entities
         public string? BackID { get; set; }
 
         public string? BusinessLicense { get; set; }
-
-        public User? User { get; set; }
-
-        public Guid? UserID { get; set; }
 
         public IdentificateType IdentificateType { get; set; }
 

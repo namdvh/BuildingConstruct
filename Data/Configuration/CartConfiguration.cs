@@ -19,11 +19,6 @@ namespace Data.Configuration
 
             builder.Property(x => x.Id)
                   .ValueGeneratedOnAdd();
-
-          
-
-
-
             builder.HasOne(x => x.User).WithMany(x => x.Carts).HasForeignKey(x => x.UserID);
             builder.HasOne(x => x.Products).WithMany(x => x.Carts).HasForeignKey(x => x.ProductID);
             builder.HasOne(x => x.ProductType).WithMany(x => x.Carts).HasForeignKey(x => x.TypeID);

@@ -21,9 +21,7 @@ namespace Data.Entities
 
         public Guid CreateBy { get; set; }
 
-        public int? VerifyID { get; set; }
-
-        public Verify? Verify { get; set; }
+     public List<Verify>? Verifies { get; set; }
 
         public DateTime RefreshTokenExpiryTime { get; set; }
 

@@ -10,11 +10,8 @@ namespace Data.Configuration
         {
             builder.ToTable("IdentitficationCards");
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.LastModifiedAt).HasDefaultValueSql("getutcdate()");
 
-            builder
-                   .HasOne(x => x.User)
-                   .WithOne(x => x.Verify).HasForeignKey<User>(x => x.VerifyID).IsRequired(false);
+            builder.HasOne(x => x.User).WithMany(x => x.Verifies).HasForeignKey(x => x.UserID);
         }
     }
 }
