@@ -184,7 +184,7 @@ namespace Application.System.Bill
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = await MapListDTO(data),
+                    Data = await MapListDTO(data,usID),
                     Pagination = pagination
                 };
             }
@@ -192,7 +192,7 @@ namespace Application.System.Bill
             return response;
         }
 
-        private async Task<List<BillDTO>> MapListDTO(List<Data.Entities.Bill> data)
+        private async Task<List<BillDTO>> MapListDTO(List<Data.Entities.Bill> data,string userID)
         {
             List<BillDTO> rs = new();
             foreach (var item in data)
@@ -211,6 +211,7 @@ namespace Application.System.Bill
                 bill.StartDate = item.StartDate;
                 bill.EndDate = item.EndDate;
                 bill.Status = item.Status;
+                bill.UserID = userID;
                 foreach(var i in item.BillDetails)
                 {
                     bill.ProductBillDetailGet = MapProductDTO((int)i.BillID);

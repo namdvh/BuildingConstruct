@@ -47,10 +47,11 @@ namespace Application.System.Notifies
             };
             var totalRecords = await _context.Notifcations.Where(x => x.UserID.ToString().Equals(userID)).CountAsync();
 
-            IQueryable<Notification> query = (IQueryable<Notification>)_context.Notifcations.Include(x => x.User).Where(x=>x.UserID.ToString().Equals(userID));
+            IQueryable<Notification> query = (IQueryable<Notification>)_context.Notifcations;
 
 
             var data = await query
+                .Include(x => x.User).Where(x => x.UserID.ToString().Equals(userID))
                 .AsNoTracking()
                .OrderBy(filter._sortBy + " " + orderBy)
                .Skip((filter.PageNumber - 1) * filter.PageSize)
