@@ -66,17 +66,27 @@ namespace BuildingConstructApi.Controllers
         public async Task<IActionResult> Test([FromBody]DetectFaceRequest request)
         {
             Mat front;
-            var test= new MemoryStream(Encoding.UTF8.GetBytes(request.Image));
-            using (var memoryStream = new MemoryStream())
-            {
-                await test.CopyToAsync(memoryStream);
-                using (var img = Image.FromStream(memoryStream))
-                {
-                    front = GetMatFromSDImage(img);
-                    return Ok(_identificationService.DetectFace(front));
+            //var test= new MemoryStream(Encoding.UTF8.GetBytes(request.Image));
+            //using (var memoryStream = new MemoryStream())
+            //{
+            //    await test.CopyToAsync(memoryStream);
+            //    using (var img = Image.FromStream(test))
+            //    {
+            //       
 
-                }
+            //    }
+            //}
+
+            byte[] bytes = Convert.FromBase64String(request.Image);
+
+            Image image;
+            using (MemoryStream ms = new MemoryStream(bytes))
+            {
+                image = Image.FromStream(ms);
+                front = GetMatFromSDImage(image);
+                return Ok(_identificationService.DetectFace(front));
             }
+
         }
 
         private Mat GetMatFromSDImage(System.Drawing.Image image)
