@@ -5,6 +5,7 @@ using Emgu.CV.Structure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Drawing;
+using System.Text;
 using ViewModels.Identification;
 using ViewModels.Pagination;
 
@@ -62,12 +63,13 @@ namespace BuildingConstructApi.Controllers
 
 
         [HttpPost("test")]
-        public async Task<IActionResult> Test(IFormFile image)
+        public async Task<IActionResult> Test([FromBody]string image)
         {
             Mat front;
+            var test= new MemoryStream(Encoding.UTF8.GetBytes(image));
             using (var memoryStream = new MemoryStream())
             {
-                await image.CopyToAsync(memoryStream);
+                await test.CopyToAsync(memoryStream);
                 using (var img = Image.FromStream(memoryStream))
                 {
                     front = GetMatFromSDImage(img);

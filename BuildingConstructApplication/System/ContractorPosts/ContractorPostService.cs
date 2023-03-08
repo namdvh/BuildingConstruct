@@ -911,6 +911,8 @@ namespace Application.System.ContractorPosts
         {
             List<AppliedPostAll> result = new();
 
+
+
             foreach (var item in list)
             {
                 AppliedPostAll dto = new()

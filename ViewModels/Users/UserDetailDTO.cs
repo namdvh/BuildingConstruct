@@ -42,7 +42,14 @@ namespace ViewModels.Users
 
         public string? Certificate { get; set; }
 
+        public List<WorkerListType>? ConstructionType { get; set; }
+    }
 
+
+    public class WorkerListType {
+
+        public int ConstructionTypeId { get; set; }
+        public string Name { get; set; }
     }
 
 

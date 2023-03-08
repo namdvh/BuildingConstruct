@@ -1,4 +1,5 @@
 ﻿using Data.Enum;
+using ViewModels.Commitment;
 
 namespace ViewModels.ContractorPost
 {
@@ -26,5 +27,6 @@ namespace ViewModels.ContractorPost
 
         public decimal? WishSalary { get; set; }
 
+        public List<CommitmentGroup>? Groups { get; set; }
     }
 }

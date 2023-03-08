@@ -235,9 +235,9 @@ namespace Application.System.Users
                             DOB = us.DOB,
                             Gender = us.Gender,
                             Role = roleName,
-                            BuilderID=us.BuilderId,
-                            ContractorID=us.ContractorId,
-                            StoreID=us.MaterialStoreID
+                            BuilderID = us.BuilderId,
+                            ContractorID = us.ContractorId,
+                            StoreID = us.MaterialStoreID
                         };
 
                     }
@@ -300,9 +300,9 @@ namespace Application.System.Users
                 Id = user.Id,
                 UserName = user.UserName,
                 Phone = user.PhoneNumber,
-                BuilderID=user.BuilderId,
-                StoreID=user.MaterialStoreID,
-                ContractorID=user.ContractorId
+                BuilderID = user.BuilderId,
+                StoreID = user.MaterialStoreID,
+                ContractorID = user.ContractorId
             };
             return userDto;
         }
@@ -544,6 +544,23 @@ namespace Application.System.Users
 
                 var tmp = _context.BuilderSkills.Include(x => x.Skill).Where(x => x.BuilderSkillID == user.BuilderId).ToList();
 
+                var contrusctionType = _context.WorkerContructionTypes
+
+                    .Include(x => x.ConstructionType)
+                    .Where(x => x.BuilderId == user.BuilderId).ToList();
+
+
+                List<WorkerListType> ls = new();
+                foreach (var item in contrusctionType)
+                {
+
+                    WorkerListType workerListType = new()
+                    {
+                        ConstructionTypeId = item.ConstructionTypeId,
+                        Name = item.ConstructionType.Name
+                    };
+                    ls.Add(workerListType);
+                }
 
 
                 DetailBuilder detailBuilder = new()
@@ -551,11 +568,12 @@ namespace Application.System.Users
                     BuilderSkills = MapToSkillDTO(tmp),
                     Id = user.Builder.Id,
                     Place = user.Builder.Place,
-                    TypeName = user.Builder.Type.Name,
+                    TypeName = user.Builder.Type?.Name == null ? null : user.Builder.Type?.Name,
                     TypeID = user.Builder.TypeID,
                     ExperienceDetail = user.Builder.ExperienceDetail,
                     Certificate = user.Builder.Certificate,
-                    Experience = user.Builder.Experience
+                    Experience = user.Builder.Experience,
+                    ConstructionType = ls
                 };
 
 
