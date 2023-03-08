@@ -63,10 +63,10 @@ namespace BuildingConstructApi.Controllers
 
 
         [HttpPost("test")]
-        public async Task<IActionResult> Test([FromBody]string image)
+        public async Task<IActionResult> Test([FromBody]DetectFaceRequest request)
         {
             Mat front;
-            var test= new MemoryStream(Encoding.UTF8.GetBytes(image));
+            var test= new MemoryStream(Encoding.UTF8.GetBytes(request.Image));
             using (var memoryStream = new MemoryStream())
             {
                 await test.CopyToAsync(memoryStream);
