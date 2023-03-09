@@ -844,8 +844,27 @@ namespace Application.System.Users
                         await _context.BuilderSkills.AddAsync(newSkills);
                         await _context.SaveChangesAsync();
                     }
+                }
+                if (request.WorkerConstructionType != null)
+                {
+                    var type = await _context.WorkerContructionTypes.Where(x => x.BuilderId.Equals(user.BuilderId)).ToListAsync();
+                    if (type.Any())
+                    {
+                        _context.RemoveRange(type);
+                        await _context.SaveChangesAsync();
+                    }
 
 
+                    foreach (var x in request.WorkerConstructionType)
+                    {
+                        WorkerContructionType newSkills = new()
+                        {
+                            BuilderId= user.BuilderId.Value,
+                            ConstructionTypeId=x
+                        };
+                        await _context.WorkerContructionTypes.AddAsync(newSkills);
+                        await _context.SaveChangesAsync();
+                    }
                 }
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();

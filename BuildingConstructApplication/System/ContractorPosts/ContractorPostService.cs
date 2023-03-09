@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 using System.Security.Claims;
 using System.Text;
+using ViewModels.Commitment;
 using ViewModels.ContractorPost;
 using ViewModels.Pagination;
 using ViewModels.Response;
@@ -201,7 +202,7 @@ namespace Application.System.ContractorPosts
             {
                 post.isApplied = false;
             }
-          
+
             ContractorPostDetailDTO postDTO = new()
             {
                 Title = post.Title,
@@ -560,12 +561,16 @@ namespace Application.System.ContractorPosts
 
             foreach (var item in groupMembers)
             {
+                var type = _context.Types.Where(x => x.Id == item.TypeID).Select(x => x.Name).FirstOrDefault();
+
                 AppliedGroup rs = new()
                 {
                     DOB = item.DOB,
                     VerifyId = item.IdNumber,
                     Name = item.Name,
+                    TypeName = type,
                     TypeID = item.TypeID,
+
                 };
                 result.Add(rs);
             }
@@ -833,8 +838,8 @@ namespace Application.System.ContractorPosts
             {
                 Code = BaseCode.SUCCESS,
                 Message = BaseCode.SUCCESS_MESSAGE,
-                Data= postAuthor.ToString(),
-                NavigateId= request.PostId
+                Data = postAuthor.ToString(),
+                NavigateId = request.PostId
 
             };
 
@@ -900,14 +905,14 @@ namespace Application.System.ContractorPosts
             response = new()
             {
                 Code = BaseCode.SUCCESS,
-                Data = MapListAppliedAllDTO(rs),
+                Data = MapListAppliedAllDTO(rs, user.BuilderId.Value),
                 Message = BaseCode.SUCCESS_MESSAGE,
                 Pagination = pagination
             };
             return response;
         }
 
-        private List<AppliedPostAll> MapListAppliedAllDTO(List<AppliedPost> list)
+        private List<AppliedPostAll> MapListAppliedAllDTO(List<AppliedPost> list, int builderID)
         {
             List<AppliedPostAll> result = new();
 
@@ -915,6 +920,32 @@ namespace Application.System.ContractorPosts
 
             foreach (var item in list)
             {
+                var hasGroup = _context.Groups.Where(x => x.BuilderID == builderID && x.PostID == item.PostID).FirstOrDefault();
+                List<CommitmentGroup> ls = new();
+
+                if (hasGroup != null)
+                {
+                    var groupMember = _context.GroupMembers
+                        .Where(x => x.GroupId == hasGroup.Id)
+                        .ToList();
+
+                    foreach (var member in groupMember)
+                    {
+                        var type = _context.Types.Where(x => x.Id == member.TypeID).Select(x => x.Name).FirstOrDefault();
+
+                        CommitmentGroup group = new()
+                        {
+                            DOB = member.DOB,
+                            Name = member.Name,
+                            TypeID = member.TypeID,
+                            TypeName = type,
+                            VerifyId = member.IdNumber
+                        };
+                        ls.Add(group);
+                    }
+                }
+
+
                 AppliedPostAll dto = new()
                 {
                     PostId = item.PostID,
@@ -927,7 +958,8 @@ namespace Application.System.ContractorPosts
                     AuthorName = item.ContractorPosts.Contractor?.User?.FirstName + " " + item.ContractorPosts.Contractor?.User?.LastName,
                     Title = item.ContractorPosts.Title,
                     AppliedDate = item.AppliedDate,
-                    WishSalary = item.WishSalary
+                    WishSalary = item.WishSalary,
+                    Groups = ls.Any() ? ls : null
                 };
                 result.Add(dto);
             }
@@ -1033,7 +1065,7 @@ namespace Application.System.ContractorPosts
                      .OrderBy(filter._sortBy + " " + orderBy)
                      .Skip((filter.PageNumber - 1) * filter.PageSize)
                      .Take(filter.PageSize)
-                     .Where(x=>x.ContractorID==user.ContractorId)
+                     .Where(x => x.ContractorID == user.ContractorId)
                      .ToListAsync();
 
 

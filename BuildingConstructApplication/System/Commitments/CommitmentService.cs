@@ -1,10 +1,13 @@
 ﻿using Data.DataContext;
 using Data.Entities;
 using Data.Enum;
+using Gridify;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
+using System.Text;
 using ViewModels.Commitment;
+using ViewModels.ContractorPost;
 using ViewModels.Pagination;
 using ViewModels.Response;
 
@@ -646,5 +649,112 @@ namespace Application.System.Commitments
             return result;
 
         }
+
+        public async Task<BasePagination<List<ContractorPostDTO>>> GetPost(PaginationFilter filter, Guid id)
+        {
+            BasePagination<List<ContractorPostDTO>> response;
+            var orderBy = filter._orderBy.ToString();
+            int totalRecord;
+            orderBy = orderBy switch
+            {
+                "1" => "ascending",
+                "-1" => "descending",
+                _ => orderBy
+            };
+            if (string.IsNullOrEmpty(filter._sortBy))
+            {
+                filter._sortBy = "LastModifiedAt";
+            }
+
+
+
+            IQueryable<PostCommitment> query = _context.PostCommitments;
+
+            var user = await _context.Users.Where(x => x.Id.Equals(id)).FirstOrDefaultAsync();
+            var result = await query
+                    .Include(x=>x.Contractor)
+                            .ThenInclude(x=>x.User)
+                    .Include(x=>x.ContractorPosts)
+                     .OrderBy(filter._sortBy + " " + orderBy)
+                     .Skip((filter.PageNumber - 1) * filter.PageSize)
+                     .Take(filter.PageSize)
+                     .Where(x=>x.BuilderID==user.BuilderId)
+                     .ToListAsync();
+         
+
+            if (filter.FilterRequest != null)
+            {
+                totalRecord = result.Count;
+            }
+            else
+            {
+                totalRecord = await _context.ContractorPosts.CountAsync();
+            }
+
+            if (!result.Any())
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.EMPTY_MESSAGE,
+                    Data = new(),
+                    Pagination = null
+                };
+            }
+            else
+            {
+                double totalPages;
+
+                totalPages = ((double)totalRecord / (double)filter.PageSize);
+
+                var roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
+                Pagination pagination = new()
+                {
+                    CurrentPage = filter.PageNumber,
+                    PageSize = filter.PageSize,
+                    TotalPages = roundedTotalPages,
+                    TotalRecords = totalRecord
+                };
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = MapListDTOBuilder(result),
+                    Pagination = pagination
+                };
+            }
+            return response;
+        }
+
+        private List<ContractorPostDTO> MapListDTOBuilder(List<PostCommitment> list)
+        {
+            List<ContractorPostDTO> result = new();
+
+            foreach (var item in list)
+            {
+
+                ContractorPostDTO dto = new()
+                {
+                    Avatar = item.Contractor.User.Avatar,
+                    ContractorID = item.Contractor.Id,
+                    Description = item.ContractorPosts.Description,
+                    EndDate = item.EndDate,
+                    Id = item.Id,
+                    NumberPeople = item.ContractorPosts.NumberPeople,
+                    Place = item.ContractorPosts.Place,
+                    PostCategories = item.ContractorPosts.PostCategories,
+                    ProjectName = item.ContractorPosts.ProjectName,
+                    Salaries = item.Salaries,
+                    StarDate = item.ContractorPosts.StarDate,
+                    AuthorName = item.Contractor.User.FirstName + " " + item.Contractor.User.LastName,
+                    Title = item.ContractorPosts.Title,
+                  
+                };
+                result.Add(dto);
+            }
+            return result;
+        }
+
     }
 }
