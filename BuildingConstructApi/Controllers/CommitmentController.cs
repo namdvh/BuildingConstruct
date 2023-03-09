@@ -70,16 +70,10 @@ namespace BuildingConstructApi.Controllers
             return Ok(result);
         }
 
-        [HttpGet("builder")]
-        public async Task<IActionResult> GetPostWithCommitment([FromBody] PaginationFilter request)
+        [HttpGet("builder/{id}")]
+        public async Task<IActionResult> GetPostWithCommitment([FromBody] PaginationFilter request,string id )
         {
-            var userID = User.FindFirst("UserID").Value;
-
-            if (userID == null)
-            {
-                return BadRequest();
-            }
-            var result = await _commitmentService.GetPost(request,  Guid.Parse(userID));
+            var result = await _commitmentService.GetPost(request,  Guid.Parse(id));
             return Ok(result);
         }
 

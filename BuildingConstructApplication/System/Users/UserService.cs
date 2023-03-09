@@ -2,18 +2,23 @@
 using Data.DataContext;
 using Data.Entities;
 using Data.Enum;
+using Emgu.CV.Ocl;
 using FluentValidation.Results;
+using Gridify;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq.Dynamic.Core;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
+using ViewModels.ContractorPost;
+using ViewModels.Pagination;
 using ViewModels.Response;
 using ViewModels.Users;
 
@@ -859,8 +864,8 @@ namespace Application.System.Users
                     {
                         WorkerContructionType newSkills = new()
                         {
-                            BuilderId= user.BuilderId.Value,
-                            ConstructionTypeId=x
+                            BuilderId = user.BuilderId.Value,
+                            ConstructionTypeId = x
                         };
                         await _context.WorkerContructionTypes.AddAsync(newSkills);
                         await _context.SaveChangesAsync();
@@ -1098,6 +1103,131 @@ namespace Application.System.Users
                 };
             }
             return response;
+        }
+
+        public async Task<BasePagination<List<UserDetailDTO>>> GetContractorFavorite(PaginationFilter filter)
+        {
+            BasePagination<List<UserDetailDTO>> response;
+            List<UserDetailDTO> ls = new();
+            var orderBy = filter._orderBy.ToString();
+            int totalRecord;
+            orderBy = orderBy switch
+            {
+                "1" => "ascending",
+                "-1" => "descending",
+                _ => orderBy
+            };
+            if (string.IsNullOrEmpty(filter._sortBy))
+            {
+                filter._sortBy = "LastModifiedAt";
+            }
+
+
+
+            IQueryable<AppliedPost> query2 = _context.AppliedPosts;
+
+            //var newList = _context.AppliedPosts.GroupBy(x => x.PostID)
+            //      .OrderByDescending(g => g.Count())
+            //      .SelectMany(g => g)
+            //      .ToList();
+
+
+            var query = from history in _context.AppliedPosts
+                        group history by history.PostID into historyGroup
+                        orderby historyGroup.Key
+                        select new { post = historyGroup.Key, postCount = historyGroup.Count() };
+
+
+            var data = query.Skip((filter.PageNumber - 1) * filter.PageSize)
+                     .Take(filter.PageSize).ToList();
+
+            if (filter.FilterRequest != null)
+            {
+                totalRecord = data.Count;
+            }
+            else
+            {
+                totalRecord = await _context.AppliedPosts.CountAsync();
+            }
+
+            if (!data.Any())
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.EMPTY_MESSAGE,
+                    Data = new(),
+                    Pagination = null
+                };
+            }
+            else
+            {
+                double totalPages;
+
+                totalPages = ((double)totalRecord / (double)filter.PageSize);
+
+                var roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
+                Pagination pagination = new()
+                {
+                    CurrentPage = filter.PageNumber,
+                    PageSize = filter.PageSize,
+                    TotalPages = roundedTotalPages,
+                    TotalRecords = totalRecord
+                };
+
+                foreach (var item in data)
+                {
+                    ls.Add(MapToDetailDTO(item.post));
+                }
+
+
+
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = ls,
+                    Pagination = pagination
+                };
+            }
+            return response;
+        }
+
+        private UserDetailDTO MapToDetailDTO(int postID)
+        {
+            UserDetailDTO userDetail;
+
+            var post = _context.ContractorPosts
+                .Include(x => x.Contractor)
+                        .ThenInclude(x => x.User)
+                .Where(x => x.Id == postID).FirstOrDefault();
+
+
+            DetailContractor detailContractor = new()
+            {
+                CompanyName = post.Contractor.CompanyName,
+                Description = post.Contractor.Description,
+                Id = post.Contractor.Id,
+                Website = post.Contractor.Website
+            };
+
+
+            userDetail = new()
+            {
+                Address = post.Contractor.User.Address,
+                Avatar = post.Contractor.User.Avatar,
+                DOB = post.Contractor.User.DOB,
+                Email = post.Contractor.User.Email,
+                FirstName = post.Contractor.User.FirstName,
+                Gender = post.Contractor.User.Gender,
+                IdNumber = post.Contractor.User.IdNumber,
+                LastName = post.Contractor.User.LastName,
+                Status = post.Contractor.User.Status,
+                Phone = post.Contractor.User.PhoneNumber,
+                Contractor = detailContractor,
+            };
+            return userDetail;
         }
     }
 }

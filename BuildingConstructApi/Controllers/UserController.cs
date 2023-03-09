@@ -13,6 +13,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
+using ViewModels.Pagination;
 using ViewModels.Users;
 
 namespace BuildingConstructApi.Controllers
@@ -268,6 +269,15 @@ namespace BuildingConstructApi.Controllers
             return Ok(result);
 
         }
+
+        [HttpGet("detail/favorite")]
+        public async Task<IActionResult> GetContrusctor([FromQuery] PaginationFilter request)
+        {
+            var result = await _userService.GetContractorFavorite(request);
+            return Ok(result);
+
+        }
+
 
 
         [HttpPut("update/builder")]

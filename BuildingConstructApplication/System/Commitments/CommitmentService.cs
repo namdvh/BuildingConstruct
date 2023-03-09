@@ -663,7 +663,7 @@ namespace Application.System.Commitments
             };
             if (string.IsNullOrEmpty(filter._sortBy))
             {
-                filter._sortBy = "LastModifiedAt";
+                filter._sortBy = "Id";
             }
 
 
