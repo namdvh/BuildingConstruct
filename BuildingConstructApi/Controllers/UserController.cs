@@ -278,6 +278,22 @@ namespace BuildingConstructApi.Controllers
 
         }
 
+        [HttpGet("detail/builder/favorite")]
+        public async Task<IActionResult> GetBuilderFavorite([FromQuery] PaginationFilter request)
+        {
+            var result = await _userService.GetBuilderFavorite(request);
+            return Ok(result);
+
+        }
+
+        [HttpGet("detail/store/favorite")]
+        public async Task<IActionResult> GetStoreFavorite([FromQuery] PaginationFilter request)
+        {
+            var result = await _userService.GetStoreFavorite(request);
+            return Ok(result);
+
+        }
+
 
 
         [HttpPut("update/builder")]

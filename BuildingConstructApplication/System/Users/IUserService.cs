@@ -25,6 +25,8 @@ namespace Application.System.Users
         Task<BaseResponse<UserDetailDTO>> GetProfile(Guid userID);
 
         Task<BasePagination<List<UserDetailDTO>>> GetContractorFavorite(PaginationFilter request);
+        Task<BasePagination<List<UserDetailDTO>>> GetBuilderFavorite(PaginationFilter request);
+        Task<BasePagination<List<UserDetailDTO>>> GetStoreFavorite(PaginationFilter request);
 
         Task<BaseResponse<string>> UpdateBuilderProfile(UpdateBuilderRequest request, Guid userID);
         Task<BaseResponse<string>> UpdateContractorProfile(UpdateContractorRequest request, Guid userID);
