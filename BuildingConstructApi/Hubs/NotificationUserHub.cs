@@ -21,8 +21,12 @@ namespace BuildingConstructApi.Hubs
         }
         public async override Task OnConnectedAsync()
         {
-            Claim identifierClaim = _accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
-            var userID = identifierClaim.Value.ToString();
+            var identifierClaim = _accessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (identifierClaim == null)
+            {
+                return;
+            }
+            var userID = identifierClaim.ToString();
             _userConnectionManager.KeepUserConnection(userID, Context.ConnectionId);
             await Task.CompletedTask;
         }
