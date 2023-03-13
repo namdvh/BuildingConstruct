@@ -75,8 +75,10 @@ namespace Application.System.Commitments
                                     .ThenInclude(x => x.User)
                          .Include(x => x.Builder)
                             .ThenInclude(x => x.Type)
-                          .Include(x=>x.Contractor)
-                             .ThenInclude(x=>x.User)
+                          .Include(x => x.Contractor)
+                             .ThenInclude(x => x.User)
+                          .Include(x => x.Group)
+
                          .Where(x => (x.BuilderID.Equals(user.BuilderId)))
                          .OrderBy(filter._sortBy + " " + orderBy)
                          .Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -161,6 +163,7 @@ namespace Application.System.Commitments
                     .ThenInclude(x => x.User)
                 .Include(x => x.Builder)
                     .ThenInclude(x => x.Type)
+
                 .Where(x => x.Id == id)
                 .FirstOrDefaultAsync();
 
@@ -196,9 +199,17 @@ namespace Application.System.Commitments
         private List<CommitmentDTO> MapListDTO(List<PostCommitment> list)
         {
             List<CommitmentDTO> result = new();
+            List<CommitmentGroup>? group = new();
 
             foreach (var item in list)
             {
+
+                if (item.Group != null)
+                {
+                    var groupMember = _context.GroupMembers.Where(x => x.GroupId == item.Group.Id).ToList();
+                    group = MapGroup(groupMember);
+                }
+
 
 
                 CommitmentDTO dto = new()
@@ -216,8 +227,9 @@ namespace Application.System.Commitments
                     ConstructorName = item.Contractor.CompanyName,
                     Salary = item.Salaries,
                     BuilderTypeName = item.Builder.Type.Name,
-                    BuilderAvatar=item.Builder.User.Avatar,
-                    ConstructorAvatar=item.Contractor.User.Avatar,
+                    BuilderAvatar = item.Builder.User.Avatar,
+                    ConstructorAvatar = item.Contractor.User.Avatar,
+                    Groups=group
                 };
                 result.Add(dto);
             }
@@ -430,9 +442,9 @@ namespace Application.System.Commitments
                 {
                     if (commitment.GroupID != null)
                     {
-                        var groupCount = await _context.GroupMembers.CountAsync(x=>x.GroupId== commitment.GroupID);
-                        
-                        var contractorPost = await _context.ContractorPosts.Where(x=>x.Id==commitment.PostID).FirstOrDefaultAsync();
+                        var groupCount = await _context.GroupMembers.CountAsync(x => x.GroupId == commitment.GroupID);
+
+                        var contractorPost = await _context.ContractorPosts.Where(x => x.Id == commitment.PostID).FirstOrDefaultAsync();
 
                         var count = contractorPost.PeopeRemained - groupCount;
 
@@ -440,7 +452,7 @@ namespace Application.System.Commitments
 
 
                         _context.ContractorPosts.Update(contractorPost);
-                       await _context.SaveChangesAsync();
+                        await _context.SaveChangesAsync();
                     }
                     else
                     {
@@ -461,7 +473,7 @@ namespace Application.System.Commitments
                         Code = BaseCode.SUCCESS,
                         Message = BaseCode.SUCCESS_MESSAGE,
                         Data = builderID.ToString(),
-                        NavigateId= commitment.Id
+                        NavigateId = commitment.Id
                     };
                 }
                 else
@@ -672,15 +684,15 @@ namespace Application.System.Commitments
 
             var user = await _context.Users.Where(x => x.BuilderId.Equals(id)).FirstOrDefaultAsync();
             var result = await query
-                    .Include(x=>x.Contractor)
-                            .ThenInclude(x=>x.User)
-                    .Include(x=>x.ContractorPosts)
+                    .Include(x => x.Contractor)
+                            .ThenInclude(x => x.User)
+                    .Include(x => x.ContractorPosts)
                      .OrderBy(filter._sortBy + " " + orderBy)
                      .Skip((filter.PageNumber - 1) * filter.PageSize)
                      .Take(filter.PageSize)
-                     .Where(x=>x.BuilderID==user.BuilderId)
+                     .Where(x => x.BuilderID == user.BuilderId)
                      .ToListAsync();
-         
+
 
             if (filter.FilterRequest != null)
             {
@@ -749,7 +761,7 @@ namespace Application.System.Commitments
                     StarDate = item.ContractorPosts.StarDate,
                     AuthorName = item.Contractor.User.FirstName + " " + item.Contractor.User.LastName,
                     Title = item.ContractorPosts.Title,
-                  
+
                 };
                 result.Add(dto);
             }
