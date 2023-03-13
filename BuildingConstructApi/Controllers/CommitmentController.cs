@@ -71,7 +71,7 @@ namespace BuildingConstructApi.Controllers
         }
 
         [HttpGet("builder/{id}")]
-        public async Task<IActionResult> GetPostWithCommitment([FromBody] PaginationFilter request, [FromRoute] int id)
+        public async Task<IActionResult> GetPostWithCommitment([FromQuery] PaginationFilter request, [FromRoute] int id)
         {
             var result = await _commitmentService.GetPost(request,  id);
             return Ok(result);

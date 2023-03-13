@@ -60,7 +60,7 @@ namespace BuildingConstructApi.Controllers
 
         [HttpPost("{id}")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetPostByUserID([FromBody] PaginationFilter filter,[FromRoute]Guid request)
+        public async Task<IActionResult> GetPostByUserID([FromBody] PaginationFilter filter,[FromRoute]Guid id)
         {
             var validFilter = new PaginationFilter();
 
@@ -76,7 +76,7 @@ namespace BuildingConstructApi.Controllers
 
 
 
-            var result = await _contractorPostService.GetPost(filter, request);
+            var result = await _contractorPostService.GetPost(filter, id);
             return Ok(result);
         }
 
