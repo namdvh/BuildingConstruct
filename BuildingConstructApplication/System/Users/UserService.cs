@@ -579,7 +579,8 @@ namespace Application.System.Users
                     ExperienceDetail = user.Builder.ExperienceDetail,
                     Certificate = user.Builder.Certificate,
                     Experience = user.Builder.Experience,
-                    ConstructionType = ls
+                    ConstructionType = ls,
+                   
                 };
 
 
@@ -596,6 +597,7 @@ namespace Application.System.Users
                     Status = user.Status,
                     Phone = user.PhoneNumber,
                     Builder = detailBuilder,
+                    LastModifiedAt=user.LastModifiedAt
                 };
 
             }
@@ -623,6 +625,7 @@ namespace Application.System.Users
                     Status = user.Status,
                     Phone = user.PhoneNumber,
                     Contractor = detailContractor,
+                    LastModifiedAt=user.LastModifiedAt
                 };
             }
             else
@@ -652,6 +655,7 @@ namespace Application.System.Users
                     Status = user.Status,
                     Phone = user.PhoneNumber,
                     DetailMaterialStore = detailMaterial,
+                    LastModifiedAt = user.LastModifiedAt
                 };
             }
 
@@ -1227,6 +1231,7 @@ namespace Application.System.Users
                 Status = post.Contractor.User.Status,
                 Phone = post.Contractor.User.PhoneNumber,
                 Contractor = detailContractor,
+                LastModifiedAt=post.Contractor.User.LastModifiedAt
             };
             return userDetail;
         }
@@ -1387,6 +1392,7 @@ namespace Application.System.Users
                 Status = user.User.Status,
                 Phone = user.User.PhoneNumber,
                 Builder = detailBuilder,
+                LastModifiedAt=user.LastModifiedAt
             };
 
             return userDetail;
@@ -1528,6 +1534,7 @@ namespace Application.System.Users
                 Status = store.User.Status,
                 Phone = store.User.PhoneNumber,
                 DetailMaterialStore = detailMaterial,
+                LastModifiedAt=store.LastModifiedAt
             };
             return userDetail;
 

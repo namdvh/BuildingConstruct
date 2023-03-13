@@ -21,6 +21,7 @@ namespace ViewModels.Users
         public string? IdNumber { get; set; }
         public string? Phone { get; set; }
         public Guid? UserId { get; set; }   
+        public DateTime? LastModifiedAt { get; set; }
 
         public DetailBuilder? Builder { get; set; }
         public DetailContractor? Contractor { get; set; }
