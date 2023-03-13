@@ -58,9 +58,9 @@ namespace BuildingConstructApi.Controllers
         }
 
 
-        [HttpPost("id")]
+        [HttpPost("{id}")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetPostByUserID([FromBody] PaginationFilter filter,[FromQuery]Guid request)
+        public async Task<IActionResult> GetPostByUserID([FromBody] PaginationFilter filter,[FromRoute]Guid request)
         {
             var validFilter = new PaginationFilter();
 

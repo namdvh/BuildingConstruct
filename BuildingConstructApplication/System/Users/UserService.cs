@@ -1235,6 +1235,7 @@ namespace Application.System.Users
         {
             BasePagination<List<UserDetailDTO>> response;
             List<UserDetailDTO> ls = new();
+            List<int> builderIDFromDB = new();
             var orderBy = filter._orderBy.ToString();
             int totalRecord;
             orderBy = orderBy switch
@@ -1262,14 +1263,21 @@ namespace Application.System.Users
             var data = query.Skip((filter.PageNumber - 1) * filter.PageSize)
                      .Take(filter.PageSize).ToList();
 
+            if (!data.Any())
+            {
+                builderIDFromDB = await _context.Users.Include(x => x.Builder).Where(x => x.BuilderId != null).Select(x => (int)x.BuilderId).ToListAsync();
+
+            }
+
             if (filter.FilterRequest != null)
             {
                 totalRecord = data.Count;
             }
             else
             {
-                totalRecord =  await _context.PostCommitments.CountAsync();
+                totalRecord = await _context.PostCommitments.CountAsync();
             }
+
 
             if (!data.Any())
             {
@@ -1296,14 +1304,21 @@ namespace Application.System.Users
                     TotalRecords = totalRecord
                 };
 
-                foreach (var item in data)
+                if (data.Any())
                 {
-                    ls.Add(MapBuilderFavorite(item.builderID.Value));
+
+                    foreach (var item in data)
+                    {
+                        ls.Add(MapBuilderFavorite(item.builderID.Value));
+                    }
                 }
-
-
-
-
+                else
+                {
+                    foreach (var item in builderIDFromDB)
+                    {
+                        ls.Add(MapBuilderFavorite(item));
+                    }
+                }
                 response = new()
                 {
                     Code = BaseCode.SUCCESS,
@@ -1319,10 +1334,10 @@ namespace Application.System.Users
         {
             UserDetailDTO userDetail;
 
-           var user =_context.Builders
-                .Include(x=>x.User)
-                .Include(x=>x.Type)
-                .Where(x=>x.Id==builderID).FirstOrDefault();
+            var user = _context.Builders
+                 .Include(x => x.User)
+                 .Include(x => x.Type)
+                 .Where(x => x.Id == builderID).FirstOrDefault();
 
 
             var tmp = _context.BuilderSkills.Include(x => x.Skill).Where(x => x.BuilderSkillID == builderID).ToList();
@@ -1385,6 +1400,7 @@ namespace Application.System.Users
         {
             BasePagination<List<UserDetailDTO>> response;
             List<UserDetailDTO> ls = new();
+            List<int> storeIDFromDB = new();
             var orderBy = filter._orderBy.ToString();
             int totalRecord;
             orderBy = orderBy switch
@@ -1406,6 +1422,13 @@ namespace Application.System.Users
 
             var data = query.Skip((filter.PageNumber - 1) * filter.PageSize)
                      .Take(filter.PageSize).ToList();
+
+            if (!data.Any())
+            {
+                storeIDFromDB = await _context.Users.Include(x => x.MaterialStore).Where(x => x.MaterialStoreID != null).Select(x => (int)x.MaterialStoreID).ToListAsync();
+
+            }
+
 
             if (filter.FilterRequest != null)
             {
@@ -1441,9 +1464,19 @@ namespace Application.System.Users
                     TotalRecords = totalRecord
                 };
 
-                foreach (var item in data)
+                if (!data.Any())
                 {
-                    ls.Add(MapStoreFavorite(item.storeID.Value));
+                    foreach (var item in data)
+                    {
+                        ls.Add(MapStoreFavorite(item.storeID.Value));
+                    }
+                }
+                else
+                {
+                    foreach (var item in storeIDFromDB)
+                    {
+                        ls.Add(MapStoreFavorite(item));
+                    }
                 }
 
 
