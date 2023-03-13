@@ -12,6 +12,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using ViewModels.Categories;
 using ViewModels.MaterialStore;
+using ZedGraph;
 
 namespace Application.System.MaterialStores
 {
@@ -36,36 +37,79 @@ namespace Application.System.MaterialStores
                 return false;
             }
             var storeID = await _context.Users.Where(x => x.Id.ToString().Equals(userID)).Select(x => x.MaterialStoreID).FirstOrDefaultAsync();
-            Products products = new();
-            products.Name = request.Name;
-            products.Description = request.Description;
-            products.Brand = request.Brand;
-            products.UnitPrice = request.UnitPrice;
-            products.UnitInStock = request.UnitInStock;
-            products.Image = request.Image;
-            products.SoldQuantities = 0;
-            products.MaterialStoreID = storeID;
-            products.Unit = request.Unit;
-            products.CreatedBy = Guid.Parse(userID);
+
+            Products products = new()
+            {
+                Name = request.Name,
+                Description = request.Description,
+                Brand = request.Brand,
+                UnitPrice = request.UnitPrice,
+                UnitInStock = request.UnitInStock,
+                Image = request.Image,
+                SoldQuantities = 0,
+                MaterialStoreID = storeID,
+                Unit = request.Unit,
+                CreatedBy = Guid.Parse(userID),
+            };
+
             await _context.Products.AddAsync(products);
             await _context.SaveChangesAsync();
+
+
             if (request.ProductTypes != null)
             {
                 List<ProductType> list = new();
-                foreach(var item in request.ProductTypes)
+                foreach (var item in request.ProductTypes)
                 {
                     var productType = new ProductType();
                     productType.ProductID = products.Id;
                     productType.Quantity = item.Quantity;
                     productType.Name = item.TypeName;
+
+
+                    if (!string.IsNullOrEmpty(item.Color))
+                    {
+                        Color tmpColor = new()
+                        {
+                            Name = item.Color,
+                        };
+
+                        await _context.Colors.AddAsync(tmpColor);
+                        await _context.SaveChangesAsync();
+                        productType.ColorId = tmpColor.Id;
+                    }
+
+                    if (!string.IsNullOrEmpty(item.Size))
+                    {
+                        ProductSize tmpSize = new()
+                        {
+                            Name = item.Size,
+                        };
+
+                        await _context.Sizes.AddAsync(tmpSize);
+                        await _context.SaveChangesAsync();
+                        productType.SizeID = tmpSize.Id;
+                    }
+
+                    if (!string.IsNullOrEmpty(item.Other))
+                    {
+                        Other tmpOther = new()
+                        {
+                            Name = item.Other,
+                        };
+
+                        await _context.Others.AddAsync(tmpOther);
+                        await _context.SaveChangesAsync();
+                        productType.OtherID = tmpOther.Id;
+                    }
                     list.Add(productType);
-                    
+
                 }
                 await _context.AddRangeAsync(list);
-                var rs=await _context.SaveChangesAsync();
+                var rs = await _context.SaveChangesAsync();
                 if (rs < 0)
                 {
-                     _context.Remove(products);
+                    _context.Remove(products);
                     return false;
                 }
             }
@@ -101,12 +145,12 @@ namespace Application.System.MaterialStores
             return true;
         }
 
-        public async Task<BasePagination<List<ProductStoreDTO>>> GetAllProductStore(PaginationFilter filter, bool isAll,int? storeID)
+        public async Task<BasePagination<List<ProductStoreDTO>>> GetAllProductStore(PaginationFilter filter, bool isAll, int? storeID)
         {
             BasePagination<List<ProductStoreDTO>> response;
             var orderBy = filter._orderBy.ToString();
             int totalRecord;
-           
+
             if (string.IsNullOrEmpty(filter._sortBy))
             {
                 filter._sortBy = "Id";
@@ -127,7 +171,7 @@ namespace Application.System.MaterialStores
                .Skip((filter.PageNumber - 1) * filter.PageSize)
                .Take(filter.PageSize)
                .ToListAsync();
-            if (isAll==false)
+            if (isAll == false)
             {
                 data = await query
                 .AsNoTracking().Where(x => x.MaterialStoreID == storeID)
@@ -166,14 +210,14 @@ namespace Application.System.MaterialStores
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = await MapListDTO(data,isAll),
+                    Data = await MapListDTO(data, isAll),
                     Pagination = pagination
                 };
             }
 
             return response;
         }
-        public async Task<List<ProductStoreDTO>> MapListDTO(List<Products> list,bool? isAll)
+        public async Task<List<ProductStoreDTO>> MapListDTO(List<Products> list, bool? isAll)
         {
             List<ProductStoreDTO> result = new();
 
@@ -188,9 +232,9 @@ namespace Application.System.MaterialStores
                 dto.UnitPrice = item.UnitPrice;
                 dto.SoldQuantities = item.SoldQuantities;
                 dto.LastModifiedAt = item.LastModifiedAt;
-                
+
                 string img = item?.Image;
-                if(img != null)
+                if (img != null)
                 {
                     string[] firstImg = img.Split(",");
                     dto.Image = firstImg[0].Trim();
@@ -353,8 +397,8 @@ namespace Application.System.MaterialStores
                 {
 
                     Avatar = item.User.Avatar,
-                    FirstName=item.User.FirstName,
-                    LastName=item.User.LastName,
+                    FirstName = item.User.FirstName,
+                    LastName = item.User.LastName,
                     Description = item.Description,
                     Id = item.Id,
                     Place = item.Place,
@@ -373,7 +417,7 @@ namespace Application.System.MaterialStores
         public async Task<BaseResponse<ProductDetailDTO>> GetProductDetail(int productId)
         {
             BaseResponse<ProductDetailDTO> response = new();
-            var rs = await _context.Products.Include(x => x.ProductCategories).Include(x=>x.ProductTypes).SingleOrDefaultAsync(x => x.Id == productId);
+            var rs = await _context.Products.Include(x => x.ProductCategories).Include(x => x.ProductTypes).SingleOrDefaultAsync(x => x.Id == productId);
             if (rs == null)
             {
 
@@ -384,7 +428,7 @@ namespace Application.System.MaterialStores
             ProductDetailDTO productDetail = new();
             productDetail.Id = rs.Id;
             productDetail.Name = rs.Name;
-           
+
             if (rs.Image != null)
             {
                 string[] img = rs.Image.Split(",");
@@ -404,7 +448,7 @@ namespace Application.System.MaterialStores
             productDetail.ProductType = await GetProductType(rs.ProductTypes);
             productDetail.Store = await GetStore((int)rs.MaterialStoreID);
             productDetail.ProductCategories = await GetCategory(rs.ProductCategories);
-            productDetail.CreatedBy=rs.CreatedBy;
+            productDetail.CreatedBy = rs.CreatedBy;
             response.Data = productDetail;
             response.Code = BaseCode.SUCCESS;
             response.Message = "SUCCESS";
@@ -426,7 +470,7 @@ namespace Application.System.MaterialStores
             final.Place = results.Place;
             return final;
         }
-       
+
         public async Task<List<CategoryDTO>> GetCategory(List<ProductCategories> productCategories)
         {
             List<CategoryDTO> list = new();
@@ -457,11 +501,19 @@ namespace Application.System.MaterialStores
             List<ProductTypeDTO> list = new();
             foreach (var c in productType)
             {
-                var results = await _context.ProductTypes.Where(x => x.Id == c.Id).SingleOrDefaultAsync();
+                var results = await _context.ProductTypes
+                    .Include(x=>x.Color)
+                    .Include(x=>x.Size)
+                    .Include(x=>x.Other)
+                    .Where(x => x.Id == c.Id)
+                    .SingleOrDefaultAsync();
                 var final = new ProductTypeDTO();
                 final.Id = results.Id;
                 final.TypeName = results.Name;
                 final.Quantity = results.Quantity;
+                final.Other = results.Other.Name;
+                final.Size = results.Size.Name;
+                final.Color = results.Color.Name;
                 list.Add(final);
             }
             return list;
@@ -532,14 +584,14 @@ namespace Application.System.MaterialStores
                 products.Image = request.Image;
 
             }
-             _context.Entry<Products>(products).State = EntityState.Modified;
+            _context.Entry<Products>(products).State = EntityState.Modified;
 
             var listcate = new List<CategoryDTO>();
             if (request.ProductTypes != null)
             {
-                foreach(var i in request.ProductTypes)
+                foreach (var i in request.ProductTypes)
                 {
-                    var type = _context.ProductTypes.AsNoTracking().FirstOrDefault(x=>x.Id==i.Id);
+                    var type = _context.ProductTypes.AsNoTracking().FirstOrDefault(x => x.Id == i.Id);
                     if (type != null)
                     {
                         type.ProductID = productId;
@@ -592,7 +644,7 @@ namespace Application.System.MaterialStores
                     }
                 }
             }
-             _context.Update(products);
+            _context.Update(products);
             var results = await _context.SaveChangesAsync();
             if (results > 0)
             {

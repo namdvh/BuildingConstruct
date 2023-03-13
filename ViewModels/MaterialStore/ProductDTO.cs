@@ -24,6 +24,7 @@ namespace ViewModels.MaterialStore
         public string? Brand { get; set; }
 
         public List<CategoryProductDTO>? Categories { get; set; }
+
         public List<ProductTypeDTO>? ProductTypes { get; set; }
     }
 }

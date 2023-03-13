@@ -39,6 +39,11 @@ namespace ViewModels.Carts
         public string? TypeName { get; set; }
 
         public string? Unit { get; set; }
+
+        public string? Color { get; set; }
+        public string? Size { get; set; }
+        public string? Other { get; set; }
+
     }
 
 
@@ -49,6 +54,10 @@ namespace ViewModels.Carts
         public string? TypeName { get; set; }
 
         public int? Quantity { get; set; }
+
+        public string? Color { get; set; }
+        public string? Size { get; set; }
+        public string? Other { get; set; }
 
     }
 }

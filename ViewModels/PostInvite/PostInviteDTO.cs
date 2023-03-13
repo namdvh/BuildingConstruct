@@ -1,4 +1,6 @@
-﻿namespace ViewModels.PostInvite
+﻿using Data.Enum;
+
+namespace ViewModels.PostInvite
 {
     public class PostInviteDTO
     {
@@ -10,6 +12,8 @@
         public string? CompanyName { get; set; }
         public string? ContractorPostName { get; set; }
         public int? ContractorPostId { get; set; }
+        public Place Places { get; set; }
+        public string? Salaries { get; set; }
 
         public DateTime LastModifiedAt { get; set; } = DateTime.Now;
 

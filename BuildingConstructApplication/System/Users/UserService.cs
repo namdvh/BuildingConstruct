@@ -411,7 +411,7 @@ namespace Application.System.Users
             var accesstoken = new JwtSecurityToken(_config["Tokens:Issuer"],
                 _config["Tokens:Issuer"],
                 claims,
-                expires: DateTime.Now.AddSeconds(30),
+                expires: DateTime.Now.AddMinutes(30),
                 signingCredentials: creds);
             var refreshtoken = new JwtSecurityToken(_config["Tokens:Issuer"],
                 _config["Tokens:Issuer"],

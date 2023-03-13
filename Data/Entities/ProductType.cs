@@ -9,10 +9,21 @@
         public Products Products { get; set; }
 
         public int ProductID { get; set; }
+        public int Quantity { get; set; }
+
+        public int? ColorId { get; set; }
+        public Color? Color { get; set; }
+        public int? SizeID { get; set; }
+        public ProductSize? Size { get; set; }
+
+        public int? OtherID { get; set; }
+        public Other? Other { get; set; }
+
+
+
         public BillDetail? BillDetails { get; set; }
 
 
-        public int Quantity { get; set; }
 
 
         public List<Cart>? Carts { get; set; }

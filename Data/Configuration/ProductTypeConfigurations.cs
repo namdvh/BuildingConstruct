@@ -15,6 +15,11 @@ namespace Data.Configuration
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
             builder.HasOne(x => x.Products).WithMany(x => x.ProductTypes).HasForeignKey(x => x.ProductID);
+
+
+            builder.HasOne(x => x.Color).WithMany(x => x.ProductTypes).HasForeignKey(x => x.ColorId);
+            builder.HasOne(x => x.Size).WithMany(x => x.ProductTypes).HasForeignKey(x => x.SizeID);
+            builder.HasOne(x => x.Other).WithMany(x => x.ProductTypes).HasForeignKey(x => x.ColorId);
         }
 
     }

@@ -9,6 +9,7 @@ using ViewModels.Identification;
 using ViewModels.Pagination;
 using ViewModels.Response;
 
+
 namespace Application.System.Identification
 {
     public class IdentificationService : IIdentificationService
@@ -249,7 +250,7 @@ namespace Application.System.Identification
         }
 
 
-        private List<IdentificationDTO> MapListDTO(List<Verify> verifies)
+        private List<IdentificationDTO> MapListDTO(List<Data.Entities.Verify> verifies)
         {
 
             List<IdentificationDTO> ls = new();

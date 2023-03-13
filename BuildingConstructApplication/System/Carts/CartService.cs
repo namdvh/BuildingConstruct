@@ -130,6 +130,11 @@ namespace Application.System.Carts
                     .ThenInclude(x => x.MaterialStore)
                         .ThenInclude(x => x.User)
                 .Include(x => x.ProductType)
+                    .ThenInclude(x=>x.Color)
+                 .Include(x => x.ProductType)
+                    .ThenInclude(x => x.Size)
+                 .Include(x => x.ProductType)
+                    .ThenInclude(x => x.Other)
                 .Where(x => x.UserID.Equals(UserID))
                 .OrderBy(filter._sortBy + " " + orderBy)
                 .Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -316,7 +321,11 @@ namespace Application.System.Carts
 
         private CartDTO MapToDTO(Cart cart)
         {
-            var listType = _context.ProductTypes.Where(x => x.ProductID == cart.ProductID).ToList();
+            var listType = _context.ProductTypes
+                .Include(x=>x.Color)
+                .Include(x=>x.Size)
+                .Include(x=>x.Other)
+                .Where(x => x.ProductID == cart.ProductID).ToList();
             List<CartProductType> types = new();
 
             if (listType.Any())
@@ -328,6 +337,9 @@ namespace Application.System.Carts
                         Id = item.Id,
                         TypeName = item.Name,
                         Quantity = item.Quantity,
+                        Color=item.Color.Name,
+                        Size=item.Size.Name,
+                        Other=item.Other.Name,
                     };
                     types.Add(tmp);
                 }
@@ -346,6 +358,9 @@ namespace Application.System.Carts
                 UnitPrice = cart.Products.UnitPrice,
                 Unit=cart.Products.Unit,
                 TypeName = cart.ProductType?.Name != null ? cart.ProductType.Name : null,
+                Color = cart.ProductType?.Color.Name != null ? cart.ProductType.Color.Name : null,
+                Size = cart.ProductType?.Size.Name != null ? cart.ProductType.Size.Name : null,
+                Other = cart.ProductType?.Other.Name != null ? cart.ProductType.Other.Name : null,
                 TypeID = cart.ProductType?.Id != null ? cart.ProductType.Id : null,
                 ProductType = listType.Any() ? types : null,
             };
