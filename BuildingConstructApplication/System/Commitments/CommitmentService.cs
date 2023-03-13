@@ -650,7 +650,7 @@ namespace Application.System.Commitments
 
         }
 
-        public async Task<BasePagination<List<ContractorPostDTO>>> GetPost(PaginationFilter filter, Guid id)
+        public async Task<BasePagination<List<ContractorPostDTO>>> GetPost(PaginationFilter filter, int id)
         {
             BasePagination<List<ContractorPostDTO>> response;
             var orderBy = filter._orderBy.ToString();
@@ -670,7 +670,7 @@ namespace Application.System.Commitments
 
             IQueryable<PostCommitment> query = _context.PostCommitments;
 
-            var user = await _context.Users.Where(x => x.Id.Equals(id)).FirstOrDefaultAsync();
+            var user = await _context.Users.Where(x => x.BuilderId.Equals(id)).FirstOrDefaultAsync();
             var result = await query
                     .Include(x=>x.Contractor)
                             .ThenInclude(x=>x.User)
