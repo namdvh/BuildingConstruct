@@ -17,6 +17,7 @@ namespace ViewModels.BillModels
         public string? StoreName { get; set; }
         public string? Reason { get; set; }
         public int? StoreID { get; set; }
+        public string? UserID { get; set; }
         public decimal TotalPrice { get; set; }
         public Status Status { get; set; }
         public int? ProductTypeId { get; set; }
