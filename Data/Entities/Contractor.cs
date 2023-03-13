@@ -18,5 +18,9 @@
 
         public List<Bill>? Bills { get; set; }
 
+        public List<PostInvite>? PostInvites { get; set; }
+
+
+
     }
 }

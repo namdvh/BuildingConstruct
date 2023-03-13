@@ -18,6 +18,7 @@ namespace ViewModels.ContractorPost
         public string Name { get; set; }
         public DateTime DOB { get; set; }
         public Guid TypeID { get; set; }
+        public string? TypeName { get; set; }
         public string VerifyId { get; set; }
     }
 }

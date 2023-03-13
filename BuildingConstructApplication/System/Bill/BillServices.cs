@@ -3,17 +3,13 @@ using Data.Entities;
 using Data.Enum;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
-using ViewModels.BillModels;
 using System.Linq.Dynamic.Core;
+using System.Security.Claims;
+using System.Text;
+using ViewModels.BillModels;
+using ViewModels.Carts;
 using ViewModels.Pagination;
 using ViewModels.Response;
-using System.Text;
-using System.Linq;
-using Emgu.CV.OCR;
-using Microsoft.AspNetCore.Mvc;
-using ViewModels.Carts;
-using ZedGraph;
 
 namespace Application.System.Bill
 {
@@ -113,7 +109,7 @@ namespace Application.System.Bill
             bool flag = false;
 
             List<Data.Entities.Bill>? data;
-            var query =_context.Bills;
+            var query = _context.Bills;
 
             if (string.IsNullOrEmpty(filter._sortBy))
             {
@@ -128,7 +124,7 @@ namespace Application.System.Bill
             if (filter.FilterRequest != null && filter.FilterRequest.Status.HasValue)
             {
                 data = await query
-                    .Include(x=>x.BillDetails)
+                    .Include(x => x.BillDetails)
                  .OrderBy(filter._sortBy + " " + orderBy)
                  .Skip((filter.PageNumber - 1) * filter.PageSize)
                  .Take(filter.PageSize)
@@ -256,7 +252,7 @@ namespace Application.System.Bill
 
             return response;
         }
-      
+
 
 
 

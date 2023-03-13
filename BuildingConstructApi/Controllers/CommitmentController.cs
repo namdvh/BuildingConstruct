@@ -70,6 +70,15 @@ namespace BuildingConstructApi.Controllers
             return Ok(result);
         }
 
+        [HttpGet("builder/{id}")]
+        public async Task<IActionResult> GetPostWithCommitment([FromBody] PaginationFilter request,string id )
+        {
+            var result = await _commitmentService.GetPost(request,  Guid.Parse(id));
+            return Ok(result);
+        }
+
+
+
         [HttpPut("{commitmentID}")]
         public async Task<IActionResult> UpdateCommitment([FromRoute] int commitmentID)
         {

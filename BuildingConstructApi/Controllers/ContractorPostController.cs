@@ -57,6 +57,31 @@ namespace BuildingConstructApi.Controllers
             return Ok(result);
         }
 
+
+        [HttpPost("{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetPostByUserID([FromBody] PaginationFilter filter,[FromRoute]Guid request)
+        {
+            var validFilter = new PaginationFilter();
+
+            if (filter.FilterRequest == null)
+            {
+                validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize, filter._sortBy, filter._orderBy);
+            }
+            else
+            {
+                validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize, filter._sortBy, filter._orderBy, filter.FilterRequest);
+
+            }
+
+
+
+            var result = await _contractorPostService.GetPost(filter, request);
+            return Ok(result);
+        }
+
+
+
         [HttpPost("contractor/getAll")]
         [AllowAnonymous]
         public async Task<IActionResult> GetAllPostContractor([FromBody] PaginationFilter request)

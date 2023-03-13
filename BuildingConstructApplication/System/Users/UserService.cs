@@ -2,18 +2,24 @@
 using Data.DataContext;
 using Data.Entities;
 using Data.Enum;
+using Emgu.CV.Features2D;
+using Emgu.CV.Ocl;
 using FluentValidation.Results;
+using Gridify;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq.Dynamic.Core;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
+using ViewModels.ContractorPost;
+using ViewModels.Pagination;
 using ViewModels.Response;
 using ViewModels.Users;
 
@@ -235,9 +241,9 @@ namespace Application.System.Users
                             DOB = us.DOB,
                             Gender = us.Gender,
                             Role = roleName,
-                            BuilderID=us.BuilderId,
-                            ContractorID=us.ContractorId,
-                            StoreID=us.MaterialStoreID
+                            BuilderID = us.BuilderId,
+                            ContractorID = us.ContractorId,
+                            StoreID = us.MaterialStoreID
                         };
 
                     }
@@ -300,9 +306,9 @@ namespace Application.System.Users
                 Id = user.Id,
                 UserName = user.UserName,
                 Phone = user.PhoneNumber,
-                BuilderID=user.BuilderId,
-                StoreID=user.MaterialStoreID,
-                ContractorID=user.ContractorId
+                BuilderID = user.BuilderId,
+                StoreID = user.MaterialStoreID,
+                ContractorID = user.ContractorId
             };
             return userDto;
         }
@@ -544,6 +550,23 @@ namespace Application.System.Users
 
                 var tmp = _context.BuilderSkills.Include(x => x.Skill).Where(x => x.BuilderSkillID == user.BuilderId).ToList();
 
+                var contrusctionType = _context.WorkerContructionTypes
+
+                    .Include(x => x.ConstructionType)
+                    .Where(x => x.BuilderId == user.BuilderId).ToList();
+
+
+                List<WorkerListType> ls = new();
+                foreach (var item in contrusctionType)
+                {
+
+                    WorkerListType workerListType = new()
+                    {
+                        ConstructionTypeId = item.ConstructionTypeId,
+                        Name = item.ConstructionType.Name
+                    };
+                    ls.Add(workerListType);
+                }
 
 
                 DetailBuilder detailBuilder = new()
@@ -551,11 +574,12 @@ namespace Application.System.Users
                     BuilderSkills = MapToSkillDTO(tmp),
                     Id = user.Builder.Id,
                     Place = user.Builder.Place,
-                    TypeName = user.Builder.Type.Name,
+                    TypeName = user.Builder.Type?.Name == null ? null : user.Builder.Type?.Name,
                     TypeID = user.Builder.TypeID,
                     ExperienceDetail = user.Builder.ExperienceDetail,
                     Certificate = user.Builder.Certificate,
-                    Experience = user.Builder.Experience
+                    Experience = user.Builder.Experience,
+                    ConstructionType = ls
                 };
 
 
@@ -826,8 +850,27 @@ namespace Application.System.Users
                         await _context.BuilderSkills.AddAsync(newSkills);
                         await _context.SaveChangesAsync();
                     }
+                }
+                if (request.WorkerConstructionType != null)
+                {
+                    var type = await _context.WorkerContructionTypes.Where(x => x.BuilderId.Equals(user.BuilderId)).ToListAsync();
+                    if (type.Any())
+                    {
+                        _context.RemoveRange(type);
+                        await _context.SaveChangesAsync();
+                    }
 
 
+                    foreach (var x in request.WorkerConstructionType)
+                    {
+                        WorkerContructionType newSkills = new()
+                        {
+                            BuilderId = user.BuilderId.Value,
+                            ConstructionTypeId = x
+                        };
+                        await _context.WorkerContructionTypes.AddAsync(newSkills);
+                        await _context.SaveChangesAsync();
+                    }
                 }
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
@@ -1061,6 +1104,433 @@ namespace Application.System.Users
                 };
             }
             return response;
+        }
+
+        public async Task<BasePagination<List<UserDetailDTO>>> GetContractorFavorite(PaginationFilter filter)
+        {
+            BasePagination<List<UserDetailDTO>> response;
+            List<UserDetailDTO> ls = new();
+            var orderBy = filter._orderBy.ToString();
+            int totalRecord;
+            orderBy = orderBy switch
+            {
+                "1" => "ascending",
+                "-1" => "descending",
+                _ => orderBy
+            };
+            if (string.IsNullOrEmpty(filter._sortBy))
+            {
+                filter._sortBy = "LastModifiedAt";
+            }
+
+
+
+            IQueryable<AppliedPost> query2 = _context.AppliedPosts;
+
+            //var newList = _context.AppliedPosts.GroupBy(x => x.PostID)
+            //      .OrderByDescending(g => g.Count())
+            //      .SelectMany(g => g)
+            //      .ToList();
+
+
+            var query = from history in _context.AppliedPosts
+                        group history by history.PostID into historyGroup
+                        orderby historyGroup.Key
+                        select new { post = historyGroup.Key, postCount = historyGroup.Count() };
+
+
+            var data = query.Skip((filter.PageNumber - 1) * filter.PageSize)
+                     .Take(filter.PageSize).ToList();
+
+            if (filter.FilterRequest != null)
+            {
+                totalRecord = data.Count;
+            }
+            else
+            {
+                totalRecord = await _context.AppliedPosts.CountAsync();
+            }
+
+            if (!data.Any())
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.EMPTY_MESSAGE,
+                    Data = new(),
+                    Pagination = null
+                };
+            }
+            else
+            {
+                double totalPages;
+
+                totalPages = ((double)totalRecord / (double)filter.PageSize);
+
+                var roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
+                Pagination pagination = new()
+                {
+                    CurrentPage = filter.PageNumber,
+                    PageSize = filter.PageSize,
+                    TotalPages = roundedTotalPages,
+                    TotalRecords = totalRecord
+                };
+
+                foreach (var item in data)
+                {
+                    ls.Add(MapToDetailDTO(item.post));
+                }
+
+
+
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = ls,
+                    Pagination = pagination
+                };
+            }
+            return response;
+        }
+
+        private UserDetailDTO MapToDetailDTO(int postID)
+        {
+            UserDetailDTO userDetail;
+
+            var post = _context.ContractorPosts
+                .Include(x => x.Contractor)
+                        .ThenInclude(x => x.User)
+                .Where(x => x.Id == postID).FirstOrDefault();
+
+
+            DetailContractor detailContractor = new()
+            {
+                CompanyName = post.Contractor.CompanyName,
+                Description = post.Contractor.Description,
+                Id = post.Contractor.Id,
+                Website = post.Contractor.Website
+            };
+
+
+            userDetail = new()
+            {
+                Address = post.Contractor.User.Address,
+                Avatar = post.Contractor.User.Avatar,
+                DOB = post.Contractor.User.DOB,
+                Email = post.Contractor.User.Email,
+                FirstName = post.Contractor.User.FirstName,
+                Gender = post.Contractor.User.Gender,
+                IdNumber = post.Contractor.User.IdNumber,
+                LastName = post.Contractor.User.LastName,
+                Status = post.Contractor.User.Status,
+                Phone = post.Contractor.User.PhoneNumber,
+                Contractor = detailContractor,
+            };
+            return userDetail;
+        }
+
+        public async Task<BasePagination<List<UserDetailDTO>>> GetBuilderFavorite(PaginationFilter filter)
+        {
+            BasePagination<List<UserDetailDTO>> response;
+            List<UserDetailDTO> ls = new();
+            List<int> builderIDFromDB = new();
+            var orderBy = filter._orderBy.ToString();
+            int totalRecord;
+            orderBy = orderBy switch
+            {
+                "1" => "ascending",
+                "-1" => "descending",
+                _ => orderBy
+            };
+            if (string.IsNullOrEmpty(filter._sortBy))
+            {
+                filter._sortBy = "Id";
+            }
+
+
+
+            IQueryable<AppliedPost> query2 = _context.AppliedPosts;
+
+
+            var query = from commitment in _context.PostCommitments
+                        group commitment by commitment.BuilderID into builderGroup
+                        orderby builderGroup.Key
+                        select new { builderID = builderGroup.Key, count = builderGroup.Count() };
+
+
+            var data = query.Skip((filter.PageNumber - 1) * filter.PageSize)
+                     .Take(filter.PageSize).ToList();
+
+            if (!data.Any())
+            {
+                builderIDFromDB = await _context.Users.Include(x => x.Builder).Where(x => x.BuilderId != null).Select(x => (int)x.BuilderId).ToListAsync();
+
+            }
+
+            if (filter.FilterRequest != null)
+            {
+                totalRecord = data.Count;
+            }
+            else
+            {
+                totalRecord = await _context.PostCommitments.CountAsync();
+            }
+
+
+            if (!data.Any())
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.EMPTY_MESSAGE,
+                    Data = new(),
+                    Pagination = null
+                };
+            }
+            else
+            {
+                double totalPages;
+
+                totalPages = ((double)totalRecord / (double)filter.PageSize);
+
+                var roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
+                Pagination pagination = new()
+                {
+                    CurrentPage = filter.PageNumber,
+                    PageSize = filter.PageSize,
+                    TotalPages = roundedTotalPages,
+                    TotalRecords = totalRecord
+                };
+
+                if (data.Any())
+                {
+
+                    foreach (var item in data)
+                    {
+                        ls.Add(MapBuilderFavorite(item.builderID.Value));
+                    }
+                }
+                else
+                {
+                    foreach (var item in builderIDFromDB)
+                    {
+                        ls.Add(MapBuilderFavorite(item));
+                    }
+                }
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = ls,
+                    Pagination = pagination
+                };
+            }
+            return response;
+        }
+
+        private UserDetailDTO MapBuilderFavorite(int builderID)
+        {
+            UserDetailDTO userDetail;
+
+            var user = _context.Builders
+                 .Include(x => x.User)
+                 .Include(x => x.Type)
+                 .Where(x => x.Id == builderID).FirstOrDefault();
+
+
+            var tmp = _context.BuilderSkills.Include(x => x.Skill).Where(x => x.BuilderSkillID == builderID).ToList();
+
+            var contrusctionType = _context.WorkerContructionTypes
+                .Include(x => x.ConstructionType)
+                .Where(x => x.BuilderId == builderID).ToList();
+
+
+            List<WorkerListType> ls = new();
+            foreach (var item in contrusctionType)
+            {
+
+                WorkerListType workerListType = new()
+                {
+                    ConstructionTypeId = item.ConstructionTypeId,
+                    Name = item.ConstructionType.Name
+                };
+                ls.Add(workerListType);
+            }
+
+
+            DetailBuilder detailBuilder = new()
+            {
+                BuilderSkills = MapToSkillDTO(tmp),
+                Id = user.Id,
+                Place = user.Place,
+                TypeName = user.Type?.Name == null ? null : user.Type?.Name,
+                TypeID = user.TypeID,
+                ExperienceDetail = user.ExperienceDetail,
+                Certificate = user.Certificate,
+                Experience = user.Experience,
+                ConstructionType = ls
+            };
+
+
+            userDetail = new()
+            {
+                Address = user.User?.Address,
+                Avatar = user.User.Avatar,
+                DOB = user.User.DOB,
+                Email = user.User.Email,
+                FirstName = user.User.FirstName,
+                Gender = user.User.Gender,
+                IdNumber = user.User.IdNumber,
+                LastName = user.User.LastName,
+                Status = user.User.Status,
+                Phone = user.User.PhoneNumber,
+                Builder = detailBuilder,
+            };
+
+            return userDetail;
+
+        }
+
+
+
+
+        public async Task<BasePagination<List<UserDetailDTO>>> GetStoreFavorite(PaginationFilter filter)
+        {
+            BasePagination<List<UserDetailDTO>> response;
+            List<UserDetailDTO> ls = new();
+            List<int> storeIDFromDB = new();
+            var orderBy = filter._orderBy.ToString();
+            int totalRecord;
+            orderBy = orderBy switch
+            {
+                "1" => "ascending",
+                "-1" => "descending",
+                _ => orderBy
+            };
+            if (string.IsNullOrEmpty(filter._sortBy))
+            {
+                filter._sortBy = "Id";
+            }
+
+            var query = from bill in _context.Bills
+                        group bill by bill.StoreID into storeGroup
+                        orderby storeGroup.Key
+                        select new { storeID = storeGroup.Key, count = storeGroup.Count() };
+
+
+            var data = query.Skip((filter.PageNumber - 1) * filter.PageSize)
+                     .Take(filter.PageSize).ToList();
+
+            if (!data.Any())
+            {
+                storeIDFromDB = await _context.Users.Include(x => x.MaterialStore).Where(x => x.MaterialStoreID != null).Select(x => (int)x.MaterialStoreID).ToListAsync();
+
+            }
+
+
+            if (filter.FilterRequest != null)
+            {
+                totalRecord = data.Count;
+            }
+            else
+            {
+                totalRecord = await _context.Bills.CountAsync();
+            }
+
+            if (!data.Any())
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.EMPTY_MESSAGE,
+                    Data = new(),
+                    Pagination = null
+                };
+            }
+            else
+            {
+                double totalPages;
+
+                totalPages = ((double)totalRecord / (double)filter.PageSize);
+
+                var roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
+                Pagination pagination = new()
+                {
+                    CurrentPage = filter.PageNumber,
+                    PageSize = filter.PageSize,
+                    TotalPages = roundedTotalPages,
+                    TotalRecords = totalRecord
+                };
+
+                if (!data.Any())
+                {
+                    foreach (var item in data)
+                    {
+                        ls.Add(MapStoreFavorite(item.storeID.Value));
+                    }
+                }
+                else
+                {
+                    foreach (var item in storeIDFromDB)
+                    {
+                        ls.Add(MapStoreFavorite(item));
+                    }
+                }
+
+
+
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = ls,
+                    Pagination = pagination
+                };
+            }
+            return response;
+        }
+
+
+        private UserDetailDTO MapStoreFavorite(int storeID)
+        {
+            UserDetailDTO userDetail;
+
+            var store = _context.MaterialStores
+                 .Include(x => x.User)
+                 .Where(x => x.Id == storeID).FirstOrDefault();
+
+
+            DetailMaterialStore detailMaterial = new()
+            {
+                Description = store.Description,
+                Id = store.Id,
+                Website = store.Website,
+                Experience = store.Experience,
+                Image = store.Image,
+                Place = store.Place,
+                TaxCode = store.TaxCode
+            };
+
+
+            userDetail = new()
+            {
+                Address = store.User.Address,
+                Avatar = store.User.Avatar,
+                DOB = store.User.DOB,
+                Email = store.User.Email,
+                FirstName = store.User.FirstName,
+                Gender = store.User.Gender,
+                IdNumber = store.User.IdNumber,
+                LastName = store.User.LastName,
+                Status = store.User.Status,
+                Phone = store.User.PhoneNumber,
+                DetailMaterialStore = detailMaterial,
+            };
+            return userDetail;
+
         }
     }
 }

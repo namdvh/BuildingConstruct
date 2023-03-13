@@ -15,6 +15,8 @@ namespace Application.System.Commitments
     {
         Task<BasePagination<List<CommitmentDTO>>> GetCommitment(Guid UserID,PaginationFilter filter,Status status);
 
+        Task<BasePagination<List<ContractorPostDTO>>> GetPost(PaginationFilter filter, Guid id);
+
         Task<BaseResponse<DetailCommitmentDTO>> GetDetailCommitment(int commitmenntID );
 
         Task<BaseResponse<string>> UpdateCommitment(Guid userID,int commitmenntID );

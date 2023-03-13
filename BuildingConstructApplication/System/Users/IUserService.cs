@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ViewModels.Pagination;
 using ViewModels.Response;
 using ViewModels.Users;
 
@@ -22,6 +23,10 @@ namespace Application.System.Users
         public Task<BaseResponse<Token>> GenerateToken(UserModels request);
         Task<BaseResponse<string>> RefreshToken(RefreshTokenResponse refreshToken);
         Task<BaseResponse<UserDetailDTO>> GetProfile(Guid userID);
+
+        Task<BasePagination<List<UserDetailDTO>>> GetContractorFavorite(PaginationFilter request);
+        Task<BasePagination<List<UserDetailDTO>>> GetBuilderFavorite(PaginationFilter request);
+        Task<BasePagination<List<UserDetailDTO>>> GetStoreFavorite(PaginationFilter request);
 
         Task<BaseResponse<string>> UpdateBuilderProfile(UpdateBuilderRequest request, Guid userID);
         Task<BaseResponse<string>> UpdateContractorProfile(UpdateContractorRequest request, Guid userID);

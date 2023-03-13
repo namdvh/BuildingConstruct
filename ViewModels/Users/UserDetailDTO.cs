@@ -20,6 +20,7 @@ namespace ViewModels.Users
         public Status? Status { get; set; }
         public string? IdNumber { get; set; }
         public string? Phone { get; set; }
+        public Guid? UserId { get; set; }   
 
         public DetailBuilder? Builder { get; set; }
         public DetailContractor? Contractor { get; set; }
@@ -42,7 +43,14 @@ namespace ViewModels.Users
 
         public string? Certificate { get; set; }
 
+        public List<WorkerListType>? ConstructionType { get; set; }
+    }
 
+
+    public class WorkerListType {
+
+        public int ConstructionTypeId { get; set; }
+        public string Name { get; set; }
     }
 
 
