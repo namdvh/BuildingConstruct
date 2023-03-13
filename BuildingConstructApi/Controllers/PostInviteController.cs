@@ -42,5 +42,14 @@ namespace BuildingConstructApi.Controllers
             var result = await postInviteService.Update(id);
             return Ok(result);
         }
+
+        [HttpGet("isInvite")]
+        public async Task<IActionResult> IsInvite([FromQuery] int builderID , [FromQuery] int postID)
+        {
+            var result = await postInviteService.isInvite(builderID,postID);
+            return Ok(result);
+        }
+
+
     }
 }

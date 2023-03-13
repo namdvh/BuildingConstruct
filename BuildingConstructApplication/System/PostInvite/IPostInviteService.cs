@@ -15,6 +15,8 @@ namespace Application.System.PostInvite
     {
         Task<BasePagination<List<PostInviteDTO>>> GetAll(PaginationFilter filter,Guid UserID);
 
+        Task<BaseResponse<bool>> isInvite(int builderID, int postID);
+
         Task<BaseResponse<string>> Create(CreatePostIniviteRequest requests);
 
         Task<BaseResponse<string>> Update(int id);

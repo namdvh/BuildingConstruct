@@ -1,13 +1,10 @@
-﻿using ViewModels.Pagination;
+﻿using Data.DataContext;
+using Data.Enum;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
+using ViewModels.Pagination;
 using ViewModels.PostInvite;
 using ViewModels.Response;
-using System.Linq.Dynamic.Core;
-using Data.DataContext;
-using Data.Entities;
-using Data.Enum;
-using ViewModels.Identification;
-using Microsoft.EntityFrameworkCore;
-using static Emgu.CV.Stitching.Stitcher;
 
 namespace Application.System.PostInvite
 {
@@ -135,6 +132,34 @@ namespace Application.System.PostInvite
 
             return response;
 
+        }
+
+        public async Task<BaseResponse<bool>> isInvite(int builderID, int postID)
+        {
+            BaseResponse<bool> response = new();
+
+            var check = await _context.PostInvites.Where(x=>x.BuilderId== builderID && x.ContractorPostId==postID).FirstOrDefaultAsync();
+
+            if (check != null)
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = true,
+                };
+            }
+            else
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = false,
+                };
+            }
+
+            return response;
         }
 
         public async Task<BaseResponse<string>> Update(int id)
