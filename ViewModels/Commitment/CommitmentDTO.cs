@@ -36,5 +36,7 @@ namespace ViewModels.Commitment
 
         public string? ConstructorAvatar { get; set; }
 
+        public List<CommitmentGroup>? Groups { get; set; }
+
     }
 }
