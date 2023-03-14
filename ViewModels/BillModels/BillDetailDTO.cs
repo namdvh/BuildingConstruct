@@ -29,6 +29,9 @@ namespace ViewModels.BillModels
         public decimal? BillDetailTotalPrice { get; set; }
         public decimal? BillDetailQuantity { get; set; }
         public string? TypeName { get; set; }
+        public string? ColorName { get; set; }
+        public string? SizeName { get; set; }
+        public string? OtherName { get; set; }
         public int? TypeId { get; set; }
         public string? Unit { get; set; }
         public int? CartId { get; set; }

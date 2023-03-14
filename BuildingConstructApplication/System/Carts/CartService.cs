@@ -340,6 +340,9 @@ namespace Application.System.Carts
                         Color=item.Color.Name,
                         Size=item.Size.Name,
                         Other=item.Other.Name,
+                        ColorID=item.ColorId,
+                        SizeID=item.SizeID,
+                        OtherID=item.OtherID,
                     };
                     types.Add(tmp);
                 }

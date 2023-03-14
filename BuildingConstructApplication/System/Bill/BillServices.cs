@@ -392,13 +392,23 @@ namespace Application.System.Bill
                 .Include(x => x.Bills)
                     .ThenInclude(x => x.Contractor)
                 .Include(x => x.ProductTypes)
+                    .ThenInclude(x=>x.Color)
+                 .Include(x => x.ProductTypes)
+                    .ThenInclude(x => x.Size)
+                 .Include(x => x.ProductTypes)
+                    .ThenInclude(x => x.Other)
                 .Where(x => x.BillID == id)
             .ToList();
 
             foreach (var item in rs)
             {
                 List<CartProductType> types = new();
-                var listType = _context.ProductTypes.Where(x => x.ProductID == item.ProductID).ToList();
+                var listType = _context.ProductTypes
+                    .Include(x=>x.Color)
+                    .Include(x=>x.Size)
+                    .Include(x=>x.Other)
+                    
+                    .Where(x => x.ProductID == item.ProductID).ToList();
 
                 if (listType.Any())
                 {
@@ -409,6 +419,13 @@ namespace Application.System.Bill
                             Id = type.Id,
                             TypeName = type.Name,
                             Quantity = type.Quantity,
+                            Color=type.Color.Name,
+                            Size=type.Color.Name,
+                            Other=type.Color.Name,
+                            ColorID=type.ColorId,
+                            SizeID=type.SizeID,
+                            OtherID=type.OtherID,
+                            
                         };
                         types.Add(tmp);
                     }
@@ -432,6 +449,9 @@ namespace Application.System.Bill
                     BillDetailTotalPrice = item.Price,
                     TypeId = item.ProductTypeId,
                     TypeName = item.ProductTypes?.Name,
+                    ColorName= item.ProductTypes?.Color.Name,
+                    SizeName= item.ProductTypes?.Size.Name,
+                    OtherName= item.ProductTypes?.Other.Name,
                     Unit = item.Products.Unit,
                     ProductType = listType.Any() ? types : null,
                     CartId = item.Bills.Status == Status.CANCEL ? cartID : null
