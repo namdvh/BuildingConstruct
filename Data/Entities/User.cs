@@ -48,6 +48,6 @@ namespace Data.Entities
 
         public List<Cart> Carts { get; set; }
         public List<Save>? Saves { get; set; }
-
+        public List<Payment>? Payments { get; set; }
     }
 }

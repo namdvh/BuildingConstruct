@@ -1,9 +1,12 @@
 ﻿using Application.Library;
+using Data.DataContext;
+using Data.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using ViewModels.Payment;
@@ -13,9 +16,11 @@ namespace Application.System.VnPay
     public class VnPayService : IVnPayService
     {
         private readonly IConfiguration _configuration;
-        public VnPayService(IConfiguration configuration)
+        private readonly BuildingConstructDbContext _context;
+        public VnPayService(IConfiguration configuration, BuildingConstructDbContext context, IHttpContextAccessor accessor)
         {
             _configuration = configuration;
+            _context = context;
         }
         public string CreatePaymentUrl(PaymentInformationModel model, HttpContext context)
         {
@@ -46,11 +51,32 @@ namespace Application.System.VnPay
 
         public PaymentResponseModel PaymentExecute(IQueryCollection collections)
         {
-
             var pay = new VnPayLibrary();
             var response = pay.GetFullResponseData(collections, _configuration["Vnpay:HashSecret"]);
-
             return response;
+
+        }
+        public async Task<string> StoreDB(PaymentRequestDTO response)
+        {
+            var payment = new Payment();
+            payment.UserId = Guid.Parse(response.UserId);
+            payment.PaymentDate = DateTime.Now;
+            payment.ExpireationDate = DateTime.Now.AddMonths(1);
+            payment.Price = response.Amount;
+            payment.TransactionId = response.TransactionId;
+            payment.PaymentId = response.PaymentId;
+            payment.IsRefund = false;
+            payment.VnPayResponseCode = response.VnPayResponseCode;
+            _context.Payments.Add(payment);
+            var rs=_context.SaveChanges();
+            if (rs > 0)
+            {
+                return payment.VnPayResponseCode;
+            }
+            else
+            {
+                return "Failed";
+            }
         }
     }
 }

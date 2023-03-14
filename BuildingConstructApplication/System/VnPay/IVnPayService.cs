@@ -12,5 +12,7 @@ namespace Application.System.VnPay
     {
         string CreatePaymentUrl(PaymentInformationModel model, HttpContext context);
         PaymentResponseModel PaymentExecute(IQueryCollection collections);
+        Task<string> StoreDB(PaymentRequestDTO response);
+
     }
 }

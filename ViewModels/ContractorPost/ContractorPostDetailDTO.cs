@@ -41,6 +41,7 @@ namespace ViewModels.ContractorPost
         public string? EndTime { get; set; }
 
         public bool Accommodation { get; set; }
+        public int ViewCount { get; set; }
 
         public bool Transport { get; set; }
     }

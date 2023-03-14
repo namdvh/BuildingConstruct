@@ -243,7 +243,7 @@ namespace Application.System.Users
                             Role = roleName,
                             BuilderID = us.BuilderId,
                             ContractorID = us.ContractorId,
-                            StoreID = us.MaterialStoreID
+                            StoreID = us.MaterialStoreID,
                         };
 
                     }
@@ -411,7 +411,7 @@ namespace Application.System.Users
             var accesstoken = new JwtSecurityToken(_config["Tokens:Issuer"],
                 _config["Tokens:Issuer"],
                 claims,
-                expires: DateTime.Now.AddMinutes(30),
+                expires: DateTime.Now.AddDays(1),
                 signingCredentials: creds);
             var refreshtoken = new JwtSecurityToken(_config["Tokens:Issuer"],
                 _config["Tokens:Issuer"],

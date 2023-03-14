@@ -53,6 +53,7 @@ namespace Data.DataContext
             modelBuilder.ApplyConfiguration(new WorkerConstructionTypeConfiguration());
             modelBuilder.ApplyConfiguration(new ProductTypeConfigurations());
             modelBuilder.ApplyConfiguration(new PostInviteConfiguration());
+            modelBuilder.ApplyConfiguration(new PaymentConfiguration());
             modelBuilder.ApplyConfiguration(new OtherConfiguration());
             modelBuilder.ApplyConfiguration(new SizeConfiguration());
             modelBuilder.ApplyConfiguration(new ColorConfiguration());
@@ -89,6 +90,7 @@ namespace Data.DataContext
         public DbSet<Notification> Notifcations { get; set; }    
         public DbSet<ProductType> ProductTypes { get; set; }    
         public DbSet<PostInvite> PostInvites { get; set; }    
+        public DbSet<Payment> Payments { get; set; }    
 
         public DbSet<Color> Colors { get; set; }    
         public DbSet<ProductSize> Sizes { get; set; }    
