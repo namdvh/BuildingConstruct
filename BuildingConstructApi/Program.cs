@@ -140,7 +140,9 @@ builder.Services.AddAuthentication(opt =>
 builder.Services.AddDbContext<BuildingConstructDbContext>(options => options.
            UseSqlServer(builder.Configuration.GetConnectionString(SystemsConstant.MainConnectionString)));
 builder.Services.AddIdentity<User, Role>(
-    options => { options.Password.RequireUppercase = false;
+    options =>
+    {
+        options.Password.RequireUppercase = false;
         options.Password.RequireLowercase = false;
         options.Password.RequireNonAlphanumeric = false;
         options.Password.RequireDigit = false;
@@ -148,7 +150,7 @@ builder.Services.AddIdentity<User, Role>(
     ).AddEntityFrameworkStores<BuildingConstructDbContext>().AddDefaultTokenProviders();
 builder.Services.AddScoped<UserManager<User>, UserManager<User>>();
 builder.Services.AddScoped<SignInManager<User>, SignInManager<User>>();
-    builder.Services.AddScoped<IUserConnectionManager, UserConnectionManager>();
+builder.Services.AddScoped<IUserConnectionManager, UserConnectionManager>();
 builder.Services.AddScoped<RoleManager<Role>, RoleManager<Role>>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITypeService, TypeService>();
@@ -178,6 +180,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseCors(x => x
+        .WithOrigins("https://localhost:4000")
         .AllowAnyMethod()
         .AllowAnyHeader()
         .SetIsOriginAllowed(origin => true) // allow any origin
@@ -187,7 +190,7 @@ app.UseAuthorization();
 app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapControllers(); 
+    endpoints.MapControllers();
     endpoints.MapHub<NotificationUserHub>("/NotificationUserHub");
 });
 

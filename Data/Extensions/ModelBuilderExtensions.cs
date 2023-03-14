@@ -61,6 +61,32 @@ namespace Data.Extensions
                 Name = "Công trình công cộng"
             });
 
+            //ADMIN
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63e9"),
+                Email = "admin15@gmail.com",
+                UserName = "admin15@gmail.com",
+                PasswordHash = hasher.HashPassword(null, "Hoainam@123"),
+                SecurityStamp = string.Empty,
+                FirstName = "Admin",
+                LastName = "Admin",
+                DOB = new DateTime(2001, 4, 30),
+                PhoneNumber = "0909090909",
+                Gender = Enum.Gender.MALE,
+                Token = "xxx",
+                Status = Enum.Status.Level1,
+                Avatar = "https://i1-giaitri.vnecdn.net/2013/08/15/DK-02756-1376528749.jpg?w=680&h=0&q=100&dpr=1&fit=crop&s=mX89l0q4HQgntQ5wJesOcw",
+                BuilderId = 1,
+                Address = "18, Phuoc Thien, Nhon Trach, Dong Nai"
+            });
+            modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
+            {
+                RoleId = Guid.Parse("52ec6e78-6732-43bf-adab-9cfa2e5da268"),
+                UserId = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63e9"),
+            });
+
+
 
 
 
