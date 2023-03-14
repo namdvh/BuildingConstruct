@@ -89,6 +89,7 @@ namespace Data.DataContext
         public DbSet<Notification> Notifcations { get; set; }    
         public DbSet<ProductType> ProductTypes { get; set; }    
         public DbSet<PostInvite> PostInvites { get; set; }    
+
         public DbSet<Color> Colors { get; set; }    
         public DbSet<ProductSize> Sizes { get; set; }    
         public DbSet<Other> Others { get; set; }    

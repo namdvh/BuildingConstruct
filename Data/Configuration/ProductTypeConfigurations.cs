@@ -19,7 +19,7 @@ namespace Data.Configuration
 
             builder.HasOne(x => x.Color).WithMany(x => x.ProductTypes).HasForeignKey(x => x.ColorId);
             builder.HasOne(x => x.Size).WithMany(x => x.ProductTypes).HasForeignKey(x => x.SizeID);
-            builder.HasOne(x => x.Other).WithMany(x => x.ProductTypes).HasForeignKey(x => x.ColorId);
+            builder.HasOne(x => x.Other).WithMany(x => x.ProductTypes).HasForeignKey(x => x.OtherID);
         }
 
     }

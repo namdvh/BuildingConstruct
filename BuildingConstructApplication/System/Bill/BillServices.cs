@@ -10,6 +10,7 @@ using ViewModels.BillModels;
 using ViewModels.Carts;
 using ViewModels.Pagination;
 using ViewModels.Response;
+using ZedGraph;
 
 namespace Application.System.Bill
 {
@@ -419,10 +420,10 @@ namespace Application.System.Bill
                             Id = type.Id,
                             TypeName = type.Name,
                             Quantity = type.Quantity,
-                            Color=type.Color.Name,
-                            Size=type.Color.Name,
-                            Other=type.Color.Name,
-                            ColorID=type.ColorId,
+                            Color = type.Color?.Name == null ? null : type.Color.Name,
+                            Size = type.Size?.Name == null ? null : type.Size.Name,
+                            Other = type.Other?.Name == null ? null : type.Other.Name,
+                            ColorID =type.ColorId,
                             SizeID=type.SizeID,
                             OtherID=type.OtherID,
                             
@@ -449,9 +450,15 @@ namespace Application.System.Bill
                     BillDetailTotalPrice = item.Price,
                     TypeId = item.ProductTypeId,
                     TypeName = item.ProductTypes?.Name,
-                    ColorName= item.ProductTypes?.Color.Name,
-                    SizeName= item.ProductTypes?.Size.Name,
-                    OtherName= item.ProductTypes?.Other.Name,
+                    //ColorName= item.ProductTypes?.Color.Name,
+                    //SizeName= item.ProductTypes?.Size.Name,
+                    //OtherName= item.ProductTypes?.Other.Name,
+                    
+                    ColorName = item.ProductTypes?.Color?.Name != null ? item.ProductTypes.Color.Name : null,
+                    SizeName = item.ProductTypes?.Size?.Name != null ? item.ProductTypes.Size.Name : null,
+                    OtherName = item.ProductTypes?.Other?.Name != null ? item.ProductTypes.Other.Name : null,
+
+
                     Unit = item.Products.Unit,
                     ProductType = listType.Any() ? types : null,
                     CartId = item.Bills.Status == Status.CANCEL ? cartID : null

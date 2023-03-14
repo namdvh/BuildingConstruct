@@ -78,6 +78,7 @@ namespace Application.System.MaterialStores
                         await _context.SaveChangesAsync();
                         productType.ColorId = tmpColor.Id;
                     }
+                    
 
                     if (!string.IsNullOrEmpty(item.Size))
                     {
@@ -90,6 +91,7 @@ namespace Application.System.MaterialStores
                         await _context.SaveChangesAsync();
                         productType.SizeID = tmpSize.Id;
                     }
+                    
 
                     if (!string.IsNullOrEmpty(item.Other))
                     {
@@ -102,6 +104,7 @@ namespace Application.System.MaterialStores
                         await _context.SaveChangesAsync();
                         productType.OtherID = tmpOther.Id;
                     }
+                    
                     list.Add(productType);
 
                 }
@@ -496,6 +499,9 @@ namespace Application.System.MaterialStores
             }
             return list;
         }
+
+
+
         public async Task<List<ProductTypeDTO>> GetProductType(List<ProductType> productType)
         {
             List<ProductTypeDTO> list = new();
@@ -511,9 +517,12 @@ namespace Application.System.MaterialStores
                 final.Id = results.Id;
                 final.TypeName = results.Name;
                 final.Quantity = results.Quantity;
-                final.Other = results.Other.Name;
-                final.Size = results.Size.Name;
-                final.Color = results.Color.Name;
+                final.Other = results.Other?.Name ==null ? null : results.Other.Name;
+                final.Size = results.Size?.Name == null ? null : results.Size.Name;
+                final.Color = results.Color?.Name == null ? null : results.Color.Name;
+                final.ColorId = results.ColorId;
+                final.SizeId = results.SizeID;
+                final.OtherId = results.OtherID;
                 list.Add(final);
             }
             return list;

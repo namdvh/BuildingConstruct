@@ -1353,6 +1353,25 @@ namespace Data.Extensions
                 NavigateId = 1
             });
 
+            modelBuilder.Entity<Color>().HasData(new Color
+            {
+               Id=1,
+               Name="No Color"
+            });
+
+            modelBuilder.Entity<ProductSize>().HasData(new ProductSize
+            {
+                Id = 1,
+                Name = "No Size"
+            });
+
+            modelBuilder.Entity<Other>().HasData(new Other
+            {
+                Id = 1,
+                Name = "No Other"
+            });
+
+
         }
     }
 }

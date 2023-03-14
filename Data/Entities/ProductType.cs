@@ -13,6 +13,7 @@
 
         public int? ColorId { get; set; }
         public Color? Color { get; set; }
+
         public int? SizeID { get; set; }
         public ProductSize? Size { get; set; }
 
