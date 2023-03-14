@@ -151,7 +151,7 @@ namespace Application.System.ContractorPosts
         {
             var rs = await _context.ContractorPosts.FirstOrDefaultAsync(x => x.Id == cPostid);
             BaseResponse<ContractorPostDetailDTO> response = new();
-
+            var userId = _accessor.HttpContext.User.FindFirst("UserID").Value.ToString();
 
             if (rs == null)
             {
@@ -161,13 +161,16 @@ namespace Application.System.ContractorPosts
                 return response;
             }
             var count = await _context.ContractorPosts.Where(x => x.Id == cPostid).ToListAsync();
-            foreach (var item in count)
+            if (rs.CreateBy.ToString().Equals(userId))
             {
-                int view = item.ViewCount;
-                view++;
-                item.ViewCount = view;
-                _context.ContractorPosts.Update(item);
-                await _context.SaveChangesAsync();
+                foreach (var item in count)
+                {
+                    int view = item.ViewCount;
+                    view++;
+                    item.ViewCount = view;
+                    _context.ContractorPosts.Update(item);
+                    await _context.SaveChangesAsync();
+                }
             }
             ContractorPostDetailDTO postDetail = await MapToDetailDTO(rs);
             response.Data = postDetail;
@@ -217,6 +220,7 @@ namespace Application.System.ContractorPosts
                 Benefit = post.Benefit,
                 Required = post.Required,
                 StarDate = post.StarDate,
+                ViewCount=post.ViewCount,
                 EndDate = post.EndDate,
                 LastModifiedAt = post.LastModifiedAt,
                 NumberPeople = post.NumberPeople,
