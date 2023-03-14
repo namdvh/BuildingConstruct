@@ -502,9 +502,9 @@ namespace Application.System.MaterialStores
             foreach (var c in productType)
             {
                 var results = await _context.ProductTypes
-                    .Include(x=>x.Color)
-                    .Include(x=>x.Size)
-                    .Include(x=>x.Other)
+                    .Include(x => x.Color)
+                    .Include(x => x.Size)
+                    .Include(x => x.Other)
                     .Where(x => x.Id == c.Id)
                     .SingleOrDefaultAsync();
                 var final = new ProductTypeDTO();
@@ -594,6 +594,66 @@ namespace Application.System.MaterialStores
                     var type = _context.ProductTypes.AsNoTracking().FirstOrDefault(x => x.Id == i.Id);
                     if (type != null)
                     {
+                        if (type.ColorId != null)
+                        {
+                            var colorDeleted = await _context.Colors.Where(x => x.Id == type.ColorId).FirstOrDefaultAsync();
+                            if (colorDeleted != null)
+                            {
+                                colorDeleted.Name = i.Name;
+                                _context.Colors.Update(colorDeleted);
+                                await _context.SaveChangesAsync();
+                            }
+
+                        }
+                        if (type.OtherID != null)
+                        {
+                            var OtherDeleted = await _context.Others.Where(x => x.Id == type.OtherID).FirstOrDefaultAsync();
+                            if (OtherDeleted != null)
+                            {
+                                _context.Others.Remove(OtherDeleted);
+                                await _context.SaveChangesAsync();
+                            }
+
+                            if (!string.IsNullOrEmpty(i.Other))
+                            {
+
+                                Other newOther = new()
+                                {
+                                    LastModifiedAt = DateTime.Now,
+                                    Name = i.Other
+                                };
+
+                                await _context.Others.AddAsync(newOther);
+                                await _context.SaveChangesAsync();
+
+                                type.OtherID = newOther.Id;
+                            }
+                        }
+                        if (type.SizeID != null)
+                        {
+                            var sizeDeleted = await _context.Sizes.Where(x => x.Id == type.SizeID).FirstOrDefaultAsync();
+                            if (sizeDeleted != null)
+                            {
+                                _context.Sizes.Remove(sizeDeleted);
+                                await _context.SaveChangesAsync();
+                            }
+
+                            if (!string.IsNullOrEmpty(i.Size))
+                            {
+
+                                ProductSize newSize = new()
+                                {
+                                    LastModifiedAt = DateTime.Now,
+                                    Name = i.Size
+                                };
+
+                                await _context.Sizes.AddAsync(newSize);
+                                await _context.SaveChangesAsync();
+
+                                type.SizeID = newSize.Id;
+                            }
+                        }
+
                         type.ProductID = productId;
                         type.Name = i.Name;
                         type.Quantity = i.Quantity;
