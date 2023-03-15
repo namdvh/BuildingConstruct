@@ -708,7 +708,7 @@ namespace Data.Extensions
                 ProductID = 7,
                 SizeID=2,
                 ColorId=1,
-                OtherID=1
+                OtherID=1,
                 Quantity = 5,
                 Status=Enum.Status.SUCCESS
             });

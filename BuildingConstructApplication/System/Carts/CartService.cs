@@ -327,7 +327,7 @@ namespace Application.System.Carts
                 .Include(x=>x.Color)
                 .Include(x=>x.Size)
                 .Include(x=>x.Other)
-                .Where(x => x.ProductID == cart.ProductID).ToList();
+                .Where(x => x.ProductID == cart.ProductID && x.Status==Status.SUCCESS).ToList();
             List<CartProductType> types = new();
 
             if (listType.Any())

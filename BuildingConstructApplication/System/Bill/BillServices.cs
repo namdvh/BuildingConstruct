@@ -409,7 +409,7 @@ namespace Application.System.Bill
                     .Include(x=>x.Size)
                     .Include(x=>x.Other)
                     
-                    .Where(x => x.ProductID == item.ProductID).ToList();
+                    .Where(x => x.ProductID == item.ProductID && x.Status == Status.SUCCESS).ToList();
 
                 if (listType.Any())
                 {

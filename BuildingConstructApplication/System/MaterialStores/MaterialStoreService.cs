@@ -528,7 +528,7 @@ namespace Application.System.MaterialStores
                     .Include(x => x.Color)
                     .Include(x => x.Size)
                     .Include(x => x.Other)
-                    .Where(x => x.Id == c.Id)
+                    .Where(x => x.Id == c.Id && x.Status==Status.SUCCESS )
                     .SingleOrDefaultAsync();
                 var final = new ProductTypeDTO();
                 final.Id = results.Id;
