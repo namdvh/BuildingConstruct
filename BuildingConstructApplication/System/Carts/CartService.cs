@@ -336,7 +336,7 @@ namespace Application.System.Carts
                     CartProductType tmp = new()
                     {
                         Id = item.Id,
-                        TypeName = item.Name,
+                        //TypeName = item.Name,
                         Quantity = item.Quantity,
                         Color=item.Color?.Name == null ? null : item.Color.Name,
                         Size=item.Size?.Name == null ? null : item.Size.Name,
@@ -361,7 +361,7 @@ namespace Application.System.Carts
                 UnitInStock = cart.Products.UnitInStock,
                 UnitPrice = cart.Products.UnitPrice,
                 Unit=cart.Products.Unit,
-                TypeName = cart.ProductType?.Name != null ? cart.ProductType.Name : null,
+                //TypeName = cart.ProductType?.Name != null ? cart.ProductType.Name : null,
                 Color = cart.ProductType?.Color?.Name != null ? cart.ProductType.Color.Name : null,
                 Size = cart.ProductType?.Size?.Name != null ? cart.ProductType.Size.Name : null,
                 Other = cart.ProductType?.Other?.Name != null ? cart.ProductType.Other.Name : null,

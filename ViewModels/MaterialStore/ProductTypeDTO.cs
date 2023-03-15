@@ -9,7 +9,7 @@ namespace ViewModels.MaterialStore
     public class ProductTypeDTO
     {
         public int? Id { get; set; }
-        public string TypeName { get; set; }
+        public string? TypeName { get; set; }
         public int Quantity { get; set; }
 
 

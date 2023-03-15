@@ -1114,6 +1114,7 @@ namespace Application.System.Users
         {
             BasePagination<List<UserDetailDTO>> response;
             List<UserDetailDTO> ls = new();
+            List<int> contractorIDFromDB = new();
             var orderBy = filter._orderBy.ToString();
             int totalRecord;
             orderBy = orderBy switch
@@ -1146,6 +1147,14 @@ namespace Application.System.Users
             var data = query.Skip((filter.PageNumber - 1) * filter.PageSize)
                      .Take(filter.PageSize).ToList();
 
+
+            if (!data.Any())
+            {
+                contractorIDFromDB = await _context.Users.Include(x => x.Contractor).Where(x => x.ContractorId != null).Select(x => (int)x.ContractorId).ToListAsync();
+
+            }
+
+
             if (filter.FilterRequest != null)
             {
                 totalRecord = data.Count;
@@ -1155,7 +1164,7 @@ namespace Application.System.Users
                 totalRecord = await _context.AppliedPosts.CountAsync();
             }
 
-            if (!data.Any())
+            if (!data.Any()&&!contractorIDFromDB.Any())
             {
                 response = new()
                 {
@@ -1180,10 +1189,25 @@ namespace Application.System.Users
                     TotalRecords = totalRecord
                 };
 
-                foreach (var item in data)
+
+                if (data.Any())
                 {
-                    ls.Add(MapToDetailDTO(item.post));
+
+                    foreach (var item in data)
+                    {
+                        ls.Add(MapToDetailDTO(item.post));
+                    }
                 }
+                else
+                {
+                    foreach (var item in contractorIDFromDB)
+                    {
+                        ls.Add(MapToDetailDTO(item));
+                    }
+                }
+
+
+            
 
 
 
@@ -1284,7 +1308,7 @@ namespace Application.System.Users
             }
 
 
-            if (!data.Any())
+            if (!data.Any() && !builderIDFromDB.Any())
             {
                 response = new()
                 {
@@ -1445,7 +1469,7 @@ namespace Application.System.Users
                 totalRecord = await _context.Bills.CountAsync();
             }
 
-            if (!data.Any())
+            if (!data.Any() && !storeIDFromDB.Any())
             {
                 response = new()
                 {
@@ -1470,7 +1494,7 @@ namespace Application.System.Users
                     TotalRecords = totalRecord
                 };
 
-                if (!data.Any())
+                if (data.Any())
                 {
                     foreach (var item in data)
                     {

@@ -64,7 +64,7 @@ namespace Application.System.MaterialStores
                     var productType = new ProductType();
                     productType.ProductID = products.Id;
                     productType.Quantity = item.Quantity;
-                    productType.Name = item.TypeName;
+                    //productType.Name = item.TypeName;
 
 
                     if (!string.IsNullOrEmpty(item.Color))
@@ -515,7 +515,7 @@ namespace Application.System.MaterialStores
                     .SingleOrDefaultAsync();
                 var final = new ProductTypeDTO();
                 final.Id = results.Id;
-                final.TypeName = results.Name;
+                //final.TypeName = results.Name;
                 final.Quantity = results.Quantity;
                 final.Other = results.Other?.Name ==null ? null : results.Other.Name;
                 final.Size = results.Size?.Name == null ? null : results.Size.Name;
@@ -608,7 +608,7 @@ namespace Application.System.MaterialStores
                             var colorDeleted = await _context.Colors.Where(x => x.Id == type.ColorId).FirstOrDefaultAsync();
                             if (colorDeleted != null)
                             {
-                                colorDeleted.Name = i.Name;
+                                colorDeleted.Name = i.Color;
                                 _context.Colors.Update(colorDeleted);
                                 await _context.SaveChangesAsync();
                             }
@@ -664,7 +664,7 @@ namespace Application.System.MaterialStores
                         }
 
                         type.ProductID = productId;
-                        type.Name = i.Name;
+                        //type.Name = i.Name;
                         type.Quantity = i.Quantity;
                         _context.Entry<ProductType>(type).State = EntityState.Modified;
                     }
@@ -672,7 +672,7 @@ namespace Application.System.MaterialStores
                     {
                         var productType = new ProductType();
                         productType.ProductID = products.Id;
-                        productType.Name = i.Name;
+                        //productType.Name = i.Name;
                         productType.Quantity = i.Quantity;
                         _context.Add(productType);
                     }

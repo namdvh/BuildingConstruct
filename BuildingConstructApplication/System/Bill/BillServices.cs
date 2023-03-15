@@ -418,7 +418,7 @@ namespace Application.System.Bill
                         CartProductType tmp = new()
                         {
                             Id = type.Id,
-                            TypeName = type.Name,
+                            //TypeName = type.Name,
                             Quantity = type.Quantity,
                             Color = type.Color?.Name == null ? null : type.Color.Name,
                             Size = type.Size?.Name == null ? null : type.Size.Name,
@@ -449,7 +449,7 @@ namespace Application.System.Bill
                     BillDetailQuantity = item.Quantity,
                     BillDetailTotalPrice = item.Price,
                     TypeId = item.ProductTypeId,
-                    TypeName = item.ProductTypes?.Name,
+                    //TypeName = item.ProductTypes?.Name,
                     //ColorName= item.ProductTypes?.Color.Name,
                     //SizeName= item.ProductTypes?.Size.Name,
                     //OtherName= item.ProductTypes?.Other.Name,
