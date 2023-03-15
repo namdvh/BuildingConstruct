@@ -1259,25 +1259,25 @@ namespace Data.Extensions
                
             });
 
-            modelBuilder.Entity<Other>().HasData(new Other
-            {
-                Id = 7,
-                Name = "Ngoại thất",
+            //modelBuilder.Entity<Other>().HasData(new Other
+            //{
+            //    Id = 7,
+            //    Name = "Ngoại thất",
 
-            });
+            //});
 
-            modelBuilder.Entity<Other>().HasData(new Other
-            {
-                Id = 8,
-                Name = "Nội thất",
+            //modelBuilder.Entity<Other>().HasData(new Other
+            //{
+            //    Id = 8,
+            //    Name = "Nội thất",
 
-            });
+            //});
 
             modelBuilder.Entity<ProductType>().HasData(new ProductType
             {
                 Id = 60,
                 SizeID=7,
-                OtherID=7,
+               
                 ProductID=20,
                 Quantity=5
 
@@ -1286,30 +1286,12 @@ namespace Data.Extensions
             {
                 Id = 61,
                 SizeID = 7,
-                OtherID = 8,
+           
                 ProductID = 20,
                 Quantity = 3
 
             });
-            modelBuilder.Entity<ProductType>().HasData(new ProductType
-            {
-                Id = 62,
-                SizeID = 8,
-                OtherID = 7,
-                ProductID = 20,
-                Quantity = 4
-
-            });
-
-            modelBuilder.Entity<ProductType>().HasData(new ProductType
-            {
-                Id = 63,
-                SizeID = 8,
-                OtherID = 8,
-                ProductID = 20,
-                Quantity = 4
-
-            });
+          
 
 
 
