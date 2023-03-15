@@ -420,14 +420,15 @@ namespace Application.System.Bill
                             Id = type.Id,
                             //TypeName = type.Name,
                             Quantity = type.Quantity,
-                            Color = type.Color?.Name == null ? null : type.Color.Name,
-                            Size = type.Size?.Name == null ? null : type.Size.Name,
-                            Other = type.Other?.Name == null ? null : type.Other.Name,
-                            ColorID =type.ColorId,
-                            SizeID=type.SizeID,
-                            OtherID=type.OtherID,
-                            
-                        };
+                            Color = type.Color?.Name == "No Color" ? null : type.Color.Name,
+                            Size = type.Size?.Name == "No Size" ? null : type.Size.Name,
+                            Other = type.Other?.Name == "No Other" ? null : type.Other.Name,
+                            ColorID =type.ColorId == 1 ? null : type.ColorId,
+                            SizeID=type.SizeID == 1 ? null : type.SizeID,
+                            OtherID=type.OtherID == 1 ? null : type.OtherID,
+
+
+                    };
                         types.Add(tmp);
                     }
                 }
@@ -454,9 +455,9 @@ namespace Application.System.Bill
                     //SizeName= item.ProductTypes?.Size.Name,
                     //OtherName= item.ProductTypes?.Other.Name,
                     
-                    ColorName = item.ProductTypes?.Color?.Name != null ? item.ProductTypes.Color.Name : null,
-                    SizeName = item.ProductTypes?.Size?.Name != null ? item.ProductTypes.Size.Name : null,
-                    OtherName = item.ProductTypes?.Other?.Name != null ? item.ProductTypes.Other.Name : null,
+                    ColorName = item.ProductTypes?.Color?.Name != "No Color" ? item.ProductTypes.Color.Name : null,
+                    SizeName = item.ProductTypes?.Size?.Name != "No Size" ? item.ProductTypes.Size.Name : null,
+                    OtherName = item.ProductTypes?.Other?.Name != "No Other" ? item.ProductTypes.Other.Name : null,
 
 
                     Unit = item.Products.Unit,

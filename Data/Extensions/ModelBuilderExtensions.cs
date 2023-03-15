@@ -707,7 +707,10 @@ namespace Data.Extensions
                 //Name = "Màu vàng",
                 ProductID = 7,
                 SizeID=2,
+                ColorId=1,
+                OtherID=1
                 Quantity = 5,
+                Status=Enum.Status.SUCCESS
             });
 
             modelBuilder.Entity<ProductType>().HasData(new ProductType
@@ -716,7 +719,10 @@ namespace Data.Extensions
                 //Name = "Màu vàng",
                 ProductID = 7,
                 SizeID = 3,
+                OtherID=1,
+                ColorId=1,
                 Quantity = 10,
+                Status = Enum.Status.SUCCESS
             });
 
 
@@ -939,8 +945,10 @@ namespace Data.Extensions
                Id=50,
                ColorId=6,
                SizeID=4,
+               OtherID=1,
                ProductID=34,
-               Quantity=5
+               Quantity=5,
+                Status = Enum.Status.SUCCESS
             });
 
             modelBuilder.Entity<ProductType>().HasData(new ProductType
@@ -948,8 +956,10 @@ namespace Data.Extensions
                 Id = 51,
                 ColorId = 6,
                 SizeID = 5,
+                OtherID=1,
                 ProductID = 34,
-                Quantity = 3
+                Quantity = 3,
+                Status = Enum.Status.SUCCESS
             });
 
             modelBuilder.Entity<ProductType>().HasData(new ProductType
@@ -957,8 +967,10 @@ namespace Data.Extensions
                 Id = 52,
                 ColorId = 7,
                 SizeID = 4,
+                OtherID=1,
                 ProductID = 34,
-                Quantity = 5
+                Quantity = 5,
+                Status = Enum.Status.SUCCESS
             });
 
             modelBuilder.Entity<ProductType>().HasData(new ProductType
@@ -966,8 +978,10 @@ namespace Data.Extensions
                 Id = 53,
                 ColorId = 7,
                 SizeID = 5,
+                OtherID=1,
                 ProductID = 34,
-                Quantity = 5
+                Quantity = 5,
+                Status = Enum.Status.SUCCESS
             });
             //PRODUCT 7
 
@@ -1277,18 +1291,22 @@ namespace Data.Extensions
             {
                 Id = 60,
                 SizeID=7,
-               
+                ColorId=1,
+                OtherID=1,
                 ProductID=20,
-                Quantity=5
+                Quantity=5,
+                Status = Enum.Status.SUCCESS
 
             });
             modelBuilder.Entity<ProductType>().HasData(new ProductType
             {
                 Id = 61,
-                SizeID = 7,
-           
+                SizeID = 8,
+                ColorId=1,
+                OtherID=1,
                 ProductID = 20,
-                Quantity = 3
+                Quantity = 3,
+                Status = Enum.Status.SUCCESS
 
             });
           

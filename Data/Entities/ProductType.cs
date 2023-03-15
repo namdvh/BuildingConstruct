@@ -1,4 +1,6 @@
-﻿namespace Data.Entities
+﻿using Data.Enum;
+
+namespace Data.Entities
 {
     public class ProductType
     {
@@ -19,6 +21,8 @@
 
         public int? OtherID { get; set; }
         public Other? Other { get; set; }
+
+        public Status Status { get; set; }
 
 
 

@@ -9,6 +9,7 @@ using System.Linq.Dynamic.Core;
 using System.Text;
 using Gridify;
 using Microsoft.AspNetCore.Http;
+using ZedGraph;
 
 namespace Application.System.Carts
 {
@@ -338,13 +339,16 @@ namespace Application.System.Carts
                         Id = item.Id,
                         //TypeName = item.Name,
                         Quantity = item.Quantity,
-                        Color=item.Color?.Name == null ? null : item.Color.Name,
-                        Size=item.Size?.Name == null ? null : item.Size.Name,
-                        Other=item.Other?.Name == null ? null : item.Other.Name,
-                        ColorID=item.ColorId,
-                        SizeID=item.SizeID,
-                        OtherID=item.OtherID,
-                    };
+                        Color=item.Color?.Name == "No Color" ? null : item.Color.Name,
+                        Size=item.Size?.Name == "No Size" ? null : item.Size.Name,
+                        Other=item.Other?.Name == "No Other" ? null : item.Other.Name,
+                        ColorID=item.ColorId == 1 ? null : item.ColorId,
+                        SizeID=item.SizeID == 1 ? null : item.SizeID,
+                        OtherID=item.OtherID == 1 ? null : item.OtherID,
+
+          
+
+                };
                     types.Add(tmp);
                 }
             }
@@ -361,10 +365,11 @@ namespace Application.System.Carts
                 UnitInStock = cart.Products.UnitInStock,
                 UnitPrice = cart.Products.UnitPrice,
                 Unit=cart.Products.Unit,
+                IsDisable=cart.ProductType?.Status==Status.CANCEL ? true : false,
                 //TypeName = cart.ProductType?.Name != null ? cart.ProductType.Name : null,
-                Color = cart.ProductType?.Color?.Name != null ? cart.ProductType.Color.Name : null,
-                Size = cart.ProductType?.Size?.Name != null ? cart.ProductType.Size.Name : null,
-                Other = cart.ProductType?.Other?.Name != null ? cart.ProductType.Other.Name : null,
+                Color = cart.ProductType?.Color?.Name != "No Color" ? cart.ProductType.Color.Name : null,
+                Size = cart.ProductType?.Size?.Name != "No Size" ? cart.ProductType.Size.Name : null,
+                Other = cart.ProductType?.Other?.Name != "No Other" ? cart.ProductType.Other.Name : null,
                 TypeID = cart.ProductType?.Id != null ? cart.ProductType.Id : null,
                 ProductType = listType.Any() ? types : null,
             };
