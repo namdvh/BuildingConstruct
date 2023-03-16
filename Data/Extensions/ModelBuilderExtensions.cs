@@ -118,6 +118,7 @@ namespace Data.Extensions
             {
                 Id = 1,
                 CreateBy=Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d9"),
+                TypeID= Guid.Parse("4ace8fcb-95eb-48c0-9deb-240e8b4e10e0"),
                 Place=Enum.Place._60 
             }) ;
 
@@ -163,6 +164,8 @@ namespace Data.Extensions
             {
                 Id = 2,
                 CreateBy = Guid.Parse("d39ae0a6-9b2d-4421-be4a-cc294cec054f"),
+                TypeID = Guid.Parse("bd880489-5c76-4854-93ab-66e3a541bf24"),
+
                 Place = Enum.Place._61
             });
 
@@ -205,6 +208,7 @@ namespace Data.Extensions
             {
                 Id = 3,
                 CreateBy = Guid.Parse("d91f9ece-25a7-4dc6-adde-186b12c04d56"),
+                TypeID = Guid.Parse("ce9fa65b-d005-46b6-953e-e6462a59cfb3"),
                 Place = Enum.Place._61
             });
 
