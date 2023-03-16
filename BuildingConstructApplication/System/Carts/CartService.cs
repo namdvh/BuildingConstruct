@@ -27,8 +27,8 @@ namespace Application.System.Carts
             BaseResponse<CartDTO>? response = null;
             Cart cart;
             var existed = await _context.Carts
-                .Include(x=>x.Products)
-                    .ThenInclude(x=>x.ProductTypes)
+                .Include(x => x.Products)
+                    .ThenInclude(x => x.ProductTypes)
                 .Where(x => x.UserID.Equals(userID) && x.ProductID == requests.ProductID && x.TypeID == requests.TypeID).FirstOrDefaultAsync();
 
             if (existed != null)
@@ -38,7 +38,7 @@ namespace Application.System.Carts
                 {
                     var inStockQuanties = await _context.ProductTypes.Where(x => x.Id == existed.TypeID).FirstOrDefaultAsync();
                     var totalInCart = requests.Quantity + existed.Quantity;
-                    if(totalInCart> inStockQuanties.Quantity)
+                    if (totalInCart > inStockQuanties.Quantity)
                     {
                         response = new BaseResponse<CartDTO>
                         {
@@ -84,7 +84,7 @@ namespace Application.System.Carts
                 }
 
 
-              
+
 
                 response = new()
                 {
@@ -180,7 +180,7 @@ namespace Application.System.Carts
                     .ThenInclude(x => x.MaterialStore)
                         .ThenInclude(x => x.User)
                 .Include(x => x.ProductType)
-                    .ThenInclude(x=>x.Color)
+                    .ThenInclude(x => x.Color)
                  .Include(x => x.ProductType)
                     .ThenInclude(x => x.Size)
                  .Include(x => x.ProductType)
@@ -320,17 +320,58 @@ namespace Application.System.Carts
 
             foreach (var item in requests)
             {
-                var cart = new Cart()
+                var product = await _context.Products.Where(x => x.Id == item.ProductID).FirstOrDefaultAsync();
+
+                if (string.IsNullOrEmpty(item.TypeID.ToString()))
                 {
-                    ProductID = item.ProductID,
-                    Quantity = item.Quantity,
-                    TypeID = item.TypeID,
-                    UserID = userID
-                };
-                await _context.Carts.AddAsync(cart);
-                rs = await _context.SaveChangesAsync();
-
-
+                    var quanties = await _context.ProductTypes.Include(x => x.Products).Where(x => x.Id == item.TypeID).FirstOrDefaultAsync();
+                    if (item.Quantity > quanties.Quantity)
+                    {
+                        response = new()
+                        {
+                            Code = BaseCode.ERROR,
+                            Message = quanties.Products.Name + "không có đủ số lượng"
+                        };
+                        return response;
+                    }
+                    else
+                    {
+                        var cart = new Cart()
+                        {
+                            ProductID = item.ProductID,
+                            Quantity = item.Quantity,
+                            TypeID = item.TypeID,
+                            UserID = userID
+                        };
+                        await _context.Carts.AddAsync(cart);
+                        rs = await _context.SaveChangesAsync();
+                    }
+                }
+                else
+                {
+                    var quanties = await _context.Products.Where(x => x.Id == item.ProductID).FirstOrDefaultAsync();
+                    if (item.Quantity > quanties.UnitInStock)
+                    {
+                        response = new()
+                        {
+                            Code = BaseCode.ERROR,
+                            Message = quanties.Name + "không có đủ số lượng"
+                        };
+                        return response;
+                    }
+                    else
+                    {
+                        var cart = new Cart()
+                        {
+                            ProductID = item.ProductID,
+                            Quantity = item.Quantity,
+                            TypeID = item.TypeID,
+                            UserID = userID
+                        };
+                        await _context.Carts.AddAsync(cart);
+                        rs = await _context.SaveChangesAsync();
+                    }
+                }
             }
 
             if (rs > 0)
@@ -372,10 +413,10 @@ namespace Application.System.Carts
         private CartDTO MapToDTO(Cart cart)
         {
             var listType = _context.ProductTypes
-                .Include(x=>x.Color)
-                .Include(x=>x.Size)
-                .Include(x=>x.Other)
-                .Where(x => x.ProductID == cart.ProductID && x.Status==Status.SUCCESS).ToList();
+                .Include(x => x.Color)
+                .Include(x => x.Size)
+                .Include(x => x.Other)
+                .Where(x => x.ProductID == cart.ProductID && x.Status == Status.SUCCESS).ToList();
             List<CartProductType> types = new();
 
             if (listType.Any())
@@ -387,14 +428,14 @@ namespace Application.System.Carts
                         Id = item.Id,
                         //TypeName = item.Name,
                         Quantity = item.Quantity,
-                        Color=item.Color?.Name == "No Color" ? null : item.Color.Name,
-                        Size=item.Size?.Name == "No Size" ? null : item.Size.Name,
-                        Other=item.Other?.Name == "No Other" ? null : item.Other.Name,
-                        ColorID=item.ColorId == 1 ? null : item.ColorId,
-                        SizeID=item.SizeID == 1 ? null : item.SizeID,
-                        OtherID=item.OtherID == 1 ? null : item.OtherID,
+                        Color = item.Color?.Name == "No Color" ? null : item.Color.Name,
+                        Size = item.Size?.Name == "No Size" ? null : item.Size.Name,
+                        Other = item.Other?.Name == "No Other" ? null : item.Other.Name,
+                        ColorID = item.ColorId == 1 ? null : item.ColorId,
+                        SizeID = item.SizeID == 1 ? null : item.SizeID,
+                        OtherID = item.OtherID == 1 ? null : item.OtherID,
 
-                };
+                    };
                     types.Add(tmp);
                 }
             }
@@ -410,8 +451,8 @@ namespace Application.System.Carts
                 Quantity = cart.Quantity,
                 UnitInStock = cart.Products.UnitInStock,
                 UnitPrice = cart.Products.UnitPrice,
-                Unit=cart.Products.Unit,
-                IsDisable=cart.ProductType?.Status==Status.CANCEL ? true : false,
+                Unit = cart.Products.Unit,
+                IsDisable = cart.ProductType?.Status == Status.CANCEL ? true : false,
                 //TypeName = cart.ProductType?.Name != null ? cart.ProductType.Name : null,
                 //Color = cart.ProductType?.Color?.Name != "No Color" ? cart.ProductType.Color.Name : null,
                 //Size = cart.ProductType?.Size?.Name != "No Size" ? cart.ProductType.Size.Name : null,
