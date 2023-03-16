@@ -65,6 +65,7 @@ namespace Application.System.MaterialStores
                     var productType = new ProductType();
                     productType.ProductID = products.Id;
                     productType.Quantity = item.Quantity;
+                    productType.Status = Status.SUCCESS; 
                     //productType.Name = item.TypeName;
 
 
