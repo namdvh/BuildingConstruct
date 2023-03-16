@@ -203,6 +203,7 @@ namespace Application.System.Bill
                 bill.TotalPrice = item.TotalPrice;
                 bill.StoreID = item.StoreID;
                 bill.StoreName = store.FirstName + " " + store.LastName;
+                bill.Avatar = store.Avatar;
                 bill.Notes = item.Note;
                 bill.Reason = item.Reason;
                 bill.StartDate = item.StartDate;
