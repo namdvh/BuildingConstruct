@@ -346,8 +346,6 @@ namespace Application.System.Carts
                         SizeID=item.SizeID == 1 ? null : item.SizeID,
                         OtherID=item.OtherID == 1 ? null : item.OtherID,
 
-          
-
                 };
                     types.Add(tmp);
                 }
@@ -367,12 +365,42 @@ namespace Application.System.Carts
                 Unit=cart.Products.Unit,
                 IsDisable=cart.ProductType?.Status==Status.CANCEL ? true : false,
                 //TypeName = cart.ProductType?.Name != null ? cart.ProductType.Name : null,
-                Color = cart.ProductType?.Color?.Name != "No Color" ? cart.ProductType.Color.Name : null,
-                Size = cart.ProductType?.Size?.Name != "No Size" ? cart.ProductType.Size.Name : null,
-                Other = cart.ProductType?.Other?.Name != "No Other" ? cart.ProductType.Other.Name : null,
+                //Color = cart.ProductType?.Color?.Name != "No Color" ? cart.ProductType.Color.Name : null,
+                //Size = cart.ProductType?.Size?.Name != "No Size" ? cart.ProductType.Size.Name : null,
+                //Other = cart.ProductType?.Other?.Name != "No Other" ? cart.ProductType.Other.Name : null,
                 TypeID = cart.ProductType?.Id != null ? cart.ProductType.Id : null,
                 ProductType = listType.Any() ? types : null,
             };
+
+            if (cart.ProductType?.Color?.Name != null)
+            {
+                dto.Color = cart.ProductType?.Color?.Name != "No Color" ? cart.ProductType.Color.Name : null;
+            }
+            else
+            {
+                dto.Color = null;
+            }
+            if (cart.ProductType?.Size?.Name != null)
+            {
+
+                dto.Size = cart.ProductType?.Size?.Name != "No Size" ? cart.ProductType.Size.Name : null;
+            }
+            else
+            {
+                dto.Size = null;
+            }
+            if (cart.ProductType?.Other?.Name != null)
+            {
+
+                dto.Other = cart.ProductType?.Other?.Name != "No Other" ? cart.ProductType.Other.Name : null;
+            }
+            else
+            {
+                dto.Other = null;
+            }
+
+
+
             return dto;
         }
     }
