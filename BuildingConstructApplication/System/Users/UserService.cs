@@ -1255,7 +1255,8 @@ namespace Application.System.Users
                 Status = post.Contractor.User.Status,
                 Phone = post.Contractor.User.PhoneNumber,
                 Contractor = detailContractor,
-                LastModifiedAt=post.Contractor.User.LastModifiedAt
+                LastModifiedAt=post.Contractor.User.LastModifiedAt,
+                UserId=post.Contractor.CreateBy
             };
             return userDetail;
         }
@@ -1416,7 +1417,8 @@ namespace Application.System.Users
                 Status = user.User.Status,
                 Phone = user.User.PhoneNumber,
                 Builder = detailBuilder,
-                LastModifiedAt=user.LastModifiedAt
+                LastModifiedAt=user.LastModifiedAt,
+                UserId=user.User.Id
             };
 
             return userDetail;
@@ -1558,7 +1560,8 @@ namespace Application.System.Users
                 Status = store.User.Status,
                 Phone = store.User.PhoneNumber,
                 DetailMaterialStore = detailMaterial,
-                LastModifiedAt=store.LastModifiedAt
+                LastModifiedAt=store.LastModifiedAt,
+                UserId=store.User.Id
             };
             return userDetail;
 
