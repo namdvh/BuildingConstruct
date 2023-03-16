@@ -26,17 +26,65 @@ namespace Application.System.Carts
         {
             BaseResponse<CartDTO>? response = null;
             Cart cart;
-            var existed = await _context.Carts.Where(x => x.UserID.Equals(userID) && x.ProductID == requests.ProductID && x.TypeID == requests.TypeID).FirstOrDefaultAsync();
+            var existed = await _context.Carts
+                .Include(x=>x.Products)
+                    .ThenInclude(x=>x.ProductTypes)
+                .Where(x => x.UserID.Equals(userID) && x.ProductID == requests.ProductID && x.TypeID == requests.TypeID).FirstOrDefaultAsync();
 
             if (existed != null)
             {
-                var quantity = existed.Quantity;
-                quantity += requests.Quantity;
 
-                existed.Quantity = quantity;
+                if (existed.TypeID != null)
+                {
+                    var inStockQuanties = await _context.ProductTypes.Where(x => x.Id == existed.TypeID).FirstOrDefaultAsync();
+                    var totalInCart = requests.Quantity + existed.Quantity;
+                    if(totalInCart> inStockQuanties.Quantity)
+                    {
+                        response = new BaseResponse<CartDTO>
+                        {
+                            Code = BaseCode.ERROR,
+                            Message = "Sản phẩm không đủ số lượng",
+                        };
+                        return response;
+                    }
+                    else
+                    {
+                        var quantity = existed.Quantity;
+                        quantity += requests.Quantity;
 
-                _context.Carts.Update(existed);
-                await _context.SaveChangesAsync();
+                        existed.Quantity = quantity;
+
+                        _context.Carts.Update(existed);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+                else
+                {
+                    var quanties = existed.Products.UnitInStock;
+                    var totalInCart = requests.Quantity + existed.Quantity;
+                    if (totalInCart > quanties)
+                    {
+                        response = new BaseResponse<CartDTO>
+                        {
+                            Code = BaseCode.ERROR,
+                            Message = "Sản phẩm không đủ số lượng",
+                        };
+                        return response;
+                    }
+                    else
+                    {
+                        var quantity = existed.Quantity;
+                        quantity += requests.Quantity;
+
+                        existed.Quantity = quantity;
+
+                        _context.Carts.Update(existed);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+
+
+              
 
                 response = new()
                 {
