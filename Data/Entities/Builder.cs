@@ -30,6 +30,7 @@ namespace Data.Entities
         public List<PostCommitment>? PostCommitments { get; set; }
         public List<WorkerContructionType>? WorkerContructionTypes { get; set; }
         public List<PostInvite>? PostInvites { get; set; }
+        public List<UserAnswer>? UserAnswers { get; set; }
 
 
     }

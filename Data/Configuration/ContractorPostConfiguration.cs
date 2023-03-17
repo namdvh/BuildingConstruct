@@ -16,6 +16,7 @@ namespace Data.Configuration
             builder.Property(x => x.LastModifiedAt).HasDefaultValueSql("getutcdate()");
 
             builder.HasOne(x => x.Contractor).WithMany(x => x.ContractorPosts).HasForeignKey(x => x.ContractorID);
+            builder.HasMany(x => x.Quizzes).WithOne(x => x.ContractorPost).HasForeignKey(x => x.PostID);
         }
     }
 }

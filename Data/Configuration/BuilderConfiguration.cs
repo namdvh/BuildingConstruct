@@ -26,6 +26,8 @@ namespace Data.Configuration
 
             builder.HasOne(x => x.Type).WithMany(x => x.Builder).HasForeignKey(x => x.TypeID);
 
+            builder.HasMany(x => x.UserAnswers).WithOne(x => x.Builder).HasForeignKey(x => x.BuilderId);
+
 
         }
     }
