@@ -27,5 +27,6 @@ namespace ViewModels.Users
         public int? StoreID { get; set; }
         public int? BuilderID { get; set; }
         public int? ContractorID { get; set; }
+        public bool Premium { get; set; }
     }
 }

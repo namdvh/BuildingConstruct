@@ -221,9 +221,14 @@ namespace Application.System.Users
                             response.Message = "Role Name is null";
                             return response;
                         }
-
                         var roles = await _userService.GetRolesAsync(us);
                         var userDTO = MapToDto(us, roleName);
+                        var premium = await _context.Payments.Where(x => x.UserId.ToString().Equals(us.Id.ToString())).FirstOrDefaultAsync();
+                        bool isPremium = false;
+                        if (premium != null)
+                        {
+                            isPremium = true;
+                        }
                         var token = await GenerateToken(userDTO);
                         us.Token = token.Data.RefreshToken;
                         us.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;
@@ -244,7 +249,8 @@ namespace Application.System.Users
                             BuilderID = us.BuilderId,
                             ContractorID = us.ContractorId,
                             StoreID = us.MaterialStoreID,
-                        };
+                            Premium=isPremium
+                    };
 
                     }
                 }
@@ -581,7 +587,7 @@ namespace Application.System.Users
                     Experience = user.Builder.Experience,
                     Image = user.Builder.Image,
                     ConstructionType = ls,
-                   
+
                 };
 
 
@@ -598,7 +604,7 @@ namespace Application.System.Users
                     Status = user.Status,
                     Phone = user.PhoneNumber,
                     Builder = detailBuilder,
-                    LastModifiedAt=user.LastModifiedAt
+                    LastModifiedAt = user.LastModifiedAt
                 };
 
             }
@@ -626,7 +632,7 @@ namespace Application.System.Users
                     Status = user.Status,
                     Phone = user.PhoneNumber,
                     Contractor = detailContractor,
-                    LastModifiedAt=user.LastModifiedAt
+                    LastModifiedAt = user.LastModifiedAt
                 };
             }
             else
@@ -1169,7 +1175,7 @@ namespace Application.System.Users
                 totalRecord = await _context.AppliedPosts.CountAsync();
             }
 
-            if (!data.Any()&&!contractorIDFromDB.Any())
+            if (!data.Any() && !contractorIDFromDB.Any())
             {
                 response = new()
                 {
@@ -1212,7 +1218,7 @@ namespace Application.System.Users
                 }
 
 
-            
+
 
 
 
@@ -1260,8 +1266,8 @@ namespace Application.System.Users
                 Status = post.Contractor.User.Status,
                 Phone = post.Contractor.User.PhoneNumber,
                 Contractor = detailContractor,
-                LastModifiedAt=post.Contractor.User.LastModifiedAt,
-                UserId=post.Contractor.CreateBy
+                LastModifiedAt = post.Contractor.User.LastModifiedAt,
+                UserId = post.Contractor.CreateBy
             };
             return userDetail;
         }
@@ -1422,8 +1428,8 @@ namespace Application.System.Users
                 Status = user.User.Status,
                 Phone = user.User.PhoneNumber,
                 Builder = detailBuilder,
-                LastModifiedAt=user.LastModifiedAt,
-                UserId=user.User.Id
+                LastModifiedAt = user.LastModifiedAt,
+                UserId = user.User.Id
             };
 
             return userDetail;
@@ -1565,8 +1571,8 @@ namespace Application.System.Users
                 Status = store.User.Status,
                 Phone = store.User.PhoneNumber,
                 DetailMaterialStore = detailMaterial,
-                LastModifiedAt=store.LastModifiedAt,
-                UserId=store.User.Id
+                LastModifiedAt = store.LastModifiedAt,
+                UserId = store.User.Id
             };
             return userDetail;
 
