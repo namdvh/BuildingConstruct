@@ -11,6 +11,7 @@ namespace Data.Entities
         public string? Certificate { get; set; }
 
         public int? Experience { get; set; }
+        public string? Image { get; set; }
 
         public Place? Place { get; set; }
         public string? ConstructionType { get; set; }

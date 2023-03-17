@@ -13,6 +13,7 @@ namespace ViewModels.Users
         public string? Avatar { get; set; }
         public string? IdNumber { get; set; }
         public string? Phone { get; set; }
+        public string? Image { get; set; }
 
 
 

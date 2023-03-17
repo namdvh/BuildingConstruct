@@ -34,6 +34,8 @@ namespace ViewModels.Users
 
         public Place? Place { get; set; }
 
+        public string? Image { get; set; }
+
         public List<BuilderSkillsDTO>? BuilderSkills { get; set; }
 
         public string? TypeName { get; set; }

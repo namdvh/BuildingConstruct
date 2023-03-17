@@ -22,7 +22,7 @@ namespace BuildingConstructApi.Controllers
         public async Task<IActionResult> GetAllNotification([FromQuery] PaginationFilter request)
         {
             var validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
-            var userID = User.FindFirst("UserID").Value;
+            var userID = User.FindFirst("UserID")?.Value;
 
             if (userID == null)
             {

@@ -32,7 +32,7 @@ namespace Application.System.Users
         private readonly RoleManager<Role> _roleManager;
         private readonly IConfiguration _config;
         private readonly BuildingConstructDbContext _context;
-        private readonly string emailApi = "";
+        //private readonly string emailApi = "";
         public UserService(UserManager<User> userService, SignInManager<User> signInManager, RoleManager<Role> roleManager, IConfiguration config, BuildingConstructDbContext context)
         {
             _userService = userService;
@@ -579,6 +579,7 @@ namespace Application.System.Users
                     ExperienceDetail = user.Builder.ExperienceDetail,
                     Certificate = user.Builder.Certificate,
                     Experience = user.Builder.Experience,
+                    Image = user.Builder.Image,
                     ConstructionType = ls,
                    
                 };
@@ -750,6 +751,10 @@ namespace Application.System.Users
                 if (!string.IsNullOrEmpty(request.FirstName))
                 {
                     user.FirstName = request.FirstName;
+                }
+                if (!string.IsNullOrEmpty(request.Image))
+                {
+                    user.Builder.Image = request.Image;
                 }
 
                 if (!string.IsNullOrEmpty(request.LastName))

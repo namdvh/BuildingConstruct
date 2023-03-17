@@ -487,6 +487,16 @@ namespace Application.System.Carts
             {
                 dto.Other = null;
             }
+            if (cart.ProductType != null)
+            {
+
+                dto.Label = cart.ProductType.Label;
+            }
+            else
+            {
+                dto.Label = null;
+            }
+
 
 
 

@@ -390,7 +390,6 @@ namespace Application.System.Commitments
         public async Task<BaseResponse<string>> CreateCommitment(CreateCommimentRequest request, Guid ContractorID)
         {
             BaseResponse<string> response;
-            PostCommitment builder;
             PostCommitment commitment;
 
             var ctor = await _context.Users.Include(x => x.Contractor).Where(x => x.Id.Equals(ContractorID)).FirstOrDefaultAsync();

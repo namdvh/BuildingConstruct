@@ -488,6 +488,17 @@ namespace Application.System.Bill
                     pro.OtherName = null;
                 }
 
+                if (item.ProductTypes != null)
+                {
+
+                    pro.Label = item.ProductTypes.Label;
+                }
+                else
+                {
+                    pro.Label = null;
+                }
+
+
                 list.Add(pro);
             }
             return list;

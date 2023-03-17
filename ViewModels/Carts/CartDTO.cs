@@ -44,6 +44,8 @@ namespace ViewModels.Carts
         public string? Size { get; set; }
         public string? Other { get; set; }
 
+        public string? Label { get; set; }
+
         public bool IsDisable { get; set; }
 
     }

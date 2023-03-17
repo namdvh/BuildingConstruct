@@ -260,7 +260,7 @@ namespace BuildingConstructApi.Controllers
         [HttpGet("detail")]
         public async Task<IActionResult> GetUserDetail(Guid userID)
         {
-            if (userID == null)
+            if (userID==Guid.Empty)
             {
                 return BadRequest();
             }

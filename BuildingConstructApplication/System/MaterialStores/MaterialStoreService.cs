@@ -65,7 +65,13 @@ namespace Application.System.MaterialStores
                     var productType = new ProductType();
                     productType.ProductID = products.Id;
                     productType.Quantity = item.Quantity;
-                    productType.Status = Status.SUCCESS; 
+                    productType.Status = Status.SUCCESS;
+
+                    if (!string.IsNullOrEmpty(item.Label))
+                    {
+                        productType.Label = item.Label;
+                    }
+
                     //productType.Name = item.TypeName;
 
 
@@ -166,7 +172,6 @@ namespace Application.System.MaterialStores
         {
             BasePagination<List<ProductStoreDTO>> response;
             var orderBy = filter._orderBy.ToString();
-            int totalRecord;
 
             if (string.IsNullOrEmpty(filter._sortBy))
             {
@@ -535,6 +540,7 @@ namespace Application.System.MaterialStores
                 final.Id = results.Id;
                 //final.TypeName = results.Name;
                 final.Quantity = results.Quantity;
+                final.Label = results.Label;
                 final.Other = results.Other?.Name == "No Other" ? null : results.Other.Name;
                 final.Size = results.Size?.Name == "No Size" ? null : results.Size.Name;
                 final.Color = results.Color?.Name == "No Color" ? null : results.Color.Name;
