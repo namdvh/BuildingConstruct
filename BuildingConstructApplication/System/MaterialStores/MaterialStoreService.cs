@@ -60,6 +60,10 @@ namespace Application.System.MaterialStores
             if (request.ProductTypes != null)
             {
                 List<ProductType> list = new();
+                List<Color> colorExisted = new();
+                List<ProductSize> sizeExisted = new();
+
+
                 foreach (var item in request.ProductTypes)
                 {
                     var productType = new ProductType();
@@ -72,19 +76,30 @@ namespace Application.System.MaterialStores
                         productType.Label = item.Label;
                     }
 
-                    //productType.Name = item.TypeName;
-
-
                     if (!string.IsNullOrEmpty(item.Color))
                     {
-                        Color tmpColor = new()
-                        {
-                            Name = item.Color,
-                        };
+                        var inColorList = colorExisted.Where(x => x.Name.Equals(item.Color)).FirstOrDefault();
 
-                        await _context.Colors.AddAsync(tmpColor);
-                        await _context.SaveChangesAsync();
-                        productType.ColorId = tmpColor.Id;
+                        if (inColorList != null)
+                        {
+                            productType.ColorId = inColorList.Id;
+                        }
+                        else
+                        {
+
+                            Color tmpColor = new()
+                            {
+                                Name = item.Color,
+                            };
+
+                            await _context.Colors.AddAsync(tmpColor);
+                            await _context.SaveChangesAsync();
+
+                            colorExisted.Add(tmpColor);
+                            productType.ColorId = tmpColor.Id;
+
+                        }
+
                     }
                     else
                     {
@@ -94,14 +109,28 @@ namespace Application.System.MaterialStores
 
                     if (!string.IsNullOrEmpty(item.Size))
                     {
-                        ProductSize tmpSize = new()
-                        {
-                            Name = item.Size,
-                        };
+                        var inSizeList = sizeExisted.Where(x => x.Name.Equals(item.Size)).FirstOrDefault();
 
-                        await _context.Sizes.AddAsync(tmpSize);
-                        await _context.SaveChangesAsync();
-                        productType.SizeID = tmpSize.Id;
+                        if (inSizeList != null)
+                        {
+                            productType.SizeID = inSizeList.Id;
+                        }
+                        else
+                        {
+
+                            ProductSize tmpSize = new()
+                            {
+                                Name = item.Size,
+                            };
+
+                            await _context.Sizes.AddAsync(tmpSize);
+                            await _context.SaveChangesAsync();
+                            sizeExisted.Add(tmpSize);
+                            productType.SizeID = tmpSize.Id;
+                        }
+
+
+
                     }
                     else
                     {
@@ -534,7 +563,7 @@ namespace Application.System.MaterialStores
                     .Include(x => x.Color)
                     .Include(x => x.Size)
                     .Include(x => x.Other)
-                    .Where(x => x.Id == c.Id && x.Status==Status.SUCCESS )
+                    .Where(x => x.Id == c.Id && x.Status == Status.SUCCESS)
                     .SingleOrDefaultAsync();
                 var final = new ProductTypeDTO();
                 final.Id = results.Id;
