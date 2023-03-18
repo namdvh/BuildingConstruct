@@ -47,6 +47,10 @@ namespace ViewModels.Users
         public string? Certificate { get; set; }
 
         public List<WorkerListType>? ConstructionType { get; set; }
+
+        public int? InviteCount { get; set; }
+
+        public int? AppliedCount { get; set; }
     }
 
 

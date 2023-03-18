@@ -249,8 +249,8 @@ namespace Application.System.Users
                             BuilderID = us.BuilderId,
                             ContractorID = us.ContractorId,
                             StoreID = us.MaterialStoreID,
-                            Premium=isPremium
-                    };
+                            Premium = isPremium
+                        };
 
                     }
                 }
@@ -573,7 +573,8 @@ namespace Application.System.Users
                     };
                     ls.Add(workerListType);
                 }
-
+                var appliedCount = _context.AppliedPosts.Where(x => x.BuilderID == user.Builder.Id).Count();
+                var inviteCount = _context.PostInvites.Where(x => x.BuilderId == user.Builder.Id).Count();
 
                 DetailBuilder detailBuilder = new()
                 {
@@ -587,6 +588,8 @@ namespace Application.System.Users
                     Experience = user.Builder.Experience,
                     Image = user.Builder.Image,
                     ConstructionType = ls,
+                    AppliedCount = appliedCount,
+                    InviteCount = inviteCount,
 
                 };
 
@@ -814,12 +817,14 @@ namespace Application.System.Users
                     {
                         user.Builder.ExperienceDetail = null;
                     }
+                    else
+                    {
+
+                        user.Builder.ExperienceDetail = request.ExperienceDetail;
+                    }
 
                 }
-                else
-                {
-                    user.Builder.ExperienceDetail = request.ExperienceDetail;
-                }
+               
 
 
 
@@ -832,15 +837,15 @@ namespace Application.System.Users
                 {
                     if (request.Certificate.Length == 0)
                     {
-                        user.Builder.ExperienceDetail = null;
+                        user.Builder.Certificate = null;
                     }
-                    user.Builder.Certificate = null;
-                }
-                else
-                {
-                    user.Builder.Certificate = request.Certificate;
+                    else
+                    {
+                        user.Builder.Certificate = request.Certificate;
 
+                    }
                 }
+             
                 if (!string.IsNullOrEmpty(request.TypeID.ToString()))
                 {
                     user.Builder.TypeID = request.TypeID;
