@@ -804,6 +804,10 @@ namespace Application.System.Users
                     user.PhoneNumber = request.Phone;
 
                 }
+
+
+                //
+
                 if (request.ExperienceDetail != null)
                 {
                     if (request.ExperienceDetail.Length == 0)
@@ -816,6 +820,9 @@ namespace Application.System.Users
                 {
                     user.Builder.ExperienceDetail = request.ExperienceDetail;
                 }
+
+
+
                 if (!string.IsNullOrEmpty(request.Experience.ToString()))
                 {
                     user.Builder.Experience = request.Experience;
@@ -1159,6 +1166,8 @@ namespace Application.System.Users
                      .Take(filter.PageSize).ToList();
 
 
+
+
             if (!data.Any())
             {
                 contractorIDFromDB = await _context.Users.Include(x => x.Contractor).Where(x => x.ContractorId != null).Select(x => (int)x.ContractorId).ToListAsync();
@@ -1219,7 +1228,7 @@ namespace Application.System.Users
 
 
 
-
+                var final = ls.DistinctBy(x => x.UserId).ToList();
 
 
 
@@ -1227,7 +1236,7 @@ namespace Application.System.Users
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = ls,
+                    Data = final,
                     Pagination = pagination
                 };
             }
@@ -1360,11 +1369,15 @@ namespace Application.System.Users
                         ls.Add(MapBuilderFavorite(item));
                     }
                 }
+
+                var final = ls.DistinctBy(x => x.UserId).ToList();
+
+
                 response = new()
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = ls,
+                    Data = final,
                     Pagination = pagination
                 };
             }
@@ -1521,6 +1534,9 @@ namespace Application.System.Users
                         ls.Add(MapStoreFavorite(item));
                     }
                 }
+                var final = ls.DistinctBy(x => x.UserId).ToList();
+
+
 
 
 
@@ -1529,7 +1545,7 @@ namespace Application.System.Users
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = ls,
+                    Data = final,
                     Pagination = pagination
                 };
             }

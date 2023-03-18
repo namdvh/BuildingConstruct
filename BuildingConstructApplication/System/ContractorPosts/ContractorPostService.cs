@@ -720,6 +720,7 @@ namespace Application.System.ContractorPosts
                     AuthorName = item.Contractor.User.FirstName + " " + item.Contractor.User.LastName,
                     Title = item.Title,
                     IsSave = save,
+                    _createdBy=item.CreateBy,
                     ViewCount = item.ViewCount,
                     LastModifiedAt = item.LastModifiedAt,
                 };

@@ -468,7 +468,12 @@ namespace Application.System.MaterialStores
         public async Task<BaseResponse<ProductDetailDTO>> GetProductDetail(int productId)
         {
             BaseResponse<ProductDetailDTO> response = new();
-            var rs = await _context.Products.Include(x => x.ProductCategories).Include(x => x.ProductTypes).SingleOrDefaultAsync(x => x.Id == productId);
+            var rs = await _context.Products
+                .Include(x=> x.MaterialStore)
+                    .ThenInclude(x=>x.User)
+                .Include(x => x.ProductCategories)
+                .Include(x => x.ProductTypes)
+                .SingleOrDefaultAsync(x => x.Id == productId);
             if (rs == null)
             {
 
@@ -494,6 +499,7 @@ namespace Application.System.MaterialStores
             productDetail.UnitInStock = rs.UnitInStock;
             productDetail.UnitPrice = rs.UnitPrice;
             productDetail.Unit = rs.Unit;
+            productDetail.UserId = rs.MaterialStore.User.Id;
             productDetail.Brand = rs.Brand;
             productDetail.SoldQuantities = rs.SoldQuantities;
             productDetail.ProductType = await GetProductType(rs.ProductTypes);

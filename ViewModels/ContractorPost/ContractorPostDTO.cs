@@ -34,6 +34,8 @@ namespace ViewModels.ContractorPost
 
         public string? Avatar { get; set; }
 
+        public Guid? _createdBy { get; set; }
+
         public DateTime LastModifiedAt { get; set; }
 
     }
