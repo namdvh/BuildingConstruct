@@ -12,6 +12,8 @@ namespace Data.Entities
 
         public string Name { get; set; }
 
+        public string? Image { get; set; }
+
         public DateTime LastModifiedAt { get; set; } = DateTime.Now;
 
         public List<ProductType>? ProductTypes { get; set; }

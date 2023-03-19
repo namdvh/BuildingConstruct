@@ -434,6 +434,8 @@ namespace Application.System.Carts
                         ColorID = item.ColorId == 1 ? null : item.ColorId,
                         SizeID = item.SizeID == 1 ? null : item.SizeID,
                         OtherID = item.OtherID == 1 ? null : item.OtherID,
+                        OtherImage = item.Other.Image == null ? null : item.Other.Image,
+                        ColorImage = item.Color.Image == null ? null : item.Color.Image,
 
                     };
                     types.Add(tmp);
@@ -496,6 +498,8 @@ namespace Application.System.Carts
             {
                 dto.Label = null;
             }
+
+
 
 
 

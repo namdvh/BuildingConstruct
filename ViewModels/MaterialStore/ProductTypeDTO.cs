@@ -24,5 +24,9 @@ namespace ViewModels.MaterialStore
         public string? Other { get; set; }
         public string? Size { get; set; }
 
+        public string? ColorImage { get; set; }
+
+        public string? OtherImage { get; set; }
+
     }
 }
