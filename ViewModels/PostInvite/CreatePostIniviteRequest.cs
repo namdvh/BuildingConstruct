@@ -1,16 +1,14 @@
-﻿using Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ViewModels.PostInvite
 {
     public class CreatePostIniviteRequest
     {
         public int? ContractorId { get; set; }
-        public int? BuilderId { get; set; }
-        public int? ContractorPostId { get; set; }
+
+        [Required]
+        public int BuilderId { get; set; }
+        [Required]
+        public int ContractorPostId { get; set; }
     }
 }

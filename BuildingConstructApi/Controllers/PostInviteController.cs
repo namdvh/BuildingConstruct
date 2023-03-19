@@ -1,8 +1,14 @@
-﻿using Application.System.Bill;
+﻿using Application.System.Notifies;
 using Application.System.PostInvite;
+using BuildingConstructApi.Hubs;
+using Data.DataContext;
+using Data.Entities;
+using Data.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ViewModels.Identification;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
+using ViewModels.Notificate;
 using ViewModels.Pagination;
 using ViewModels.PostInvite;
 
@@ -14,25 +20,72 @@ namespace BuildingConstructApi.Controllers
     public class PostInviteController : ControllerBase
     {
         private readonly IPostInviteService postInviteService;
+        private readonly BuildingConstructDbContext _context;
+        private readonly IUserConnectionManager _userConnectionManager;
+        private readonly IHubContext<NotificationUserHub> _notificationUserHubContext;
 
-        public PostInviteController(IPostInviteService postInviteService)
+
+        public PostInviteController(IPostInviteService postInviteService, BuildingConstructDbContext context, IUserConnectionManager userConnectionManager, IHubContext<NotificationUserHub> notificationUserHubContext)
         {
             this.postInviteService = postInviteService;
+            _context = context;
+            _userConnectionManager = userConnectionManager;
+            _notificationUserHubContext = notificationUserHubContext;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] PaginationFilter request)
         {
             var userID = User.FindFirst("UserID").Value;
-            var result = await postInviteService.GetAll(request,Guid.Parse(userID));
+            var result = await postInviteService.GetAll(request, Guid.Parse(userID));
             return Ok(result);
+
+
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreatePostIniviteRequest requests)
         {
-            var result = await postInviteService.Create( requests);
+            var result = await postInviteService.Create(requests);
+
+            var author = await _context.Users.Where(x => x.ContractorId==requests.ContractorId).FirstOrDefaultAsync();
+
+            NotificateAuthor notiAuthor = new()
+            {
+                Avatar = author.Avatar,
+                FirstName = author.FirstName,
+                LastName = author.LastName,
+            };
+
+            NotificationModels noti = new() 
+            {
+                LastModifiedAt = DateTime.Now,
+                CreateBy =author.Id,
+                NavigateId = result.NavigateId,
+                UserId = Guid.Parse(result.Data),
+                Message = NotificationMessage.SEND_INVITE,
+                NotificationType = NotificationType.TYPE_1,
+                Author = notiAuthor,
+            };
+
+            var check = await _userConnectionManager.SaveNotification(noti);
+            var connections = _userConnectionManager.GetUserConnections(result.Data.ToString());
+            if (connections != null && connections.Count > 0)
+            {
+                foreach (var connectionId in connections)
+                {
+
+                    if (check != null)
+                    {
+                        noti.Id = check.Data.Id;
+                        await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("sendToUser", noti);
+
+                    }
+                }
+            }
             return Ok(result);
+
+
         }
 
         [HttpPut("{id}")]
@@ -44,9 +97,9 @@ namespace BuildingConstructApi.Controllers
         }
 
         [HttpGet("isInvite")]
-        public async Task<IActionResult> IsInvite([FromQuery] int builderID , [FromQuery] int postID)
+        public async Task<IActionResult> IsInvite([FromQuery] int builderID, [FromQuery] int postID)
         {
-            var result = await postInviteService.isInvite(builderID,postID);
+            var result = await postInviteService.isInvite(builderID, postID);
             return Ok(result);
         }
 

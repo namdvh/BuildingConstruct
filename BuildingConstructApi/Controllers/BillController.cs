@@ -7,6 +7,7 @@ using Data.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using ViewModels.BillModels;
 using ViewModels.Notificate;
 using ViewModels.Pagination;
@@ -20,15 +21,24 @@ namespace BuildingConstructApi.Controllers
     public class BillController : ControllerBase
     {
         private readonly IBillServices _billServices;
+        private readonly IHubContext<NotificationUserHub> _notificationUserHubContext;
+        private readonly IUserConnectionManager _userConnectionManager;
+        private readonly BuildingConstructDbContext _context;
 
-        public BillController(IBillServices billServices)
+        public BillController(IBillServices billServices, IHubContext<NotificationUserHub> notificationUserHubContext, IUserConnectionManager userConnectionManager, BuildingConstructDbContext context)
         {
             _billServices = billServices;
+            _notificationUserHubContext = notificationUserHubContext;
+            _userConnectionManager = userConnectionManager;
+            _context = context;
         }
+
         [HttpPost("createBill")]
         public async Task<IActionResult> CreateBill([FromBody] List<BillDTO> request)
         {
             BaseResponse<List<BillDTO>> response = new();
+            var userID = User.FindFirst("UserID").Value;
+
             var rs = await _billServices.CreateBill(request);
             if (rs)
             {
@@ -41,6 +51,67 @@ namespace BuildingConstructApi.Controllers
                 response.Code = BaseCode.ERROR;
                 response.Message = "Create Bill fail";
             }
+
+
+            foreach (var item in request)
+            {
+                var contractorID = await _context.Users.Where(x=>x.Id.Equals(Guid.Parse(userID))).Select(x=>x.ContractorId).FirstOrDefaultAsync();
+                var author = await _context.Users.Where(x => x.MaterialStoreID.Equals(item.StoreID)).FirstOrDefaultAsync();
+                var newestBill = await _context.Bills.Where(x => x.StoreID.Equals(item.StoreID) && x.ContractorId == contractorID).Select(x=>x.Id).FirstOrDefaultAsync();
+
+                var store = await _context.Users.Where(x => x.MaterialStoreID == item.StoreID).FirstOrDefaultAsync();
+
+                NotificateAuthor notiAuthor = new()
+                {
+                    Avatar = author.Avatar,
+                    FirstName = author.FirstName,
+                    LastName = author.LastName,
+                };
+
+                NotificationModels noti = new()
+                {
+                    LastModifiedAt = DateTime.Now,
+                    CreateBy = Guid.Parse(userID),
+                    NavigateId = newestBill,
+                    UserId = store.Id,
+                    Message = NotificationMessage.CREATE_BILL,
+                    NotificationType = NotificationType.TYPE_1,
+                    Author = notiAuthor,
+                };
+
+                var check = await _userConnectionManager.SaveNotification(noti);
+                var connections = _userConnectionManager.GetUserConnections(store.Id.ToString());
+                if (connections != null && connections.Count > 0)
+                {
+                    foreach (var connectionId in connections)
+                    {
+
+                        if (check != null)
+                        {
+                            noti.Id = check.Data.Id;
+                            await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("sendToUser", noti);
+
+                        }
+                    }
+                }
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             return Ok(response);
         }
         [HttpPost("getAll")]
@@ -79,10 +150,10 @@ namespace BuildingConstructApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBillStatus([FromRoute] int id, [FromBody]UpdateBillRequest request)
+        public async Task<IActionResult> UpdateBillStatus([FromRoute] int id, [FromBody] UpdateBillRequest request)
         {
             var userID = User.FindFirst("UserID").Value;
-            var rs = await _billServices.UpdateStatusBill(request.Status, id,request.Message,Guid.Parse(userID));
+            var rs = await _billServices.UpdateStatusBill(request.Status, id, request.Message, Guid.Parse(userID));
             return Ok(rs);
         }
 
