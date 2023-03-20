@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+  sql-server:
+    container_name: buildingdb
+    image: "mcr.microsoft.com/mssql/server:2019-latest"
+    ports:
+        - 1433:1433
+    environment:
+        SA_PASSWORD: "Hoainam@123"
+        ACCEPT_EULA: "Y"
+
+  buildingconstructapi:
+    container_name: buildingapi
+    image: ${DOCKER_REGISTRY-}buildingconstructapi
+    build:
+      context: .
+      dockerfile: BuildingConstructApi/Dockerfile
+    ports:
+        - 8000:80
+    depends_on:
+        - sql-server
