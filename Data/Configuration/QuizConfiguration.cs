@@ -16,6 +16,7 @@ namespace Data.Configuration
               .ValueGeneratedOnAdd();
 
             builder.HasMany(x => x.Questions).WithOne(x => x.Quiz).HasForeignKey(x => x.QuizId);
+            builder.HasMany(x => x.AppliedPosts).WithOne(x => x.Quiz).HasForeignKey(x => x.QuizId);
         }
 
     }

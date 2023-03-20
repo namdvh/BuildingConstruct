@@ -206,6 +206,9 @@ namespace Application.System.ContractorPosts
                 post.isApplied = false;
             }
 
+            var listQuiz = await _context.Quizzes.Where(x=>x.PostID==post.Id).ToListAsync();
+
+
             ContractorPostDetailDTO postDTO = new()
             {
                 Title = post.Title,
@@ -231,7 +234,8 @@ namespace Application.System.ContractorPosts
                 type = await GetTypeAndSkillFromPost(post.Id),
                 CreatedBy = post.CreateBy,
                 Author = await GetUserProfile(post.CreateBy),
-                IsSave = IsSave
+                IsSave = IsSave,
+                Quizzes = listQuiz.Any() ? listQuiz : null,
             };
 
             return postDTO;

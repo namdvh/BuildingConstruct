@@ -1,4 +1,5 @@
-﻿using Data.Enum;
+﻿using Data.Entities;
+using Data.Enum;
 using ViewModels.Users;
 
 namespace ViewModels.ContractorPost
@@ -44,5 +45,12 @@ namespace ViewModels.ContractorPost
         public int ViewCount { get; set; }
 
         public bool Transport { get; set; }
+
+        public List<Quiz>? Quizzes { get; set; }
+
     }
+
+
+   
+
 }

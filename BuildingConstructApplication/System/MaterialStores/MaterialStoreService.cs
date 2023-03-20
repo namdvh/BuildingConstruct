@@ -90,7 +90,7 @@ namespace Application.System.MaterialStores
                             Color tmpColor = new()
                             {
                                 Name = item.Color,
-                                Image = item.ColorImage,
+                                Image = item.Image,
                             };
 
                             await _context.Colors.AddAsync(tmpColor);
@@ -144,7 +144,7 @@ namespace Application.System.MaterialStores
                         Other tmpOther = new()
                         {
                             Name = item.Other,
-                            Image=item.OtherImage
+                            Image=item.Image
                         };
 
                         await _context.Others.AddAsync(tmpOther);
@@ -584,8 +584,11 @@ namespace Application.System.MaterialStores
                 final.ColorId = results.ColorId == 1 ? null : results.ColorId;
                 final.SizeId = results.SizeID == 1 ? null : results.SizeID;
                 final.OtherId = results.OtherID == 1 ? null : results.OtherID;
-                final.OtherImage=results.Other.Image ==null ? null : results.Other.Image;
-                final.ColorImage=results.Color.Image ==null ? null : results.Color.Image;
+
+                final.Image = results.Other.Image == null ? results.Color.Image : null;
+
+                //final.OtherImage=results.Other.Image ==null ? null : results.Other.Image;
+                //final.ColorImage=results.Color.Image ==null ? null : results.Color.Image;
                 list.Add(final);
             }
             return list;

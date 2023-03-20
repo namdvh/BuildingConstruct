@@ -161,7 +161,7 @@ namespace BuildingConstructApi.Controllers
 
 
             //Xác nhận 
-            if (request.Status == Status.SUCCESS)
+            if (request.Status == Status.ACCEPTED)
             {
                 var author = await _context.Bills
                     .Include(x => x.MaterialStore)
@@ -230,7 +230,7 @@ namespace BuildingConstructApi.Controllers
                 }
             }
             //Nhận hàng
-            if (request.Status == Status.RECEIVED)
+            if (request.Status == Status.SUCCESS)
             {
                 var author = await _context.Bills
                     .Include(x => x.MaterialStore)

@@ -1591,7 +1591,6 @@ namespace Data.Extensions
               Id=1,
               Name="Bài test thợ xây ",
               PostID=1,
-              DesiredResult=10,
               TypeID= Guid.Parse("4ace8fcb-95eb-48c0-9deb-240e8b4e10e0"),
               LastModifiedAt=DateTime.Now
 
@@ -1604,7 +1603,6 @@ namespace Data.Extensions
                 PostID = 1,
                 TypeID = Guid.Parse("ce9fa65b-d005-46b6-953e-e6462a59cfb3"),
                 LastModifiedAt = DateTime.Now,
-                DesiredResult=10,
 
             });
 
@@ -1680,7 +1678,7 @@ namespace Data.Extensions
                 Id = 5,
                 Name = "Phá dỡ",
                 isCorrect = true,
-                QuestionId = 1
+                QuestionId = 2
 
             });
 
@@ -1689,7 +1687,7 @@ namespace Data.Extensions
                 Id = 6,
                 Name = "Ràng buộc ",
                 isCorrect = false,
-                QuestionId = 1
+                QuestionId = 2
 
             });
 
@@ -1698,7 +1696,7 @@ namespace Data.Extensions
                 Id = 7,
                 Name = "Cốt thép",
                 isCorrect = false,
-                QuestionId = 1
+                QuestionId = 2
 
             });
 
@@ -1707,7 +1705,7 @@ namespace Data.Extensions
                 Id = 8,
                 Name = "Đùn",
                 isCorrect = false,
-                QuestionId = 1
+                QuestionId = 2
 
             });
 

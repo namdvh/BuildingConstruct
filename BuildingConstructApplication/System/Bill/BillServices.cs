@@ -426,8 +426,9 @@ namespace Application.System.Bill
                             ColorID = type.ColorId == 1 ? null : type.ColorId,
                             SizeID = type.SizeID == 1 ? null : type.SizeID,
                             OtherID = type.OtherID == 1 ? null : type.OtherID,
-                            OtherImage = type.Other.Image == null ? null : type.Other.Image,
-                            ColorImage = type.Color.Image == null ? null : type.Color.Image,
+                            Image=type.Other.Image==null?type.Color.Image:null,
+                            //OtherImage = type.Other.Image == null ? null : type.Other.Image,
+                            //ColorImage = type.Color.Image == null ? null : type.Color.Image,
 
 
                         };

@@ -66,8 +66,8 @@ namespace ViewModels.Carts
         public int? OtherID { get; set; }
         public string? Other { get; set; }
 
-        public string? OtherImage { get; set; }
-        public string? ColorImage { get; set; }
+        public string? Image { get; set; }
+        //public string? ColorImage { get; set; }
 
     }
 }

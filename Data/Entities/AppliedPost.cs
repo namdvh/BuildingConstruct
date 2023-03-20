@@ -28,6 +28,10 @@ namespace Data.Entities
 
         public decimal? WishSalary { get; set; }
 
+        public int? QuizId { get; set; }
+
+        public Quiz? Quiz { get; set; }
+
 
 
     }

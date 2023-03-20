@@ -1,29 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace Data.Entities
 {
     public class Quiz
     {
-        public int Id { get; set; } 
+        public int Id { get; set; }
 
         public string? Name { get; set; }
 
         public Guid? TypeID { get; set; }
-
+        [JsonIgnore]
         public Type? Types { get; set; }
 
         public int PostID { get; set; }
 
-        public decimal? DesiredResult { get; set; }
-
+        [JsonIgnore]
         public ContractorPost ContractorPost { get; set; }
 
         public DateTime LastModifiedAt { get; set; } = DateTime.Now;
-
+        [JsonIgnore]
         public List<Question> Questions { get; set; }
+
+        public List<AppliedPost>? AppliedPosts { get; set; }
     }
 }
