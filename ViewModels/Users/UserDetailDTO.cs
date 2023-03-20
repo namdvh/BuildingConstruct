@@ -51,6 +51,9 @@ namespace ViewModels.Users
         public int? InviteCount { get; set; }
 
         public int? AppliedCount { get; set; }
+
+        public List<string>? Images { get; set; }
+
     }
 
 

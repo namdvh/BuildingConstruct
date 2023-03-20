@@ -575,6 +575,15 @@ namespace Application.System.Users
                 }
                 var appliedCount = _context.AppliedPosts.Where(x => x.BuilderID == user.Builder.Id).Count();
                 var inviteCount = _context.PostInvites.Where(x => x.BuilderId == user.Builder.Id).Count();
+                List<string> images = new();
+
+                if (user.Builder.Image != null)
+                {
+                    var splitImage = user.Builder.Image.Split(",").ToList();
+
+                    images.AddRange(splitImage);
+                }
+
 
                 DetailBuilder detailBuilder = new()
                 {
@@ -590,6 +599,7 @@ namespace Application.System.Users
                     ConstructionType = ls,
                     AppliedCount = appliedCount,
                     InviteCount = inviteCount,
+                    Images = images.Any() ? images : null
 
                 };
 
@@ -824,7 +834,7 @@ namespace Application.System.Users
                     }
 
                 }
-               
+
 
 
 
@@ -845,7 +855,7 @@ namespace Application.System.Users
 
                     }
                 }
-             
+
                 if (!string.IsNullOrEmpty(request.TypeID.ToString()))
                 {
                     user.Builder.TypeID = request.TypeID;
