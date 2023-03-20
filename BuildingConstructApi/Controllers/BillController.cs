@@ -55,9 +55,9 @@ namespace BuildingConstructApi.Controllers
 
             foreach (var item in request)
             {
-                var contractorID = await _context.Users.Where(x=>x.Id.Equals(Guid.Parse(userID))).Select(x=>x.ContractorId).FirstOrDefaultAsync();
+                var contractorID = await _context.Users.Where(x => x.Id.Equals(Guid.Parse(userID))).Select(x => x.ContractorId).FirstOrDefaultAsync();
                 var author = await _context.Users.Where(x => x.MaterialStoreID.Equals(item.StoreID)).FirstOrDefaultAsync();
-                var newestBill = await _context.Bills.Where(x => x.StoreID.Equals(item.StoreID) && x.ContractorId == contractorID).Select(x=>x.Id).FirstOrDefaultAsync();
+                var newestBill = await _context.Bills.Where(x => x.StoreID.Equals(item.StoreID) && x.ContractorId == contractorID).Select(x => x.Id).FirstOrDefaultAsync();
 
                 var store = await _context.Users.Where(x => x.MaterialStoreID == item.StoreID).FirstOrDefaultAsync();
 
@@ -154,6 +154,137 @@ namespace BuildingConstructApi.Controllers
         {
             var userID = User.FindFirst("UserID").Value;
             var rs = await _billServices.UpdateStatusBill(request.Status, id, request.Message, Guid.Parse(userID));
+
+            NotificateAuthor notiAuthor = null;
+            NotificationModels noti = null;
+            string receivedId = string.Empty;
+
+
+            //Xác nhận 
+            if (request.Status == Status.SUCCESS)
+            {
+                var author = await _context.Bills
+                    .Include(x => x.MaterialStore)
+                        .ThenInclude(x => x.User)
+                    .Include(x => x.Contractor)
+                    .FirstOrDefaultAsync(x => x.Id == id);
+
+                if (author != null)
+                {
+
+                    notiAuthor = new()
+                    {
+                        Avatar = author.MaterialStore?.User?.Avatar,
+                        FirstName = author.MaterialStore?.User?.FirstName,
+                        LastName = author.MaterialStore?.User?.LastName,
+                    };
+
+                    noti = new()
+                    {
+                        LastModifiedAt = DateTime.Now,
+                        CreateBy = author.MaterialStore.CreateBy,
+                        NavigateId = rs.NavigateId,
+                        UserId = author.Contractor.CreateBy,
+                        Message = NotificationMessage.UPDATE_BILL_ACCEPTED,
+                        NotificationType = NotificationType.TYPE_1,
+                        Author = notiAuthor,
+                    };
+
+                    receivedId = author.Contractor.CreateBy.ToString();
+
+
+                }
+            }
+            //Vận chuyển
+            if (request.Status == Status.PAID)
+            {
+                var author = await _context.Bills
+                    .Include(x => x.MaterialStore)
+                        .ThenInclude(x => x.User)
+                    .Include(x => x.Contractor)
+                    .FirstOrDefaultAsync(x => x.Id == id);
+
+                if (author != null)
+                {
+
+                    notiAuthor = new()
+                    {
+                        Avatar = author.MaterialStore?.User?.Avatar,
+                        FirstName = author.MaterialStore?.User?.FirstName,
+                        LastName = author.MaterialStore?.User?.LastName,
+                    };
+
+                    noti = new()
+                    {
+                        LastModifiedAt = DateTime.Now,
+                        CreateBy = author.MaterialStore.CreateBy,
+                        NavigateId = rs.NavigateId,
+                        UserId = author.Contractor.CreateBy,
+                        Message = NotificationMessage.UPDATE_BILL_DELIVERD,
+                        NotificationType = NotificationType.TYPE_1,
+                        Author = notiAuthor,
+                    };
+
+                    receivedId = author.Contractor.CreateBy.ToString();
+
+                }
+            }
+            //Nhận hàng
+            if (request.Status == Status.RECEIVED)
+            {
+                var author = await _context.Bills
+                    .Include(x => x.MaterialStore)
+                        .ThenInclude(x => x.User)
+                    .Include(x => x.Contractor)
+                        .ThenInclude(x => x.User)
+                    .FirstOrDefaultAsync(x => x.Id == id);
+
+                if (author != null)
+                {
+
+                    notiAuthor = new()
+                    {
+                        Avatar = author.Contractor?.User?.Avatar,
+                        FirstName = author.Contractor?.User?.FirstName,
+                        LastName = author.Contractor?.User?.LastName,
+                    };
+
+                    noti = new()
+                    {
+                        LastModifiedAt = DateTime.Now,
+                        CreateBy = author.Contractor.CreateBy,
+                        NavigateId = rs.NavigateId,
+                        UserId = author.MaterialStore.CreateBy,
+                        Message = NotificationMessage.UPDATE_BILL_DELIVERD,
+                        NotificationType = NotificationType.TYPE_1,
+                        Author = notiAuthor,
+                    };
+
+                    receivedId = author.MaterialStore.CreateBy.ToString();
+
+                }
+            }
+
+
+
+            var check = await _userConnectionManager.SaveNotification(noti);
+            var connections = _userConnectionManager.GetUserConnections(receivedId);
+            if (connections != null && connections.Count > 0)
+            {
+                foreach (var connectionId in connections)
+                {
+
+                    if (check != null)
+                    {
+                        noti.Id = check.Data.Id;
+                        await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("sendToUser", noti);
+
+                    }
+                }
+            }
+
+
+
             return Ok(rs);
         }
 

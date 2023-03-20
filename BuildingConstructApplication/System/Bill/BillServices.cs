@@ -545,7 +545,8 @@ namespace Application.System.Bill
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = ls.Any() ? ls : new()
+                    Data = ls.Any() ? ls : new(),
+                    NavigateId=billID
                 };
                 return response;
             }
