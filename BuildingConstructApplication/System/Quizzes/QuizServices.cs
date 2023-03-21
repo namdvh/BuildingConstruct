@@ -60,8 +60,20 @@ namespace Application.System.Quizzes
                 TypeID = request.TypeId
             };
 
+            var post = await _context.ContractorPosts.FirstOrDefaultAsync(x => x.Id == request.PostId);
+
+            if (post != null)
+            {
+                post.Status = Status.SUCCESS;
+
+                _context.Update(post);
+            }
+
+
             await _context.Quizzes.AddAsync(quiz);
             await _context.SaveChangesAsync();
+
+
 
             if (request.Questions != null)
             {
@@ -197,7 +209,14 @@ namespace Application.System.Quizzes
 
             var alreadyApplied = await _context.AppliedPosts.Where(x => x.BuilderID == user.BuilderId && x.PostID == postId).FirstOrDefaultAsync();
 
-            if (alreadyApplied != null)
+            var quizId = await _context.Answers
+                        .Include(x=>x.Question)
+                                        .Where(x => x.Id == request.AnswerId.First())
+                        .Select(x=>x.Question.QuizId)
+                        .FirstOrDefaultAsync();
+
+
+            if (alreadyApplied == null)
             {
                 AppliedPost applied = new()
                 {
@@ -205,7 +224,8 @@ namespace Application.System.Quizzes
                     PostID = postId,
                     WishSalary = request.WishSalary,
                     Status = Status.NOT_RESPONSE,
-                    AppliedDate = DateTime.Now
+                    AppliedDate = DateTime.Now,
+                    QuizId= quizId
 
                 };
 

@@ -18,7 +18,7 @@ namespace ViewModels.Quizzes
     {
         public string QuestionName { get; set; } = string.Empty;
 
-        public List<CreateAnswerDTO>? Answers { get; set; };
+        public List<CreateAnswerDTO>? Answers { get; set; }
 
     }
 

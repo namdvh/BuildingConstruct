@@ -42,6 +42,7 @@ namespace Data.Entities
         public int PeopeRemained { get; set; }
         public bool? isApplied { get; set; }
 
+        public bool QuizRequired { get; set; }
 
         public string? ConstructionType { get; set; }
         

@@ -14,7 +14,7 @@ namespace Application.System.Quizzes
     public interface IQuizServices
     {
         //Get quiz gồm question and answer
-        Task<BaseResponse<QuizDTO>> GetAll(int id);
+        Task<BaseResponse<QuizDTO>> GetAll(int id,Guid userId);
 
         Task<BaseResponse<string>> CreateQuiz(CreateQuizRequest request);
 

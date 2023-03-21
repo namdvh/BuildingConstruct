@@ -38,5 +38,7 @@ namespace ViewModels.ContractorPost
 
         public DateTime LastModifiedAt { get; set; }
 
+        public Status Status { get; set; }
+
     }
 }

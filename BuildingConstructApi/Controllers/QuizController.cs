@@ -1,4 +1,5 @@
 ﻿using Application.System.Quizzes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ViewModels.Quizzes;
 
@@ -6,6 +7,7 @@ namespace BuildingConstructApi.Controllers
 {
     [Route("api/quiz")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class QuizController : ControllerBase
     {
         private readonly IQuizServices _quizService;
@@ -18,7 +20,10 @@ namespace BuildingConstructApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAll([FromRoute] int id)
         {
-            var result = await _quizService.GetAll(id);
+            var userID = User.FindFirst("UserID").Value;
+
+
+            var result = await _quizService.GetAll(id,Guid.Parse(userID));
             return Ok(result);
         }
 

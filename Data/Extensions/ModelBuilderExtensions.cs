@@ -459,6 +459,7 @@ namespace Data.Extensions
                 StartTime="8:00",
                 EndTime="17:30",
                 CreateBy=Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7"),
+                QuizRequired=true
             });
 
             modelBuilder.Entity<ContractorPostSkill>().HasData(new ContractorPostSkill
@@ -1561,7 +1562,8 @@ namespace Data.Extensions
                 BuilderID=1,
                 PostID=1,
                 AppliedDate=DateTime.Now,
-                Status=Enum.Status.ACCEPTED
+                Status=Enum.Status.ACCEPTED,
+                QuizId=1
                 
             });
 
@@ -1570,7 +1572,9 @@ namespace Data.Extensions
                 BuilderID = 2,
                 PostID = 1,
                 AppliedDate = DateTime.Now,
-                Status = Enum.Status.ACCEPTED
+                Status = Enum.Status.ACCEPTED,
+                QuizId = 1
+
 
             });
 
@@ -1579,7 +1583,9 @@ namespace Data.Extensions
                 BuilderID = 3,
                 PostID = 1,
                 AppliedDate = DateTime.Now,
-                Status = Enum.Status.ACCEPTED
+                Status = Enum.Status.ACCEPTED,
+                QuizId = 1
+
 
             });
 
@@ -1706,6 +1712,96 @@ namespace Data.Extensions
                 Name = "Đùn",
                 isCorrect = false,
                 QuestionId = 2
+
+            });
+
+            //QUESTION 3
+
+            modelBuilder.Entity<Question>().HasData(new Question
+            {
+                Id = 3,
+                Name = "Khi một ngôi nhà sử dụng năng lượng mặt trời, bạn thường sẽ thấy ________ trên mái nhà.?",
+                QuizId = 1,
+            }); ;
+
+            modelBuilder.Entity<Answer>().HasData(new Answer
+            {
+                Id = 9,
+                Name = "Ăng-ten",
+                isCorrect = false,
+                QuestionId = 3
+
+            });
+
+            modelBuilder.Entity<Answer>().HasData(new Answer
+            {
+                Id = 10,
+                Name = "Giếng trời ",
+                isCorrect = false,
+                QuestionId = 3
+
+            });
+
+            modelBuilder.Entity<Answer>().HasData(new Answer
+            {
+                Id = 11,
+                Name = "Tấm",
+                isCorrect = true,
+                QuestionId = 3
+
+            });
+
+            modelBuilder.Entity<Answer>().HasData(new Answer
+            {
+                Id = 12,
+                Name = "Ống",
+                isCorrect = false,
+                QuestionId = 3
+
+            });
+
+            //QUESTION 4
+
+            modelBuilder.Entity<Question>().HasData(new Question
+            {
+                Id = 4,
+                Name = "Tên khác của một bức tường không chịu lực là gì?",
+                QuizId = 1,
+            }); ;
+
+            modelBuilder.Entity<Answer>().HasData(new Answer
+            {
+                Id = 13,
+                Name = "Bươm bướm",
+                isCorrect = false,
+                QuestionId = 4
+
+            });
+
+            modelBuilder.Entity<Answer>().HasData(new Answer
+            {
+                Id = 14,
+                Name = "Màn ",
+                isCorrect = false,
+                QuestionId = 4
+
+            });
+
+            modelBuilder.Entity<Answer>().HasData(new Answer
+            {
+                Id = 15,
+                Name = "Đảng",
+                isCorrect = true,
+                QuestionId = 4
+
+            });
+
+            modelBuilder.Entity<Answer>().HasData(new Answer
+            {
+                Id = 16,
+                Name = "Chỉ",
+                isCorrect = false,
+                QuestionId = 4
 
             });
 

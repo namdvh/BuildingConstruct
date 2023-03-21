@@ -585,7 +585,16 @@ namespace Application.System.MaterialStores
                 final.SizeId = results.SizeID == 1 ? null : results.SizeID;
                 final.OtherId = results.OtherID == 1 ? null : results.OtherID;
 
-                final.Image = results.Other.Image == null ? results.Color.Image : null;
+                if (final.OtherId == null)
+                {
+                    final.Image = results.Color.Image != null ? results.Color.Image : null;
+                }
+                else
+                {
+                    final.Image = results.Other.Image != null ? results.Other.Image : null;
+
+                }
+
 
                 //final.OtherImage=results.Other.Image ==null ? null : results.Other.Image;
                 //final.ColorImage=results.Color.Image ==null ? null : results.Color.Image;

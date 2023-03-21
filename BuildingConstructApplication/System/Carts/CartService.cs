@@ -434,9 +434,18 @@ namespace Application.System.Carts
                         ColorID = item.ColorId == 1 ? null : item.ColorId,
                         SizeID = item.SizeID == 1 ? null : item.SizeID,
                         OtherID = item.OtherID == 1 ? null : item.OtherID,
-                        Image = item.Other.Image == null ? item.Color.Image : null,
 
                     };
+
+                    if (tmp.OtherID == null)
+                    {
+                        tmp.Image = item.Color.Image != null ? item.Color.Image : null;
+                    }
+                    else
+                    {
+                        tmp.Image = item.Other.Image != null ? item.Other.Image : null;
+
+                    }
                     types.Add(tmp);
                 }
             }
