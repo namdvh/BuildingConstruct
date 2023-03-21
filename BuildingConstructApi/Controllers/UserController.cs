@@ -331,6 +331,14 @@ namespace BuildingConstructApi.Controllers
             return Ok(result);
 
         }
+        [HttpPost("getProfile")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetProfile([FromBody] RefreshToken refreshToken)
+        {
+            var rs = await _userService.GetProfile(refreshToken);
+
+            return Ok(rs);
+        }
 
     }
 }
