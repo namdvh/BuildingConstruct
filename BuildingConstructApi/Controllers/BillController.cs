@@ -264,7 +264,40 @@ namespace BuildingConstructApi.Controllers
 
                 }
             }
+            //Hủy 
+            if (request.Status == Status.CANCEL)
+            {
+                var author = await _context.Bills
+                   .Include(x => x.MaterialStore)
+                       .ThenInclude(x => x.User)
+                   .Include(x => x.Contractor)
+                       .ThenInclude(x => x.User)
+                   .FirstOrDefaultAsync(x => x.Id == id);
 
+                if (author != null)
+                {
+
+                    notiAuthor = new()
+                    {
+                        Avatar = author.Contractor?.User?.Avatar,
+                        FirstName = author.Contractor?.User?.FirstName,
+                        LastName = author.Contractor?.User?.LastName,
+                    };
+
+                    noti = new()
+                    {
+                        LastModifiedAt = DateTime.Now,
+                        CreateBy = author.Contractor.CreateBy,
+                        NavigateId = rs.NavigateId,
+                        UserId = author.MaterialStore.CreateBy,
+                        Message = NotificationMessage.UPDATE_BILL_CANCELED,
+                        NotificationType = NotificationType.TYPE_1,
+                        Author = notiAuthor,
+                    };
+
+                    receivedId = author.MaterialStore.CreateBy.ToString();
+                }
+            }
 
 
             var check = await _userConnectionManager.SaveNotification(noti);

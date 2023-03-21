@@ -17,6 +17,7 @@ namespace Data.Enum
         public static string UPDATE_BILL_ACCEPTED = "đã xác nhận đơn hàng ";
         public static string UPDATE_BILL_DELIVERD = "đã chuyển sang trạng thái vận chuyển đơn hàng ";
         public static string UPDATE_BILL_RECEIVED = "đã chuyển sang trạng thái nhận đơn hàng thành công";
+        public static string UPDATE_BILL_CANCELED = "đã chuyển sang trạng thái hủy";
     }
 
 }
