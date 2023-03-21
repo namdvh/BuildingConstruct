@@ -212,7 +212,9 @@ namespace Application.System.PostInvite
                     ContractorName = item.Contractor.User.FirstName + " " + item.Contractor.User.LastName,
                     ContractorPostId = item.ContractorPostId,
                     ContractorPostName = item.ContractorPost.ProjectName,
-                    Id = item.Id
+                    Id = item.Id,
+                    Places=item.ContractorPost.Place,
+                    Salaries=item.ContractorPost.Salaries,
                 };
                 ls.Add(tmp);
             }

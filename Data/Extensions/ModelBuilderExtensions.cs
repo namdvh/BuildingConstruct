@@ -61,6 +61,32 @@ namespace Data.Extensions
                 Name = "Công trình công cộng"
             });
 
+            //ADMIN
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63e9"),
+                Email = "admin15@gmail.com",
+                UserName = "admin15@gmail.com",
+                PasswordHash = hasher.HashPassword(null, "Hoainam@123"),
+                SecurityStamp = string.Empty,
+                FirstName = "Admin",
+                LastName = "Admin",
+                DOB = new DateTime(2001, 4, 30),
+                PhoneNumber = "0909090909",
+                Gender = Enum.Gender.MALE,
+                Token = "xxx",
+                Status = Enum.Status.Level1,
+                Avatar = "https://i1-giaitri.vnecdn.net/2013/08/15/DK-02756-1376528749.jpg?w=680&h=0&q=100&dpr=1&fit=crop&s=mX89l0q4HQgntQ5wJesOcw",
+                BuilderId = 1,
+                Address = "18, Phuoc Thien, Nhon Trach, Dong Nai"
+            });
+            modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
+            {
+                RoleId = Guid.Parse("52ec6e78-6732-43bf-adab-9cfa2e5da268"),
+                UserId = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63e9"),
+            });
+
+
 
 
 
@@ -92,6 +118,7 @@ namespace Data.Extensions
             {
                 Id = 1,
                 CreateBy=Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d9"),
+                TypeID= Guid.Parse("4ace8fcb-95eb-48c0-9deb-240e8b4e10e0"),
                 Place=Enum.Place._60 
             }) ;
 
@@ -137,6 +164,8 @@ namespace Data.Extensions
             {
                 Id = 2,
                 CreateBy = Guid.Parse("d39ae0a6-9b2d-4421-be4a-cc294cec054f"),
+                TypeID = Guid.Parse("bd880489-5c76-4854-93ab-66e3a541bf24"),
+
                 Place = Enum.Place._61
             });
 
@@ -148,6 +177,49 @@ namespace Data.Extensions
             modelBuilder.Entity<WorkerContructionType>().HasData(new WorkerContructionType
             {
                 BuilderId = 2,
+                ConstructionTypeId = 2
+            });
+
+            //user 3
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = Guid.Parse("d91f9ece-25a7-4dc6-adde-186b12c04d56"),
+                Email = "namhoaidoan12@gmail.com",
+                UserName = "namhoaidoan12@gmail.com",
+                PasswordHash = hasher.HashPassword(null, "Hoainam@123"),
+                SecurityStamp = string.Empty,
+                FirstName = "Hieu",
+                LastName = "Nguyen Anh",
+                DOB = new DateTime(2001, 9, 15),
+                PhoneNumber = "0101010101",
+                Gender = Enum.Gender.MALE,
+                Token = "xxx",
+                Status = Enum.Status.Level1,
+                Avatar = "https://scontent.fsgn5-3.fna.fbcdn.net/v/t1.6435-9/86186750_1329130013936346_7257030880831471616_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=174925&_nc_ohc=Z1GTPvzRt7wAX_WbRZ5&_nc_ht=scontent.fsgn5-3.fna&oh=00_AfAYtaD2dHE_84_-PSlDqLaeyBlH9zJ3b308pHcTWucCXw&oe=642552F2",
+                BuilderId = 3,
+                Address = "18, Phuoc Thien, Nhon Trach, Dong Nai"
+            });
+            modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
+            {
+                RoleId = Guid.Parse("dc48ba58-ddcb-41de-96fe-e41327e5f313"),
+                UserId = Guid.Parse("d91f9ece-25a7-4dc6-adde-186b12c04d56"),
+            });
+            modelBuilder.Entity<Builder>().HasData(new Builder()
+            {
+                Id = 3,
+                CreateBy = Guid.Parse("d91f9ece-25a7-4dc6-adde-186b12c04d56"),
+                TypeID = Guid.Parse("ce9fa65b-d005-46b6-953e-e6462a59cfb3"),
+                Place = Enum.Place._61
+            });
+
+            modelBuilder.Entity<WorkerContructionType>().HasData(new WorkerContructionType
+            {
+                BuilderId = 3,
+                ConstructionTypeId = 1
+            });
+            modelBuilder.Entity<WorkerContructionType>().HasData(new WorkerContructionType
+            {
+                BuilderId = 3,
                 ConstructionTypeId = 2
             });
 
@@ -619,6 +691,46 @@ namespace Data.Extensions
 
             });
 
+            modelBuilder.Entity<ProductSize>().HasData(new ProductSize
+            {
+             Id=2,
+             Name="4.5L"
+
+            });
+
+            modelBuilder.Entity<ProductSize>().HasData(new ProductSize
+            {
+                Id = 3,
+                Name = "7.5L"
+
+            });
+
+            modelBuilder.Entity<ProductType>().HasData(new ProductType
+            {
+                Id = 12,
+                //Name = "Màu vàng",
+                ProductID = 7,
+                SizeID=2,
+                ColorId=1,
+                OtherID=1,
+                Quantity = 5,
+                Status=Enum.Status.SUCCESS
+            });
+
+            modelBuilder.Entity<ProductType>().HasData(new ProductType
+            {
+                Id = 13,
+                //Name = "Màu vàng",
+                ProductID = 7,
+                SizeID = 3,
+                OtherID=1,
+                ColorId=1,
+                Quantity = 10,
+                Status = Enum.Status.SUCCESS
+            });
+
+
+
 
             //PRODUCT 2
 
@@ -807,40 +919,74 @@ namespace Data.Extensions
                 Name = "Cái",
             });
 
-            modelBuilder.Entity<ProductType>().HasData(new ProductType
+            modelBuilder.Entity<Color>().HasData(new Color
             {
-                Name = "Màu vàng",
                 Id = 6,
-                ProductID = 34,
-                Quantity = 5,
+                Name = "Màu vàng",
             });
 
-            modelBuilder.Entity<ProductType>().HasData(new ProductType
+            modelBuilder.Entity<Color>().HasData(new Color
             {
                 Name = "Màu xám",
                 Id = 7,
-                ProductID = 34,
-                Quantity = 10,
+            });
+
+            modelBuilder.Entity<ProductSize>().HasData(new ProductSize
+            {
+                Name = "5M",
+                Id = 4,
+            });
+
+            modelBuilder.Entity<ProductSize>().HasData(new ProductSize
+            {
+                Name = "10M",
+                Id = 5,
+            });
+
+
+            modelBuilder.Entity<ProductType>().HasData(new ProductType
+            {
+               Id=50,
+               ColorId=6,
+               SizeID=4,
+               OtherID=1,
+               ProductID=34,
+               Quantity=5,
+                Status = Enum.Status.SUCCESS
             });
 
             modelBuilder.Entity<ProductType>().HasData(new ProductType
             {
-                Name = "Màu trắng",
-                Id = 8,
+                Id = 51,
+                ColorId = 6,
+                SizeID = 5,
+                OtherID=1,
                 ProductID = 34,
-                Quantity = 1220,
+                Quantity = 3,
+                Status = Enum.Status.SUCCESS
             });
-
 
             modelBuilder.Entity<ProductType>().HasData(new ProductType
             {
-                Name = "Màu đen",
-                Id = 9,
+                Id = 52,
+                ColorId = 7,
+                SizeID = 4,
+                OtherID=1,
                 ProductID = 34,
-                Quantity = 33,
+                Quantity = 5,
+                Status = Enum.Status.SUCCESS
             });
 
-            
+            modelBuilder.Entity<ProductType>().HasData(new ProductType
+            {
+                Id = 53,
+                ColorId = 7,
+                SizeID = 5,
+                OtherID=1,
+                ProductID = 34,
+                Quantity = 5,
+                Status = Enum.Status.SUCCESS
+            });
             //PRODUCT 7
 
             modelBuilder.Entity<Products>().HasData(new Products
@@ -1117,21 +1263,57 @@ namespace Data.Extensions
                 Name = "Sơn ngoại thất",
             });
 
-            modelBuilder.Entity<ProductType>().HasData(new ProductType
+            modelBuilder.Entity<ProductSize>().HasData(new ProductSize
             {
+                Id = 7,
                 Name = "5L",
-                Id = 1,
-                ProductID = 20,
-                Quantity = 10,
+               
             });
+
+            modelBuilder.Entity<ProductSize>().HasData(new ProductSize
+            {
+                Id = 8,
+                Name = "18L",
+               
+            });
+
+            //modelBuilder.Entity<Other>().HasData(new Other
+            //{
+            //    Id = 7,
+            //    Name = "Ngoại thất",
+
+            //});
+
+            //modelBuilder.Entity<Other>().HasData(new Other
+            //{
+            //    Id = 8,
+            //    Name = "Nội thất",
+
+            //});
 
             modelBuilder.Entity<ProductType>().HasData(new ProductType
             {
-                Name = "10L",
-                Id = 2,
-                ProductID = 20,
-                Quantity = 10,
+                Id = 60,
+                SizeID=7,
+                ColorId=1,
+                OtherID=1,
+                ProductID=20,
+                Quantity=5,
+                Status = Enum.Status.SUCCESS
+
             });
+            modelBuilder.Entity<ProductType>().HasData(new ProductType
+            {
+                Id = 61,
+                SizeID = 8,
+                ColorId=1,
+                OtherID=1,
+                ProductID = 20,
+                Quantity = 3,
+                Status = Enum.Status.SUCCESS
+
+            });
+          
 
 
 
@@ -1234,7 +1416,7 @@ namespace Data.Extensions
                Price=200000,
                ProductID=20,
                Quantity=5,
-               ProductTypeId=1
+               ProductTypeId=60
             });
             modelBuilder.Entity<BillDetail>().HasData(new BillDetail
             {
@@ -1243,7 +1425,7 @@ namespace Data.Extensions
                 Price = 150000,
                 ProductID = 21,
                 Quantity = 8,
-                ProductTypeId=3
+                //ProductTypeId=3
             });
             modelBuilder.Entity<BillDetail>().HasData(new BillDetail
             {
@@ -1300,20 +1482,20 @@ namespace Data.Extensions
 
          
 
-            modelBuilder.Entity<ProductType>().HasData(new ProductType
-            {
-                Name = "Trắng",
-                Id = 3,
-                ProductID = 21,
-                Quantity = 10,
-            });
-            modelBuilder.Entity<ProductType>().HasData(new ProductType
-            {
-                Name = "Đen",
-                Id = 4,
-                ProductID = 21,
-                Quantity = 10,
-            });
+            //modelBuilder.Entity<ProductType>().HasData(new ProductType
+            //{
+            //    //Name = "Trắng",
+            //    Id = 3,
+            //    ProductID = 21,
+            //    Quantity = 10,
+            //});
+            //modelBuilder.Entity<ProductType>().HasData(new ProductType
+            //{
+            //    //Name = "Đen",
+            //    Id = 4,
+            //    ProductID = 21,
+            //    Quantity = 10,
+            //});
             modelBuilder.Entity<Notification>().HasData(new Notification
             {
                 Id = 1,
@@ -1352,6 +1534,54 @@ namespace Data.Extensions
                 Message = "Create commitment successfully",
                 NavigateId = 1
             });
+
+            modelBuilder.Entity<Color>().HasData(new Color
+            {
+               Id=1,
+               Name="No Color"
+            });
+
+            modelBuilder.Entity<ProductSize>().HasData(new ProductSize
+            {
+                Id = 1,
+                Name = "No Size"
+            });
+
+            modelBuilder.Entity<Other>().HasData(new Other
+            {
+                Id = 1,
+                Name = "No Other"
+            });
+
+
+
+            modelBuilder.Entity<AppliedPost>().HasData(new AppliedPost
+            {
+                BuilderID=1,
+                PostID=1,
+                AppliedDate=DateTime.Now,
+                Status=Enum.Status.ACCEPTED
+                
+            });
+
+            modelBuilder.Entity<AppliedPost>().HasData(new AppliedPost
+            {
+                BuilderID = 2,
+                PostID = 1,
+                AppliedDate = DateTime.Now,
+                Status = Enum.Status.ACCEPTED
+
+            });
+
+            modelBuilder.Entity<AppliedPost>().HasData(new AppliedPost
+            {
+                BuilderID = 3,
+                PostID = 1,
+                AppliedDate = DateTime.Now,
+                Status = Enum.Status.ACCEPTED
+
+            });
+
 
         }
     }

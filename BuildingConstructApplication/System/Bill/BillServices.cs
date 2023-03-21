@@ -10,6 +10,7 @@ using ViewModels.BillModels;
 using ViewModels.Carts;
 using ViewModels.Pagination;
 using ViewModels.Response;
+using ZedGraph;
 
 namespace Application.System.Bill
 {
@@ -180,7 +181,7 @@ namespace Application.System.Bill
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = await MapListDTO(data,usID),
+                    Data = await MapListDTO(data, usID),
                     Pagination = pagination
                 };
             }
@@ -188,7 +189,7 @@ namespace Application.System.Bill
             return response;
         }
 
-        private async Task<List<BillDTO>> MapListDTO(List<Data.Entities.Bill> data,string userID)
+        private async Task<List<BillDTO>> MapListDTO(List<Data.Entities.Bill> data, string userID)
         {
             List<BillDTO> rs = new();
             foreach (var item in data)
@@ -202,13 +203,14 @@ namespace Application.System.Bill
                 bill.TotalPrice = item.TotalPrice;
                 bill.StoreID = item.StoreID;
                 bill.StoreName = store.FirstName + " " + store.LastName;
+                bill.Avatar = store.Avatar;
                 bill.Notes = item.Note;
                 bill.Reason = item.Reason;
                 bill.StartDate = item.StartDate;
                 bill.EndDate = item.EndDate;
                 bill.Status = item.Status;
                 bill.UserID = userID;
-                foreach(var i in item.BillDetails)
+                foreach (var i in item.BillDetails)
                 {
                     bill.ProductBillDetailGet = MapProductDTO((int)i.BillID);
 
@@ -392,13 +394,22 @@ namespace Application.System.Bill
                 .Include(x => x.Bills)
                     .ThenInclude(x => x.Contractor)
                 .Include(x => x.ProductTypes)
+                    .ThenInclude(x => x.Color)
+                 .Include(x => x.ProductTypes)
+                    .ThenInclude(x => x.Size)
+                 .Include(x => x.ProductTypes)
+                    .ThenInclude(x => x.Other)
                 .Where(x => x.BillID == id)
             .ToList();
 
             foreach (var item in rs)
             {
                 List<CartProductType> types = new();
-                var listType = _context.ProductTypes.Where(x => x.ProductID == item.ProductID).ToList();
+                var listType = _context.ProductTypes
+                    .Include(x => x.Color)
+                    .Include(x => x.Size)
+                    .Include(x => x.Other)
+                    .Where(x => x.ProductID == item.ProductID && x.Status == Status.SUCCESS).ToList();
 
                 if (listType.Any())
                 {
@@ -407,8 +418,16 @@ namespace Application.System.Bill
                         CartProductType tmp = new()
                         {
                             Id = type.Id,
-                            TypeName = type.Name,
+                            //TypeName = type.Name,
                             Quantity = type.Quantity,
+                            Color = type.Color?.Name == "No Color" ? null : type.Color.Name,
+                            Size = type.Size?.Name == "No Size" ? null : type.Size.Name,
+                            Other = type.Other?.Name == "No Other" ? null : type.Other.Name,
+                            ColorID = type.ColorId == 1 ? null : type.ColorId,
+                            SizeID = type.SizeID == 1 ? null : type.SizeID,
+                            OtherID = type.OtherID == 1 ? null : type.OtherID,
+
+
                         };
                         types.Add(tmp);
                     }
@@ -431,11 +450,43 @@ namespace Application.System.Bill
                     BillDetailQuantity = item.Quantity,
                     BillDetailTotalPrice = item.Price,
                     TypeId = item.ProductTypeId,
-                    TypeName = item.ProductTypes?.Name,
+                    //TypeName = item.ProductTypes?.Name,
+                    //ColorName= item.ProductTypes?.Color.Name,
+                    //SizeName= item.ProductTypes?.Size.Name,
+                    //OtherName= item.ProductTypes?.Other.Name,
+
+
+
                     Unit = item.Products.Unit,
                     ProductType = listType.Any() ? types : null,
                     CartId = item.Bills.Status == Status.CANCEL ? cartID : null
                 };
+                if (item.ProductTypes?.Color?.Name != null)
+                {
+                    pro.ColorName = item.ProductTypes?.Color?.Name != "No Color" ? item.ProductTypes.Color.Name : null;
+                }
+                else
+                {
+                    pro.ColorName = null;
+                }
+                if (item.ProductTypes?.Size?.Name != null)
+                {
+
+                    pro.SizeName = item.ProductTypes?.Size?.Name != "No Size" ? item.ProductTypes.Size.Name : null;
+                }
+                else
+                {
+                    pro.SizeName = null;
+                }
+                if(item.ProductTypes?.Other?.Name != null)
+                {
+
+                pro.OtherName = item.ProductTypes?.Other?.Name != "No Other" ? item.ProductTypes.Other.Name : null;
+                }
+                else
+                {
+                    pro.OtherName = null;
+                }
 
                 list.Add(pro);
             }

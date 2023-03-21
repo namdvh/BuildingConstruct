@@ -1,9 +1,4 @@
 ﻿using Application.ClaimTokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ViewModels.Pagination;
 using ViewModels.Response;
 using ViewModels.Users;
@@ -15,7 +10,7 @@ namespace Application.System.Users
 
         public Task<BaseResponse<UserModels>> LoginGoogle(LoginGoogleRequest request);
         public Task<BaseResponse<UserModels>> UpdateRole(UpdateRoleRequest request);
-        
+
 
         public Task<BaseResponse<UserDTO>> Login(LoginRequestDTO request);
 

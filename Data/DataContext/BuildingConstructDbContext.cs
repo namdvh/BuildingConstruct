@@ -54,6 +54,9 @@ namespace Data.DataContext
             modelBuilder.ApplyConfiguration(new ProductTypeConfigurations());
             modelBuilder.ApplyConfiguration(new PostInviteConfiguration());
             modelBuilder.ApplyConfiguration(new PaymentConfiguration());
+            modelBuilder.ApplyConfiguration(new OtherConfiguration());
+            modelBuilder.ApplyConfiguration(new SizeConfiguration());
+            modelBuilder.ApplyConfiguration(new ColorConfiguration());
 
             modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("UserLogins").HasKey(x => x.UserId);
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("UserRoles").HasKey(x => new { x.UserId, x.RoleId });
@@ -88,5 +91,9 @@ namespace Data.DataContext
         public DbSet<ProductType> ProductTypes { get; set; }    
         public DbSet<PostInvite> PostInvites { get; set; }    
         public DbSet<Payment> Payments { get; set; }    
+
+        public DbSet<Color> Colors { get; set; }    
+        public DbSet<ProductSize> Sizes { get; set; }    
+        public DbSet<Other> Others { get; set; }    
     }
 }

@@ -221,9 +221,14 @@ namespace Application.System.Users
                             response.Message = "Role Name is null";
                             return response;
                         }
-
                         var roles = await _userService.GetRolesAsync(us);
                         var userDTO = MapToDto(us, roleName);
+                        var premium = await _context.Payments.Where(x => x.UserId.ToString().Equals(us.Id.ToString())).FirstOrDefaultAsync();
+                        bool isPremium = false;
+                        if (premium != null)
+                        {
+                            isPremium = true;
+                        }
                         var token = await GenerateToken(userDTO);
                         us.Token = token.Data.RefreshToken;
                         us.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;
@@ -244,7 +249,8 @@ namespace Application.System.Users
                             BuilderID = us.BuilderId,
                             ContractorID = us.ContractorId,
                             StoreID = us.MaterialStoreID,
-                        };
+                            Premium=isPremium
+                    };
 
                     }
                 }
@@ -580,7 +586,7 @@ namespace Application.System.Users
                     Certificate = user.Builder.Certificate,
                     Experience = user.Builder.Experience,
                     ConstructionType = ls,
-                   
+
                 };
 
 
@@ -597,7 +603,7 @@ namespace Application.System.Users
                     Status = user.Status,
                     Phone = user.PhoneNumber,
                     Builder = detailBuilder,
-                    LastModifiedAt=user.LastModifiedAt
+                    LastModifiedAt = user.LastModifiedAt
                 };
 
             }
@@ -625,7 +631,7 @@ namespace Application.System.Users
                     Status = user.Status,
                     Phone = user.PhoneNumber,
                     Contractor = detailContractor,
-                    LastModifiedAt=user.LastModifiedAt
+                    LastModifiedAt = user.LastModifiedAt
                 };
             }
             else
@@ -1114,6 +1120,7 @@ namespace Application.System.Users
         {
             BasePagination<List<UserDetailDTO>> response;
             List<UserDetailDTO> ls = new();
+            List<int> contractorIDFromDB = new();
             var orderBy = filter._orderBy.ToString();
             int totalRecord;
             orderBy = orderBy switch
@@ -1146,6 +1153,14 @@ namespace Application.System.Users
             var data = query.Skip((filter.PageNumber - 1) * filter.PageSize)
                      .Take(filter.PageSize).ToList();
 
+
+            if (!data.Any())
+            {
+                contractorIDFromDB = await _context.Users.Include(x => x.Contractor).Where(x => x.ContractorId != null).Select(x => (int)x.ContractorId).ToListAsync();
+
+            }
+
+
             if (filter.FilterRequest != null)
             {
                 totalRecord = data.Count;
@@ -1155,7 +1170,7 @@ namespace Application.System.Users
                 totalRecord = await _context.AppliedPosts.CountAsync();
             }
 
-            if (!data.Any())
+            if (!data.Any() && !contractorIDFromDB.Any())
             {
                 response = new()
                 {
@@ -1180,10 +1195,25 @@ namespace Application.System.Users
                     TotalRecords = totalRecord
                 };
 
-                foreach (var item in data)
+
+                if (data.Any())
                 {
-                    ls.Add(MapToDetailDTO(item.post));
+
+                    foreach (var item in data)
+                    {
+                        ls.Add(MapToDetailDTO(item.post));
+                    }
                 }
+                else
+                {
+                    foreach (var item in contractorIDFromDB)
+                    {
+                        ls.Add(MapToDetailDTO(item));
+                    }
+                }
+
+
+
 
 
 
@@ -1231,7 +1261,8 @@ namespace Application.System.Users
                 Status = post.Contractor.User.Status,
                 Phone = post.Contractor.User.PhoneNumber,
                 Contractor = detailContractor,
-                LastModifiedAt=post.Contractor.User.LastModifiedAt
+                LastModifiedAt = post.Contractor.User.LastModifiedAt,
+                UserId = post.Contractor.CreateBy
             };
             return userDetail;
         }
@@ -1284,7 +1315,7 @@ namespace Application.System.Users
             }
 
 
-            if (!data.Any())
+            if (!data.Any() && !builderIDFromDB.Any())
             {
                 response = new()
                 {
@@ -1392,7 +1423,8 @@ namespace Application.System.Users
                 Status = user.User.Status,
                 Phone = user.User.PhoneNumber,
                 Builder = detailBuilder,
-                LastModifiedAt=user.LastModifiedAt
+                LastModifiedAt = user.LastModifiedAt,
+                UserId = user.User.Id
             };
 
             return userDetail;
@@ -1445,7 +1477,7 @@ namespace Application.System.Users
                 totalRecord = await _context.Bills.CountAsync();
             }
 
-            if (!data.Any())
+            if (!data.Any() && !storeIDFromDB.Any())
             {
                 response = new()
                 {
@@ -1470,7 +1502,7 @@ namespace Application.System.Users
                     TotalRecords = totalRecord
                 };
 
-                if (!data.Any())
+                if (data.Any())
                 {
                     foreach (var item in data)
                     {
@@ -1534,7 +1566,8 @@ namespace Application.System.Users
                 Status = store.User.Status,
                 Phone = store.User.PhoneNumber,
                 DetailMaterialStore = detailMaterial,
-                LastModifiedAt=store.LastModifiedAt
+                LastModifiedAt = store.LastModifiedAt,
+                UserId = store.User.Id
             };
             return userDetail;
 

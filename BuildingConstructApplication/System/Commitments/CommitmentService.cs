@@ -78,7 +78,6 @@ namespace Application.System.Commitments
                           .Include(x => x.Contractor)
                              .ThenInclude(x => x.User)
                           .Include(x => x.Group)
-
                          .Where(x => (x.BuilderID.Equals(user.BuilderId)))
                          .OrderBy(filter._sortBy + " " + orderBy)
                          .Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -99,6 +98,7 @@ namespace Application.System.Commitments
                             .ThenInclude(x => x.Type)
                         .Include(x => x.Builder)
                             .ThenInclude(x => x.User)
+                        .Include(x=>x.Group)
                         .Where(x => (x.ContractorID.Equals(user.ContractorId)))
                         .OrderBy(filter._sortBy + " " + orderBy)
                         .Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -206,7 +206,7 @@ namespace Application.System.Commitments
 
                 if (item.Group != null)
                 {
-                    var groupMember = _context.GroupMembers.Where(x => x.GroupId == item.Group.Id).ToList();
+                    var groupMember = _context.GroupMembers.Include(x=>x.Type).Where(x => x.GroupId == item.Group.Id).ToList();
                     group = MapGroup(groupMember);
                 }
 

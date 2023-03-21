@@ -8,6 +8,8 @@ using ViewModels.Response;
 using System.Linq.Dynamic.Core;
 using System.Text;
 using Gridify;
+using Microsoft.AspNetCore.Http;
+using ZedGraph;
 
 namespace Application.System.Carts
 {
@@ -24,17 +26,65 @@ namespace Application.System.Carts
         {
             BaseResponse<CartDTO>? response = null;
             Cart cart;
-            var existed = await _context.Carts.Where(x => x.UserID.Equals(userID) && x.ProductID == requests.ProductID && x.TypeID == requests.TypeID).FirstOrDefaultAsync();
+            var existed = await _context.Carts
+                .Include(x => x.Products)
+                    .ThenInclude(x => x.ProductTypes)
+                .Where(x => x.UserID.Equals(userID) && x.ProductID == requests.ProductID && x.TypeID == requests.TypeID).FirstOrDefaultAsync();
 
             if (existed != null)
             {
-                var quantity = existed.Quantity;
-                quantity += requests.Quantity;
 
-                existed.Quantity = quantity;
+                if (existed.TypeID != null)
+                {
+                    var inStockQuanties = await _context.ProductTypes.Where(x => x.Id == existed.TypeID).FirstOrDefaultAsync();
+                    var totalInCart = requests.Quantity + existed.Quantity;
+                    if (totalInCart > inStockQuanties.Quantity)
+                    {
+                        response = new BaseResponse<CartDTO>
+                        {
+                            Code = BaseCode.ERROR,
+                            Message = "Sản phẩm không đủ số lượng",
+                        };
+                        return response;
+                    }
+                    else
+                    {
+                        var quantity = existed.Quantity;
+                        quantity += requests.Quantity;
 
-                _context.Carts.Update(existed);
-                await _context.SaveChangesAsync();
+                        existed.Quantity = quantity;
+
+                        _context.Carts.Update(existed);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+                else
+                {
+                    var quanties = existed.Products.UnitInStock;
+                    var totalInCart = requests.Quantity + existed.Quantity;
+                    if (totalInCart > quanties)
+                    {
+                        response = new BaseResponse<CartDTO>
+                        {
+                            Code = BaseCode.ERROR,
+                            Message = "Sản phẩm không đủ số lượng",
+                        };
+                        return response;
+                    }
+                    else
+                    {
+                        var quantity = existed.Quantity;
+                        quantity += requests.Quantity;
+
+                        existed.Quantity = quantity;
+
+                        _context.Carts.Update(existed);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+
+
+
 
                 response = new()
                 {
@@ -130,6 +180,11 @@ namespace Application.System.Carts
                     .ThenInclude(x => x.MaterialStore)
                         .ThenInclude(x => x.User)
                 .Include(x => x.ProductType)
+                    .ThenInclude(x => x.Color)
+                 .Include(x => x.ProductType)
+                    .ThenInclude(x => x.Size)
+                 .Include(x => x.ProductType)
+                    .ThenInclude(x => x.Other)
                 .Where(x => x.UserID.Equals(UserID))
                 .OrderBy(filter._sortBy + " " + orderBy)
                 .Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -265,17 +320,58 @@ namespace Application.System.Carts
 
             foreach (var item in requests)
             {
-                var cart = new Cart()
+                var product = await _context.Products.Where(x => x.Id == item.ProductID).FirstOrDefaultAsync();
+
+                if (string.IsNullOrEmpty(item.TypeID.ToString()))
                 {
-                    ProductID = item.ProductID,
-                    Quantity = item.Quantity,
-                    TypeID = item.TypeID,
-                    UserID = userID
-                };
-                await _context.Carts.AddAsync(cart);
-                rs = await _context.SaveChangesAsync();
-
-
+                    var quanties = await _context.ProductTypes.Include(x => x.Products).Where(x => x.Id == item.TypeID).FirstOrDefaultAsync();
+                    if (item.Quantity > quanties.Quantity)
+                    {
+                        response = new()
+                        {
+                            Code = BaseCode.ERROR,
+                            Message = quanties.Products.Name + "không có đủ số lượng"
+                        };
+                        return response;
+                    }
+                    else
+                    {
+                        var cart = new Cart()
+                        {
+                            ProductID = item.ProductID,
+                            Quantity = item.Quantity,
+                            TypeID = item.TypeID,
+                            UserID = userID
+                        };
+                        await _context.Carts.AddAsync(cart);
+                        rs = await _context.SaveChangesAsync();
+                    }
+                }
+                else
+                {
+                    var quanties = await _context.Products.Where(x => x.Id == item.ProductID).FirstOrDefaultAsync();
+                    if (item.Quantity > quanties.UnitInStock)
+                    {
+                        response = new()
+                        {
+                            Code = BaseCode.ERROR,
+                            Message = quanties.Name + "không có đủ số lượng"
+                        };
+                        return response;
+                    }
+                    else
+                    {
+                        var cart = new Cart()
+                        {
+                            ProductID = item.ProductID,
+                            Quantity = item.Quantity,
+                            TypeID = item.TypeID,
+                            UserID = userID
+                        };
+                        await _context.Carts.AddAsync(cart);
+                        rs = await _context.SaveChangesAsync();
+                    }
+                }
             }
 
             if (rs > 0)
@@ -316,7 +412,11 @@ namespace Application.System.Carts
 
         private CartDTO MapToDTO(Cart cart)
         {
-            var listType = _context.ProductTypes.Where(x => x.ProductID == cart.ProductID).ToList();
+            var listType = _context.ProductTypes
+                .Include(x => x.Color)
+                .Include(x => x.Size)
+                .Include(x => x.Other)
+                .Where(x => x.ProductID == cart.ProductID && x.Status == Status.SUCCESS).ToList();
             List<CartProductType> types = new();
 
             if (listType.Any())
@@ -326,8 +426,15 @@ namespace Application.System.Carts
                     CartProductType tmp = new()
                     {
                         Id = item.Id,
-                        TypeName = item.Name,
+                        //TypeName = item.Name,
                         Quantity = item.Quantity,
+                        Color = item.Color?.Name == "No Color" ? null : item.Color.Name,
+                        Size = item.Size?.Name == "No Size" ? null : item.Size.Name,
+                        Other = item.Other?.Name == "No Other" ? null : item.Other.Name,
+                        ColorID = item.ColorId == 1 ? null : item.ColorId,
+                        SizeID = item.SizeID == 1 ? null : item.SizeID,
+                        OtherID = item.OtherID == 1 ? null : item.OtherID,
+
                     };
                     types.Add(tmp);
                 }
@@ -344,11 +451,45 @@ namespace Application.System.Carts
                 Quantity = cart.Quantity,
                 UnitInStock = cart.Products.UnitInStock,
                 UnitPrice = cart.Products.UnitPrice,
-                Unit=cart.Products.Unit,
-                TypeName = cart.ProductType?.Name != null ? cart.ProductType.Name : null,
+                Unit = cart.Products.Unit,
+                IsDisable = cart.ProductType?.Status == Status.CANCEL ? true : false,
+                //TypeName = cart.ProductType?.Name != null ? cart.ProductType.Name : null,
+                //Color = cart.ProductType?.Color?.Name != "No Color" ? cart.ProductType.Color.Name : null,
+                //Size = cart.ProductType?.Size?.Name != "No Size" ? cart.ProductType.Size.Name : null,
+                //Other = cart.ProductType?.Other?.Name != "No Other" ? cart.ProductType.Other.Name : null,
                 TypeID = cart.ProductType?.Id != null ? cart.ProductType.Id : null,
                 ProductType = listType.Any() ? types : null,
             };
+
+            if (cart.ProductType?.Color?.Name != null)
+            {
+                dto.Color = cart.ProductType?.Color?.Name != "No Color" ? cart.ProductType.Color.Name : null;
+            }
+            else
+            {
+                dto.Color = null;
+            }
+            if (cart.ProductType?.Size?.Name != null)
+            {
+
+                dto.Size = cart.ProductType?.Size?.Name != "No Size" ? cart.ProductType.Size.Name : null;
+            }
+            else
+            {
+                dto.Size = null;
+            }
+            if (cart.ProductType?.Other?.Name != null)
+            {
+
+                dto.Other = cart.ProductType?.Other?.Name != "No Other" ? cart.ProductType.Other.Name : null;
+            }
+            else
+            {
+                dto.Other = null;
+            }
+
+
+
             return dto;
         }
     }
