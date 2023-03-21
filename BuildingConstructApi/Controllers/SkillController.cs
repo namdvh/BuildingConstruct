@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ViewModels.Pagination;
+using ViewModels.Skills;
 
 namespace BuildingConstructApi.Controllers
 {
@@ -37,6 +38,24 @@ namespace BuildingConstructApi.Controllers
 
             var result = await _skillService.GetAll(validFilter);
             return Ok(result);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateSkill(SkillRequest skill)
+        {
+            var rs = await _skillService.CreateSkill(skill);
+            return Ok(rs);
+        }
+        [HttpPut("delete")]
+        public async Task<IActionResult> DeleteSkill(int skillId)
+        {
+            var rs = await _skillService.DeleteSkill(skillId);
+            return Ok(rs);
+        }
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateSkill(int skillId, [FromBody] SkillRequest skill)
+        {
+            var rs = await _skillService.UpdateSkill(skillId, skill);
+            return Ok(rs);
         }
     }
 }
