@@ -853,6 +853,26 @@ namespace Application.System.ContractorPosts
             }
             else
             {
+                if (request.QuizSubmit != null)
+                {
+                    List<UserAnswer> ls = new();
+
+                    foreach (var item in request.QuizSubmit.AnswerId)
+                    {
+                        UserAnswer answer = new UserAnswer()
+                        {
+                            AnswerID = item,
+                            BuilderId = user.BuilderId.Value
+                        };
+
+                        ls.Add(answer);
+
+                        await _context.AddRangeAsync(ls);
+
+                        await _context.SaveChangesAsync();
+                    }
+                }
+
                 AppliedPost applied = new()
                 {
                     BuilderID = user.BuilderId.Value,

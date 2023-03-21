@@ -10,6 +10,5 @@ namespace ViewModels.Quizzes
     {
         public List<int> AnswerId { get; set; }
 
-        public decimal? WishSalary { get; set; }
     }
 }

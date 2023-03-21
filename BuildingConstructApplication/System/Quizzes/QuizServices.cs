@@ -222,7 +222,7 @@ namespace Application.System.Quizzes
                 {
                     BuilderID = user.BuilderId.Value,
                     PostID = postId,
-                    WishSalary = request.WishSalary,
+                    //WishSalary = request.WishSalary,
                     Status = Status.NOT_RESPONSE,
                     AppliedDate = DateTime.Now,
                     QuizId= quizId
