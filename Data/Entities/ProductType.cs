@@ -19,6 +19,8 @@ namespace Data.Entities
         public int? SizeID { get; set; }
         public ProductSize? Size { get; set; }
 
+        public string? Label { get; set; }
+
         public int? OtherID { get; set; }
         public Other? Other { get; set; }
 

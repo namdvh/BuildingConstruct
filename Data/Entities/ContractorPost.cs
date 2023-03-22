@@ -19,6 +19,7 @@ namespace Data.Entities
 
         public List<PostCommitment>? PostCommitments { get; set; }
         public List<AppliedPost>? AppliedPosts { get; set; }
+        public List<Quiz>? Quizzes { get; set; }
         public List<PostInvite>? PostInvites { get; set; }
         public List<Save>? Saves { get; set; }
 
@@ -41,6 +42,7 @@ namespace Data.Entities
         public int PeopeRemained { get; set; }
         public bool? isApplied { get; set; }
 
+        public bool QuizRequired { get; set; }
 
         public string? ConstructionType { get; set; }
         

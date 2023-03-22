@@ -36,5 +36,7 @@ namespace ViewModels.ContractorPost
 
         public bool Transport { get; set; }
 
+        public bool QuizRequired { get; set; }
+
     }
 }

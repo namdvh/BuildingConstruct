@@ -35,6 +35,8 @@ namespace ViewModels.Users
 
         public Place? Place { get; set; }
 
+        public string? Image { get; set; }
+
         public List<BuilderSkillsDTO>? BuilderSkills { get; set; }
 
         public string? TypeName { get; set; }
@@ -46,6 +48,13 @@ namespace ViewModels.Users
         public string? Certificate { get; set; }
 
         public List<WorkerListType>? ConstructionType { get; set; }
+
+        public int? InviteCount { get; set; }
+
+        public int? AppliedCount { get; set; }
+
+        public List<string>? Images { get; set; }
+
     }
 
 

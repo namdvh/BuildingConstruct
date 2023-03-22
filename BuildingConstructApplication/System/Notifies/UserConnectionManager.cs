@@ -1,11 +1,6 @@
 ﻿using Data.DataContext;
 using Data.Entities;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ViewModels.Notificate;
 using ViewModels.Response;
 
@@ -15,6 +10,8 @@ namespace Application.System.Notifies
     {
         private static ConcurrentDictionary<string, ConcurrentBag<string>> userConnectionMap = new ConcurrentDictionary<string, ConcurrentBag<string>>();
         private readonly ReaderWriterLockSlim userConnectionMapLock = new ReaderWriterLockSlim();
+
+        private static string userConnectionMapLocker = string.Empty;
         private readonly BuildingConstructDbContext _context;
 
         public UserConnectionManager(BuildingConstructDbContext context)
@@ -49,7 +46,7 @@ namespace Application.System.Notifies
             userConnectionMapLock.EnterReadLock();
             try
             {
-                if (userConnectionMap.TryGetValue(userId, out ConcurrentBag<string> connections)!=null)
+                if (userConnectionMap.TryGetValue(userId, out ConcurrentBag<string> connections) != null)
                 {
                     return new List<string>(connections);
                 }
@@ -58,11 +55,27 @@ namespace Application.System.Notifies
                     return null;
                 }
             }
+            catch (Exception e)
+            {
+                return null;
+            }
             finally
             {
                 userConnectionMapLock.ExitReadLock();
             }
+
+            //var conn = new List<string>();
+            //lock (userConnectionMapLocker)
+            //{
+            //    List<string> ls = new();
+
+            //    ls.Add(userId);
+
+            //    conn = ls;
+            //}
+            //return conn;
         }
+
 
 
 

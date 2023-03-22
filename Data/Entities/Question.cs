@@ -6,17 +6,16 @@ using System.Threading.Tasks;
 
 namespace Data.Entities
 {
-    public class Other
+    public class Question
     {
         public int Id { get; set; }
 
         public string Name { get; set; }
 
-        public string? Image { get; set; }
+        public int QuizId { get; set; }
 
-        public DateTime LastModifiedAt { get; set; } = DateTime.Now;
+        public Quiz Quiz { get; set; }
 
-        public List<ProductType>? ProductTypes { get; set; }
-
+        public List<Answer> Answers { get; set; }
     }
 }

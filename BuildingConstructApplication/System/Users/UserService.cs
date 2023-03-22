@@ -32,7 +32,7 @@ namespace Application.System.Users
         private readonly RoleManager<Role> _roleManager;
         private readonly IConfiguration _config;
         private readonly BuildingConstructDbContext _context;
-        private readonly string emailApi = "";
+        //private readonly string emailApi = "";
         public UserService(UserManager<User> userService, SignInManager<User> signInManager, RoleManager<Role> roleManager, IConfiguration config, BuildingConstructDbContext context)
         {
             _userService = userService;
@@ -249,8 +249,8 @@ namespace Application.System.Users
                             BuilderID = us.BuilderId,
                             ContractorID = us.ContractorId,
                             StoreID = us.MaterialStoreID,
-                            Premium=isPremium
-                    };
+                            Premium = isPremium
+                        };
 
                     }
                 }
@@ -573,6 +573,16 @@ namespace Application.System.Users
                     };
                     ls.Add(workerListType);
                 }
+                var appliedCount = _context.AppliedPosts.Where(x => x.BuilderID == user.Builder.Id).Count();
+                var inviteCount = _context.PostInvites.Where(x => x.BuilderId == user.Builder.Id).Count();
+                List<string> images = new();
+
+                if (user.Builder.Image != null)
+                {
+                    var splitImage = user.Builder.Image.Split(",").ToList();
+
+                    images.AddRange(splitImage);
+                }
 
 
                 DetailBuilder detailBuilder = new()
@@ -585,7 +595,11 @@ namespace Application.System.Users
                     ExperienceDetail = user.Builder.ExperienceDetail,
                     Certificate = user.Builder.Certificate,
                     Experience = user.Builder.Experience,
+                    Image = user.Builder.Image,
                     ConstructionType = ls,
+                    AppliedCount = appliedCount,
+                    InviteCount = inviteCount,
+                    Images = images.Any() ? images : null
 
                 };
 
@@ -757,6 +771,10 @@ namespace Application.System.Users
                 {
                     user.FirstName = request.FirstName;
                 }
+                if (!string.IsNullOrEmpty(request.Image))
+                {
+                    user.Builder.Image = request.Image;
+                }
 
                 if (!string.IsNullOrEmpty(request.LastName))
                 {
@@ -799,18 +817,27 @@ namespace Application.System.Users
                     user.PhoneNumber = request.Phone;
 
                 }
+
+
+                //
+
                 if (request.ExperienceDetail != null)
                 {
                     if (request.ExperienceDetail.Length == 0)
                     {
                         user.Builder.ExperienceDetail = null;
                     }
+                    else
+                    {
+
+                        user.Builder.ExperienceDetail = request.ExperienceDetail;
+                    }
 
                 }
-                else
-                {
-                    user.Builder.ExperienceDetail = request.ExperienceDetail;
-                }
+
+
+
+
                 if (!string.IsNullOrEmpty(request.Experience.ToString()))
                 {
                     user.Builder.Experience = request.Experience;
@@ -820,15 +847,15 @@ namespace Application.System.Users
                 {
                     if (request.Certificate.Length == 0)
                     {
-                        user.Builder.ExperienceDetail = null;
+                        user.Builder.Certificate = null;
                     }
-                    user.Builder.Certificate = null;
-                }
-                else
-                {
-                    user.Builder.Certificate = request.Certificate;
+                    else
+                    {
+                        user.Builder.Certificate = request.Certificate;
 
+                    }
                 }
+
                 if (!string.IsNullOrEmpty(request.TypeID.ToString()))
                 {
                     user.Builder.TypeID = request.TypeID;
@@ -1154,6 +1181,8 @@ namespace Application.System.Users
                      .Take(filter.PageSize).ToList();
 
 
+
+
             if (!data.Any())
             {
                 contractorIDFromDB = await _context.Users.Include(x => x.Contractor).Where(x => x.ContractorId != null).Select(x => (int)x.ContractorId).ToListAsync();
@@ -1214,7 +1243,7 @@ namespace Application.System.Users
 
 
 
-
+                var final = ls.DistinctBy(x => x.UserId).ToList();
 
 
 
@@ -1222,7 +1251,7 @@ namespace Application.System.Users
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = ls,
+                    Data = final,
                     Pagination = pagination
                 };
             }
@@ -1355,11 +1384,15 @@ namespace Application.System.Users
                         ls.Add(MapBuilderFavorite(item));
                     }
                 }
+
+                var final = ls.DistinctBy(x => x.UserId).ToList();
+
+
                 response = new()
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = ls,
+                    Data = final,
                     Pagination = pagination
                 };
             }
@@ -1516,6 +1549,9 @@ namespace Application.System.Users
                         ls.Add(MapStoreFavorite(item));
                     }
                 }
+                var final = ls.DistinctBy(x => x.UserId).ToList();
+
+
 
 
 
@@ -1524,7 +1560,7 @@ namespace Application.System.Users
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = ls,
+                    Data = final,
                     Pagination = pagination
                 };
             }

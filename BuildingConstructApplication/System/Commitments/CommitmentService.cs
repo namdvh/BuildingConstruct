@@ -353,7 +353,7 @@ namespace Application.System.Commitments
         public async Task<BaseResponse<string>> UpdateCommitment(Guid userID, int id)
         {
             BaseResponse<string> response;
-            var postCommitment = await _context.PostCommitments.Where(x => x.Id == id).FirstOrDefaultAsync();
+            var postCommitment = await _context.PostCommitments.Include(x=>x.Contractor).Where(x => x.Id == id).FirstOrDefaultAsync();
 
             if (postCommitment == null)
             {
@@ -379,10 +379,15 @@ namespace Application.System.Commitments
             //    await _context.SaveChangesAsync();
             //}
 
+
+
+
             response = new()
             {
                 Code = BaseCode.SUCCESS,
-                Message = BaseCode.SUCCESS_MESSAGE
+                Message = BaseCode.SUCCESS_MESSAGE,
+                Data= postCommitment.Contractor.CreateBy.ToString(),
+                NavigateId=id
             };
             return response;
         }
@@ -390,7 +395,6 @@ namespace Application.System.Commitments
         public async Task<BaseResponse<string>> CreateCommitment(CreateCommimentRequest request, Guid ContractorID)
         {
             BaseResponse<string> response;
-            PostCommitment builder;
             PostCommitment commitment;
 
             var ctor = await _context.Users.Include(x => x.Contractor).Where(x => x.Id.Equals(ContractorID)).FirstOrDefaultAsync();

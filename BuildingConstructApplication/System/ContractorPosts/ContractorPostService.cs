@@ -50,14 +50,14 @@ namespace Application.System.ContractorPosts
                 ViewCount = 0,
                 NumberPeople = contractorPostDTO.NumberPeople,
                 PeopeRemained = contractorPostDTO.NumberPeople,
-                Status = Status.Level1,
+                Status = contractorPostDTO.QuizRequired == true ? Status.PENDING : Status.SUCCESS,
                 PostCategories = PostCategories.Categories1,
                 Benefit = contractorPostDTO.Benefit,
                 Required = contractorPostDTO.Required,
                 LastModifiedAt = DateTime.Now,
                 CreateBy = Guid.Parse(userID),
-                ContractorID = (int)contracID
-
+                ContractorID = (int)contracID,
+                QuizRequired = contractorPostDTO.QuizRequired,
             };
 
             await _context.ContractorPosts.AddAsync(contractorPost);
@@ -206,6 +206,9 @@ namespace Application.System.ContractorPosts
                 post.isApplied = false;
             }
 
+            var listQuiz = await _context.Quizzes.Where(x => x.PostID == post.Id).ToListAsync();
+
+
             ContractorPostDetailDTO postDTO = new()
             {
                 Title = post.Title,
@@ -220,7 +223,7 @@ namespace Application.System.ContractorPosts
                 Benefit = post.Benefit,
                 Required = post.Required,
                 StarDate = post.StarDate,
-                ViewCount=post.ViewCount,
+                ViewCount = post.ViewCount,
                 EndDate = post.EndDate,
                 LastModifiedAt = post.LastModifiedAt,
                 NumberPeople = post.NumberPeople,
@@ -231,7 +234,8 @@ namespace Application.System.ContractorPosts
                 type = await GetTypeAndSkillFromPost(post.Id),
                 CreatedBy = post.CreateBy,
                 Author = await GetUserProfile(post.CreateBy),
-                IsSave = IsSave
+                IsSave = IsSave,
+                Quizzes = listQuiz.Any() ? listQuiz : null,
             };
 
             return postDTO;
@@ -392,6 +396,7 @@ namespace Application.System.ContractorPosts
             var result = await query
                     .Include(x => x.Contractor)
                         .ThenInclude(x => x.User)
+                    .Where(x => x.Status == Status.SUCCESS)
                      .OrderBy(filter._sortBy + " " + orderBy)
                      .Skip((filter.PageNumber - 1) * filter.PageSize)
                      .Take(filter.PageSize)
@@ -466,6 +471,7 @@ namespace Application.System.ContractorPosts
             var appliedPost = await _context.AppliedPosts
                 .Include(x => x.Builder)
                     .ThenInclude(x => x.User)
+                .Include(x => x.Quiz)
                 .Where(x => x.PostID == postID)
                 .OrderBy(filter._sortBy + " " + orderBy)
                 .Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -529,6 +535,22 @@ namespace Application.System.ContractorPosts
 
         private AppliedPostDTO MapToAppliedPostDTO(AppliedPost applied)
         {
+            int totalScore = 0;
+            int totalQuestion = 0;
+
+            if (applied.QuizId != null)
+            {
+                totalScore = _context.UserAnswers
+                    .Include(x => x.Answer)
+                    .Where(x => x.BuilderId == applied.BuilderID && x.Answer.isCorrect == true && x.Answer.Question.QuizId == applied.QuizId)
+                    .Count();
+
+                totalQuestion = _context.Questions.Where(x=>x.QuizId==applied.QuizId).Count();
+
+            }
+
+
+
             AppliedPostDTO rs = new()
             {
                 Avatar = applied.Builder.User.Avatar,
@@ -537,7 +559,13 @@ namespace Application.System.ContractorPosts
                 LastName = applied.Builder.User.LastName,
                 UserID = applied.Builder.User.Id,
                 WishSalary = applied.WishSalary,
-                AppliedDate = applied.AppliedDate
+                AppliedDate = applied.AppliedDate,
+                QuizId = applied.QuizId,
+                QuizName = applied.Quiz?.Name,
+                TotalCorrectAnswers = totalScore,
+                TotalNumberQuestion = totalQuestion,
+
+
             };
             return rs;
         }
@@ -720,8 +748,10 @@ namespace Application.System.ContractorPosts
                     AuthorName = item.Contractor.User.FirstName + " " + item.Contractor.User.LastName,
                     Title = item.Title,
                     IsSave = save,
+                    _createdBy = item.CreateBy,
                     ViewCount = item.ViewCount,
                     LastModifiedAt = item.LastModifiedAt,
+                    Status = item.Status
                 };
                 result.Add(dto);
             }
@@ -823,6 +853,26 @@ namespace Application.System.ContractorPosts
             }
             else
             {
+                if (request.QuizSubmit != null)
+                {
+                    List<UserAnswer> ls = new();
+
+                    foreach (var item in request.QuizSubmit.AnswerId)
+                    {
+                        UserAnswer answer = new UserAnswer()
+                        {
+                            AnswerID = item,
+                            BuilderId = user.BuilderId.Value
+                        };
+
+                        ls.Add(answer);
+
+                        await _context.AddRangeAsync(ls);
+
+                        await _context.SaveChangesAsync();
+                    }
+                }
+
                 AppliedPost applied = new()
                 {
                     BuilderID = user.BuilderId.Value,

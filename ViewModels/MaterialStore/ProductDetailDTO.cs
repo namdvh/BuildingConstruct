@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ViewModels.Categories;
+﻿using ViewModels.Categories;
 
 namespace ViewModels.MaterialStore
 {
@@ -25,6 +20,8 @@ namespace ViewModels.MaterialStore
         public string? Brand { get; set; }
 
         public int SoldQuantities { get; set; }
+
+        public Guid UserId { get; set; }
 
         public MaterialStoreDTO Store { get; set; }
 

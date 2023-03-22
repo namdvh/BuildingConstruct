@@ -20,26 +20,33 @@ namespace Application.System.PostInvite
         public async Task<BaseResponse<string>> Create(CreatePostIniviteRequest requests)
         {
             BaseResponse<string> response;
+          
 
-            Data.Entities.PostInvite postInvite = new()
-            {
-                BuilderId = requests.BuilderId,
-                ContractorId = requests.ContractorId,
-                ContractorPostId = requests.ContractorPostId,
-                IsRead = false,
-                LastModifiedAt = DateTime.Now,
-            };
+                Data.Entities.PostInvite postInvite = new()
+                {
+                    BuilderId = requests.BuilderId,
+                    ContractorId = requests.ContractorId,
+                    ContractorPostId = requests.ContractorPostId,
+                    IsRead = false,
+                    LastModifiedAt = DateTime.Now,
+                };
 
-            await _context.PostInvites.AddAsync(postInvite);
-            await _context.SaveChangesAsync();
+                await _context.PostInvites.AddAsync(postInvite);
+                await _context.SaveChangesAsync();
+
+
+            var sendID = await _context.Users.Where(x=>x.BuilderId==requests.BuilderId).Select(x=>x.Id).FirstOrDefaultAsync(); 
 
             response = new()
             {
                 Code = BaseCode.SUCCESS,
-                Message = BaseCode.SUCCESS_MESSAGE
-            };
+                Message = BaseCode.SUCCESS_MESSAGE,
+                Data = sendID.ToString(),
+                NavigateId = requests.ContractorPostId
+                };
 
             return response;
+
 
         }
 
@@ -138,7 +145,7 @@ namespace Application.System.PostInvite
         {
             BaseResponse<bool> response = new();
 
-            var check = await _context.PostInvites.Where(x=>x.BuilderId== builderID && x.ContractorPostId==postID).FirstOrDefaultAsync();
+            var check = await _context.PostInvites.Where(x => x.BuilderId == builderID && x.ContractorPostId == postID).FirstOrDefaultAsync();
 
             if (check != null)
             {
@@ -213,8 +220,8 @@ namespace Application.System.PostInvite
                     ContractorPostId = item.ContractorPostId,
                     ContractorPostName = item.ContractorPost.ProjectName,
                     Id = item.Id,
-                    Places=item.ContractorPost.Place,
-                    Salaries=item.ContractorPost.Salaries,
+                    Places = item.ContractorPost.Place,
+                    Salaries = item.ContractorPost.Salaries,
                 };
                 ls.Add(tmp);
             }

@@ -2,17 +2,11 @@
 using Application.System.SavePost;
 using BuildingConstructApi.Hubs;
 using Data.DataContext;
-using Data.Entities;
 using Data.Enum;
-using Emgu.CV;
-using Emgu.CV.Structure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
-using System.Drawing;
-using System.Reflection.PortableExecutable;
 using ViewModels.Notificate;
 using ViewModels.Pagination;
 using ViewModels.Response;
@@ -27,8 +21,8 @@ namespace BuildingConstructApi.Controllers
     {
         private readonly IHubContext<NotificationUserHub> _notificationUserHubContext;
         private readonly IUserConnectionManager _userConnectionManager;
-        private readonly ISaveService _saveService;
         private readonly BuildingConstructDbContext _context;
+        private readonly ISaveService _saveService;
 
         public SavePostController(ISaveService saveService, IUserConnectionManager userConnectionManager, IHubContext<NotificationUserHub> notificationUserHubContext, BuildingConstructDbContext context)
         {
@@ -41,15 +35,14 @@ namespace BuildingConstructApi.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateSavePost([FromBody] SavePostRequest request)
-         {
+        {
             var rs = await _saveService.SavePost(request);
-            var connections = _userConnectionManager.GetUserConnections(rs.Data);
             NotificationModels noti = new();
             noti.NotificationType = NotificationType.TYPE_1;
             noti.Message = NotificationMessage.SAVENOTI;
             var userID = User.FindFirst("UserID").Value;
             noti.CreateBy = Guid.Parse(userID.ToString());
-            noti.UserId=Guid.Parse(rs.Data.ToString());
+            noti.UserId = Guid.Parse(rs.Data.ToString());
             var author = await _context.Users.Where(x => x.Id.ToString().Equals(userID.ToString())).FirstOrDefaultAsync();
             noti.Author = new();
             noti.Author.FirstName = author.FirstName;
@@ -58,19 +51,20 @@ namespace BuildingConstructApi.Controllers
             noti.LastModifiedAt = DateTime.Now;
             noti.NavigateId = rs.NavigateId;
             var check = await _userConnectionManager.SaveNotification(noti);
+            var connections = _userConnectionManager.GetUserConnections(rs.Data);
             if (connections != null && connections.Count > 0)
             {
                 foreach (var connectionId in connections)
                 {
-                   
-                    if (check !=null)
+
+                    if (check != null)
                     {
                         noti.Id = check.Data.Id;
                         await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("sendToUser", noti);
 
                     }
                 }
-            }     
+            }
             return Ok(rs);
         }
         [HttpGet("getAllSave")]
@@ -108,22 +102,22 @@ namespace BuildingConstructApi.Controllers
             return Ok(response);
         }
 
-        
-
-            //using (var memoryStream = new MemoryStream())
-            //{
-            //    await image[1].CopyToAsync(memoryStream);
-            //    using (var img = Image.FromStream(memoryStream))
-            //    {
-            //        face = GetMatFromSDImage(img);
-
-            //    }
-            //}
 
 
-       
+        //using (var memoryStream = new MemoryStream())
+        //{
+        //    await image[1].CopyToAsync(memoryStream);
+        //    using (var img = Image.FromStream(memoryStream))
+        //    {
+        //        face = GetMatFromSDImage(img);
+
+        //    }
+        //}
 
 
-       
+
+
+
+
     }
 }

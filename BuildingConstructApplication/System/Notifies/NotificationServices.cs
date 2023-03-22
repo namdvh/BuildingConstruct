@@ -29,12 +29,8 @@ namespace Application.System.Notifies
 
         public async Task<BasePagination<List<NotificationDTO>>> GetAllNotification(PaginationFilter filter, Guid UserId)
         {
-            Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
-            var userID = identifierClaim.Value.ToString();
             BasePagination<List<NotificationDTO>> response = new();
             var orderBy = filter._orderBy.ToString();
-            int totalRecord;
-
             if (string.IsNullOrEmpty(filter._sortBy))
             {
                 filter._sortBy = "Id";
@@ -45,18 +41,22 @@ namespace Application.System.Notifies
                 "-1" => "descending",
                 _ => orderBy
             };
-            var totalRecords = await _context.Notifcations.Where(x => x.UserID.ToString().Equals(userID)).CountAsync();
 
-            IQueryable<Notification> query = (IQueryable<Notification>)_context.Notifcations;
+            IQueryable<Notification> query = _context.Notifcations;
 
 
             var data = await query
-                .Include(x => x.User).Where(x => x.UserID.ToString().Equals(userID))
+                .Include(x => x.User)
                 .AsNoTracking()
-               .OrderBy(filter._sortBy + " " + orderBy)
-               .Skip((filter.PageNumber - 1) * filter.PageSize)
-               .Take(filter.PageSize)
-               .ToListAsync();
+                .Where(x => x.UserID.Equals(UserId))
+                .OrderBy(filter._sortBy + " " + orderBy)
+                .Skip((filter.PageNumber - 1) * filter.PageSize)
+                .Take(filter.PageSize)
+                .ToListAsync();
+
+
+            var totalRecords = await _context.Notifcations.Where(x => x.UserID.Equals(UserId)).CountAsync();
+
             if (data == null)
             {
 
@@ -72,6 +72,7 @@ namespace Application.System.Notifies
                 totalPages = totalRecords / (double)filter.PageSize;
 
                 var roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
+
                 Pagination pagination = new()
                 {
                     CurrentPage = filter.PageNumber,
@@ -79,10 +80,15 @@ namespace Application.System.Notifies
                     TotalPages = roundedTotalPages,
                     TotalRecords = totalRecords
                 };
-                response.Code = BaseCode.SUCCESS;
-                response.Message = BaseCode.SUCCESS_MESSAGE;
-                response.Data = await MapListDTO(data);
-                response.Pagination = pagination;
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = await MapListDTO(data),
+                    Pagination = pagination
+                };
+
             }
 
             return response;
@@ -111,7 +117,7 @@ namespace Application.System.Notifies
                     dto.Author.LastName = user.LastName;
                     dto.Author.Avatar = user.Avatar;
                 }
-               
+
                 result.Add(dto);
             }
             return result;
@@ -124,7 +130,7 @@ namespace Application.System.Notifies
 
             if (noti != null)
             {
-                noti.IsRead = true ;
+                noti.IsRead = true;
                 _context.Update(noti);
                 await _context.SaveChangesAsync();
 

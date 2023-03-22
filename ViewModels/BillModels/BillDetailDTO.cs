@@ -32,6 +32,7 @@ namespace ViewModels.BillModels
         public string? ColorName { get; set; }
         public string? SizeName { get; set; }
         public string? OtherName { get; set; }
+        public string? Label { get; set; }
         public int? TypeId { get; set; }
         public string? Unit { get; set; }
         public int? CartId { get; set; }

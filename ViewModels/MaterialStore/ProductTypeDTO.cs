@@ -10,6 +10,9 @@ namespace ViewModels.MaterialStore
     {
         public int? Id { get; set; }
         public string? TypeName { get; set; }
+
+        public string? Label { get; set; }
+
         public int Quantity { get; set; }
 
 
@@ -20,6 +23,10 @@ namespace ViewModels.MaterialStore
         public string? Color { get; set; }
         public string? Other { get; set; }
         public string? Size { get; set; }
+
+        public string? Image { get; set; }
+
+        //public string? OtherImage { get; set; }
 
     }
 }

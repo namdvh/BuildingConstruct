@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ViewModels.Quizzes;
 
 namespace ViewModels.ContractorPost
 {
@@ -11,6 +12,7 @@ namespace ViewModels.ContractorPost
         public int PostId { get; set; }   
         public decimal? WishSalary { get; set; }
         public List<AppliedGroup>? GroupMember { get; set; } 
+        public QuizSubmit? QuizSubmit { get; set; }
     }
 
     public class AppliedGroup

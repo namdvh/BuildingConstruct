@@ -10,7 +10,9 @@ namespace Data.Entities
     {
         public int Id { get; set; }
 
-        public string Name { get; set; }    
+        public string Name { get; set; }   
+        
+        public string? Image { get; set; }
 
         public DateTime LastModifiedAt { get; set; }=DateTime.Now;
 

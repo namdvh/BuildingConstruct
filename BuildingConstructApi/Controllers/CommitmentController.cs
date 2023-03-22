@@ -89,6 +89,58 @@ namespace BuildingConstructApi.Controllers
                 return BadRequest();
             }
             var result = await _commitmentService.UpdateCommitment(Guid.Parse(userID), commitmentID);
+
+            var author = await _context.Users.Where(x => x.Id.ToString().Equals(userID.ToString())).FirstOrDefaultAsync();
+
+            NotificateAuthor notiAuthor = new()
+            {
+                Avatar = author.Avatar,
+                FirstName = author.FirstName,
+                LastName = author.LastName,
+            };
+
+            NotificationModels noti = new()
+            {
+                LastModifiedAt = DateTime.Now,
+                CreateBy = Guid.Parse(userID),
+                NavigateId = result.NavigateId,
+                UserId = Guid.Parse(result.Data.ToString()),
+                Message = NotificationMessage.UPDATE_COMMIMENT,
+                NotificationType = NotificationType.TYPE_1,
+                Author = notiAuthor,
+            };
+
+            var check = await _userConnectionManager.SaveNotification(noti);
+            var connections = _userConnectionManager.GetUserConnections(result.Data);
+            if (connections != null && connections.Count > 0)
+            {
+                foreach (var connectionId in connections)
+                {
+
+                    if (check != null)
+                    {
+                        noti.Id = check.Data.Id;
+                        await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("sendToUser", noti);
+
+                    }
+                }
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             return Ok(result);
         }
 

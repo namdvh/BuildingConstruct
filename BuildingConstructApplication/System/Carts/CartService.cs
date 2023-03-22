@@ -436,6 +436,16 @@ namespace Application.System.Carts
                         OtherID = item.OtherID == 1 ? null : item.OtherID,
 
                     };
+
+                    if (tmp.OtherID == null)
+                    {
+                        tmp.Image = item.Color.Image != null ? item.Color.Image : null;
+                    }
+                    else
+                    {
+                        tmp.Image = item.Other.Image != null ? item.Other.Image : null;
+
+                    }
                     types.Add(tmp);
                 }
             }
@@ -487,6 +497,18 @@ namespace Application.System.Carts
             {
                 dto.Other = null;
             }
+            if (cart.ProductType != null)
+            {
+
+                dto.Label = cart.ProductType.Label;
+            }
+            else
+            {
+                dto.Label = null;
+            }
+
+
+
 
 
 

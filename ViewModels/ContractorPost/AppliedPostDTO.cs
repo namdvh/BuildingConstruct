@@ -17,5 +17,9 @@ namespace ViewModels.ContractorPost
         public decimal? WishSalary { get; set; }
         public DateTime? AppliedDate{ get; set; }
         public List<AppliedGroup>? Groups { get; set; }
+        public int? QuizId { get; set; }
+        public string? QuizName { get; set; }
+        public int? TotalNumberQuestion { get; set; }
+        public int? TotalCorrectAnswers { get; set; }
     }
 }

@@ -459,6 +459,7 @@ namespace Data.Extensions
                 StartTime="8:00",
                 EndTime="17:30",
                 CreateBy=Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7"),
+                QuizRequired=true
             });
 
             modelBuilder.Entity<ContractorPostSkill>().HasData(new ContractorPostSkill
@@ -1501,7 +1502,7 @@ namespace Data.Extensions
                 Id = 1,
                 Type=Enum.NotificationType.TYPE_1,
                 Title="New Notification",
-                UserID=Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d6"),
+                UserID=Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7"),
                 CreateBy=Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d9"),
                 IsRead=false,
                 LastModifiedAt=DateTime.Now,
@@ -1510,11 +1511,12 @@ namespace Data.Extensions
             });
 
             modelBuilder.Entity<Notification>().HasData(new Notification
+            
             {
                 Id = 2,
                 Type = Enum.NotificationType.TYPE_2,
                 Title = "New Notification",
-                UserID = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d6"),
+                UserID = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7"),
                 CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d9"),
                 IsRead = false,
                 LastModifiedAt = DateTime.Now,
@@ -1527,7 +1529,7 @@ namespace Data.Extensions
                 Id = 3,
                 Type = Enum.NotificationType.TYPE_3,
                 Title = "New Notification",
-                UserID = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d6"),
+                UserID = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7"),
                 CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d9"),
                 IsRead = false,
                 LastModifiedAt = DateTime.Now,
@@ -1560,7 +1562,8 @@ namespace Data.Extensions
                 BuilderID=1,
                 PostID=1,
                 AppliedDate=DateTime.Now,
-                Status=Enum.Status.ACCEPTED
+                Status=Enum.Status.ACCEPTED,
+                QuizId=1
                 
             });
 
@@ -1569,7 +1572,9 @@ namespace Data.Extensions
                 BuilderID = 2,
                 PostID = 1,
                 AppliedDate = DateTime.Now,
-                Status = Enum.Status.ACCEPTED
+                Status = Enum.Status.ACCEPTED,
+                QuizId = 1
+
 
             });
 
@@ -1578,9 +1583,229 @@ namespace Data.Extensions
                 BuilderID = 3,
                 PostID = 1,
                 AppliedDate = DateTime.Now,
-                Status = Enum.Status.ACCEPTED
+                Status = Enum.Status.ACCEPTED,
+                QuizId = 1
+
 
             });
+
+
+
+            //QUIZ
+            modelBuilder.Entity<Quiz>().HasData(new Quiz
+            {
+              Id=1,
+              Name="Bài test thợ xây ",
+              PostID=1,
+              TypeID= Guid.Parse("4ace8fcb-95eb-48c0-9deb-240e8b4e10e0"),
+              LastModifiedAt=DateTime.Now
+
+            });
+
+            modelBuilder.Entity<Quiz>().HasData(new Quiz
+            {
+                Id = 2,
+                Name = "Bài test thợ sơn ",
+                PostID = 1,
+                TypeID = Guid.Parse("ce9fa65b-d005-46b6-953e-e6462a59cfb3"),
+                LastModifiedAt = DateTime.Now,
+
+            });
+
+
+
+
+            //QUESTION SECTION
+
+
+
+
+
+
+            //QUESTION 1
+
+
+            modelBuilder.Entity<Question>().HasData(new Question
+            {
+                Id = 1,
+                Name = "Búa tạ, cáo búa  đều là những loại gì?",
+                QuizId = 1,
+            }); ;
+
+            modelBuilder.Entity<Answer>().HasData(new Answer
+            {
+              Id=1,
+              Name="Máy khoan",
+              isCorrect=false,
+              QuestionId=1
+
+            });
+
+            modelBuilder.Entity<Answer>().HasData(new Answer
+            {
+                Id = 2,
+                Name = "Búa",
+                isCorrect = true,
+                QuestionId = 1
+
+            });
+
+            modelBuilder.Entity<Answer>().HasData(new Answer
+            {
+                Id = 3,
+                Name = "Cưa",
+                isCorrect = false,
+                QuestionId = 1
+
+            });
+
+            modelBuilder.Entity<Answer>().HasData(new Answer
+            {
+                Id = 4,
+                Name = "Vặn vít",
+                isCorrect = false,
+                QuestionId = 1
+
+            });
+
+
+            //QUESTION 2
+
+
+            modelBuilder.Entity<Question>().HasData(new Question
+            {
+                Id = 2,
+                Name = "Quá trình phá hủy một tòa nhà được gọi là _______ ?",
+                QuizId = 1,
+            }); ;
+
+            modelBuilder.Entity<Answer>().HasData(new Answer
+            {
+                Id = 5,
+                Name = "Phá dỡ",
+                isCorrect = true,
+                QuestionId = 2
+
+            });
+
+            modelBuilder.Entity<Answer>().HasData(new Answer
+            {
+                Id = 6,
+                Name = "Ràng buộc ",
+                isCorrect = false,
+                QuestionId = 2
+
+            });
+
+            modelBuilder.Entity<Answer>().HasData(new Answer
+            {
+                Id = 7,
+                Name = "Cốt thép",
+                isCorrect = false,
+                QuestionId = 2
+
+            });
+
+            modelBuilder.Entity<Answer>().HasData(new Answer
+            {
+                Id = 8,
+                Name = "Đùn",
+                isCorrect = false,
+                QuestionId = 2
+
+            });
+
+            //QUESTION 3
+
+            modelBuilder.Entity<Question>().HasData(new Question
+            {
+                Id = 3,
+                Name = "Khi một ngôi nhà sử dụng năng lượng mặt trời, bạn thường sẽ thấy ________ trên mái nhà.?",
+                QuizId = 1,
+            }); ;
+
+            modelBuilder.Entity<Answer>().HasData(new Answer
+            {
+                Id = 9,
+                Name = "Ăng-ten",
+                isCorrect = false,
+                QuestionId = 3
+
+            });
+
+            modelBuilder.Entity<Answer>().HasData(new Answer
+            {
+                Id = 10,
+                Name = "Giếng trời ",
+                isCorrect = false,
+                QuestionId = 3
+
+            });
+
+            modelBuilder.Entity<Answer>().HasData(new Answer
+            {
+                Id = 11,
+                Name = "Tấm",
+                isCorrect = true,
+                QuestionId = 3
+
+            });
+
+            modelBuilder.Entity<Answer>().HasData(new Answer
+            {
+                Id = 12,
+                Name = "Ống",
+                isCorrect = false,
+                QuestionId = 3
+
+            });
+
+            //QUESTION 4
+
+            modelBuilder.Entity<Question>().HasData(new Question
+            {
+                Id = 4,
+                Name = "Tên khác của một bức tường không chịu lực là gì?",
+                QuizId = 1,
+            }); ;
+
+            modelBuilder.Entity<Answer>().HasData(new Answer
+            {
+                Id = 13,
+                Name = "Bươm bướm",
+                isCorrect = false,
+                QuestionId = 4
+
+            });
+
+            modelBuilder.Entity<Answer>().HasData(new Answer
+            {
+                Id = 14,
+                Name = "Màn ",
+                isCorrect = false,
+                QuestionId = 4
+
+            });
+
+            modelBuilder.Entity<Answer>().HasData(new Answer
+            {
+                Id = 15,
+                Name = "Đảng",
+                isCorrect = true,
+                QuestionId = 4
+
+            });
+
+            modelBuilder.Entity<Answer>().HasData(new Answer
+            {
+                Id = 16,
+                Name = "Chỉ",
+                isCorrect = false,
+                QuestionId = 4
+
+            });
+
+
 
 
         }

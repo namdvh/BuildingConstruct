@@ -60,25 +60,47 @@ namespace Application.System.MaterialStores
             if (request.ProductTypes != null)
             {
                 List<ProductType> list = new();
+                List<Color> colorExisted = new();
+                List<ProductSize> sizeExisted = new();
+
+
                 foreach (var item in request.ProductTypes)
                 {
                     var productType = new ProductType();
                     productType.ProductID = products.Id;
                     productType.Quantity = item.Quantity;
-                    productType.Status = Status.SUCCESS; 
-                    //productType.Name = item.TypeName;
+                    productType.Status = Status.SUCCESS;
 
+                    if (!string.IsNullOrEmpty(item.Label))
+                    {
+                        productType.Label = item.Label;
+                    }
 
                     if (!string.IsNullOrEmpty(item.Color))
                     {
-                        Color tmpColor = new()
-                        {
-                            Name = item.Color,
-                        };
+                        var inColorList = colorExisted.Where(x => x.Name.Equals(item.Color)).FirstOrDefault();
 
-                        await _context.Colors.AddAsync(tmpColor);
-                        await _context.SaveChangesAsync();
-                        productType.ColorId = tmpColor.Id;
+                        if (inColorList != null)
+                        {
+                            productType.ColorId = inColorList.Id;
+                        }
+                        else
+                        {
+
+                            Color tmpColor = new()
+                            {
+                                Name = item.Color,
+                                Image = item.Image,
+                            };
+
+                            await _context.Colors.AddAsync(tmpColor);
+                            await _context.SaveChangesAsync();
+
+                            colorExisted.Add(tmpColor);
+                            productType.ColorId = tmpColor.Id;
+
+                        }
+
                     }
                     else
                     {
@@ -88,14 +110,28 @@ namespace Application.System.MaterialStores
 
                     if (!string.IsNullOrEmpty(item.Size))
                     {
-                        ProductSize tmpSize = new()
-                        {
-                            Name = item.Size,
-                        };
+                        var inSizeList = sizeExisted.Where(x => x.Name.Equals(item.Size)).FirstOrDefault();
 
-                        await _context.Sizes.AddAsync(tmpSize);
-                        await _context.SaveChangesAsync();
-                        productType.SizeID = tmpSize.Id;
+                        if (inSizeList != null)
+                        {
+                            productType.SizeID = inSizeList.Id;
+                        }
+                        else
+                        {
+
+                            ProductSize tmpSize = new()
+                            {
+                                Name = item.Size,
+                            };
+
+                            await _context.Sizes.AddAsync(tmpSize);
+                            await _context.SaveChangesAsync();
+                            sizeExisted.Add(tmpSize);
+                            productType.SizeID = tmpSize.Id;
+                        }
+
+
+
                     }
                     else
                     {
@@ -108,6 +144,7 @@ namespace Application.System.MaterialStores
                         Other tmpOther = new()
                         {
                             Name = item.Other,
+                            Image=item.Image
                         };
 
                         await _context.Others.AddAsync(tmpOther);
@@ -166,7 +203,6 @@ namespace Application.System.MaterialStores
         {
             BasePagination<List<ProductStoreDTO>> response;
             var orderBy = filter._orderBy.ToString();
-            int totalRecord;
 
             if (string.IsNullOrEmpty(filter._sortBy))
             {
@@ -434,7 +470,12 @@ namespace Application.System.MaterialStores
         public async Task<BaseResponse<ProductDetailDTO>> GetProductDetail(int productId)
         {
             BaseResponse<ProductDetailDTO> response = new();
-            var rs = await _context.Products.Include(x => x.ProductCategories).Include(x => x.ProductTypes).SingleOrDefaultAsync(x => x.Id == productId);
+            var rs = await _context.Products
+                .Include(x=> x.MaterialStore)
+                    .ThenInclude(x=>x.User)
+                .Include(x => x.ProductCategories)
+                .Include(x => x.ProductTypes)
+                .SingleOrDefaultAsync(x => x.Id == productId);
             if (rs == null)
             {
 
@@ -460,6 +501,7 @@ namespace Application.System.MaterialStores
             productDetail.UnitInStock = rs.UnitInStock;
             productDetail.UnitPrice = rs.UnitPrice;
             productDetail.Unit = rs.Unit;
+            productDetail.UserId = rs.MaterialStore.User.Id;
             productDetail.Brand = rs.Brand;
             productDetail.SoldQuantities = rs.SoldQuantities;
             productDetail.ProductType = await GetProductType(rs.ProductTypes);
@@ -529,18 +571,33 @@ namespace Application.System.MaterialStores
                     .Include(x => x.Color)
                     .Include(x => x.Size)
                     .Include(x => x.Other)
-                    .Where(x => x.Id == c.Id && x.Status==Status.SUCCESS )
+                    .Where(x => x.Id == c.Id && x.Status == Status.SUCCESS)
                     .SingleOrDefaultAsync();
                 var final = new ProductTypeDTO();
                 final.Id = results.Id;
                 //final.TypeName = results.Name;
                 final.Quantity = results.Quantity;
+                final.Label = results.Label;
                 final.Other = results.Other?.Name == "No Other" ? null : results.Other.Name;
                 final.Size = results.Size?.Name == "No Size" ? null : results.Size.Name;
                 final.Color = results.Color?.Name == "No Color" ? null : results.Color.Name;
                 final.ColorId = results.ColorId == 1 ? null : results.ColorId;
                 final.SizeId = results.SizeID == 1 ? null : results.SizeID;
                 final.OtherId = results.OtherID == 1 ? null : results.OtherID;
+
+                if (final.OtherId == null)
+                {
+                    final.Image = results.Color.Image != null ? results.Color.Image : null;
+                }
+                else
+                {
+                    final.Image = results.Other.Image != null ? results.Other.Image : null;
+
+                }
+
+
+                //final.OtherImage=results.Other.Image ==null ? null : results.Other.Image;
+                //final.ColorImage=results.Color.Image ==null ? null : results.Color.Image;
                 list.Add(final);
             }
             return list;
