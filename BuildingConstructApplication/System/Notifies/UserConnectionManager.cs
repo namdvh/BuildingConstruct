@@ -43,38 +43,37 @@ namespace Application.System.Notifies
 
         public List<string> GetUserConnections(string userId)
         {
-            //userConnectionMapLock.EnterReadLock();
-            //try
-            //{
-            //    if (userConnectionMap.TryGetValue(userId, out ConcurrentBag<string> connections) != null)
-            //    {
-            //        return new List<string>(connections);
-            //    }
-            //    else
-            //    {
-            //        return null;
-            //    }
-            //}
-            //catch (Exception e)
-            //{
-            //    return null;
-            //}
-            ////finally
-            ////{
-            ////    userConnectionMapLock.ExitReadLock();
-            ////}
-            ///
-
-            var conn = new List<string>();
-            lock (userConnectionMapLocker)
+            userConnectionMapLock.EnterReadLock();
+            try
             {
-                List<string> ls = new();
-
-                ls.Add(userId);
-
-                conn = ls;
+                if (userConnectionMap.TryGetValue(userId, out ConcurrentBag<string> connections) != null)
+                {
+                    return new List<string>(connections);
+                }
+                else
+                {
+                    return null;
+                }
             }
-            return conn;
+            catch (Exception e)
+            {
+                return null;
+            }
+            finally
+            {
+                userConnectionMapLock.ExitReadLock();
+            }
+
+            //var conn = new List<string>();
+            //lock (userConnectionMapLocker)
+            //{
+            //    List<string> ls = new();
+
+            //    ls.Add(userId);
+
+            //    conn = ls;
+            //}
+            //return conn;
         }
 
 

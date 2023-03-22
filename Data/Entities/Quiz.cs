@@ -20,7 +20,7 @@ namespace Data.Entities
         public DateTime LastModifiedAt { get; set; } = DateTime.Now;
         [JsonIgnore]
         public List<Question> Questions { get; set; }
-
+        [JsonIgnore]
         public List<AppliedPost>? AppliedPosts { get; set; }
     }
 }
