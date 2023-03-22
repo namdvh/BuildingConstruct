@@ -4,6 +4,8 @@ using Data.Enum;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 using ViewModels.Pagination;
+using ViewModels.Response;
+using ViewModels.Skills;
 
 namespace Application.System.Skills
 {
@@ -14,6 +16,65 @@ namespace Application.System.Skills
         public SkillServices(BuildingConstructDbContext context)
         {
             _context = context;
+        }
+
+        public async Task<BaseResponse<string>> CreateSkill(SkillRequest skill)
+        {
+            BaseResponse<string> response = new();
+            var skills = new Data.Entities.Skill()
+            {
+                Name = skill.Name,
+                FromSystem=true,
+                TypeId=Guid.Parse(skill.TypeId)
+            };
+            var check = await _context.Skills.Where(x => x.Id==skills.Id).FirstOrDefaultAsync();
+            if (check == null)
+            {
+                await _context.Skills.AddAsync(skills);
+                var rs = await _context.SaveChangesAsync();
+                if (rs > 0)
+                {
+                    response.Code = BaseCode.SUCCESS;
+                    response.Message = BaseCode.SUCCESS_MESSAGE;
+                }
+                else
+                {
+
+                    response.Code = BaseCode.ERROR;
+                    response.Message = BaseCode.ERROR_MESSAGE;
+                }
+            }
+            return response;
+        }
+
+        public async Task<BaseResponse<string>> DeleteSkill(int skillID)
+        {
+            BaseResponse<string> response = new();
+            var check = await _context.Skills.Include(x => x.BuilderSkills).Include(x => x.ContractorPostSkills).Where(x => x.Id==skillID).FirstOrDefaultAsync();
+            if (check != null)
+            {
+                if (!check.BuilderSkills.Any() && !check.ContractorPostSkills.Any())
+                {
+                    _context.Skills.Remove(check);
+                    var rs = await _context.SaveChangesAsync();
+                    if (rs > 0)
+                    {
+                        response.Code = BaseCode.SUCCESS;
+                        response.Message = BaseCode.SUCCESS_MESSAGE;
+                    }
+                    else
+                    {
+                        response.Code = BaseCode.ERROR;
+                        response.Message = BaseCode.ERROR_MESSAGE;
+                    }
+                }
+                else
+                {
+                    response.Code = BaseCode.ERROR;
+                    response.Message = BaseCode.ERROR_MESSAGE;
+                }
+            }
+            return response;
         }
 
         public async Task<BasePagination<List<Skill>>> GetAll(PaginationFilter filter)
@@ -81,5 +142,31 @@ namespace Application.System.Skills
             return response;
         }
 
+        public async Task<BaseResponse<string>> UpdateSkill(int skillID, SkillRequest skill)
+        {
+            BaseResponse<string> response = new();
+            var check = await _context.Skills.Where(x => x.Id==skillID).FirstOrDefaultAsync();
+            if (check != null)
+            {
+                check.Name = skill.Name;
+                if (skill.TypeId != null)
+                {
+                    check.TypeId = Guid.Parse(skill.TypeId);
+                }
+                _context.Skills.Update(check);
+                var rs = await _context.SaveChangesAsync();
+                if (rs > 0)
+                {
+                    response.Code = BaseCode.SUCCESS;
+                    response.Message = BaseCode.SUCCESS_MESSAGE;
+                }
+                else
+                {
+                    response.Code = BaseCode.ERROR;
+                    response.Message = BaseCode.ERROR_MESSAGE;
+                }
+            }
+            return response;
+        }
     }
 }

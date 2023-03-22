@@ -23,10 +23,10 @@ namespace Data.DataContext
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-            //foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
-            //{
-            //    relationship.DeleteBehavior = DeleteBehavior.Restrict;
-            //}
+            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                relationship.DeleteBehavior = DeleteBehavior.Restrict;
+            }
             modelBuilder.ApplyConfiguration(new ContractorPostConfiguration());
             modelBuilder.ApplyConfiguration(new MaterialStoreConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
@@ -81,20 +81,20 @@ namespace Data.DataContext
         public DbSet<Entities.Type> Types { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<Products> Products { get; set; }
-        public DbSet<GroupMember> GroupMembers { get; set; }    
-        public DbSet<Categories> Categories { get; set; }    
-        public DbSet<ProductCategories> ProductCategories { get; set; }    
-        public DbSet<AppliedPost> AppliedPosts { get; set; }    
-        public DbSet<PostCommitment> PostCommitments { get; set; }    
-        public DbSet<ContractorPostType> ContractorPostTypes { get; set; }     
-        public DbSet<Cart> Carts { get; set; }    
-        public DbSet<Save> Saves { get; set; }    
-        public DbSet<Bill> Bills { get; set; }    
-        public DbSet<BillDetail> BillDetails { get; set; }    
-        public DbSet<Notification> Notifcations { get; set; }    
-        public DbSet<ProductType> ProductTypes { get; set; }    
-        public DbSet<PostInvite> PostInvites { get; set; }    
-        public DbSet<Payment> Payments { get; set; }    
+        public DbSet<GroupMember> GroupMembers { get; set; }
+        public DbSet<Categories> Categories { get; set; }
+        public DbSet<ProductCategories> ProductCategories { get; set; }
+        public DbSet<AppliedPost> AppliedPosts { get; set; }
+        public DbSet<PostCommitment> PostCommitments { get; set; }
+        public DbSet<ContractorPostType> ContractorPostTypes { get; set; }
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<Save> Saves { get; set; }
+        public DbSet<Bill> Bills { get; set; }
+        public DbSet<BillDetail> BillDetails { get; set; }
+        public DbSet<Notification> Notifcations { get; set; }
+        public DbSet<ProductType> ProductTypes { get; set; }
+        public DbSet<PostInvite> PostInvites { get; set; }
+        public DbSet<Payment> Payments { get; set; }
 
         public DbSet<Color> Colors { get; set; }    
         public DbSet<ProductSize> Sizes { get; set; }    
