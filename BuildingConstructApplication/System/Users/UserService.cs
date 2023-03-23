@@ -232,6 +232,28 @@ namespace Application.System.Users
                         var token = await GenerateToken(userDTO);
                         us.Token = token.Data.RefreshToken;
                         us.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;
+                        if (us.LoginTime == null)
+                        {
+                            us.LoginTime = DateTime.Now.ToString();
+                        }
+
+                        else
+                        {
+                            string date = us.LoginTime;
+                            string[] check = date.Split(',');
+                            foreach (var item in check)
+                            {
+                                if (DateTime.Parse(item).Date < DateTime.Now.Date)
+                                {
+                                    us.LoginTime = DateTime.Now.ToString();
+                                }
+                                else
+                                {
+                                    us.LoginTime = us.LoginTime + ',' + DateTime.Now;
+                                }
+                            }
+
+                        }
                         await _userService.UpdateAsync(us);
                         response.Data = new()
                         {
@@ -1629,7 +1651,7 @@ namespace Application.System.Users
                 response.Message = "Please update all information in your profile";
                 return response;
             }
-            var us =await _context.Users.Where(x => x.Token.Equals(refreshToken.refreshToken)).FirstOrDefaultAsync();
+            var us = await _context.Users.Where(x => x.Token.Equals(refreshToken.refreshToken)).FirstOrDefaultAsync();
             if (us == null || us.Token != refreshToken.refreshToken || us.RefreshTokenExpiryTime <= DateTime.UtcNow)
             {
                 response.Code = "500";
@@ -1649,13 +1671,66 @@ namespace Application.System.Users
                 Gender = us.Gender,
                 Avatar = us.Avatar,
                 Address = us.Address,
-                IdNumber=us.IdNumber,
-                Status=us.Status,
+                IdNumber = us.IdNumber,
+                Status = us.Status,
                 Role = role[0]
             };
             response.Data = profile;
             response.Code = "200";
             response.Message = "msg";
+            return response;
+        }
+
+        public async Task<BaseResponse<List<AccessSatisticDTO>>> GetStatisticLoginCount()
+        {
+            var response = new BaseResponse<List<AccessSatisticDTO>>();
+            var list = new List<UserLoginDTO>();
+            response.Data = new List<AccessSatisticDTO>();
+            for(int i=1;i<=24;i++)
+            {
+                var us = new AccessSatisticDTO();
+                us.Time = i.ToString();
+                us.AccessCount = 0;
+                response.Data.Add(us);
+            }
+            var query = await _context.Users.Select(x => x.LoginTime).Where(x => x != null).ToListAsync();
+            foreach (var item in query)
+            {
+                //dynamic time;
+                if (item.Contains(','))
+                {
+                    var split = item.Split(',');
+                    foreach (var i in split)
+                    {
+                        var uslogin = new UserLoginDTO();
+                        uslogin.Time = DateTime.Parse(i);
+                        uslogin.AccessCount = uslogin.AccessCount + 1;
+                        //uslogin.Time = time;
+                        list.Add(uslogin);
+                    }
+                }
+                else
+                {
+                    var uslogin = new UserLoginDTO();
+                    uslogin.Time = DateTime.Parse(item);
+                    uslogin.AccessCount = 1;
+                    list.Add(uslogin);
+                }
+            }
+            var groupByTime = list.GroupBy(x => x.Time.Hour).Select(g => new
+            {
+                Time = g.Key,
+                AccessCount = g.Count(),
+            }).ToList().OrderBy(x=>x.Time);
+            foreach (var time in groupByTime)
+            {
+                foreach (var item in response.Data.Select((value, i) => (value, i)).Where(x => x.value.Time.Equals(time.Time.ToString())))
+                {
+                    item.value.Time = time.Time.ToString();
+                    item.value.AccessCount = time.AccessCount;
+                }
+            }
+
             return response;
         }
     }

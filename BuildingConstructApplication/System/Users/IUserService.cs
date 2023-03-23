@@ -27,6 +27,6 @@ namespace Application.System.Users
         Task<BaseResponse<string>> UpdateContractorProfile(UpdateContractorRequest request, Guid userID);
         Task<BaseResponse<string>> UpdateStoreProfile(UpdateStoreRequest request, Guid userID);
         Task<BaseResponse<UserDetailDTO>> GetProfile(RefreshToken refreshToken);
-
+        Task<BaseResponse<List<AccessSatisticDTO>>> GetStatisticLoginCount();
     }
 }
