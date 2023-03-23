@@ -1,14 +1,19 @@
 version: '3.4'
 
+networks:
+    backendnetwork:
+
 services:
   sql-server:
     container_name: buildingdb
     image: "mcr.microsoft.com/mssql/server:2019-latest"
     ports:
-        - 1433:1433
+        - 1455:1433
     environment:
         SA_PASSWORD: "Hoainam@123"
         ACCEPT_EULA: "Y"
+    networks:
+        - backendnetwork
 
   buildingconstructapi:
     container_name: buildingapi
@@ -20,3 +25,6 @@ services:
         - 8000:80
     depends_on:
         - sql-server
+    networks:
+        - backendnetwork
+
