@@ -590,13 +590,9 @@ namespace Application.System.ContractorPosts
                     .Include(x => x.Answer)
                     .Where(x => x.BuilderId == applied.BuilderID && x.Answer.isCorrect == true && x.Answer.Question.QuizId == applied.QuizId)
                     .Count();
-
                 totalQuestion = _context.Questions.Where(x => x.QuizId == applied.QuizId).Count();
 
             }
-
-
-
             AppliedPostDTO rs = new()
             {
                 Avatar = applied.Builder.User.Avatar,
@@ -609,6 +605,7 @@ namespace Application.System.ContractorPosts
                 AppliedDate = applied.AppliedDate,
                 TotalCorrectAnswers = totalScore,
                 TotalNumberQuestion = totalQuestion,
+              
             };
             return rs;
         }
@@ -627,6 +624,8 @@ namespace Application.System.ContractorPosts
                     Name = item.Name,
                     TypeName = type,
                     TypeID = item.TypeID,
+                    SkillAssessment=item.SkillAssessment,
+                    BehaviourAssessment=item.BehaviourAssessment
 
                 };
                 result.Add(rs);
@@ -855,7 +854,9 @@ namespace Application.System.ContractorPosts
                         IdNumber = item.VerifyId,
                         Name = item.Name,
                         TypeID = item.TypeID,
-                        GroupId = group.Id
+                        GroupId = group.Id,
+                        BehaviourAssessment=item.BehaviourAssessment,
+                        SkillAssessment=item.SkillAssessment
                     };
 
                     await _context.GroupMembers.AddAsync(groupMember);
