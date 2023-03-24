@@ -20,7 +20,7 @@ namespace Application.System.ContractorPosts
     public class ContractorPostService : IContractorPostService
     {
         private readonly BuildingConstructDbContext _context;
-        private IHttpContextAccessor _accessor;
+        private readonly IHttpContextAccessor _accessor;
         public ContractorPostService(BuildingConstructDbContext context, IHttpContextAccessor accessor)
         {
             _context = context;
@@ -101,9 +101,11 @@ namespace Application.System.ContractorPosts
 
 
 
-                        var cPostSkill = new ContractorPostSkill();
-                        cPostSkill.ContractorPostID = id;
-                        cPostSkill.SkillID = rSkill.Id;
+                        var cPostSkill = new ContractorPostSkill
+                        {
+                            ContractorPostID = id,
+                            SkillID = rSkill.Id
+                        };
                         _context.ContractorPostSkills.Add(cPostSkill);
                         var rs = _context.SaveChanges();
                         if (rs < 0)
@@ -233,6 +235,7 @@ namespace Application.System.ContractorPosts
                 PostCategories = post.PostCategories,
                 Place = post.Place,
                 IsApplied = post.isApplied,
+                RequiredQuiz=post.QuizRequired,
                 type = await GetTypeAndSkillFromPost(post.Id),
                 CreatedBy = post.CreateBy,
                 Author = await GetUserProfile(post.CreateBy),

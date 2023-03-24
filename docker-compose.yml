@@ -11,20 +11,17 @@ services:
       image: nginx:alpine
       ports:
       - "443:443"
-      networks:
-      - backendnetwork
+      #- "8080:80"
+      #networks:
+      #- backendnetwork
       depends_on:
         - buildingconstructapi
-
-
-
-
 
     sql-server:
         container_name: buildingdb
         image: "mcr.microsoft.com/mssql/server:2019-latest"
         ports:
-            - 1433:1433
+            - 1455:1433
         environment:
             SA_PASSWORD: "Hoainam@123"
             ACCEPT_EULA: "Y"
