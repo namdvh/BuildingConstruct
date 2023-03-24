@@ -1730,7 +1730,8 @@ namespace Application.System.Users
                     item.value.AccessCount = time.AccessCount;
                 }
             }
-
+            response.Code = "200";
+            response.Message = BaseCode.SUCCESS_MESSAGE;
             return response;
         }
     }
