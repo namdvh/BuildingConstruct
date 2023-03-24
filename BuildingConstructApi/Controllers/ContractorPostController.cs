@@ -109,8 +109,14 @@ namespace BuildingConstructApi.Controllers
         [HttpPost("applied")]
         public async Task<IActionResult> AppliedPost([FromBody] AppliedPostRequest request)
         {
-            var rs = User.FindFirst("UserID").Value;
+            string? rs = User.FindFirst("UserID")?.Value;
             var result = await _contractorPostService.AppliedPost(request, Guid.Parse(rs));
+
+            if (result.Data.Equals("ALREADY_APPLIED"))
+            {
+                return Ok(result);
+            }
+
             NotificationModels noti = new();
             noti.NotificationType = NotificationType.TYPE_1;
             noti.Message = NotificationMessage.APPLIEDNOTI;

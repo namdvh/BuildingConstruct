@@ -16,7 +16,7 @@ namespace Application.System.Types
     public class TypeService : ITypeService
     {
         private readonly BuildingConstructDbContext _context;
-        private IHttpContextAccessor _accessor;
+        private readonly IHttpContextAccessor _accessor;
         public TypeService(BuildingConstructDbContext context, IHttpContextAccessor accessor)
         {
             _context = context;

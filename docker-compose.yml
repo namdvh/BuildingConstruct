@@ -50,6 +50,8 @@ services:
 
     buildingconstructapi:
         container_name: buildingapi
+        #enviroment:
+        #    - ASPNETCORE_ENVIROMENT=Development
         image: ${DOCKER_REGISTRY-}buildingconstructapi
         build:
             context: .

@@ -1,6 +1,5 @@
 ﻿using Application.ClaimTokens;
 using Application.System.Users;
-using Data.DataContext;
 using Data.Entities;
 using Data.Enum;
 using Microsoft.AspNetCore.Authentication;
@@ -10,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 using ViewModels.Pagination;
@@ -53,33 +51,33 @@ namespace BuildingConstructApi.Controllers
             //}
             //else
             //{
-                var token = await _userService.GenerateToken(rs.Data);
-                if (token != null)
+            var token = await _userService.GenerateToken(rs.Data);
+            if (token != null)
+            {
+                try
                 {
-                    try
+                    var userPrincipalac = this.ValidateToken(token.Data.AccessToken);
+                    var authProperties = new AuthenticationProperties
                     {
-                        var userPrincipalac = this.ValidateToken(token.Data.AccessToken);
-                        var authProperties = new AuthenticationProperties
-                        {
-                            ExpiresUtc = DateTimeOffset.UtcNow.AddSeconds(30),
-                            IsPersistent = true,
-                            AllowRefresh = true,
-                        };
-                        await HttpContext.SignInAsync(userPrincipalac, authProperties);
-                    }
-                    catch (Exception)
-                    {
-                    }
-                    //token.Message = "Login Success";
-                    //token.Code = BaseCode.SUCCESS;
-                    //rs.Code = token.Code;
-                    //rs.Message = token.Message;
-                    
-                    rs.Data.AccessToken = token.Data.AccessToken;
-                    rs.Data.RefreshToken = token.Data.RefreshToken;
-                    rs.Data.RefreshTokenExpiryTime = token.Data.RefreshTokenExpiryTime;
+                        ExpiresUtc = DateTimeOffset.UtcNow.AddSeconds(30),
+                        IsPersistent = true,
+                        AllowRefresh = true,
+                    };
+                    await HttpContext.SignInAsync(userPrincipalac, authProperties);
                 }
-                return Ok(rs);
+                catch (Exception)
+                {
+                }
+                //token.Message = "Login Success";
+                //token.Code = BaseCode.SUCCESS;
+                //rs.Code = token.Code;
+                //rs.Message = token.Message;
+
+                rs.Data.AccessToken = token.Data.AccessToken;
+                rs.Data.RefreshToken = token.Data.RefreshToken;
+                rs.Data.RefreshTokenExpiryTime = token.Data.RefreshTokenExpiryTime;
+            }
+            return Ok(rs);
             //}
         }
 
@@ -260,7 +258,7 @@ namespace BuildingConstructApi.Controllers
         [HttpGet("detail")]
         public async Task<IActionResult> GetUserDetail(Guid userID)
         {
-            if (userID==Guid.Empty)
+            if (userID == Guid.Empty)
             {
                 return BadRequest();
             }
@@ -299,7 +297,7 @@ namespace BuildingConstructApi.Controllers
         [HttpPut("update/builder")]
         public async Task<IActionResult> UpdateBuilder([FromBody] UpdateBuilderRequest request)
         {
-            var userID = User.FindFirst("UserID").Value;
+            string? userID = User.FindFirst("UserID")?.Value;
             if (userID == null)
             {
                 return BadRequest();
@@ -311,7 +309,7 @@ namespace BuildingConstructApi.Controllers
         [HttpPut("update/contractor")]
         public async Task<IActionResult> UpdateContractor([FromBody] UpdateContractorRequest request)
         {
-            var userID = User.FindFirst("UserID").Value;
+            string? userID = User.FindFirst("UserID")?.Value;
             if (userID == null)
             {
                 return BadRequest();
@@ -322,7 +320,7 @@ namespace BuildingConstructApi.Controllers
         [HttpPut("update/store")]
         public async Task<IActionResult> UpdateStore([FromBody] UpdateStoreRequest request)
         {
-            var userID = User.FindFirst("UserID").Value;
+            string? userID = User.FindFirst("UserID")?.Value;
             if (userID == null)
             {
                 return BadRequest();

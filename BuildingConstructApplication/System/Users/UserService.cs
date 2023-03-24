@@ -357,8 +357,10 @@ namespace Application.System.Users
 
                     if (defaultRole.Id == Guid.Parse(BaseCode.UsRole))
                     {
-                        var builder = new Builder();
-                        builder.CreateBy = user.Id;
+                        var builder = new Builder
+                        {
+                            CreateBy = user.Id
+                        };
                         await _context.Builders.AddAsync(builder);
                         _context.SaveChanges();
 

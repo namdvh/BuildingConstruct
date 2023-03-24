@@ -24,7 +24,7 @@ namespace Application.System.Carts
 
         public async Task<BaseResponse<CartDTO>> Create(Guid userID, CreateCartRequest requests)
         {
-            BaseResponse<CartDTO>? response = null;
+            BaseResponse<CartDTO>? response=null ;
             Cart cart;
             var existed = await _context.Carts
                 .Include(x => x.Products)
@@ -38,7 +38,7 @@ namespace Application.System.Carts
                 {
                     var inStockQuanties = await _context.ProductTypes.Where(x => x.Id == existed.TypeID).FirstOrDefaultAsync();
                     var totalInCart = requests.Quantity + existed.Quantity;
-                    if (totalInCart > inStockQuanties.Quantity)
+                    if (totalInCart > inStockQuanties?.Quantity)
                     {
                         response = new BaseResponse<CartDTO>
                         {
@@ -325,7 +325,7 @@ namespace Application.System.Carts
                 if (string.IsNullOrEmpty(item.TypeID.ToString()))
                 {
                     var quanties = await _context.ProductTypes.Include(x => x.Products).Where(x => x.Id == item.TypeID).FirstOrDefaultAsync();
-                    if (item.Quantity > quanties.Quantity)
+                    if (item.Quantity > quanties?.Quantity)
                     {
                         response = new()
                         {
@@ -350,7 +350,7 @@ namespace Application.System.Carts
                 else
                 {
                     var quanties = await _context.Products.Where(x => x.Id == item.ProductID).FirstOrDefaultAsync();
-                    if (item.Quantity > quanties.UnitInStock)
+                    if (item.Quantity > quanties?.UnitInStock)
                     {
                         response = new()
                         {
@@ -428,9 +428,9 @@ namespace Application.System.Carts
                         Id = item.Id,
                         //TypeName = item.Name,
                         Quantity = item.Quantity,
-                        Color = item.Color?.Name == "No Color" ? null : item.Color.Name,
-                        Size = item.Size?.Name == "No Size" ? null : item.Size.Name,
-                        Other = item.Other?.Name == "No Other" ? null : item.Other.Name,
+                        Color = item.Color?.Name == "No Color" ? null : item.Color?.Name,
+                        Size = item.Size?.Name == "No Size" ? null : item.Size?.Name,
+                        Other = item.Other?.Name == "No Other" ? null : item.Other?.Name,
                         ColorID = item.ColorId == 1 ? null : item.ColorId,
                         SizeID = item.SizeID == 1 ? null : item.SizeID,
                         OtherID = item.OtherID == 1 ? null : item.OtherID,
@@ -439,11 +439,11 @@ namespace Application.System.Carts
 
                     if (tmp.OtherID == null)
                     {
-                        tmp.Image = item.Color.Image != null ? item.Color.Image : null;
+                        tmp.Image = item.Color?.Image ?? null;
                     }
                     else
                     {
-                        tmp.Image = item.Other.Image != null ? item.Other.Image : null;
+                        tmp.Image = item.Other?.Image ?? null;
 
                     }
                     types.Add(tmp);
@@ -462,7 +462,7 @@ namespace Application.System.Carts
                 UnitInStock = cart.Products.UnitInStock,
                 UnitPrice = cart.Products.UnitPrice,
                 Unit = cart.Products.Unit,
-                IsDisable = cart.ProductType?.Status == Status.CANCEL ? true : false,
+                IsDisable = cart.ProductType?.Status == Status.CANCEL,
                 //TypeName = cart.ProductType?.Name != null ? cart.ProductType.Name : null,
                 //Color = cart.ProductType?.Color?.Name != "No Color" ? cart.ProductType.Color.Name : null,
                 //Size = cart.ProductType?.Size?.Name != "No Size" ? cart.ProductType.Size.Name : null,
@@ -473,7 +473,7 @@ namespace Application.System.Carts
 
             if (cart.ProductType?.Color?.Name != null)
             {
-                dto.Color = cart.ProductType?.Color?.Name != "No Color" ? cart.ProductType.Color.Name : null;
+                dto.Color = cart.ProductType?.Color?.Name != "No Color" ? cart.ProductType?.Color.Name : null;
             }
             else
             {
@@ -482,7 +482,7 @@ namespace Application.System.Carts
             if (cart.ProductType?.Size?.Name != null)
             {
 
-                dto.Size = cart.ProductType?.Size?.Name != "No Size" ? cart.ProductType.Size.Name : null;
+                dto.Size = cart.ProductType?.Size?.Name != "No Size" ? cart.ProductType?.Size.Name : null;
             }
             else
             {
@@ -491,7 +491,7 @@ namespace Application.System.Carts
             if (cart.ProductType?.Other?.Name != null)
             {
 
-                dto.Other = cart.ProductType?.Other?.Name != "No Other" ? cart.ProductType.Other.Name : null;
+                dto.Other = cart.ProductType?.Other?.Name != "No Other" ? cart.ProductType?.Other.Name : null;
             }
             else
             {

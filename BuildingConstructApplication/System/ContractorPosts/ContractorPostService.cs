@@ -832,7 +832,8 @@ namespace Application.System.ContractorPosts
                 response = new()
                 {
                     Code = BaseCode.SUCCESS,
-                    Message = "You have already applied to the post"
+                    Message = "You have already applied to the post",
+                    Data="ALREADY_APPLIED"
                 };
                 return response;
             }
