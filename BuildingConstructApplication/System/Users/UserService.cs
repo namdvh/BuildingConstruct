@@ -1686,7 +1686,7 @@ namespace Application.System.Users
             var response = new BaseResponse<List<AccessSatisticDTO>>();
             var list = new List<UserLoginDTO>();
             response.Data = new List<AccessSatisticDTO>();
-            for(int i=1;i<=24;i++)
+            for (int i = 1; i <= 24; i++)
             {
                 var us = new AccessSatisticDTO();
                 us.Time = i.ToString();
@@ -1702,26 +1702,33 @@ namespace Application.System.Users
                     var split = item.Split(',');
                     foreach (var i in split)
                     {
-                        var uslogin = new UserLoginDTO();
-                        uslogin.Time = DateTime.Parse(i);
-                        uslogin.AccessCount = uslogin.AccessCount + 1;
-                        //uslogin.Time = time;
-                        list.Add(uslogin);
+                        if (DateTime.Parse(i).Date == DateTime.Now.Date)
+                        {
+
+                            var uslogin = new UserLoginDTO();
+                            uslogin.Time = DateTime.Parse(i);
+                            uslogin.AccessCount = uslogin.AccessCount + 1;
+                            //uslogin.Time = time;
+                            list.Add(uslogin);
+                        }
                     }
                 }
                 else
                 {
-                    var uslogin = new UserLoginDTO();
-                    uslogin.Time = DateTime.Parse(item);
-                    uslogin.AccessCount = 1;
-                    list.Add(uslogin);
+                    if (DateTime.Parse(item).Date == DateTime.Now.Date)
+                    {
+                        var uslogin = new UserLoginDTO();
+                        uslogin.Time = DateTime.Parse(item);
+                        uslogin.AccessCount = 1;
+                        list.Add(uslogin);
+                    }
                 }
             }
             var groupByTime = list.GroupBy(x => x.Time.Hour).Select(g => new
             {
                 Time = g.Key,
                 AccessCount = g.Count(),
-            }).ToList().OrderBy(x=>x.Time);
+            }).ToList().OrderBy(x => x.Time);
             foreach (var time in groupByTime)
             {
                 foreach (var item in response.Data.Select((value, i) => (value, i)).Where(x => x.value.Time.Equals(time.Time.ToString())))
@@ -1731,6 +1738,24 @@ namespace Application.System.Users
                 }
             }
             response.Code = "200";
+            response.Message = BaseCode.SUCCESS_MESSAGE;
+            return response;
+        }
+
+        public async Task<BaseResponse<UserCountDTO>> GetTotalUser()
+        {
+            var response = new BaseResponse<UserCountDTO>();
+            var totalUser = await _context.Users.CountAsync();
+            var totalWorker = await _context.Users.Where(x => x.BuilderId != null).CountAsync();
+            var totalContractor = await _context.Users.Where(x => x.ContractorId != null).CountAsync();
+            var totalStore = await _context.Users.Where(x => x.MaterialStoreID != null).CountAsync();
+            response.Data = new();
+            var userCount = new UserCountDTO();
+            response.Data.Worker= totalWorker;
+            response.Data.Contractor= totalContractor;
+            response.Data.MaterialStore= totalStore;
+            response.Data.TotalUser= totalUser;
+            response.Code = BaseCode.SUCCESS;
             response.Message = BaseCode.SUCCESS_MESSAGE;
             return response;
         }
