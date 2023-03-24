@@ -67,6 +67,7 @@ namespace Data.DataContext
             modelBuilder.Entity<IdentityUserToken<Guid>>().ToTable("UserTokens").HasKey(x => x.UserId);
 
             modelBuilder.Seed();
+            base.OnModelCreating(modelBuilder);
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Builder> Builders { get; set; }

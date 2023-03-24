@@ -13,7 +13,6 @@ namespace Data.DbInitiallize
         public static void Initialize(BuildingConstructDbContext context)
         {
             context.Database.Migrate();
-
             // Add Seed Data...
         }
     }
