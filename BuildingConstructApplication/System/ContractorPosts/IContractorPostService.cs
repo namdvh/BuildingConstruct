@@ -22,8 +22,11 @@ namespace Application.System.ContractorPosts
         Task<BaseResponse<string>> AppliedPost(AppliedPostRequest request,Guid userID);
 
         Task<BasePagination<List<AppliedPostDTO>>> ViewAppliedPost(int postID, PaginationFilter filter);
+
         Task<bool>CreateContractorPost(ContractorPostModels contractorPostDTO);
+
         Task<BaseResponse<ContractorPostDetailDTO>> GetDetailPost(int cPostid);
+
         Task<BasePagination<List<AppliedPostAll>>> ViewAllPostApplied(Guid userID, PaginationFilter request);
 
     }

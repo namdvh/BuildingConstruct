@@ -91,9 +91,11 @@ namespace Application.System.ContractorPosts
 
                     if (o.fromSystem == false)
                     {
-                        var rSkill = new Skill();
-                        rSkill.Name = o.name;
-                        rSkill.FromSystem = o.fromSystem;
+                        var rSkill = new Skill
+                        {
+                            Name = o.name,
+                            FromSystem = o.fromSystem
+                        };
                         _context.Skills.Add(rSkill);
                         _context.SaveChanges();
 
@@ -247,19 +249,23 @@ namespace Application.System.ContractorPosts
             var final = new List<TypeModels>();
             foreach (var item in results)
             {
-                var type = new TypeModels();
-                type.id = item.TypeID;
-                type.name = item.Type.Name;
-                type.SkillArr = new();
+                var type = new TypeModels
+                {
+                    id = item.TypeID,
+                    name = item.Type.Name,
+                    SkillArr = new()
+                };
                 foreach (var i in rsSkill)
                 {
                     if (i.Skills.TypeId.Equals(item.TypeID))
                     {
-                        var skillArr = new SkillArr();
-                        skillArr.id = i.SkillID;
-                        skillArr.name = i.Skills.Name;
-                        skillArr.fromSystem = i.Skills.FromSystem;
-                        skillArr.TypeId = i.Skills.TypeId;
+                        var skillArr = new SkillArr
+                        {
+                            id = i.SkillID,
+                            name = i.Skills.Name,
+                            fromSystem = i.Skills.FromSystem,
+                            TypeId = i.Skills.TypeId
+                        };
                         type.SkillArr.Add(skillArr);
                     }
                 }
@@ -272,11 +278,13 @@ namespace Application.System.ContractorPosts
                 {
                     var t = new TypeModels();
                     t.SkillArr = new();
-                    var skillArr = new SkillArr();
-                    skillArr.id = i.SkillID;
-                    skillArr.name = i.Skills.Name;
-                    skillArr.fromSystem = i.Skills.FromSystem;
-                    skillArr.TypeId = i.Skills.TypeId;
+                    var skillArr = new SkillArr
+                    {
+                        id = i.SkillID,
+                        name = i.Skills.Name,
+                        fromSystem = i.Skills.FromSystem,
+                        TypeId = i.Skills.TypeId
+                    };
                     t.SkillArr.Add(skillArr);
                     final.Add(t);
                 }
@@ -287,17 +295,19 @@ namespace Application.System.ContractorPosts
         {
             var results = await _context.Users.Where(x => x.Id.ToString().Equals(userID.ToString())).SingleOrDefaultAsync();
             var roleid = await _context.UserRoles.Where(x => x.UserId.Equals(userID)).Select(x => x.RoleId).SingleOrDefaultAsync();
-            var final = new UserModelsDTO();
-            final.UserName = results.UserName;
-            final.Phone = results.PhoneNumber;
-            final.FirstName = results.FirstName;
-            final.LastName = results.LastName;
-            final.Address = results.Address;
-            final.Gender = results.Gender;
-            final.Avatar = results.Avatar;
-            final.DOB = results.DOB;
-            final.Email = results.Email;
-            final.RoleName = await _context.Roles.Where(x => x.Id.Equals(roleid)).Select(x => x.Name).SingleOrDefaultAsync();
+            var final = new UserModelsDTO
+            {
+                UserName = results.UserName,
+                Phone = results.PhoneNumber,
+                FirstName = results.FirstName,
+                LastName = results.LastName,
+                Address = results.Address,
+                Gender = results.Gender,
+                Avatar = results.Avatar,
+                DOB = results.DOB,
+                Email = results.Email,
+                RoleName = await _context.Roles.Where(x => x.Id.Equals(roleid)).Select(x => x.Name).SingleOrDefaultAsync()
+            };
             return final;
         }
 
@@ -448,8 +458,6 @@ namespace Application.System.ContractorPosts
             return response;
         }
 
-
-
         public async Task<BasePagination<List<AppliedPostDTO>>> ViewAppliedPost(int postID, PaginationFilter filter)
         {
             BasePagination<List<AppliedPostDTO>> response;
@@ -573,6 +581,21 @@ namespace Application.System.ContractorPosts
         private AppliedPostDTO MapToAppliedPostGroupDTO(AppliedPost applied, List<GroupMember> groupMember)
         {
             List<AppliedGroup> group = MapGroup(groupMember);
+            int totalScore = 0;
+            int totalQuestion = 0;
+
+            if (applied.QuizId != null)
+            {
+                totalScore = _context.UserAnswers
+                    .Include(x => x.Answer)
+                    .Where(x => x.BuilderId == applied.BuilderID && x.Answer.isCorrect == true && x.Answer.Question.QuizId == applied.QuizId)
+                    .Count();
+
+                totalQuestion = _context.Questions.Where(x => x.QuizId == applied.QuizId).Count();
+
+            }
+
+
 
             AppliedPostDTO rs = new()
             {
@@ -583,7 +606,9 @@ namespace Application.System.ContractorPosts
                 UserID = applied.Builder.User.Id,
                 WishSalary = applied.WishSalary,
                 Groups = group,
-                AppliedDate = applied.AppliedDate
+                AppliedDate = applied.AppliedDate,
+                TotalCorrectAnswers = totalScore,
+                TotalNumberQuestion = totalQuestion,
             };
             return rs;
         }
@@ -837,6 +862,28 @@ namespace Application.System.ContractorPosts
                     await _context.SaveChangesAsync();
                 }
 
+                if (request.QuizSubmit != null)
+                {
+                    List<UserAnswer> ls = new();
+
+                    foreach (var item in request.QuizSubmit.AnswerId)
+                    {
+                        UserAnswer answer = new UserAnswer()
+                        {
+                            AnswerID = item,
+                            BuilderId = user.BuilderId.Value
+                        };
+
+                        ls.Add(answer);
+
+                        await _context.AddRangeAsync(ls);
+                        await _context.SaveChangesAsync();
+                    }
+
+                }
+
+
+
                 AppliedPost applied = new()
                 {
                     BuilderID = user.BuilderId.Value,
@@ -846,6 +893,18 @@ namespace Application.System.ContractorPosts
                     Status = Status.NOT_RESPONSE,
                     AppliedDate = DateTime.Now
                 };
+
+                if (request.QuizSubmit != null)
+                {
+                    var quizID = await _context.Answers
+                                .Include(x => x.Question)
+                                .Where(x => x.Id == request.QuizSubmit.AnswerId.First())
+                                .Select(x => x.Question.QuizId)
+                                .FirstOrDefaultAsync();
+
+                    applied.QuizId = quizID;
+                }
+
 
                 await _context.AppliedPosts.AddAsync(applied);
                 await _context.SaveChangesAsync();
@@ -868,9 +927,9 @@ namespace Application.System.ContractorPosts
                         ls.Add(answer);
 
                         await _context.AddRangeAsync(ls);
-
                         await _context.SaveChangesAsync();
                     }
+
                 }
 
                 AppliedPost applied = new()
@@ -879,9 +938,19 @@ namespace Application.System.ContractorPosts
                     PostID = request.PostId,
                     WishSalary = request.WishSalary,
                     Status = Status.NOT_RESPONSE,
-                    AppliedDate = DateTime.Now
-
+                    AppliedDate = DateTime.Now,
                 };
+
+                if (request.QuizSubmit != null)
+                {
+                    var quizID = await _context.Answers
+                                .Include(x => x.Question)
+                                .Where(x => x.Id == request.QuizSubmit.AnswerId.First())
+                                .Select(x => x.Question.QuizId)
+                                .FirstOrDefaultAsync();
+
+                    applied.QuizId = quizID;
+                }
 
                 await _context.AppliedPosts.AddAsync(applied);
                 await _context.SaveChangesAsync();
