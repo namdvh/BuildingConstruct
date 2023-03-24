@@ -112,5 +112,11 @@ namespace BuildingConstructApi.Controllers
             var rs = await materialStoreService.GetAllProductStore(validFilter,isAll, storeID);
             return Ok(rs);
         }
+        [HttpGet("getBillStatistic")]
+        public async Task<IActionResult> GetBillStatistic()
+        {
+            var rs = await materialStoreService.GetBillStatistic();
+            return Ok(rs);
+        }
     }
 }

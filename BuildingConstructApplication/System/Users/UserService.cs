@@ -517,6 +517,29 @@ namespace Application.System.Users
                 signingCredentials: creds);
             TokenResponse token = new();
             var newAccessToken = new JwtSecurityTokenHandler().WriteToken(accesstoken);
+            if (user.LoginTime == null)
+            {
+                user.LoginTime = DateTime.Now.ToString();
+            }
+
+            else
+            {
+                string date = user.LoginTime;
+                string[] check = date.Split(',');
+                foreach (var item in check)
+                {
+                    if (DateTime.Parse(item).Date < DateTime.Now.Date)
+                    {
+                        user.LoginTime = DateTime.Now.ToString();
+                    }
+                    else
+                    {
+                        user.LoginTime = user.LoginTime + ',' + DateTime.Now;
+                    }
+                }
+
+            }
+            await _userService.UpdateAsync(user);
             token.AccessToken = newAccessToken;
             response.Data = token.AccessToken;
             response.Code = "200";
@@ -1731,10 +1754,10 @@ namespace Application.System.Users
             }).ToList().OrderBy(x => x.Time);
             foreach (var time in groupByTime)
             {
-                foreach (var item in response.Data.Select((value, i) => (value, i)).Where(x => x.value.Time.Equals(time.Time.ToString())))
+                foreach (var item in response.Data.Where(x => x.Time.Equals(time.Time.ToString())))
                 {
-                    item.value.Time = time.Time.ToString();
-                    item.value.AccessCount = time.AccessCount;
+                    item.Time = time.Time.ToString();
+                    item.AccessCount = time.AccessCount;
                 }
             }
             response.Code = "200";
