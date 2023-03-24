@@ -2,20 +2,40 @@ version: '3.4'
 
 networks:
     backendnetwork:
+        driver: bridge
 
 services:
-
     ngnix:
-      volumes:
-        - ./nginx/nginx.conf:/etc/nginx.conf
-      image: nginx:alpine
-      ports:
-      - "443:443"
-      #- "8080:80"
-      #networks:
-      #- backendnetwork
-      depends_on:
-        - buildingconstructapi
+        image: nginx:stable-alpine
+        volumes:
+            - ./nginx/nginx.conf:/etc/nginx.conf
+        ports:
+            - 3000:80
+        restart: unless-stopped
+        depends_on:
+            - buildingconstructapi
+        networks:
+            - backendnetwork
+
+
+
+
+
+
+
+
+
+      #volumes:
+      #  - ./nginx/nginx.conf:/etc/nginx.conf
+
+      #image: nginx:alpine
+      #ports:
+      #- "443:443"
+      ##- "8080:80"
+      ##networks:
+      ##- backendnetwork
+      #depends_on:
+      #  - buildingconstructapi
 
     sql-server:
         container_name: buildingdb
