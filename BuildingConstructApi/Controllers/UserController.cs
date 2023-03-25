@@ -22,7 +22,7 @@ namespace BuildingConstructApi.Controllers
 
     public class UserController : ControllerBase
     {
-        public string userID { get; set; }
+        public string UserID { get; set; }
         private readonly IUserService _userService;
         private readonly IConfiguration _configuration;
         private Task<AuthenticationState> authenticationStateTask { get; set; }
@@ -211,7 +211,7 @@ namespace BuildingConstructApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var rs = _userService.GenerateToken(request);
+            var rs = await _userService.GenerateToken(request);
             return Ok(rs);
         }
 
@@ -250,7 +250,7 @@ namespace BuildingConstructApi.Controllers
         {
             var rs = User.FindFirst("UserID").Value;
             //or if u want the list of claims
-            userID = rs;
+            UserID = rs;
             var claims = User.Claims;
             return Ok(rs);
         }

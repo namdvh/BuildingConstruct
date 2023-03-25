@@ -25,7 +25,7 @@ namespace BuildingConstructApi.Controllers
         public async Task<IActionResult> GetAll([FromQuery] PaginationFilter request)
         {
             var validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
-            var userID = User.FindFirst("UserID").Value;
+            string? userID = User.FindFirst("UserID")?.Value;
 
             if (userID == null)
             {
@@ -38,7 +38,7 @@ namespace BuildingConstructApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateCartRequest requests)
         {
-            var userID = User.FindFirst("UserID").Value;
+            string? userID = User.FindFirst("UserID")?.Value;
 
             if (userID == null)
             {
@@ -51,7 +51,7 @@ namespace BuildingConstructApi.Controllers
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] List<CreateCartRequest> requests)
         {
-            var userID = User.FindFirst("UserID").Value;
+            string? userID = User.FindFirst("UserID")?.Value;
 
             if (userID == null)
             {
@@ -62,9 +62,9 @@ namespace BuildingConstructApi.Controllers
         }
 
         [HttpPut("delete")]
-        public async Task<IActionResult> Delete([FromBody] List<RemoveCartRequest>? requests)
+        public async Task<IActionResult> Delete([FromBody] List<RemoveCartRequest> requests)
         {
-            var userID = User.FindFirst("UserID").Value;
+            string? userID = User.FindFirst("UserID")?.Value;
 
             if (userID == null)
             {

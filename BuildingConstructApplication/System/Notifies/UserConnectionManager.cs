@@ -9,6 +9,7 @@ namespace Application.System.Notifies
     public class UserConnectionManager : IUserConnectionManager
     {
         private static ConcurrentDictionary<string, ConcurrentBag<string>> userConnectionMap = new ConcurrentDictionary<string, ConcurrentBag<string>>();
+
         private readonly ReaderWriterLockSlim userConnectionMapLock = new ReaderWriterLockSlim();
 
         private static string userConnectionMapLocker = string.Empty;

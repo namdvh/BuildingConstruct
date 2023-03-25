@@ -117,18 +117,22 @@ namespace BuildingConstructApi.Controllers
                 return Ok(result);
             }
 
-            NotificationModels noti = new();
-            noti.NotificationType = NotificationType.TYPE_1;
-            noti.Message = NotificationMessage.APPLIEDNOTI;
-            noti.CreateBy = Guid.Parse(rs.ToString());
-            noti.UserId = Guid.Parse(result.Data.ToString());
+            NotificationModels noti = new()
+            {
+                NotificationType = NotificationType.TYPE_1,
+                Message = NotificationMessage.APPLIEDNOTI,
+                CreateBy = Guid.Parse(rs.ToString()),
+                UserId = Guid.Parse(result.Data.ToString()),
+                LastModifiedAt = DateTime.Now,
+                NavigateId = result.NavigateId,
+            };
             var author = await _context.Users.Where(x => x.Id.ToString().Equals(noti.CreateBy.ToString())).FirstOrDefaultAsync();
-            noti.Author = new();
-            noti.Author.FirstName = author.FirstName;
-            noti.Author.LastName = author.LastName;
-            noti.Author.Avatar = author.Avatar;
-            noti.LastModifiedAt = DateTime.Now;
-            noti.NavigateId = result.NavigateId;
+            noti.Author = new()
+            {
+                FirstName = author.FirstName,
+                LastName = author.LastName,
+                Avatar = author.Avatar
+            };
             var check = await _userConnectionManager.SaveNotification(noti);
             var connections = _userConnectionManager.GetUserConnections(result.Data);
             if (connections != null && connections.Count > 0)

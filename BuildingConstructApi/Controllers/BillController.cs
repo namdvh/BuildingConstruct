@@ -37,7 +37,7 @@ namespace BuildingConstructApi.Controllers
         public async Task<IActionResult> CreateBill([FromBody] List<BillDTO> request)
         {
             BaseResponse<List<BillDTO>> response = new();
-            var userID = User.FindFirst("UserID").Value;
+            string? userID = User.FindFirst("UserID")?.Value;
 
             var rs = await _billServices.CreateBill(request);
             if (rs)
@@ -152,7 +152,7 @@ namespace BuildingConstructApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBillStatus([FromRoute] int id, [FromBody] UpdateBillRequest request)
         {
-            var userID = User.FindFirst("UserID").Value;
+            string? userID = User.FindFirst("UserID")?.Value;
             var rs = await _billServices.UpdateStatusBill(request.Status, id, request.Message, Guid.Parse(userID));
 
             NotificateAuthor notiAuthor = null;
