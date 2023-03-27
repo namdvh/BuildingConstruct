@@ -5,25 +5,20 @@ networks:
         driver: bridge
 
 services:
-    ngnix:
-        image: nginx:stable-alpine
-        volumes:
-            - ./nginx/nginx.conf:/etc/nginx.conf
-        ports:
-            - 3000:80
-        restart: unless-stopped
-        depends_on:
-            - buildingconstructapi
-        networks:
-            - backendnetwork
-
-
-
-
-
-
-
-
+    #ngnix:
+    #    image: nginx:stable-alpine
+    #    volumes:
+    #        - ./nginx/nginx.conf:/etc/nginx.conf
+    #    ports:
+    #        - 3000:80
+    #    expose:
+    #     - 3000
+         
+    #    restart: unless-stopped
+    #    depends_on:
+    #        - buildingconstructapi
+    #    networks:
+    #        - backendnetwork
 
       #volumes:
       #  - ./nginx/nginx.conf:/etc/nginx.conf
@@ -36,6 +31,7 @@ services:
       ##- backendnetwork
       #depends_on:
       #  - buildingconstructapi
+
 
     sql-server:
         container_name: buildingdb
@@ -58,6 +54,8 @@ services:
             dockerfile: BuildingConstructApi/Dockerfile
         ports:
         - 8000:80
+        expose:
+        - 8000
         depends_on:
         - sql-server
         networks:
