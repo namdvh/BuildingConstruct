@@ -179,7 +179,7 @@ builder.WebHost.UseKestrel(options =>
 {
     options.Listen(IPAddress.Any, 80, listenOptions =>
     {
-        listenOptions.UseHttps(new X509Certificate2("./BuildingConstructApi/cert/mycert.pfx", "Hoainam@123"));
+        listenOptions.UseHttps(new X509Certificate2("${HOME}/.aspnet/https/localhost.pfx", "Hoainam@123"));
     });
 });
 var app = builder.Build();
