@@ -65,7 +65,7 @@ services:
         - /path/to/cert:/app/cert
         environment:
           - ASPNETCORE_Kestrel__Certificates__Default__Password=Hoainam@123
-          - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/cert/mycert.pfx
+          - ASPNETCORE_Kestrel__Certificates__Default__Path=%USERPROFILE%\.aspnet\https\aspnetapp.pfx
     nginx:
         build: nginx
         ports:

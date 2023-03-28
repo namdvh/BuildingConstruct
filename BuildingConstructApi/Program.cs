@@ -175,13 +175,6 @@ builder.Services.AddScoped<IBillServices, BillServices>();
 builder.Services.AddScoped<IIdentificationService, IdentificationService>();
 builder.Services.AddScoped<IPostInviteService, PostIniviteService>();
 builder.Services.AddScoped<IQuizServices, QuizServices>();
-builder.WebHost.UseKestrel(options =>
-{
-    options.Listen(IPAddress.Any, 80, listenOptions =>
-    {
-        listenOptions.UseHttps(new X509Certificate2("/.aspnet/https/aspnetapp.pfx", "Hoainam@123"));
-    });
-});
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
