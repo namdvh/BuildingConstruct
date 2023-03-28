@@ -58,6 +58,15 @@ services:
         - 8000
         depends_on:
         - sql-server
+        restart: always
         networks:
         - backendnetwork
+    nginx:
+        build: nginx
+        ports:
+          - 80:80
+          - 443:443
+        depends_on: 
+          - buildingconstructapi
+        restart: always
 

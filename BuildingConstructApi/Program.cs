@@ -191,6 +191,10 @@ using (var scope = app.Services.CreateScope())
     }
 }
 app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 app.UseRouting();
 app.UseCors(x => x
         .WithOrigins("https://localhost:4000")
