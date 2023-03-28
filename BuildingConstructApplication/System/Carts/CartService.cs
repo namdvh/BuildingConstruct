@@ -24,7 +24,7 @@ namespace Application.System.Carts
 
         public async Task<BaseResponse<CartDTO>> Create(Guid userID, CreateCartRequest requests)
         {
-            BaseResponse<CartDTO>? response=null ;
+            BaseResponse<CartDTO>? response = null;
             Cart cart;
             var existed = await _context.Carts
                 .Include(x => x.Products)
@@ -462,7 +462,7 @@ namespace Application.System.Carts
                 UnitInStock = cart.Products.UnitInStock,
                 UnitPrice = cart.Products.UnitPrice,
                 Unit = cart.Products.Unit,
-                IsDisable = cart.ProductType?.Status == Status.CANCEL,
+                IsDisable = cart.Products.Status == false ? true : false,
                 //TypeName = cart.ProductType?.Name != null ? cart.ProductType.Name : null,
                 //Color = cart.ProductType?.Color?.Name != "No Color" ? cart.ProductType.Color.Name : null,
                 //Size = cart.ProductType?.Size?.Name != "No Size" ? cart.ProductType.Size.Name : null,

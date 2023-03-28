@@ -30,6 +30,47 @@ namespace Application.System.Bill
             Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
             var usID = identifierClaim.Value;
             var contracID = _context.Users.Where(x => x.Id.ToString().Equals(usID)).FirstOrDefault().ContractorId;
+
+
+            //Checking quantities for product before create bill 
+
+            foreach (var item in requests)
+            {
+                foreach (var billdetail in item.ProductBillDetail)
+                {
+                    var checkingProduct = await _context.Products.FirstOrDefaultAsync(x => x.Id == billdetail.ProductId);
+
+                    if (billdetail.TypeID == null)
+                    {
+                        if (checkingProduct != null)
+                        {
+                            if (billdetail.Quantity > checkingProduct.UnitInStock)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var checkingProductType = await _context.ProductTypes.FirstOrDefaultAsync(x => x.Id == billdetail.TypeID);
+
+                        if (checkingProductType != null)
+                        {
+                            if (billdetail.Quantity > checkingProductType.Quantity)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+
+                }
+            }
+
+
+
+
+
+
             foreach (var r in requests)
             {
                 var bill = new Data.Entities.Bill();
@@ -491,10 +532,10 @@ namespace Application.System.Bill
                 {
                     pro.SizeName = null;
                 }
-                if(item.ProductTypes?.Other?.Name != null)
+                if (item.ProductTypes?.Other?.Name != null)
                 {
 
-                pro.OtherName = item.ProductTypes?.Other?.Name != "No Other" ? item.ProductTypes.Other.Name : null;
+                    pro.OtherName = item.ProductTypes?.Other?.Name != "No Other" ? item.ProductTypes.Other.Name : null;
                 }
                 else
                 {
@@ -557,7 +598,7 @@ namespace Application.System.Bill
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
                     Data = ls.Any() ? ls : new(),
-                    NavigateId=billID
+                    NavigateId = billID
                 };
                 return response;
             }

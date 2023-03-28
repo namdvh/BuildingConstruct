@@ -659,7 +659,7 @@ namespace Application.System.Users
                     Website = user.MaterialStore.Website,
                     Experience = user.MaterialStore.Experience,
                     Image = user.MaterialStore.Image,
-                    Place = user.MaterialStore.Place,
+                    Place = user.MaterialStore.Place.Value,
                     TaxCode = user.MaterialStore.TaxCode
                 };
 
@@ -911,6 +911,14 @@ namespace Application.System.Users
                         await _context.SaveChangesAsync();
                     }
                 }
+
+
+                if (user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null)
+                {
+                    user.Status = Status.Level2;
+                }
+
+
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
 
@@ -931,6 +939,14 @@ namespace Application.System.Users
                     Code = BaseCode.ERROR
                 };
             }
+
+
+
+
+
+
+
+
             return response;
         }
 
@@ -1004,6 +1020,12 @@ namespace Application.System.Users
                 {
                     user.Contractor.Website = request.Website;
                 }
+
+                if (user.Avatar != null && user.Contractor.CompanyName != null )
+                {
+                    user.Status = Status.Level2;
+                }
+
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
 
@@ -1116,9 +1138,10 @@ namespace Application.System.Users
 
                 }
 
-
-
-
+                if (user.Avatar != null && user.MaterialStore.Image != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
+                {
+                    user.Status = Status.Level2;
+                }
 
 
 
@@ -1586,7 +1609,7 @@ namespace Application.System.Users
                 Website = store.Website,
                 Experience = store.Experience,
                 Image = store.Image,
-                Place = store.Place,
+                Place = store.Place.Value,
                 TaxCode = store.TaxCode
             };
 
@@ -1631,7 +1654,7 @@ namespace Application.System.Users
                 response.Message = "Please update all information in your profile";
                 return response;
             }
-            var us =await _context.Users.Where(x => x.Token.Equals(refreshToken.refreshToken)).FirstOrDefaultAsync();
+            var us = await _context.Users.Where(x => x.Token.Equals(refreshToken.refreshToken)).FirstOrDefaultAsync();
             if (us == null || us.Token != refreshToken.refreshToken || us.RefreshTokenExpiryTime <= DateTime.UtcNow)
             {
                 response.Code = "500";
@@ -1651,8 +1674,8 @@ namespace Application.System.Users
                 Gender = us.Gender,
                 Avatar = us.Avatar,
                 Address = us.Address,
-                IdNumber=us.IdNumber,
-                Status=us.Status,
+                IdNumber = us.IdNumber,
+                Status = us.Status,
                 Role = role[0]
             };
             response.Data = profile;

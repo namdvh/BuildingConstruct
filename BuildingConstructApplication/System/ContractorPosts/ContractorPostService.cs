@@ -5,6 +5,7 @@ using Gridify;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Security.Claims;
 using System.Text;
@@ -338,6 +339,7 @@ namespace Application.System.ContractorPosts
             StringBuilder salariesSearch = new();
             StringBuilder placeSearch = new();
             StringBuilder categoriesSearch = new();
+            StringBuilder typesSearch = new();
 
             if (filter.FilterRequest != null)
             {
@@ -403,6 +405,26 @@ namespace Application.System.ContractorPosts
                 if (filter.FilterRequest.Accommodation == true)
                 {
                     query = query.Where(x => x.Accommodation == true);
+
+                }
+
+                if (filter.FilterRequest.Types.Any())
+                {
+                    var count = filter.FilterRequest.Types.Count;
+                    for (int i = 0; i < count; i++)
+                    {
+                        if (i == count - 1)
+                        {
+                            typesSearch.Append("TypeID=" + filter.FilterRequest.Types[i]);
+                            break;
+                        }
+                        typesSearch.Append("TypeID=" + filter.FilterRequest.Types[i] + "|");
+                    }
+
+                    var types = await _context.ContractorPostTypes.ApplyFiltering(typesSearch.ToString()).Select(x => x.ContractorPostID).ToListAsync();
+
+
+                    query = query.Where(x => types.Contains(x.Id));
 
                 }
 
@@ -850,6 +872,8 @@ namespace Application.System.ContractorPosts
                     };
                     return response;
                 }
+
+
 
                 //Group is not null
                 if (request.GroupMember is not null)
