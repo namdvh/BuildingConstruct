@@ -21,10 +21,13 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using ViewModels.ContractorPost;
 using ViewModels.Users;
 using static Constants.Constants;
@@ -172,7 +175,23 @@ builder.Services.AddScoped<IBillServices, BillServices>();
 builder.Services.AddScoped<IIdentificationService, IdentificationService>();
 builder.Services.AddScoped<IPostInviteService, PostIniviteService>();
 builder.Services.AddScoped<IQuizServices, QuizServices>();
+builder.Services.AddCertificateForwarding(options =>
+{
+    options.CertificateHeader = "ssl-client-cert";
 
+    options.HeaderConverter = (headerValue) =>
+    {
+        X509Certificate2? clientCertificate = null;
+
+        if (!string.IsNullOrWhiteSpace(headerValue))
+        {
+            clientCertificate = X509Certificate2.CreateFromPem(
+                WebUtility.UrlDecode(headerValue));
+        }
+
+        return clientCertificate!;
+    };
+});
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -190,11 +209,8 @@ using (var scope = app.Services.CreateScope())
         DbInitializer.Initialize(context);
     }
 }
+
 app.UseHttpsRedirection();
-if (!app.Environment.IsDevelopment())
-{
-    app.UseHttpsRedirection();
-}
 app.UseRouting();
 app.UseCors(x => x
         .WithOrigins("https://localhost:4000")
@@ -206,6 +222,10 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHsts();
+}
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseAuthorization();
