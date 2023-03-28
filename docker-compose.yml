@@ -69,4 +69,6 @@ services:
         depends_on: 
           - buildingconstructapi
         restart: always
+        volumes:
+        - /etc/letsencrypt:/etc/letsencrypt:ro
 
