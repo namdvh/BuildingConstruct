@@ -61,6 +61,11 @@ services:
         restart: always
         networks:
         - backendnetwork
+        volumes:
+        - /path/to/cert:/app/cert
+        environment:
+          - ASPNETCORE_Kestrel__Certificates__Default__Password=Hoainam@123
+          - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/cert/mycert.pfx
     nginx:
         build: nginx
         ports:

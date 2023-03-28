@@ -175,22 +175,12 @@ builder.Services.AddScoped<IBillServices, BillServices>();
 builder.Services.AddScoped<IIdentificationService, IdentificationService>();
 builder.Services.AddScoped<IPostInviteService, PostIniviteService>();
 builder.Services.AddScoped<IQuizServices, QuizServices>();
-builder.Services.AddCertificateForwarding(options =>
+builder.WebHost.UseKestrel(options =>
 {
-    options.CertificateHeader = "ssl-client-cert";
-
-    options.HeaderConverter = (headerValue) =>
+    options.Listen(IPAddress.Any, 80, listenOptions =>
     {
-        X509Certificate2? clientCertificate = null;
-
-        if (!string.IsNullOrWhiteSpace(headerValue))
-        {
-            clientCertificate = X509Certificate2.CreateFromPem(
-                WebUtility.UrlDecode(headerValue));
-        }
-
-        return clientCertificate!;
-    };
+        listenOptions.UseHttps(new X509Certificate2("/app/cert/mycert.pfx", "Hoainam@123"));
+    });
 });
 var app = builder.Build();
 // Configure the HTTP request pipeline.
