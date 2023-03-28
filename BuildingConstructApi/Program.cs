@@ -218,10 +218,7 @@ app.UseCors(x => x
         .AllowAnyHeader()
         .SetIsOriginAllowed(origin => true) // allow any origin
         .AllowCredentials());
-app.UseForwardedHeaders(new ForwardedHeadersOptions
-{
-    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-});
+app.UseCertificateForwarding();
 if (!app.Environment.IsDevelopment())
 {
     app.UseHsts();
