@@ -4,7 +4,7 @@
 
 namespace BuildingConstructApi.Controllers
 {
-    [Route("api/testing")]
+    [Route("testing")]
     [ApiController]
     public class testing : ControllerBase
     {
