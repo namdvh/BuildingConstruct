@@ -913,7 +913,7 @@ namespace Application.System.Users
                 }
 
 
-                if (user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null)
+                if (user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null && user.Status != Status.Level3)
                 {
                     user.Status = Status.Level2;
                 }
@@ -1021,7 +1021,7 @@ namespace Application.System.Users
                     user.Contractor.Website = request.Website;
                 }
 
-                if (user.Avatar != null && user.Contractor.CompanyName != null )
+                if (user.Avatar != null && user.Contractor.CompanyName != null && user.Status != Status.Level3)
                 {
                     user.Status = Status.Level2;
                 }
@@ -1138,7 +1138,7 @@ namespace Application.System.Users
 
                 }
 
-                if (user.Avatar != null && user.MaterialStore.Image != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
+                if (user.Avatar != null && user.MaterialStore.Image != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null && user.Status != Status.Level3)
                 {
                     user.Status = Status.Level2;
                 }

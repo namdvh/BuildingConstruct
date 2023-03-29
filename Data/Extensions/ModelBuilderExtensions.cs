@@ -1519,7 +1519,7 @@ namespace Data.Extensions
             modelBuilder.Entity<Notification>().HasData(new Notification
             {
                 Id = 1,
-                Type=Enum.NotificationType.TYPE_1,
+                Type=Enum.NotificationType.CONTRACTOR_POST_NOTIFICATION,
                 Title="New Notification",
                 UserID=Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7"),
                 CreateBy=Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d9"),
@@ -1533,7 +1533,7 @@ namespace Data.Extensions
             
             {
                 Id = 2,
-                Type = Enum.NotificationType.TYPE_2,
+                Type = Enum.NotificationType.CONTRACTOR_POST_NOTIFICATION,
                 Title = "New Notification",
                 UserID = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7"),
                 CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d9"),
@@ -1546,7 +1546,7 @@ namespace Data.Extensions
             modelBuilder.Entity<Notification>().HasData(new Notification
             {
                 Id = 3,
-                Type = Enum.NotificationType.TYPE_3,
+                Type = Enum.NotificationType.CONTRACTOR_POST_NOTIFICATION,
                 Title = "New Notification",
                 UserID = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7"),
                 CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d9"),

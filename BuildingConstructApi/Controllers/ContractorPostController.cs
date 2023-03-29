@@ -119,7 +119,7 @@ namespace BuildingConstructApi.Controllers
 
             NotificationModels noti = new()
             {
-                NotificationType = NotificationType.TYPE_1,
+                NotificationType = NotificationType.CONTRACTOR_POST_NOTIFICATION,
                 Message = NotificationMessage.APPLIEDNOTI,
                 CreateBy = Guid.Parse(rs.ToString()),
                 UserId = Guid.Parse(result.Data.ToString()),

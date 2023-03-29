@@ -110,7 +110,7 @@ namespace BuildingConstructApi.Controllers
                     NavigateId = result.NavigateId,
                     UserId = Guid.Parse(result.Data.ToString()),
                     Message = NotificationMessage.UPDATE_COMMIMENT,
-                    NotificationType = NotificationType.TYPE_1,
+                    NotificationType = NotificationType.COMMITMENT_NOTIFICATION,
                     Author = notiAuthor,
                 };
 
@@ -151,7 +151,7 @@ namespace BuildingConstructApi.Controllers
 
             NotificationModels noti = new()
             {
-                NotificationType = NotificationType.TYPE_2,
+                NotificationType = NotificationType.COMMITMENT_NOTIFICATION,
                 Message = NotificationMessage.SAVENOTI,
                 CreateBy = Guid.Parse(contractorID.ToString()),
                 UserId = Guid.Parse(result.Data.ToString()),

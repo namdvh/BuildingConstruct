@@ -69,7 +69,7 @@ namespace BuildingConstructApi.Controllers
                         NavigateId = newestBill,
                         UserId = store.Id,
                         Message = NotificationMessage.CREATE_BILL,
-                        NotificationType = NotificationType.TYPE_1,
+                        NotificationType = NotificationType.BILL_NOTIFICATION,
                         Author = notiAuthor,
                     };
 
@@ -169,7 +169,7 @@ namespace BuildingConstructApi.Controllers
                         NavigateId = rs.NavigateId,
                         UserId = author.Contractor.CreateBy,
                         Message = NotificationMessage.UPDATE_BILL_ACCEPTED,
-                        NotificationType = NotificationType.TYPE_1,
+                        NotificationType = NotificationType.BILL_NOTIFICATION,
                         Author = notiAuthor,
                     };
 
@@ -204,7 +204,7 @@ namespace BuildingConstructApi.Controllers
                         NavigateId = rs.NavigateId,
                         UserId = author.Contractor.CreateBy,
                         Message = NotificationMessage.UPDATE_BILL_DELIVERD,
-                        NotificationType = NotificationType.TYPE_1,
+                        NotificationType = NotificationType.BILL_NOTIFICATION,
                         Author = notiAuthor,
                     };
 
@@ -239,7 +239,7 @@ namespace BuildingConstructApi.Controllers
                         NavigateId = rs.NavigateId,
                         UserId = author.MaterialStore.CreateBy,
                         Message = NotificationMessage.UPDATE_BILL_DELIVERD,
-                        NotificationType = NotificationType.TYPE_1,
+                        NotificationType = NotificationType.BILL_NOTIFICATION,
                         Author = notiAuthor,
                     };
 
@@ -274,7 +274,7 @@ namespace BuildingConstructApi.Controllers
                         NavigateId = rs.NavigateId,
                         UserId = author.MaterialStore.CreateBy,
                         Message = NotificationMessage.UPDATE_BILL_CANCELED,
-                        NotificationType = NotificationType.TYPE_1,
+                        NotificationType = NotificationType.BILL_NOTIFICATION,
                         Author = notiAuthor,
                     };
 
