@@ -458,9 +458,9 @@ namespace Application.System.Users
             return response;
         }
 
-        public async Task<BaseResponse<string>> RefreshToken(RefreshTokenResponse refreshToken)
+        public async Task<BaseResponse<UserDetailDTO>> RefreshToken(RefreshTokenResponse refreshToken)
         {
-            BaseResponse<string> response = new();
+            BaseResponse<UserDetailDTO> response = new();
             var tokenHandler = new JwtSecurityTokenHandler();
 
             dynamic principal = null;
@@ -541,9 +541,47 @@ namespace Application.System.Users
             }
             await _userService.UpdateAsync(user);
             token.AccessToken = newAccessToken;
-            response.Data = token.AccessToken;
-            response.Code = "200";
-            response.Message = "Generate new token successfully";
+            response.Data = new();
+            var premium = await _context.Payments.Where(x => x.UserId.Equals(user.Id)).FirstOrDefaultAsync();
+            bool isPremium = false;
+            if (premium != null)
+            {
+                isPremium = true;
+            }
+            if (roles.Contains("User"))
+            {
+                var result = await _context.Users
+                                    .Include(x => x.Builder)
+                                        .ThenInclude(x => x.Type)
+                                    .Where(x => x.Id.Equals(user.Id))
+                                    .FirstOrDefaultAsync();
+                response.Data = MapToDetailDTO(result, 1);
+                response.Code = "200";
+                response.Data.AccessToken = token.AccessToken;
+                response.Data.Premium = isPremium;
+                response.Message = "Generate new token successfully";
+            }
+            else if (roles.Contains("Contractor"))
+            {
+                var result = await _context.Users.Include(x => x.Contractor).Where(x => x.Id.Equals(user.Id)).FirstOrDefaultAsync();
+
+                response.Code = "200";
+                response.Data = MapToDetailDTO(result, 2);
+                response.Data.AccessToken = token.AccessToken;
+                response.Data.Premium = isPremium;
+                response.Message = "Generate new token successfully";
+
+            }
+            else
+            {
+                var result = await _context.Users.Include(x => x.MaterialStore).Where(x => x.Id.Equals(user.Id)).FirstOrDefaultAsync();
+
+                response.Code = "200";
+                response.Data = MapToDetailDTO(result, 3);
+                response.Data.AccessToken = token.AccessToken;
+                response.Data.Premium = isPremium;
+                response.Message = "Generate new token successfully";
+            }
             return response;
         }
         private ClaimsPrincipal GetPrincipalFromToken(string? token)
@@ -1774,10 +1812,10 @@ namespace Application.System.Users
             var totalStore = await _context.Users.Where(x => x.MaterialStoreID != null).CountAsync();
             response.Data = new();
             var userCount = new UserCountDTO();
-            response.Data.Worker= totalWorker;
-            response.Data.Contractor= totalContractor;
-            response.Data.MaterialStore= totalStore;
-            response.Data.TotalUser= totalUser;
+            response.Data.Worker = totalWorker;
+            response.Data.Contractor = totalContractor;
+            response.Data.MaterialStore = totalStore;
+            response.Data.TotalUser = totalUser;
             response.Code = BaseCode.SUCCESS;
             response.Message = BaseCode.SUCCESS_MESSAGE;
             return response;

@@ -27,6 +27,8 @@ namespace ViewModels.Users
         public DetailContractor? Contractor { get; set; }
         public DetailMaterialStore? DetailMaterialStore { get; set; }
         public string? Role { get; set; }
+        public string? AccessToken { get; set; }
+        public bool? Premium { get; set; }
     }
 
     public class DetailBuilder
