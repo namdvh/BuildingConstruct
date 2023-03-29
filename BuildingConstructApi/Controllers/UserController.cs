@@ -102,7 +102,7 @@ namespace BuildingConstructApi.Controllers
             }
             else
             {
-                var token = await _userService.GenerateToken(rs.Data);
+                var token = rs;
                 if (token != null)
                 {
                     try
@@ -156,7 +156,7 @@ namespace BuildingConstructApi.Controllers
                     Phone = rs.Data.Phone,
                     Role = rs.Data.Role
                 };
-                var token = await _userService.GenerateToken(userModels);
+                var token = rs;
                 if (token != null)
                 {
                     try

@@ -118,10 +118,10 @@ namespace Application.System.Types
             return response;
         }
 
-        public async Task<BaseResponse<string>> UpdateType(string typeID, TypeRequest type)
+        public async Task<BaseResponse<string>> UpdateType(TypeRequest type)
         {
             BaseResponse<string> response = new();
-            var check = await _context.Types.Where(x => x.Id.ToString().Equals(typeID)).FirstOrDefaultAsync();
+            var check = await _context.Types.Where(x => x.Id.ToString().Equals(type.typeId)).FirstOrDefaultAsync();
             if (check != null)
             {
                 check.Name = type.Name;

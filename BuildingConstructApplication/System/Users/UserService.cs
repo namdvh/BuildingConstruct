@@ -104,6 +104,9 @@ namespace Application.System.Users
             users.Token = token.Data.RefreshToken;
             users.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;
             await _userService.UpdateAsync(users);
+            u.AccessToken=token.Data.AccessToken;
+            u.RefreshToken = token.Data.RefreshToken;
+            u.RefreshTokenExpiryTime= (DateTime)token.Data.RefreshTokenExpiryTime;
             response.Data = u;
 
             return response;
@@ -271,8 +274,11 @@ namespace Application.System.Users
                             BuilderID = us.BuilderId,
                             ContractorID = us.ContractorId,
                             StoreID = us.MaterialStoreID,
-                            Premium = isPremium
-                        };
+                            Premium = isPremium,
+                            RefreshToken= token.Data.RefreshToken,
+                            AccessToken= token.Data.AccessToken,
+                            RefreshTokenExpiryTime= (DateTime)token.Data.RefreshTokenExpiryTime
+                    };
 
                     }
                 }
@@ -318,7 +324,10 @@ namespace Application.System.Users
                     Avatar = user.Avatar,
                     DOB = user.DOB,
                     Gender = user.Gender,
-                    Role = roleName
+                    Role = roleName,
+                    RefreshToken = token.Data.RefreshToken,
+                    AccessToken = token.Data.AccessToken,
+                    RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime
                 };
 
             }

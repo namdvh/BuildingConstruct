@@ -14,6 +14,6 @@ namespace Application.System.Types
         Task<BaseResponse<List<TypeModels>>> GetAllTypeAndSkills();
         Task<BaseResponse<string>> CreateType(TypeRequest type);
         Task<BaseResponse<string>> DeleteType(string typeId);
-        Task<BaseResponse<string>> UpdateType(string typeID,TypeRequest type);  
+        Task<BaseResponse<string>> UpdateType(TypeRequest type);  
     }
 }
