@@ -37,7 +37,7 @@ namespace Application.System.Identification
                 IdentificateType = requests.IdentificateType,
                 LastModifiedAt = DateTime.Now,
                 PreCodition = requests.PreCodition,
-                Status = requests.Status,
+                Status = Status.PENDING,
             };
 
             await _context.Verifies.AddAsync(verify);
@@ -102,7 +102,7 @@ namespace Application.System.Identification
                 Message = "Not Detected"
             };
             return response;
-            }
+        }
 
         public async Task<BasePagination<List<IdentificationDTO>>> GetAll(PaginationFilter filter)
         {
@@ -126,21 +126,23 @@ namespace Application.System.Identification
             if (filter.FilterRequest != null && filter.FilterRequest.Status.HasValue)
             {
                 data = await query
-                 .OrderBy(filter._sortBy + " " + orderBy)
-                 .Skip((filter.PageNumber - 1) * filter.PageSize)
-                 .Take(filter.PageSize)
-                 .Where(x => x.Status == filter.FilterRequest.Status)
-                 .ToListAsync();
+                  .Include(x => x.User)
+                  .OrderBy(filter._sortBy + " " + orderBy)
+                  .Skip((filter.PageNumber - 1) * filter.PageSize)
+                  .Take(filter.PageSize)
+                  .Where(x => x.Status == filter.FilterRequest.Status)
+                  .ToListAsync();
 
                 totalRecords = await _context.Verifies.Where(x => x.Status == filter.FilterRequest.Status).CountAsync();
             }
             else
             {
                 data = await query
-                        .OrderBy(filter._sortBy + " " + orderBy)
-                        .Skip((filter.PageNumber - 1) * filter.PageSize)
-                        .Take(filter.PageSize)
-                        .ToListAsync();
+                  .Include(x => x.User)
+                  .OrderBy(filter._sortBy + " " + orderBy)
+                  .Skip((filter.PageNumber - 1) * filter.PageSize)
+                  .Take(filter.PageSize)
+                  .ToListAsync();
                 totalRecords = await _context.Verifies.CountAsync();
             }
 
@@ -259,6 +261,7 @@ namespace Application.System.Identification
             {
                 IdentificationDTO tmp = new()
                 {
+                    Id = item.Id,
                     BackID = item.BackID,
                     BusinessLicense = item.BusinessLicense,
                     UserID = item.UserID,
@@ -268,6 +271,7 @@ namespace Application.System.Identification
                     LastModifiedAt = item.LastModifiedAt,
                     PreCodition = item.PreCodition,
                     Status = item.Status,
+                    Name = item.User?.FirstName + " " + item.User?.LastName
                 };
                 ls.Add(tmp);
             }
