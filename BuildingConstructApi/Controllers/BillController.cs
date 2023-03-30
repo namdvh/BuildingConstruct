@@ -92,6 +92,7 @@ namespace BuildingConstructApi.Controllers
             }
             else
             {
+
                 response.Code = BaseCode.ERROR;
                 response.Message = "Create Bill Failed , Please checking quantities before buy";
             }

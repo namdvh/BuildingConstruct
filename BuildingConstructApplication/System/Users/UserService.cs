@@ -1239,11 +1239,11 @@ namespace Application.System.Users
 
                 }
 
-                if (user.Status == Status.Level1 && user.Avatar != null && user.MaterialStore.Image != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
+                if (user.Status == Status.Level1 && user.Avatar != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
                 {
                     user.Status = Status.Level3;
                 }
-                else if (user.Avatar != null && user.MaterialStore.Image != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
+                else if (user.Avatar != null  && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
                 {
                     user.Status = Status.Level2;
                 }
