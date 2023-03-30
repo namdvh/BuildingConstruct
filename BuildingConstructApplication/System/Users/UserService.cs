@@ -234,7 +234,7 @@ namespace Application.System.Users
                         }
                         var token = await GenerateToken(userDTO);
                         us.Token = token.Data.RefreshToken;
-                        us.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;
+                        us.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;    
                         if (us.LoginTime == null)
                         {
                             us.LoginTime = DateTime.Now.ToString();
@@ -569,7 +569,7 @@ namespace Application.System.Users
                 response.Data = MapToDetailDTO(result, 1);
                 response.Code = "200";
                 response.Data.AccessToken = token.AccessToken;
-                response.Data.Role = roles.ToString();
+                response.Data.Role = "User";
                 response.Data.Premium = isPremium;
                 response.Message = "Generate new token successfully";
             }
@@ -580,7 +580,7 @@ namespace Application.System.Users
                 response.Code = "200";
                 response.Data = MapToDetailDTO(result, 2);
                 response.Data.AccessToken = token.AccessToken;
-                response.Data.Role = roles.ToString();
+                response.Data.Role = "Contractor";
                 response.Data.Premium = isPremium;
                 response.Message = "Generate new token successfully";
 
@@ -592,7 +592,7 @@ namespace Application.System.Users
                 response.Code = "200";
                 response.Data = MapToDetailDTO(result, 3);
                 response.Data.AccessToken = token.AccessToken;
-                response.Data.Role = roles.ToString();
+                response.Data.Role = "User";
                 response.Data.Premium = isPremium;
                 response.Message = "Generate new token successfully";
             }
@@ -797,7 +797,7 @@ namespace Application.System.Users
         }
 
         public async Task<BaseResponse<UserDetailDTO>> GetProfile(Guid userID)
-        {
+        {   
             BaseResponse<UserDetailDTO> response;
             var user = await _context.Users.Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
 
