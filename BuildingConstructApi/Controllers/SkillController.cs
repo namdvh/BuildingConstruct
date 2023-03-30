@@ -52,9 +52,9 @@ namespace BuildingConstructApi.Controllers
             return Ok(rs);
         }
         [HttpPut("update")]
-        public async Task<IActionResult> UpdateSkill(int skillId, [FromBody] SkillRequest skill)
+        public async Task<IActionResult> UpdateSkill([FromBody] SkillRequest skill)
         {
-            var rs = await _skillService.UpdateSkill(skillId, skill);
+            var rs = await _skillService.UpdateSkill(skill);
             return Ok(rs);
         }
     }

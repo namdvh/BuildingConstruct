@@ -16,6 +16,6 @@ namespace Application.System.Skills
         Task<BasePagination<List<Skill>>> GetAll(PaginationFilter filter);
         Task<BaseResponse<string>> CreateSkill(SkillRequest skill);
         Task<BaseResponse<string>> DeleteSkill(int skillID);
-        Task<BaseResponse<string>> UpdateSkill(int skillID, SkillRequest skill);
+        Task<BaseResponse<string>> UpdateSkill(SkillRequest skill);
     }
 }

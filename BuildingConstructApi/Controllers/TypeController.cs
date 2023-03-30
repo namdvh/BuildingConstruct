@@ -34,9 +34,9 @@ namespace BuildingConstructApi.Controllers
             return Ok(rs);
         }
         [HttpPut("update")]
-        public async Task<IActionResult> UpdateType(string typeId,[FromBody]TypeRequest type)
+        public async Task<IActionResult> UpdateType([FromBody]TypeRequest type)
         {
-            var rs = await _typeService.UpdateType(typeId,type);
+            var rs = await _typeService.UpdateType(type);
             return Ok(rs);
         }
     }

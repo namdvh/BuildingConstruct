@@ -104,6 +104,9 @@ namespace Application.System.Users
             users.Token = token.Data.RefreshToken;
             users.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;
             await _userService.UpdateAsync(users);
+            u.AccessToken=token.Data.AccessToken;
+            u.RefreshToken = token.Data.RefreshToken;
+            u.RefreshTokenExpiryTime= (DateTime)token.Data.RefreshTokenExpiryTime;
             response.Data = u;
 
             return response;
@@ -271,8 +274,11 @@ namespace Application.System.Users
                             BuilderID = us.BuilderId,
                             ContractorID = us.ContractorId,
                             StoreID = us.MaterialStoreID,
-                            Premium = isPremium
-                        };
+                            Premium = isPremium,
+                            RefreshToken= token.Data.RefreshToken,
+                            AccessToken= token.Data.AccessToken,
+                            RefreshTokenExpiryTime= (DateTime)token.Data.RefreshTokenExpiryTime
+                    };
 
                     }
                 }
@@ -318,7 +324,10 @@ namespace Application.System.Users
                     Avatar = user.Avatar,
                     DOB = user.DOB,
                     Gender = user.Gender,
-                    Role = roleName
+                    Role = roleName,
+                    RefreshToken = token.Data.RefreshToken,
+                    AccessToken = token.Data.AccessToken,
+                    RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime
                 };
 
             }
@@ -460,9 +469,9 @@ namespace Application.System.Users
             return response;
         }
 
-        public async Task<BaseResponse<string>> RefreshToken(RefreshTokenResponse refreshToken)
+        public async Task<BaseResponse<UserDetailDTO>> RefreshToken(RefreshTokenResponse refreshToken)
         {
-            BaseResponse<string> response = new();
+            BaseResponse<UserDetailDTO> response = new();
             var tokenHandler = new JwtSecurityTokenHandler();
 
             dynamic principal = null;
@@ -543,9 +552,47 @@ namespace Application.System.Users
             }
             await _userService.UpdateAsync(user);
             token.AccessToken = newAccessToken;
-            response.Data = token.AccessToken;
-            response.Code = "200";
-            response.Message = "Generate new token successfully";
+            response.Data = new();
+            var premium = await _context.Payments.Where(x => x.UserId.Equals(user.Id)).FirstOrDefaultAsync();
+            bool isPremium = false;
+            if (premium != null)
+            {
+                isPremium = true;
+            }
+            if (roles.Contains("User"))
+            {
+                var result = await _context.Users
+                                    .Include(x => x.Builder)
+                                        .ThenInclude(x => x.Type)
+                                    .Where(x => x.Id.Equals(user.Id))
+                                    .FirstOrDefaultAsync();
+                response.Data = MapToDetailDTO(result, 1);
+                response.Code = "200";
+                response.Data.AccessToken = token.AccessToken;
+                response.Data.Premium = isPremium;
+                response.Message = "Generate new token successfully";
+            }
+            else if (roles.Contains("Contractor"))
+            {
+                var result = await _context.Users.Include(x => x.Contractor).Where(x => x.Id.Equals(user.Id)).FirstOrDefaultAsync();
+
+                response.Code = "200";
+                response.Data = MapToDetailDTO(result, 2);
+                response.Data.AccessToken = token.AccessToken;
+                response.Data.Premium = isPremium;
+                response.Message = "Generate new token successfully";
+
+            }
+            else
+            {
+                var result = await _context.Users.Include(x => x.MaterialStore).Where(x => x.Id.Equals(user.Id)).FirstOrDefaultAsync();
+
+                response.Code = "200";
+                response.Data = MapToDetailDTO(result, 3);
+                response.Data.AccessToken = token.AccessToken;
+                response.Data.Premium = isPremium;
+                response.Message = "Generate new token successfully";
+            }
             return response;
         }
         private ClaimsPrincipal GetPrincipalFromToken(string? token)

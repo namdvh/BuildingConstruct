@@ -8,6 +8,7 @@ namespace ViewModels.Skills
 {
     public class SkillRequest
     {
+        public int? skillId { get; set; }
         public string Name { get; set; }
         public string? TypeId {get;set;}
     }

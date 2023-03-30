@@ -142,10 +142,10 @@ namespace Application.System.Skills
             return response;
         }
 
-        public async Task<BaseResponse<string>> UpdateSkill(int skillID, SkillRequest skill)
+        public async Task<BaseResponse<string>> UpdateSkill(SkillRequest skill)
         {
             BaseResponse<string> response = new();
-            var check = await _context.Skills.Where(x => x.Id==skillID).FirstOrDefaultAsync();
+            var check = await _context.Skills.Where(x => x.Id==skill.skillId).FirstOrDefaultAsync();
             if (check != null)
             {
                 check.Name = skill.Name;
