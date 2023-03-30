@@ -16,12 +16,13 @@ namespace Data.Entities
         public Status Status { get; set; }
         public string? Token { get; set; }
         public string? IdNumber { get; set; }
+        public string? LoginTime { get; set; }
 
         public DateTime LastModifiedAt { get; set; } = DateTime.Now;
 
         public Guid CreateBy { get; set; }
 
-     public List<Verify>? Verifies { get; set; }
+        public List<Verify>? Verifies { get; set; }
 
         public DateTime RefreshTokenExpiryTime { get; set; }
 

@@ -18,7 +18,6 @@ namespace Application.System.MaterialStores
     {
         private readonly BuildingConstructDbContext _context;
         private IHttpContextAccessor _accessor;
-
         public MaterialStoreService(BuildingConstructDbContext context, IHttpContextAccessor accessor)
         {
             _context = context;
@@ -801,6 +800,37 @@ namespace Application.System.MaterialStores
                 Message = BaseCode.SUCCESS_MESSAGE
             };
 
+            return response;
+        }
+
+        public async Task<BaseResponse<List<MaterialStoreStatisticDTO>>> GetBillStatistic()
+        {
+            var response=new BaseResponse<List<MaterialStoreStatisticDTO>>();
+            response.Data = new List<MaterialStoreStatisticDTO>();
+            for (int i = 1; i <= 12; i++)
+            {
+                var store = new MaterialStoreStatisticDTO();
+                store.Month = i;
+                store.BillCount = 0;
+                response.Data.Add(store);
+            }
+            Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
+            var userID = identifierClaim.Value.ToString();
+            var query = await _context.Bills.Where(x=>x.CreateBy.ToString().Equals(userID)).GroupBy(x=>x.LastModifiedAt.Month).Select(g => new
+            {
+                Month = g.Key,
+                BillCount = g.Count(),
+            }).ToListAsync();
+            foreach (var i in query)
+            {
+                foreach (var item in response.Data.Where(x => x.Month==i.Month))
+                {
+                    item.Month = i.Month;
+                    item.BillCount = i.BillCount;
+                }
+            }
+            response.Code = BaseCode.SUCCESS;
+            response.Message = BaseCode.SUCCESS_MESSAGE;
             return response;
         }
     }
