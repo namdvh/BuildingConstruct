@@ -456,7 +456,7 @@ namespace Application.System.MaterialStores
                     LastName = item.User.LastName,
                     Description = item.Description,
                     Id = item.Id,
-                    Place = item.Place.Value,
+                    Place = item.Place,
                     Experience = item.Experience,
                     Image = item.Image,
                     TaxCode = item.TaxCode,
@@ -530,7 +530,7 @@ namespace Application.System.MaterialStores
             final.Image = results.Image;
             final.Experience = results.Experience;
             final.TaxCode = results.TaxCode;
-            final.Place = results.Place.Value;
+            final.Place = results.Place;
             return final;
         }
 

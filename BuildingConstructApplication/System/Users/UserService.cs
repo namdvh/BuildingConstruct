@@ -704,7 +704,7 @@ namespace Application.System.Users
                     Website = user.MaterialStore.Website,
                     Experience = user.MaterialStore.Experience,
                     Image = user.MaterialStore.Image,
-                    Place = user.MaterialStore.Place.Value,
+                    Place = user.MaterialStore.Place,
                     TaxCode = user.MaterialStore.TaxCode
                 };
 
@@ -1662,7 +1662,7 @@ namespace Application.System.Users
                 Website = store.Website,
                 Experience = store.Experience,
                 Image = store.Image,
-                Place = store.Place.Value,
+                Place = store.Place,
                 TaxCode = store.TaxCode
             };
 

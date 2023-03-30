@@ -91,7 +91,7 @@ namespace ViewModels.Users
 
         public string? Image { get; set; }
 
-        public Place Place { get; set; }
+        public Place? Place { get; set; }
 
 
     }
