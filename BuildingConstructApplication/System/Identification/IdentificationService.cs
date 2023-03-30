@@ -2,6 +2,8 @@
 using Data.Entities;
 using Data.Enum;
 using Emgu.CV;
+using Emgu.CV.Features2D;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Drawing;
 using System.Linq.Dynamic.Core;
@@ -15,10 +17,13 @@ namespace Application.System.Identification
     public class IdentificationService : IIdentificationService
     {
         private readonly BuildingConstructDbContext _context;
+        private readonly UserManager<User> _userService;
 
-        public IdentificationService(BuildingConstructDbContext context)
+
+        public IdentificationService(BuildingConstructDbContext context, UserManager<User> userService)
         {
             _context = context;
+            _userService = userService;
         }
 
 
@@ -226,10 +231,33 @@ namespace Application.System.Identification
             var rs = await _context.Verifies.FirstOrDefaultAsync(x => x.Id == id);
             if (rs != null)
             {
-                rs.Status = status;
-                rs.LastModifiedAt = DateTime.Now;
-                _context.Update(rs);
-                await _context.SaveChangesAsync();
+                var user = await _context.Users
+                    .FirstOrDefaultAsync(x => x.Id.Equals(rs.UserID));
+                if (user != null)
+                {
+                    rs.Status = status;
+                    rs.LastModifiedAt = DateTime.Now;
+                    _context.Update(rs);
+                    await _context.SaveChangesAsync();
+
+                    if (user != null)
+                    {
+                        if (user.Status == Status.Level2 && status == Status.SUCCESS)
+                        {
+                            user.Status = Status.Level3;
+                        }
+                        else if (status == Status.SUCCESS)
+                        {
+                            user.Status = Status.Level1;
+                        }
+
+
+                        _context.Update(user);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+
+
 
 
                 response = new()

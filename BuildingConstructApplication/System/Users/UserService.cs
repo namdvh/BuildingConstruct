@@ -957,12 +957,14 @@ namespace Application.System.Users
                     }
                 }
 
-
-                if (user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null && user.Status != Status.Level3)
+                if (user.Status == Status.Level1 && user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null)
+                {
+                    user.Status = Status.Level3;
+                }
+                else if (user.Avatar != null && user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null)
                 {
                     user.Status = Status.Level2;
                 }
-
 
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
@@ -1066,11 +1068,15 @@ namespace Application.System.Users
                     user.Contractor.Website = request.Website;
                 }
 
-                if (user.Avatar != null && user.Contractor.CompanyName != null && user.Status != Status.Level3)
+                if (user.Status == Status.Level1 && user.Avatar != null && user.Contractor.CompanyName != null)
+                {
+                    user.Status = Status.Level3;
+                }
+                else if (user.Avatar != null && user.Avatar != null && user.Contractor.CompanyName != null )
                 {
                     user.Status = Status.Level2;
                 }
-
+               
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
 
@@ -1183,12 +1189,14 @@ namespace Application.System.Users
 
                 }
 
-                if (user.Avatar != null && user.MaterialStore.Image != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null && user.Status != Status.Level3)
+                if (user.Status == Status.Level1 && user.Avatar != null && user.MaterialStore.Image != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
+                {
+                    user.Status = Status.Level3;
+                }
+                else if (user.Avatar != null && user.MaterialStore.Image != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
                 {
                     user.Status = Status.Level2;
                 }
-
-
 
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
@@ -1799,10 +1807,10 @@ namespace Application.System.Users
             var totalStore = await _context.Users.Where(x => x.MaterialStoreID != null).CountAsync();
             response.Data = new();
             var userCount = new UserCountDTO();
-            response.Data.Worker= totalWorker;
-            response.Data.Contractor= totalContractor;
-            response.Data.MaterialStore= totalStore;
-            response.Data.TotalUser= totalUser;
+            response.Data.Worker = totalWorker;
+            response.Data.Contractor = totalContractor;
+            response.Data.MaterialStore = totalStore;
+            response.Data.TotalUser = totalUser;
             response.Code = BaseCode.SUCCESS;
             response.Message = BaseCode.SUCCESS_MESSAGE;
             return response;
