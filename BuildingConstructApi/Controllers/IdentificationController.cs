@@ -22,8 +22,8 @@ namespace BuildingConstructApi.Controllers
         {
             _identificationService = identificationService;
         }
-        [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] PaginationFilter request)
+        [HttpPost("getAll")]
+        public async Task<IActionResult> GetAll([FromBody] PaginationFilter request)
         {
 
             var result = await _identificationService.GetAll(request);

@@ -22,6 +22,8 @@ namespace ViewModels.Identification
 
         public Guid? UserID { get; set; }
 
+        public string? Name { get; set; }
+
         public IdentificateType IdentificateType { get; set; }
 
         public bool PreCodition { get; set; }
