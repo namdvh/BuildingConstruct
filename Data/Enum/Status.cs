@@ -2,10 +2,10 @@
 {
     public enum Status
     {
-        Level1,
-        Level2,
+        Level1, //ID
+        Level2, //
         Level3,
-        SUCCESS,
+        SUCCESS, //Mac dinh
         NOT_RESPONSE,
         PENDING,
         ACCEPTED,
