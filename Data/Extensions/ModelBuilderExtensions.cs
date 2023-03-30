@@ -673,7 +673,8 @@ namespace Data.Extensions
                 MaterialStoreID=1,
                 Unit="Lít",
                 Brand= "CMC",
-                LastModifiedAt=DateTime.Parse("2022/12/2")
+                LastModifiedAt=DateTime.Parse("2022/12/2"),
+                Status=true
             });
 
             modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
@@ -747,7 +748,8 @@ namespace Data.Extensions
                 MaterialStoreID = 1,
                 Unit = "Gạch",
                 Brand = "NIRO GRANITE",
-                LastModifiedAt = DateTime.Parse("2022/1/2")
+                LastModifiedAt = DateTime.Parse("2022/1/2"),
+                Status=true
 
             });
 
@@ -780,7 +782,8 @@ namespace Data.Extensions
                 MaterialStoreID = 1,
                 Unit = "Bộ",
                 Brand = "ARISTON",
-                LastModifiedAt = DateTime.Parse("2023/1/2")
+                LastModifiedAt = DateTime.Parse("2023/1/2"),
+                Status = true
             });
 
             modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
@@ -812,7 +815,8 @@ namespace Data.Extensions
                 Description = "Thiết kế nguyên khối sang trọng, hiện đại\r\nNắp bàn cầu đóng êm, kèm vòi rửa nước lạnh Eco-washer\r\nBề mặt nước rộng giúp ngăn mùi hiệu quả\r\nThiết kế thân kín, vành kín tiện dụng cho việc vệ sinh hàng ngày\r\nCông nghệ CeFiONtect giúp lòng bàn cầu siêu nhẵn, hạn chế tối đa các vết bẩn, vi khuẩn\r\nCông nghệ xả G-Max êm, mạnh mẽ hiệu quả",
                 MaterialStoreID = 1,
                 Unit = "Bộ",
-                Brand = "TOTO"
+                Brand = "TOTO",
+                Status = true
             });
 
             modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
@@ -857,7 +861,8 @@ namespace Data.Extensions
                 MaterialStoreID = 1,
                 Unit = "Bộ",
                 Brand = "INAX",
-                LastModifiedAt = DateTime.Parse("2022/5/22")
+                LastModifiedAt = DateTime.Parse("2022/5/22"),
+                Status = true
             });
 
             modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
@@ -902,7 +907,8 @@ namespace Data.Extensions
                 MaterialStoreID = 1,
                 Unit = "Cái",
                 Brand = "NIRO GRANITE",
-                LastModifiedAt = DateTime.Parse("2023/2/2")
+                LastModifiedAt = DateTime.Parse("2023/2/2"),
+                Status = true
             });
 
             modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
@@ -1002,7 +1008,8 @@ namespace Data.Extensions
                 MaterialStoreID = 1,
                 Unit = "Bộ",
                 Brand = "JINMEI",
-                LastModifiedAt = DateTime.Now
+                LastModifiedAt = DateTime.Now,
+                Status = true
             });
 
             modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
@@ -1040,7 +1047,8 @@ namespace Data.Extensions
                 MaterialStoreID = 1,
                 Unit = "Lít",
                 Brand = "KANSAI PAINT",
-                LastModifiedAt = DateTime.Now
+                LastModifiedAt = DateTime.Now,
+                Status = true
 
             });
 
@@ -1079,7 +1087,8 @@ namespace Data.Extensions
                 MaterialStoreID = 1,
                 Unit = "Cái",
                 Brand = "COSMOS",
-                LastModifiedAt = DateTime.Parse("2023/10/1")
+                LastModifiedAt = DateTime.Parse("2023/10/1"),
+                Status = true
             });
 
             modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
@@ -1117,7 +1126,8 @@ namespace Data.Extensions
                 MaterialStoreID = 1,
                 Unit = "Viên",
                 Brand = "NIRO GRANITE",
-                LastModifiedAt = DateTime.Now
+                LastModifiedAt = DateTime.Now,
+                Status = true
             });
 
             modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
@@ -1160,7 +1170,8 @@ namespace Data.Extensions
                 SoldQuantities = 3000,
                 Description = "Ngói lợp kiểu Pháp cổ điển",
                 MaterialStoreID = 1,
-                Brand = "Pháp"
+                Brand = "Pháp",
+                Status = true
             });
             modelBuilder.Entity<Products>().HasData(new Products
             {
@@ -1173,7 +1184,8 @@ namespace Data.Extensions
                 SoldQuantities = 1500,
                 Description = "Gạch 2 lỗ cao cấp đến từ thương hiệu nổi tiếng ",
                 MaterialStoreID = 1,
-                Brand = "Việt Nam"
+                Brand = "Việt Nam",
+                Status = true
             });
             modelBuilder.Entity<Products>().HasData(new Products
             {
@@ -1186,7 +1198,8 @@ namespace Data.Extensions
                 SoldQuantities = 1500,
                 Description = "Sơn chống thấm Nippon",
                 MaterialStoreID = 1,
-                Brand = "Mỹ"
+                Brand = "Mỹ",
+                Status = true
             });
             modelBuilder.Entity<Products>().HasData(new Products
             {
@@ -1199,7 +1212,8 @@ namespace Data.Extensions
                 SoldQuantities = 50,
                 Description = "Cát mịn dành cho xây dựng đặc biệt dành cho ngôi nhà yêu dấu của bạn",
                 MaterialStoreID = 1,
-                Brand = "Việt Nam"
+                Brand = "Việt Nam",
+                Status = true
             });
             modelBuilder.Entity<Products>().HasData(new Products
             {
@@ -1212,7 +1226,8 @@ namespace Data.Extensions
                 SoldQuantities = 300,
                 Description = "Xi măng Hà Tiên",
                 MaterialStoreID = 2,
-                Brand = "Việt Nam"
+                Brand = "Việt Nam",
+                Status = true
             });
             modelBuilder.Entity<Products>().HasData(new Products
             {
@@ -1225,7 +1240,8 @@ namespace Data.Extensions
                 SoldQuantities = 2000,
                 Description = "Gạch 4 lỗ",
                 MaterialStoreID = 2,
-                Brand = "Việt Nam"
+                Brand = "Việt Nam",
+                Status = true
             });
 
 
@@ -1240,7 +1256,8 @@ namespace Data.Extensions
                 Brand = "KANSAI PAINT",
                 SoldQuantities = 100,
                 Unit = "Lít",
-                MaterialStoreID = 1
+                MaterialStoreID = 1,
+                Status = true
             });
 
             modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
@@ -1330,7 +1347,8 @@ namespace Data.Extensions
                 Brand = "INAX",
                 Unit = "Cái",
                 SoldQuantities = 1000,
-                MaterialStoreID = 1
+                MaterialStoreID = 1,
+                Status = true
             });
 
             modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
@@ -1366,7 +1384,8 @@ namespace Data.Extensions
                 Brand = "INAX",
                 Unit = "Cái",
                 SoldQuantities = 100,
-                MaterialStoreID = 1
+                MaterialStoreID = 1,
+                Status = true
             });
 
             modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
@@ -1500,7 +1519,7 @@ namespace Data.Extensions
             modelBuilder.Entity<Notification>().HasData(new Notification
             {
                 Id = 1,
-                Type=Enum.NotificationType.TYPE_1,
+                Type=Enum.NotificationType.CONTRACTOR_POST_NOTIFICATION,
                 Title="New Notification",
                 UserID=Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7"),
                 CreateBy=Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d9"),
@@ -1514,7 +1533,7 @@ namespace Data.Extensions
             
             {
                 Id = 2,
-                Type = Enum.NotificationType.TYPE_2,
+                Type = Enum.NotificationType.CONTRACTOR_POST_NOTIFICATION,
                 Title = "New Notification",
                 UserID = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7"),
                 CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d9"),
@@ -1527,7 +1546,7 @@ namespace Data.Extensions
             modelBuilder.Entity<Notification>().HasData(new Notification
             {
                 Id = 3,
-                Type = Enum.NotificationType.TYPE_3,
+                Type = Enum.NotificationType.CONTRACTOR_POST_NOTIFICATION,
                 Title = "New Notification",
                 UserID = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7"),
                 CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d9"),

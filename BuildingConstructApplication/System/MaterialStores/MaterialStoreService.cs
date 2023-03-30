@@ -2,18 +2,15 @@ using Data.DataContext;
 using Data.Entities;
 using Data.Enum;
 using Gridify;
-using System.Text;
-using System.Linq.Dynamic.Core;
-using ViewModels.Pagination;
-using Microsoft.EntityFrameworkCore;
-using ViewModels.ContractorPost;
-using ViewModels.Response;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
+using System.Security.Claims;
+using System.Text;
 using ViewModels.Categories;
 using ViewModels.MaterialStore;
-using ZedGraph;
-using System.Collections.Generic;
+using ViewModels.Pagination;
+using ViewModels.Response;
 
 namespace Application.System.MaterialStores
 {
@@ -50,6 +47,7 @@ namespace Application.System.MaterialStores
                 MaterialStoreID = storeID,
                 Unit = request.Unit,
                 CreatedBy = Guid.Parse(userID),
+                Status=true
             };
 
             await _context.Products.AddAsync(products);
@@ -143,7 +141,7 @@ namespace Application.System.MaterialStores
                         Other tmpOther = new()
                         {
                             Name = item.Other,
-                            Image=item.Image
+                            Image = item.Image
                         };
 
                         await _context.Others.AddAsync(tmpOther);
@@ -226,7 +224,8 @@ namespace Application.System.MaterialStores
             if (isAll == false)
             {
                 data = await query
-                .AsNoTracking().Where(x => x.MaterialStoreID == storeID)
+                .AsNoTracking()
+                .Where(x => x.MaterialStoreID == storeID && x.Status==true)
                .OrderBy(filter._sortBy + " " + orderBy)
                .Skip((filter.PageNumber - 1) * filter.PageSize)
                .Take(filter.PageSize)
@@ -269,6 +268,10 @@ namespace Application.System.MaterialStores
 
             return response;
         }
+
+
+
+
         public async Task<List<ProductStoreDTO>> MapListDTO(List<Products> list, bool? isAll)
         {
             List<ProductStoreDTO> result = new();
@@ -453,7 +456,7 @@ namespace Application.System.MaterialStores
                     LastName = item.User.LastName,
                     Description = item.Description,
                     Id = item.Id,
-                    Place = item.Place,
+                    Place = item.Place.Value,
                     Experience = item.Experience,
                     Image = item.Image,
                     TaxCode = item.TaxCode,
@@ -470,8 +473,8 @@ namespace Application.System.MaterialStores
         {
             BaseResponse<ProductDetailDTO> response = new();
             var rs = await _context.Products
-                .Include(x=> x.MaterialStore)
-                    .ThenInclude(x=>x.User)
+                .Include(x => x.MaterialStore)
+                    .ThenInclude(x => x.User)
                 .Include(x => x.ProductCategories)
                 .Include(x => x.ProductTypes)
                 .SingleOrDefaultAsync(x => x.Id == productId);
@@ -527,7 +530,7 @@ namespace Application.System.MaterialStores
             final.Image = results.Image;
             final.Experience = results.Experience;
             final.TaxCode = results.TaxCode;
-            final.Place = results.Place;
+            final.Place = results.Place.Value;
             return final;
         }
 
@@ -622,206 +625,181 @@ namespace Application.System.MaterialStores
 
         public async Task<BaseResponse<ProductStoreDTO>> UpdateProduct(UpdateProductDTO request, int productId)
         {
+            BaseResponse<ProductStoreDTO> response = new();
+
             Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
             var userID = identifierClaim.Value.ToString();
+
+
             var storeID = await _context.Users.Where(x => x.Id.ToString().Equals(userID)).Select(x => x.MaterialStoreID).SingleOrDefaultAsync();
-            BaseResponse<ProductStoreDTO> response = new();
-            var products = await _context.Products.Include("ProductCategories").Where(x => x.Id == productId && x.MaterialStoreID == storeID).FirstOrDefaultAsync();
-            if (productId == null)
+
+            var existedProduct = await _context.Products.Include("ProductCategories").Where(x => x.Id == productId && x.MaterialStoreID == storeID).FirstOrDefaultAsync();
+
+            // If update => old product will change status == FALSE , add new product 
+
+            if (existedProduct == null)
             {
-                response.Message = BaseCode.ERROR_MESSAGE;
+                response.Message = BaseCode.NOTFOUND_MESSAGE;
                 response.Code = BaseCode.ERROR;
-                response.Data = null;
                 return response;
             }
-            if (!string.IsNullOrEmpty(request.Name.ToString()))
+            else
             {
-                products.Name = request.Name;
-            }
-            if (!string.IsNullOrEmpty(request.Unit.ToString()))
-            {
-                products.Unit = request.Unit;
-            }
-            if (!string.IsNullOrEmpty(request.UnitPrice.ToString()))
-            {
-                products.UnitPrice = request.UnitPrice;
+                //Change status old product 
+
+                existedProduct.Status = false;
+                _context.Products.Update(existedProduct);
+                await _context.SaveChangesAsync();
 
             }
-            if (!string.IsNullOrEmpty(request.UnitInStock.ToString()))
+
+            Products newUpdateProduct = new()
             {
-                products.UnitInStock = request.UnitInStock;
+                Name = request.Name,
+                Unit = request.Unit,
+                UnitPrice = request.UnitPrice,
+                UnitInStock = request.UnitInStock,
+                Description = request.Description,
+                Brand = request.Brand,
+                Image = request.Image,
+                Status = true,
+                MaterialStoreID = existedProduct.MaterialStoreID,
+                CreatedBy = Guid.Parse(userID),
+                SoldQuantities = existedProduct.SoldQuantities,
+            };
 
-            }
-            if (!string.IsNullOrEmpty(request.Description.ToString()))
-            {
-                products.Description = request.Description;
+            await _context.AddAsync(newUpdateProduct);
+            await _context.SaveChangesAsync();
 
-            }
-            if (!string.IsNullOrEmpty(request.Brand.ToString()))
-            {
-                products.Brand = request.Brand;
-
-            }
-            if (!string.IsNullOrEmpty(request.Image.ToString()))
-            {
-                products.Image = request.Image;
-
-            }
-            _context.Entry<Products>(products).State = EntityState.Modified;
-
-            var listcate = new List<CategoryDTO>();
             if (request.ProductTypes != null)
             {
-                var firstList = await _context.ProductTypes
-                    .Include(x => x.Color)
-                    .Include(x => x.Size)
-                    .Include(x => x.Other)
-                    .Where(x => x.ProductID == productId).ToListAsync();
-                List<ProductType>? finalList = new();
-
-
-                ProductType newType = new();
+                List<ProductType> list = new();
+                List<Color> colorExisted = new();
+                List<ProductSize> sizeExisted = new();
 
                 foreach (var item in request.ProductTypes)
                 {
+                    var productType = new ProductType();
+                    productType.ProductID = newUpdateProduct.Id;
+                    productType.Quantity = item.Quantity;
+                    productType.Status = Status.SUCCESS;
 
-                    if (firstList != null)
+                    if (!string.IsNullOrEmpty(item.Label))
                     {
-                        var color = string.IsNullOrEmpty(item.Color) ? "No Color" : item.Color;
-                        var size = string.IsNullOrEmpty(item.Size) ? "No Size" : item.Size;
-                        var other = string.IsNullOrEmpty(item.Other) ? "No Other" : item.Other;
+                        productType.Label = item.Label;
+                    }
 
+                    if (!string.IsNullOrEmpty(item.Color))
+                    {
+                        var inColorList = colorExisted.Where(x => x.Name.Equals(item.Color)).FirstOrDefault();
 
-
-                        var existed = firstList
-                            .Where(x => x.Color.Name.Equals(color)
-                            && x.Size.Name.Equals(size)
-                            && x.Other.Name.Equals(other))
-                            .ToList();
-
-                        if (existed.Any())
+                        if (inColorList != null)
                         {
-
-                            var updatedProduct = await _context.ProductTypes.Where(x => x.Id == existed.First().Id).FirstOrDefaultAsync();
-                            updatedProduct.Quantity = item.Quantity;
-
-                            _context.Update(updatedProduct);
-
-                            await _context.SaveChangesAsync();
-
-                            firstList = firstList.Except(existed).ToList();
+                            productType.ColorId = inColorList.Id;
                         }
                         else
                         {
 
-                            if (!string.IsNullOrEmpty(item.Color))
+                            Color tmpColor = new()
                             {
-                                Color tmpColor = new()
-                                {
-                                    Name = item.Color,
-                                };
+                                Name = item.Color,
+                                Image = item.Image,
+                            };
 
-                                await _context.Colors.AddAsync(tmpColor);
-                                await _context.SaveChangesAsync();
-                                newType.ColorId = tmpColor.Id;
-                            }
-                            else
-                            {
-                                newType.ColorId = 1;
-                            }
-
-
-                            if (!string.IsNullOrEmpty(item.Size))
-                            {
-                                ProductSize tmpSize = new()
-                                {
-                                    Name = item.Size,
-                                };
-
-                                await _context.Sizes.AddAsync(tmpSize);
-                                await _context.SaveChangesAsync();
-                                newType.SizeID = tmpSize.Id;
-                            }
-                            else
-                            {
-                                newType.SizeID = 1;
-                            }
-
-
-                            if (!string.IsNullOrEmpty(item.Other))
-                            {
-                                Other tmpOther = new()
-                                {
-                                    Name = item.Other,
-                                };
-
-                                await _context.Others.AddAsync(tmpOther);
-                                await _context.SaveChangesAsync();
-                                newType.OtherID = tmpOther.Id;
-                            }
-                            else
-                            {
-                                newType.OtherID = 1;
-                            }
-                            newType.ProductID = productId;
-                            newType.Status = Status.SUCCESS;
-                            await _context.ProductTypes.AddAsync(newType);
+                            await _context.Colors.AddAsync(tmpColor);
                             await _context.SaveChangesAsync();
 
+                            colorExisted.Add(tmpColor);
+                            productType.ColorId = tmpColor.Id;
+
                         }
+
                     }
+                    else
+                    {
+                        productType.ColorId = 1;
+                    }
+
+
+                    if (!string.IsNullOrEmpty(item.Size))
+                    {
+                        var inSizeList = sizeExisted.Where(x => x.Name.Equals(item.Size)).FirstOrDefault();
+
+                        if (inSizeList != null)
+                        {
+                            productType.SizeID = inSizeList.Id;
+                        }
+                        else
+                        {
+
+                            ProductSize tmpSize = new()
+                            {
+                                Name = item.Size,
+                            };
+
+                            await _context.Sizes.AddAsync(tmpSize);
+                            await _context.SaveChangesAsync();
+                            sizeExisted.Add(tmpSize);
+                            productType.SizeID = tmpSize.Id;
+                        }
+
+
+
+                    }
+                    else
+                    {
+                        productType.SizeID = 1;
+                    }
+
+
+                    if (!string.IsNullOrEmpty(item.Other))
+                    {
+                        Other tmpOther = new()
+                        {
+                            Name = item.Other,
+                            Image = item.Image
+                        };
+
+                        await _context.Others.AddAsync(tmpOther);
+                        await _context.SaveChangesAsync();
+                        productType.OtherID = tmpOther.Id;
+                    }
+                    else
+                    {
+                        productType.OtherID = 1;
+                    }
+
+                    list.Add(productType);
+
                 }
+                await _context.AddRangeAsync(list);
+                await _context.SaveChangesAsync();
 
 
-
-                foreach (var item in firstList)
-                {
-                    item.Status = Status.CANCEL;
-                    _context.Update(item);
-                    await _context.SaveChangesAsync();
-                }
             }
             if (request.Categories != null)
             {
-                foreach (var i in products.ProductCategories)
-                {
-                    _context.ProductCategories.Remove(i);
-                }
+
                 foreach (var item in request.Categories)
                 {
-                    var cate = _context.Categories.Where(x => x.ID == item.CategoryID).SingleOrDefault();
-                    if (cate != null)
+                    var productcate = new ProductCategories
                     {
-                        var category = new CategoryDTO();
-                        var productcate = new ProductCategories();
-
-                        category.Id = cate.ID;
-                        category.CategoryName = cate.Name;
-                        productcate.CategoriesID = cate.ID;
-                        productcate.ProductID = productId;
-                        productcate.Name = item.Name;
-                        await _context.ProductCategories.AddAsync(productcate);
-
-                        var rs = _context.SaveChanges();
-                        if (rs < 0)
-                        {
-                            response.Message = BaseCode.ERROR_MESSAGE;
-                            response.Code = BaseCode.ERROR;
-                            response.Data = null;
-                            return response;
-                        }
-                        listcate.Add(category);
-
-                    }
+                        ProductID = newUpdateProduct.Id,
+                        CategoriesID = item.CategoryID,
+                        Name = item.Name
+                    };
+                    await _context.AddAsync(productcate);
+                    await _context.SaveChangesAsync();
                 }
+
             }
-            _context.Update(products);
-            var results = await _context.SaveChangesAsync();
-            if (results > 0)
+
+            response = new()
             {
-                response.Message = BaseCode.SUCCESS_MESSAGE;
-                response.Code = BaseCode.SUCCESS;
-            }
+                Code = BaseCode.SUCCESS,
+                Message = BaseCode.SUCCESS_MESSAGE
+            };
+
             return response;
         }
 

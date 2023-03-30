@@ -1,9 +1,4 @@
 ﻿using Data.Enum;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ViewModels.Filter
 {
@@ -17,6 +12,8 @@ namespace ViewModels.Filter
 
         public List<PostCategories>? Categories { get; set; }
 
+        public List<Guid>? Types { get; set; }
+
         public int? Participant { get; set; }
 
         public bool? Accommodation { get; set; }
@@ -24,5 +21,8 @@ namespace ViewModels.Filter
         public bool? Transport { get; set; }
 
         public Status? Status { get; set; }
+
+
+
     }
 }

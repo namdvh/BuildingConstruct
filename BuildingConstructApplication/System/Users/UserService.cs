@@ -388,8 +388,10 @@ namespace Application.System.Users
 
                     if (defaultRole.Id == Guid.Parse(BaseCode.UsRole))
                     {
-                        var builder = new Builder();
-                        builder.CreateBy = user.Id;
+                        var builder = new Builder
+                        {
+                            CreateBy = user.Id
+                        };
                         await _context.Builders.AddAsync(builder);
                         _context.SaveChanges();
 
@@ -749,7 +751,7 @@ namespace Application.System.Users
                     Website = user.MaterialStore.Website,
                     Experience = user.MaterialStore.Experience,
                     Image = user.MaterialStore.Image,
-                    Place = user.MaterialStore.Place,
+                    Place = user.MaterialStore.Place.Value,
                     TaxCode = user.MaterialStore.TaxCode
                 };
 
@@ -1001,6 +1003,14 @@ namespace Application.System.Users
                         await _context.SaveChangesAsync();
                     }
                 }
+
+
+                if (user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null && user.Status != Status.Level3)
+                {
+                    user.Status = Status.Level2;
+                }
+
+
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
 
@@ -1021,6 +1031,14 @@ namespace Application.System.Users
                     Code = BaseCode.ERROR
                 };
             }
+
+
+
+
+
+
+
+
             return response;
         }
 
@@ -1094,6 +1112,12 @@ namespace Application.System.Users
                 {
                     user.Contractor.Website = request.Website;
                 }
+
+                if (user.Avatar != null && user.Contractor.CompanyName != null && user.Status != Status.Level3)
+                {
+                    user.Status = Status.Level2;
+                }
+
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
 
@@ -1206,9 +1230,10 @@ namespace Application.System.Users
 
                 }
 
-
-
-
+                if (user.Avatar != null && user.MaterialStore.Image != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null && user.Status != Status.Level3)
+                {
+                    user.Status = Status.Level2;
+                }
 
 
 
@@ -1676,7 +1701,7 @@ namespace Application.System.Users
                 Website = store.Website,
                 Experience = store.Experience,
                 Image = store.Image,
-                Place = store.Place,
+                Place = store.Place.Value,
                 TaxCode = store.TaxCode
             };
 

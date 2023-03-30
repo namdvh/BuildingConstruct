@@ -1,4 +1,6 @@
-﻿namespace Data.Entities
+﻿using Data.Enum;
+
+namespace Data.Entities
 {
     public class Products:BaseEntity
     {
@@ -19,7 +21,6 @@
 
         public int SoldQuantities { get; set; }
 
-
         public int? MaterialStoreID { get; set; }
 
         public MaterialStore MaterialStore { get; set; }
@@ -27,9 +28,12 @@
         public List<ProductCategories>? ProductCategories { get; set; }
 
         public List<Cart> Carts { get; set; }
+
         public List<BillDetail>? BillDetails { get; set; }
 
         public List<ProductType>? ProductTypes { get; set; }    
+
+        public bool Status { get; set; }
 
 
     }

@@ -38,7 +38,7 @@ namespace BuildingConstructApi.Controllers
         {
             var rs = await _saveService.SavePost(request);
             NotificationModels noti = new();
-            noti.NotificationType = NotificationType.TYPE_1;
+            noti.NotificationType = NotificationType.CONTRACTOR_POST_NOTIFICATION;
             noti.Message = NotificationMessage.SAVENOTI;
             var userID = User.FindFirst("UserID").Value;
             noti.CreateBy = Guid.Parse(userID.ToString());

@@ -8,8 +8,8 @@ namespace Data.Enum
 {
     public enum NotificationType
     {
-        TYPE_1,
-        TYPE_2,
-        TYPE_3
+        CONTRACTOR_POST_NOTIFICATION,
+        BILL_NOTIFICATION,
+        COMMITMENT_NOTIFICATION
     }
 }

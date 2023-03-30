@@ -4,11 +4,6 @@ using Data.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Data.DataContext
 {
@@ -96,12 +91,12 @@ namespace Data.DataContext
         public DbSet<PostInvite> PostInvites { get; set; }
         public DbSet<Payment> Payments { get; set; }
 
-        public DbSet<Color> Colors { get; set; }    
-        public DbSet<ProductSize> Sizes { get; set; }    
-        public DbSet<Other> Others { get; set; }    
-        public DbSet<Quiz> Quizzes { get; set; }    
-        public DbSet<Question> Questions { get; set; }    
-        public DbSet<Answer> Answers { get; set; }    
-        public DbSet<UserAnswer> UserAnswers { get; set; }    
+        public DbSet<Color> Colors { get; set; }
+        public DbSet<ProductSize> Sizes { get; set; }
+        public DbSet<Other> Others { get; set; }
+        public DbSet<Quiz> Quizzes { get; set; }
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<Answer> Answers { get; set; }
+        public DbSet<UserAnswer> UserAnswers { get; set; }
     }
 }

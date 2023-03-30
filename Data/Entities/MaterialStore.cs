@@ -16,7 +16,7 @@ namespace Data.Entities
 
         public string? Image { get; set; }
 
-        public Place Place { get; set; }    
+        public Place? Place { get; set; }    
 
         public User? User { get; set; }
 

@@ -64,7 +64,7 @@ namespace BuildingConstructApi.Controllers
                 NavigateId = result.NavigateId,
                 UserId = Guid.Parse(result.Data),
                 Message = NotificationMessage.SEND_INVITE,
-                NotificationType = NotificationType.TYPE_1,
+                NotificationType = NotificationType.CONTRACTOR_POST_NOTIFICATION,
                 Author = notiAuthor,
             };
 

@@ -22,5 +22,9 @@ namespace ViewModels.ContractorPost
         public Guid TypeID { get; set; }
         public string? TypeName { get; set; }
         public string VerifyId { get; set; }
+
+        public string? SkillAssessment { get; set; }
+
+        public int? BehaviourAssessment { get; set; }
     }
 }

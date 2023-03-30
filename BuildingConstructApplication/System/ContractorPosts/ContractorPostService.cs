@@ -5,6 +5,7 @@ using Gridify;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Security.Claims;
 using System.Text;
@@ -20,7 +21,7 @@ namespace Application.System.ContractorPosts
     public class ContractorPostService : IContractorPostService
     {
         private readonly BuildingConstructDbContext _context;
-        private IHttpContextAccessor _accessor;
+        private readonly IHttpContextAccessor _accessor;
         public ContractorPostService(BuildingConstructDbContext context, IHttpContextAccessor accessor)
         {
             _context = context;
@@ -30,7 +31,7 @@ namespace Application.System.ContractorPosts
         public async Task<bool> CreateContractorPost(ContractorPostModels contractorPostDTO)
         {
             Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
-            var userID = identifierClaim.Value;
+            var userID = identifierClaim?.Value;
             var contracID = _context.Users.Where(x => x.Id.ToString().Equals(userID)).FirstOrDefault().ContractorId;
 
             var contractorPost = new ContractorPost
@@ -91,17 +92,21 @@ namespace Application.System.ContractorPosts
 
                     if (o.fromSystem == false)
                     {
-                        var rSkill = new Skill();
-                        rSkill.Name = o.name;
-                        rSkill.FromSystem = o.fromSystem;
+                        var rSkill = new Skill
+                        {
+                            Name = o.name,
+                            FromSystem = o.fromSystem
+                        };
                         _context.Skills.Add(rSkill);
                         _context.SaveChanges();
 
 
 
-                        var cPostSkill = new ContractorPostSkill();
-                        cPostSkill.ContractorPostID = id;
-                        cPostSkill.SkillID = rSkill.Id;
+                        var cPostSkill = new ContractorPostSkill
+                        {
+                            ContractorPostID = id,
+                            SkillID = rSkill.Id
+                        };
                         _context.ContractorPostSkills.Add(cPostSkill);
                         var rs = _context.SaveChanges();
                         if (rs < 0)
@@ -121,9 +126,11 @@ namespace Application.System.ContractorPosts
                             if (guid.Equals(cid))
                             {
 
-                                var cPostSkill = new ContractorPostSkill();
-                                cPostSkill.ContractorPostID = id;
-                                cPostSkill.SkillID = o.id;
+                                var cPostSkill = new ContractorPostSkill
+                                {
+                                    ContractorPostID = id,
+                                    SkillID = o.id
+                                };
                                 _context.ContractorPostSkills.Add(cPostSkill);
                                 _context.SaveChanges();
                                 flag = true;
@@ -231,6 +238,7 @@ namespace Application.System.ContractorPosts
                 PostCategories = post.PostCategories,
                 Place = post.Place,
                 IsApplied = post.isApplied,
+                RequiredQuiz=post.QuizRequired,
                 type = await GetTypeAndSkillFromPost(post.Id),
                 CreatedBy = post.CreateBy,
                 Author = await GetUserProfile(post.CreateBy),
@@ -247,19 +255,23 @@ namespace Application.System.ContractorPosts
             var final = new List<TypeModels>();
             foreach (var item in results)
             {
-                var type = new TypeModels();
-                type.id = item.TypeID;
-                type.name = item.Type.Name;
-                type.SkillArr = new();
+                var type = new TypeModels
+                {
+                    id = item.TypeID,
+                    name = item.Type.Name,
+                    SkillArr = new()
+                };
                 foreach (var i in rsSkill)
                 {
                     if (i.Skills.TypeId.Equals(item.TypeID))
                     {
-                        var skillArr = new SkillArr();
-                        skillArr.id = i.SkillID;
-                        skillArr.name = i.Skills.Name;
-                        skillArr.fromSystem = i.Skills.FromSystem;
-                        skillArr.TypeId = i.Skills.TypeId;
+                        var skillArr = new SkillArr
+                        {
+                            id = i.SkillID,
+                            name = i.Skills.Name,
+                            fromSystem = i.Skills.FromSystem,
+                            TypeId = i.Skills.TypeId
+                        };
                         type.SkillArr.Add(skillArr);
                     }
                 }
@@ -272,11 +284,13 @@ namespace Application.System.ContractorPosts
                 {
                     var t = new TypeModels();
                     t.SkillArr = new();
-                    var skillArr = new SkillArr();
-                    skillArr.id = i.SkillID;
-                    skillArr.name = i.Skills.Name;
-                    skillArr.fromSystem = i.Skills.FromSystem;
-                    skillArr.TypeId = i.Skills.TypeId;
+                    var skillArr = new SkillArr
+                    {
+                        id = i.SkillID,
+                        name = i.Skills.Name,
+                        fromSystem = i.Skills.FromSystem,
+                        TypeId = i.Skills.TypeId
+                    };
                     t.SkillArr.Add(skillArr);
                     final.Add(t);
                 }
@@ -287,17 +301,19 @@ namespace Application.System.ContractorPosts
         {
             var results = await _context.Users.Where(x => x.Id.ToString().Equals(userID.ToString())).SingleOrDefaultAsync();
             var roleid = await _context.UserRoles.Where(x => x.UserId.Equals(userID)).Select(x => x.RoleId).SingleOrDefaultAsync();
-            var final = new UserModelsDTO();
-            final.UserName = results.UserName;
-            final.Phone = results.PhoneNumber;
-            final.FirstName = results.FirstName;
-            final.LastName = results.LastName;
-            final.Address = results.Address;
-            final.Gender = results.Gender;
-            final.Avatar = results.Avatar;
-            final.DOB = results.DOB;
-            final.Email = results.Email;
-            final.RoleName = await _context.Roles.Where(x => x.Id.Equals(roleid)).Select(x => x.Name).SingleOrDefaultAsync();
+            var final = new UserModelsDTO
+            {
+                UserName = results.UserName,
+                Phone = results.PhoneNumber,
+                FirstName = results.FirstName,
+                LastName = results.LastName,
+                Address = results.Address,
+                Gender = results.Gender,
+                Avatar = results.Avatar,
+                DOB = results.DOB,
+                Email = results.Email,
+                RoleName = await _context.Roles.Where(x => x.Id.Equals(roleid)).Select(x => x.Name).SingleOrDefaultAsync()
+            };
             return final;
         }
 
@@ -323,6 +339,7 @@ namespace Application.System.ContractorPosts
             StringBuilder salariesSearch = new();
             StringBuilder placeSearch = new();
             StringBuilder categoriesSearch = new();
+            StringBuilder typesSearch = new();
 
             if (filter.FilterRequest != null)
             {
@@ -391,6 +408,26 @@ namespace Application.System.ContractorPosts
 
                 }
 
+                if (filter.FilterRequest.Types.Any())
+                {
+                    var count = filter.FilterRequest.Types.Count;
+                    for (int i = 0; i < count; i++)
+                    {
+                        if (i == count - 1)
+                        {
+                            typesSearch.Append("TypeID=" + filter.FilterRequest.Types[i]);
+                            break;
+                        }
+                        typesSearch.Append("TypeID=" + filter.FilterRequest.Types[i] + "|");
+                    }
+
+                    var types = await _context.ContractorPostTypes.ApplyFiltering(typesSearch.ToString()).Select(x => x.ContractorPostID).ToListAsync();
+
+
+                    query = query.Where(x => types.Contains(x.Id));
+
+                }
+
             }
 
             var result = await query
@@ -447,8 +484,6 @@ namespace Application.System.ContractorPosts
             }
             return response;
         }
-
-
 
         public async Task<BasePagination<List<AppliedPostDTO>>> ViewAppliedPost(int postID, PaginationFilter filter)
         {
@@ -573,7 +608,18 @@ namespace Application.System.ContractorPosts
         private AppliedPostDTO MapToAppliedPostGroupDTO(AppliedPost applied, List<GroupMember> groupMember)
         {
             List<AppliedGroup> group = MapGroup(groupMember);
+            int totalScore = 0;
+            int totalQuestion = 0;
 
+            if (applied.QuizId != null)
+            {
+                totalScore = _context.UserAnswers
+                    .Include(x => x.Answer)
+                    .Where(x => x.BuilderId == applied.BuilderID && x.Answer.isCorrect == true && x.Answer.Question.QuizId == applied.QuizId)
+                    .Count();
+                totalQuestion = _context.Questions.Where(x => x.QuizId == applied.QuizId).Count();
+
+            }
             AppliedPostDTO rs = new()
             {
                 Avatar = applied.Builder.User.Avatar,
@@ -583,7 +629,10 @@ namespace Application.System.ContractorPosts
                 UserID = applied.Builder.User.Id,
                 WishSalary = applied.WishSalary,
                 Groups = group,
-                AppliedDate = applied.AppliedDate
+                AppliedDate = applied.AppliedDate,
+                TotalCorrectAnswers = totalScore,
+                TotalNumberQuestion = totalQuestion,
+              
             };
             return rs;
         }
@@ -602,6 +651,8 @@ namespace Application.System.ContractorPosts
                     Name = item.Name,
                     TypeName = type,
                     TypeID = item.TypeID,
+                    SkillAssessment=item.SkillAssessment,
+                    BehaviourAssessment=item.BehaviourAssessment
 
                 };
                 result.Add(rs);
@@ -795,109 +846,172 @@ namespace Application.System.ContractorPosts
         {
             BaseResponse<string> response;
 
-
-
             var user = await _context.Users.Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
-            var alreadyApplied = await _context.AppliedPosts.Where(x => x.BuilderID == user.BuilderId && x.PostID == request.PostId).FirstOrDefaultAsync();
 
-            if (alreadyApplied != null)
+            if(user == null)
             {
                 response = new()
                 {
-                    Code = BaseCode.SUCCESS,
-                    Message = "You have already applied to the post"
+                    Code = BaseCode.ERROR,
+                    Message = BaseCode.NOTFOUND_MESSAGE
                 };
                 return response;
             }
-
-            //Group is not null
-            if (request.GroupMember is not null)
+            else
             {
-                Group group = new()
-                {
-                    BuilderID = user.BuilderId.Value,
-                    PostID = request.PostId
-                };
 
-                await _context.Groups.AddAsync(group);
-                await _context.SaveChangesAsync();
+                var alreadyApplied = await _context.AppliedPosts.Where(x => x.BuilderID == user.BuilderId && x.PostID == request.PostId).FirstOrDefaultAsync();
 
-                foreach (var item in request.GroupMember)
+                if (alreadyApplied != null)
                 {
-                    GroupMember groupMember = new()
+                    response = new()
                     {
-                        DOB = item.DOB,
-                        IdNumber = item.VerifyId,
-                        Name = item.Name,
-                        TypeID = item.TypeID,
-                        GroupId = group.Id
+                        Code = BaseCode.SUCCESS,
+                        Message = "You have already applied to the post",
+                        Data = "ALREADY_APPLIED"
+                    };
+                    return response;
+                }
+
+
+
+                //Group is not null
+                if (request.GroupMember is not null)
+                {
+                    Group group = new()
+                    {
+                        BuilderID = user.BuilderId.Value,
+                        PostID = request.PostId
                     };
 
-                    await _context.GroupMembers.AddAsync(groupMember);
+                    await _context.Groups.AddAsync(group);
+                    await _context.SaveChangesAsync();
+
+                    foreach (var item in request.GroupMember)
+                    {
+                        GroupMember groupMember = new()
+                        {
+                            DOB = item.DOB,
+                            IdNumber = item.VerifyId,
+                            Name = item.Name,
+                            TypeID = item.TypeID,
+                            GroupId = group.Id,
+                            BehaviourAssessment = item.BehaviourAssessment,
+                            SkillAssessment = item.SkillAssessment
+                        };
+
+                        await _context.GroupMembers.AddAsync(groupMember);
+                        await _context.SaveChangesAsync();
+                    }
+
+                    if (request.QuizSubmit != null)
+                    {
+                        List<UserAnswer> ls = new();
+
+                        foreach (var item in request.QuizSubmit.AnswerId)
+                        {
+                            UserAnswer answer = new()
+                            {
+                                AnswerID = item,
+                                BuilderId = user.BuilderId.Value
+                            };
+
+                            ls.Add(answer);
+
+                            await _context.AddRangeAsync(ls);
+                            await _context.SaveChangesAsync();
+                        }
+
+                    }
+
+
+
+                    AppliedPost applied = new()
+                    {
+                        BuilderID = user.BuilderId.Value,
+                        PostID = request.PostId,
+                        WishSalary = request.WishSalary,
+                        GroupID = group.Id,
+                        Status = Status.NOT_RESPONSE,
+                        AppliedDate = DateTime.Now
+                    };
+
+                    if (request.QuizSubmit != null)
+                    {
+                        var quizID = await _context.Answers
+                                    .Include(x => x.Question)
+                                    .Where(x => x.Id == request.QuizSubmit.AnswerId.First())
+                                    .Select(x => x.Question.QuizId)
+                                    .FirstOrDefaultAsync();
+
+                        applied.QuizId = quizID;
+                    }
+
+
+                    await _context.AppliedPosts.AddAsync(applied);
+                    await _context.SaveChangesAsync();
+
+                }
+                else
+                {
+                    if (request.QuizSubmit != null)
+                    {
+                        List<UserAnswer> ls = new();
+
+                        foreach (var item in request.QuizSubmit.AnswerId)
+                        {
+                            UserAnswer answer = new()
+                            {
+                                AnswerID = item,
+                                BuilderId = user.BuilderId.Value
+                            };
+
+                            ls.Add(answer);
+
+                            await _context.AddRangeAsync(ls);
+                            await _context.SaveChangesAsync();
+                        }
+
+                    }
+
+                    AppliedPost applied = new()
+                    {
+                        BuilderID = user.BuilderId.Value,
+                        PostID = request.PostId,
+                        WishSalary = request.WishSalary,
+                        Status = Status.NOT_RESPONSE,
+                        AppliedDate = DateTime.Now,
+                    };
+
+                    if (request.QuizSubmit != null)
+                    {
+                        var quizID = await _context.Answers
+                                    .Include(x => x.Question)
+                                    .Where(x => x.Id == request.QuizSubmit.AnswerId.First())
+                                    .Select(x => x.Question.QuizId)
+                                    .FirstOrDefaultAsync();
+
+                        applied.QuizId = quizID;
+                    }
+
+                    await _context.AppliedPosts.AddAsync(applied);
                     await _context.SaveChangesAsync();
                 }
 
-                AppliedPost applied = new()
+                var postAuthor = await _context.ContractorPosts.Where(x => x.Id == request.PostId).Select(x => x.CreateBy).FirstOrDefaultAsync();
+                response = new()
                 {
-                    BuilderID = user.BuilderId.Value,
-                    PostID = request.PostId,
-                    WishSalary = request.WishSalary,
-                    GroupID = group.Id,
-                    Status = Status.NOT_RESPONSE,
-                    AppliedDate = DateTime.Now
-                };
-
-                await _context.AppliedPosts.AddAsync(applied);
-                await _context.SaveChangesAsync();
-
-            }
-            else
-            {
-                if (request.QuizSubmit != null)
-                {
-                    List<UserAnswer> ls = new();
-
-                    foreach (var item in request.QuizSubmit.AnswerId)
-                    {
-                        UserAnswer answer = new UserAnswer()
-                        {
-                            AnswerID = item,
-                            BuilderId = user.BuilderId.Value
-                        };
-
-                        ls.Add(answer);
-
-                        await _context.AddRangeAsync(ls);
-
-                        await _context.SaveChangesAsync();
-                    }
-                }
-
-                AppliedPost applied = new()
-                {
-                    BuilderID = user.BuilderId.Value,
-                    PostID = request.PostId,
-                    WishSalary = request.WishSalary,
-                    Status = Status.NOT_RESPONSE,
-                    AppliedDate = DateTime.Now
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = postAuthor.ToString(),
+                    NavigateId = request.PostId
 
                 };
 
-                await _context.AppliedPosts.AddAsync(applied);
-                await _context.SaveChangesAsync();
+                return response;
             }
 
-            var postAuthor = await _context.ContractorPosts.Where(x => x.Id == request.PostId).Select(x => x.CreateBy).FirstOrDefaultAsync();
-            response = new()
-            {
-                Code = BaseCode.SUCCESS,
-                Message = BaseCode.SUCCESS_MESSAGE,
-                Data = postAuthor.ToString(),
-                NavigateId = request.PostId
 
-            };
-
-            return response;
         }
 
         public async Task<BasePagination<List<AppliedPostAll>>> ViewAllPostApplied(Guid userID, PaginationFilter filter)
