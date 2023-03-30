@@ -37,7 +37,7 @@ namespace Application.System.Identification
                 IdentificateType = requests.IdentificateType,
                 LastModifiedAt = DateTime.Now,
                 PreCodition = requests.PreCodition,
-                Status = requests.Status,
+                Status = Status.PENDING,
             };
 
             await _context.Verifies.AddAsync(verify);
