@@ -569,6 +569,7 @@ namespace Application.System.Users
                 response.Data = MapToDetailDTO(result, 1);
                 response.Code = "200";
                 response.Data.AccessToken = token.AccessToken;
+                response.Data.Role = roles.ToString();
                 response.Data.Premium = isPremium;
                 response.Message = "Generate new token successfully";
             }
@@ -579,6 +580,7 @@ namespace Application.System.Users
                 response.Code = "200";
                 response.Data = MapToDetailDTO(result, 2);
                 response.Data.AccessToken = token.AccessToken;
+                response.Data.Role = roles.ToString();
                 response.Data.Premium = isPremium;
                 response.Message = "Generate new token successfully";
 
@@ -590,6 +592,7 @@ namespace Application.System.Users
                 response.Code = "200";
                 response.Data = MapToDetailDTO(result, 3);
                 response.Data.AccessToken = token.AccessToken;
+                response.Data.Role = roles.ToString();
                 response.Data.Premium = isPremium;
                 response.Message = "Generate new token successfully";
             }
