@@ -506,6 +506,8 @@ namespace Application.System.ContractorPosts
             var appliedPost = await _context.AppliedPosts
                 .Include(x => x.Builder)
                     .ThenInclude(x => x.User)
+                .Include(x=>x.Builder)
+                    .ThenInclude(x=>x.Type)
                 .Include(x => x.Quiz)
                 .Where(x => x.PostID == postID)
                 .OrderBy(filter._sortBy + " " + orderBy)
@@ -597,6 +599,7 @@ namespace Application.System.ContractorPosts
                 AppliedDate = applied.AppliedDate,
                 QuizId = applied.QuizId,
                 QuizName = applied.Quiz?.Name,
+                TypeName = applied.Builder.Type.Name,
                 TotalCorrectAnswers = totalScore,
                 TotalNumberQuestion = totalQuestion,
 
