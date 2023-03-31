@@ -31,5 +31,6 @@ namespace ViewModels.MaterialStore
         public List<CategoryDTO>? ProductCategories { get; set; }
         public DateTime LastModifiedAt { get; set; }
         public int ReportCount { get; set; }
+        public bool Status { get; set; }
     }
 }

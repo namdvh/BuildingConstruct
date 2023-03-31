@@ -325,6 +325,7 @@ namespace Application.System.Reports
                     dto.StoreName = item.MaterialStore?.User?.FirstName + item.MaterialStore?.User?.LastName;
                     dto.StoreID = item.MaterialStoreID;
                     dto.StoreImage = item.MaterialStore?.Image;
+                    dto.Status = item.Status;
                     dto.ProductCategories = await GetCategory(item.ProductCategories);
                     response.Data.Add(dto);
                 }
