@@ -12,6 +12,7 @@
         DECLINED,
         PAID,
         RECEIVED,
-        CANCEL
+        CANCEL,
+        DELEDTED
     }
 }

@@ -781,8 +781,6 @@ namespace Application.System.ContractorPosts
                 {
                     save = true;
                 }
-
-
                 ContractorPostDTO dto = new()
                 {
                     Avatar = item.Contractor.User.Avatar,

@@ -2,6 +2,7 @@
 using Application.System.Reports;
 using BuildingConstructApi.Hubs;
 using Data.DataContext;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -12,6 +13,7 @@ namespace BuildingConstructApi.Controllers
 {
     [Route("api/report")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class ReportController : ControllerBase
     {
         private readonly IReportService _reportService;
@@ -51,6 +53,32 @@ namespace BuildingConstructApi.Controllers
         {
             var rs = await _reportService.ReportProduct(request);
             return Ok(rs);
+        }
+        [HttpPost("createReportPost")]
+        public async Task<IActionResult> CreatePostReport([FromBody] ReportRequestDTO request)
+        {
+            var rs = await _reportService.ReportPost(request);
+            return Ok(rs);
+        }
+        [HttpPost("getAllPostReport")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllPostReport([FromBody] PaginationFilter request)
+        {
+            var validFilter = new PaginationFilter();
+            var id = User.FindFirst("UserID").Value;
+
+            if (request.FilterRequest == null)
+            {
+                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
+            }
+            else
+            {
+                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy, request.FilterRequest);
+
+            }
+
+            var result = await _reportService.GetAllReportPost(request, Guid.Parse(id));
+            return Ok(result);
         }
 
     }
