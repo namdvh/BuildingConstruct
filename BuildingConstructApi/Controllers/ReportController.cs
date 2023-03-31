@@ -31,7 +31,7 @@ namespace BuildingConstructApi.Controllers
 
 
         [HttpPost("getAll")]
-        public async Task<IActionResult> GetAllReport([FromBody] PaginationFilter request,int? storeID)
+        public async Task<IActionResult> GetAllReport([FromBody] PaginationFilter request)
         {
             var validFilter = new PaginationFilter();
 
@@ -45,7 +45,7 @@ namespace BuildingConstructApi.Controllers
 
             }
 
-            var result = await _reportService.GetAllReportProduct(request,storeID);
+            var result = await _reportService.GetAllReportProduct(request);
             return Ok(result);
         }
         [HttpPost]
@@ -77,7 +77,7 @@ namespace BuildingConstructApi.Controllers
 
             }
 
-            var result = await _reportService.GetAllReportPost(request, Guid.Parse(id));
+            var result = await _reportService.GetAllReportPost(request);
             return Ok(result);
         }
 

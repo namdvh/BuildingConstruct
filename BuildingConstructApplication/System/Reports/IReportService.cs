@@ -12,10 +12,10 @@ namespace Application.System.Reports
 {
     public interface IReportService
     {
-        Task<BasePagination<List<ReportProductDTO>>> GetAllReportProduct(PaginationFilter filter, int? storeID);
+        Task<BasePagination<List<ReportProductDTO>>> GetAllReportProduct(PaginationFilter filter);
 
         Task<BaseResponse<bool>> ReportProduct(ReportRequestDTO report);
-        Task<BasePagination<List<ReportPostDTO>>> GetAllReportPost(PaginationFilter filter, Guid id);
+        Task<BasePagination<List<ReportPostDTO>>> GetAllReportPost(PaginationFilter filter);
         Task<BaseResponse<bool>> ReportPost(ReportRequestDTO report);
 
 

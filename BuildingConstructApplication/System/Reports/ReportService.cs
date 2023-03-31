@@ -26,8 +26,10 @@ namespace Application.System.Reports
             _accessor = accessor;
         }
 
-        public async Task<BasePagination<List<ReportPostDTO>>> GetAllReportPost(PaginationFilter filter, Guid id)
+        public async Task<BasePagination<List<ReportPostDTO>>> GetAllReportPost(PaginationFilter filter)
         {
+            Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
+            var userID = identifierClaim.Value.ToString();
             BasePagination<List<ReportPostDTO>> response;
             var orderBy = filter._orderBy.ToString();
             int totalRecord;
@@ -187,7 +189,7 @@ namespace Application.System.Reports
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = MapListPostDTO(result, id),
+                    Data = MapListPostDTO(result, Guid.Parse(userID)),
                     Pagination = pagination
                 };
             }
@@ -235,11 +237,13 @@ namespace Application.System.Reports
             return result;
         }
 
-        public async Task<BasePagination<List<ReportProductDTO>>> GetAllReportProduct(PaginationFilter filter, int? storeID)
+        public async Task<BasePagination<List<ReportProductDTO>>> GetAllReportProduct(PaginationFilter filter)
         {
             BasePagination<List<ReportProductDTO>> response;
             var orderBy = filter._orderBy.ToString();
-
+            Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
+            var userID = identifierClaim.Value.ToString();
+            var storeID = await _context.Users.Where(x => x.Id.ToString().Equals(userID)).Select(x=>x.MaterialStoreID).FirstOrDefaultAsync();
             if (string.IsNullOrEmpty(filter._sortBy))
             {
                 filter._sortBy = "Id";
