@@ -238,7 +238,7 @@ namespace Application.System.ContractorPosts
                 PostCategories = post.PostCategories,
                 Place = post.Place,
                 IsApplied = post.isApplied,
-                RequiredQuiz=post.QuizRequired,
+                RequiredQuiz = post.QuizRequired,
                 type = await GetTypeAndSkillFromPost(post.Id),
                 CreatedBy = post.CreateBy,
                 Author = await GetUserProfile(post.CreateBy),
@@ -506,6 +506,8 @@ namespace Application.System.ContractorPosts
             var appliedPost = await _context.AppliedPosts
                 .Include(x => x.Builder)
                     .ThenInclude(x => x.User)
+                .Include(x=>x.Builder)
+                    .ThenInclude(x=>x.Type)
                 .Include(x => x.Quiz)
                 .Where(x => x.PostID == postID)
                 .OrderBy(filter._sortBy + " " + orderBy)
@@ -580,7 +582,7 @@ namespace Application.System.ContractorPosts
                     .Where(x => x.BuilderId == applied.BuilderID && x.Answer.isCorrect == true && x.Answer.Question.QuizId == applied.QuizId)
                     .Count();
 
-                totalQuestion = _context.Questions.Where(x=>x.QuizId==applied.QuizId).Count();
+                totalQuestion = _context.Questions.Where(x => x.QuizId == applied.QuizId).Count();
 
             }
 
@@ -597,6 +599,7 @@ namespace Application.System.ContractorPosts
                 AppliedDate = applied.AppliedDate,
                 QuizId = applied.QuizId,
                 QuizName = applied.Quiz?.Name,
+                TypeName = applied.Builder.Type.Name,
                 TotalCorrectAnswers = totalScore,
                 TotalNumberQuestion = totalQuestion,
 
@@ -632,7 +635,7 @@ namespace Application.System.ContractorPosts
                 AppliedDate = applied.AppliedDate,
                 TotalCorrectAnswers = totalScore,
                 TotalNumberQuestion = totalQuestion,
-              
+
             };
             return rs;
         }
@@ -651,8 +654,8 @@ namespace Application.System.ContractorPosts
                     Name = item.Name,
                     TypeName = type,
                     TypeID = item.TypeID,
-                    SkillAssessment=item.SkillAssessment,
-                    BehaviourAssessment=item.BehaviourAssessment
+                    SkillAssessment = item.SkillAssessment,
+                    BehaviourAssessment = item.BehaviourAssessment
 
                 };
                 result.Add(rs);
@@ -846,7 +849,7 @@ namespace Application.System.ContractorPosts
 
             var user = await _context.Users.Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
 
-            if(user == null)
+            if (user == null)
             {
                 response = new()
                 {
@@ -916,9 +919,9 @@ namespace Application.System.ContractorPosts
 
                             ls.Add(answer);
 
-                            await _context.AddRangeAsync(ls);
-                            await _context.SaveChangesAsync();
                         }
+                        await _context.AddRangeAsync(ls);
+                        await _context.SaveChangesAsync();
 
                     }
 
@@ -966,9 +969,9 @@ namespace Application.System.ContractorPosts
 
                             ls.Add(answer);
 
-                            await _context.AddRangeAsync(ls);
-                            await _context.SaveChangesAsync();
                         }
+                        await _context.AddRangeAsync(ls);
+                        await _context.SaveChangesAsync();
 
                     }
 

@@ -10,6 +10,8 @@
 
         public string? Avatar { get; set; }
 
+        public string? TypeName { get; set; }
+
         public string? LastName { get; set; }
 
         public decimal? WishSalary { get; set; }
