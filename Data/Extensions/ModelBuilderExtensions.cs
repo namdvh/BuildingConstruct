@@ -165,7 +165,7 @@ namespace Data.Extensions
                 Id = 2,
                 CreateBy = Guid.Parse("d39ae0a6-9b2d-4421-be4a-cc294cec054f"),
                 TypeID = Guid.Parse("bd880489-5c76-4854-93ab-66e3a541bf24"),
-
+                
                 Place = Enum.Place._61
             });
 
