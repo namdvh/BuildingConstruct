@@ -31,10 +31,12 @@ namespace Data.Entities
 
         public List<BillDetail>? BillDetails { get; set; }
 
-        public List<ProductType>? ProductTypes { get; set; }    
+        public List<ProductType>? ProductTypes { get; set; }
+        public List<Report>? Reports { get; set; }
+
 
         public bool Status { get; set; }
 
-
+        
     }
 }

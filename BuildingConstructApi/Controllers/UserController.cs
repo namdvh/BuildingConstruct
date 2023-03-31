@@ -337,13 +337,7 @@ namespace BuildingConstructApi.Controllers
 
             return Ok(rs);
         }
-        [HttpGet("getVisitStatistic")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetVisitStatistic()
-        {
-            var rs = await _userService.GetStatisticLoginCount();
-            return Ok(rs);
-        }
+
         [HttpGet("getTotalUser")]
         [AllowAnonymous]
         public async Task<IActionResult> GetTotalUser()

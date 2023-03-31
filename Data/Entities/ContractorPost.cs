@@ -18,6 +18,7 @@ namespace Data.Entities
         public List<ContractorPostType>? ContractorPostTypes { get; set; }
 
         public List<PostCommitment>? PostCommitments { get; set; }
+        public List<Report>? Reports { get; set; }
         public List<AppliedPost>? AppliedPosts { get; set; }
         public List<Quiz>? Quizzes { get; set; }
         public List<PostInvite>? PostInvites { get; set; }

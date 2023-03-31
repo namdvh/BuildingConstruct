@@ -56,6 +56,7 @@ namespace Data.DataContext
             modelBuilder.ApplyConfiguration(new QuestionConfiguration());
             modelBuilder.ApplyConfiguration(new AnswerConfiguration());
             modelBuilder.ApplyConfiguration(new UserAnswerConfiguration());
+            modelBuilder.ApplyConfiguration(new ReportProblemConfiguration());
 
             modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("UserLogins").HasKey(x => x.UserId);
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("UserRoles").HasKey(x => new { x.UserId, x.RoleId });
@@ -85,6 +86,7 @@ namespace Data.DataContext
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Save> Saves { get; set; }
         public DbSet<Bill> Bills { get; set; }
+        public DbSet<Report> Reports { get; set; }
         public DbSet<BillDetail> BillDetails { get; set; }
         public DbSet<Notification> Notifcations { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
