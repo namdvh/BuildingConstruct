@@ -514,6 +514,12 @@ namespace Data.Extensions
 
             });
 
+            modelBuilder.Entity<ContractorPostType>().HasData(new ContractorPostType
+            {
+                ContractorPostID = 2,
+                TypeID = Guid.Parse("4ace8fcb-95eb-48c0-9deb-240e8b4e10e0")
+            });
+
 
             modelBuilder.Entity<ContractorPostSkill>().HasData(new ContractorPostSkill
             {
