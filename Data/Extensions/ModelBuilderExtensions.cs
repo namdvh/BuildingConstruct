@@ -508,8 +508,8 @@ namespace Data.Extensions
                 Transport = true,
                 StartTime = "8:00",
                 EndTime = "17:30",
-                ContractorID = 2,
-                CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d6"),
+                ContractorID = 1,
+                CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7"),
                 QuizRequired= true,
 
             });
