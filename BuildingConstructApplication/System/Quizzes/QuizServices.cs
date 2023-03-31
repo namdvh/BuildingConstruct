@@ -25,7 +25,7 @@ namespace Application.System.Quizzes
 
             var user = await _context.Users.Where(x => x.Id.Equals(userId)).FirstOrDefaultAsync();
 
-            if (quiz != null)
+            if (quiz != null && user != null)
             {
                 response = new()
                 {
@@ -60,18 +60,23 @@ namespace Application.System.Quizzes
                 TypeID = request.TypeId
             };
 
-            var post = await _context.ContractorPosts.FirstOrDefaultAsync(x => x.Id == request.PostId);
-
-            if (post != null)
-            {
-                post.Status = Status.SUCCESS;
-
-                _context.Update(post);
-            }
-
-
             await _context.Quizzes.AddAsync(quiz);
             await _context.SaveChangesAsync();
+
+            var post = await _context.ContractorPosts.FirstOrDefaultAsync(x => x.Id == request.PostId);
+
+            if (post != null && post.Status != Status.SUCCESS)
+            {
+                var postTypes = await _context.ContractorPostTypes.Where(x => x.ContractorPostID == post.Id).CountAsync();
+                var quizCount = await _context.Quizzes.Where(x => x.PostID == post.Id).CountAsync();
+                if (postTypes == quizCount)
+                {
+                    post.Status = Status.SUCCESS;
+                    _context.Update(post);
+                    await _context.SaveChangesAsync();
+                }
+            }
+
 
 
 
@@ -80,7 +85,7 @@ namespace Application.System.Quizzes
 
                 foreach (var item in request.Questions)
                 {
-                    Question question = new Question()
+                    Question question = new()
                     {
                         Name = item.QuestionName,
                         QuizId = quiz.Id,
@@ -179,7 +184,7 @@ namespace Application.System.Quizzes
 
             foreach (var item in request.AnswerId)
             {
-                UserAnswer answer = new UserAnswer()
+                UserAnswer answer = new()
                 {
                     AnswerID = item,
                     BuilderId = user.BuilderId.Value
@@ -206,13 +211,12 @@ namespace Application.System.Quizzes
                 Message = BaseCode.SUCCESS_MESSAGE
             };
 
-
             var alreadyApplied = await _context.AppliedPosts.Where(x => x.BuilderID == user.BuilderId && x.PostID == postId).FirstOrDefaultAsync();
 
             var quizId = await _context.Answers
-                        .Include(x=>x.Question)
+                        .Include(x => x.Question)
                                         .Where(x => x.Id == request.AnswerId.First())
-                        .Select(x=>x.Question.QuizId)
+                        .Select(x => x.Question.QuizId)
                         .FirstOrDefaultAsync();
 
 
@@ -225,7 +229,7 @@ namespace Application.System.Quizzes
                     //WishSalary = request.WishSalary,
                     Status = Status.NOT_RESPONSE,
                     AppliedDate = DateTime.Now,
-                    QuizId= quizId
+                    QuizId = quizId
 
                 };
 

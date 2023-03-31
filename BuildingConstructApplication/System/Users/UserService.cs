@@ -968,7 +968,7 @@ namespace Application.System.Users
                 {
                     user.Status = Status.Level3;
                 }
-                else if (user.Avatar != null && user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null)
+                else if (user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null)
                 {
                     user.Status = Status.Level2;
                 }
@@ -1079,7 +1079,7 @@ namespace Application.System.Users
                 {
                     user.Status = Status.Level3;
                 }
-                else if (user.Avatar != null && user.Avatar != null && user.Contractor.CompanyName != null )
+                else if (user.Avatar != null && user.Contractor.CompanyName != null )
                 {
                     user.Status = Status.Level2;
                 }
@@ -1200,7 +1200,7 @@ namespace Application.System.Users
                 {
                     user.Status = Status.Level3;
                 }
-                else if (user.Avatar != null  && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
+                else if (user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
                 {
                     user.Status = Status.Level2;
                 }
