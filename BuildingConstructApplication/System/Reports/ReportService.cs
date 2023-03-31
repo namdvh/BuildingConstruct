@@ -5,9 +5,11 @@ using Data.Enum;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
+using System.Security.Claims;
 using ViewModels.Categories;
 using ViewModels.MaterialStore;
 using ViewModels.Pagination;
+using ViewModels.Response;
 
 namespace Application.System.Reports
 {
@@ -20,7 +22,7 @@ namespace Application.System.Reports
             _context = context;
             _accessor = accessor;
         }
-        public async Task<BasePagination<List<ReportProductDTO>>> GetAllReportProduct(PaginationFilter filter,Guid userId)
+        public async Task<BasePagination<List<ReportProductDTO>>> GetAllReportProduct(PaginationFilter filter, int? storeID)
         {
             BasePagination<List<ReportProductDTO>> response;
             var orderBy = filter._orderBy.ToString();
@@ -35,7 +37,7 @@ namespace Application.System.Reports
                 "-1" => "descending",
                 _ => orderBy
             };
-            IQueryable<Products> query = (IQueryable<Products>) _context.Products.Include(x => x.Reports).Include(x => x.MaterialStore).ThenInclude(x => x.User);
+            IQueryable<Products> query = (IQueryable<Products>) _context.Products.Include(x => x.ProductCategories).Include(x => x.Reports).Include(x => x.MaterialStore).ThenInclude(x => x.User);
                                                                 //select new
                                                                 //{
                                                                 //    Product=p,
@@ -45,7 +47,7 @@ namespace Application.System.Reports
 
             var data = await query
                 .AsNoTracking()
-                .Where(x=>x.Reports!=null)
+                .Where(x=>x.Reports.Any() && x.MaterialStoreID==storeID && x.Status==true)
                .OrderBy(filter._sortBy + " " + orderBy)
                .Skip((filter.PageNumber - 1) * filter.PageSize)
                .Take(filter.PageSize)
@@ -53,7 +55,7 @@ namespace Application.System.Reports
 
 
             var totalRecords = await _context.Products.Include
-                (x=>x.Reports).Where(x=>x.Reports!=null).CountAsync();
+                (x=>x.Reports).Where(x=>x.Reports.Any()).CountAsync();
 
             if (!data.Any())
             {
@@ -130,9 +132,50 @@ namespace Application.System.Reports
             return list;
         }
 
-        public Task<bool> ReportProduct(int productId)
+        public async Task<BaseResponse<bool>> ReportProduct(ReportRequestDTO report)
         {
-            throw new NotImplementedException();
+            //Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
+            var response = new BaseResponse<bool>();
+            //var userID = identifierClaim.Value.ToString();
+            var checkrp = await _context.Reports.Where(x => x.ProductId == report.ProductId && x.CreateBy == Guid.Parse("be21b564-a044-11ed-a8fc-0242ac120002")).CountAsync();
+            if (checkrp > 0)
+            {
+                response.Code = BaseCode.ERROR;
+                response.Data = false;
+                response.Message = "Bạn đã report sản phẩm này rồi";
+                return response;
+            }
+            var rp = new Report()
+            {
+                ProductId=report.ProductId,
+                LastModifiedAt=DateTime.Now,
+                CreateBy=Guid.Parse("be21b564-a044-11ed-a8fc-0242ac120002"),
+                ReportProblem=report.ReportProblem
+            };
+            await _context.Reports.AddAsync(rp);
+            var rs = await _context.SaveChangesAsync();
+            var count = await _context.Reports.Where(x => x.ProductId == report.ProductId).CountAsync();
+            if (count == 5)
+            {
+                var pd = await _context.Products.Where(x => x.Id == report.ProductId).FirstOrDefaultAsync();
+                pd.Status = false;
+                _context.Products.Update(pd);
+                await _context.SaveChangesAsync();
+            }
+
+            if (rs > 0)
+            {
+                response.Code = BaseCode.SUCCESS;
+                response.Message = "Report thành công";
+                response.Data = true;
+            }
+            else
+            {
+                response.Code = BaseCode.ERROR;
+                response.Data = false;
+                response.Message = "Report không thành công";
+            }
+            return response;
         }
     }
 }

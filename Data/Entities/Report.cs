@@ -13,5 +13,6 @@ namespace Data.Entities
         public int? ProductId { get; set; }
         public ContractorPost ContractorPosts { get; set; }
         public Products Products { get; set; }
+        public string ReportProblem { get; set; }
     }
 }

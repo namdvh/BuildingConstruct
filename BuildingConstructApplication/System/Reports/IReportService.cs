@@ -5,13 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using ViewModels.MaterialStore;
 using ViewModels.Pagination;
+using ViewModels.Response;
 
 namespace Application.System.Reports
 {
     public interface IReportService
     {
-        Task<BasePagination<List<ReportProductDTO>>> GetAllReportProduct(PaginationFilter filter, Guid userId);
+        Task<BasePagination<List<ReportProductDTO>>> GetAllReportProduct(PaginationFilter filter, int? storeID);
 
-        Task<bool> ReportProduct(int productId);
+        Task<BaseResponse<bool>> ReportProduct(ReportRequestDTO report);
     }
 }
