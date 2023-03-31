@@ -234,29 +234,7 @@ namespace Application.System.Users
                         }
                         var token = await GenerateToken(userDTO);
                         us.Token = token.Data.RefreshToken;
-                        us.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;    
-                        if (us.LoginTime == null)
-                        {
-                            us.LoginTime = DateTime.Now.ToString();
-                        }
-
-                        else
-                        {
-                            string date = us.LoginTime;
-                            string[] check = date.Split(',');
-                            foreach (var item in check)
-                            {
-                                if (DateTime.Parse(item).Date < DateTime.Now.Date)
-                                {
-                                    us.LoginTime = DateTime.Now.ToString();
-                                }
-                                else
-                                {
-                                    us.LoginTime = us.LoginTime + ',' + DateTime.Now;
-                                }
-                            }
-
-                        }
+                        us.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;      
                         await _userService.UpdateAsync(us);
                         response.Data = new()
                         {
@@ -528,28 +506,7 @@ namespace Application.System.Users
                 signingCredentials: creds);
             TokenResponse token = new();
             var newAccessToken = new JwtSecurityTokenHandler().WriteToken(accesstoken);
-            if (user.LoginTime == null)
-            {
-                user.LoginTime = DateTime.Now.ToString();
-            }
-
-            else
-            {
-                string date = user.LoginTime;
-                string[] check = date.Split(',');
-                foreach (var item in check)
-                {
-                    if (DateTime.Parse(item).Date < DateTime.Now.Date)
-                    {
-                        user.LoginTime = DateTime.Now.ToString();
-                    }
-                    else
-                    {
-                        user.LoginTime = user.LoginTime + ',' + DateTime.Now;
-                    }
-                }
-
-            }
+            
             await _userService.UpdateAsync(user);
             token.AccessToken = newAccessToken;
             response.Data = new();
@@ -1787,66 +1744,6 @@ namespace Application.System.Users
             return response;
         }
 
-        public async Task<BaseResponse<List<AccessSatisticDTO>>> GetStatisticLoginCount()
-        {
-            var response = new BaseResponse<List<AccessSatisticDTO>>();
-            var list = new List<UserLoginDTO>();
-            response.Data = new List<AccessSatisticDTO>();
-            for (int i = 1; i <= 24; i++)
-            {
-                var us = new AccessSatisticDTO();
-                us.Time = i.ToString();
-                us.AccessCount = 0;
-                response.Data.Add(us);
-            }
-            var query = await _context.Users.Select(x => x.LoginTime).Where(x => x != null).ToListAsync();
-            foreach (var item in query)
-            {
-                //dynamic time;
-                if (item.Contains(','))
-                {
-                    var split = item.Split(',');
-                    foreach (var i in split)
-                    {
-                        if (DateTime.Parse(i).Date == DateTime.Now.Date)
-                        {
-
-                            var uslogin = new UserLoginDTO();
-                            uslogin.Time = DateTime.Parse(i);
-                            uslogin.AccessCount = uslogin.AccessCount + 1;
-                            //uslogin.Time = time;
-                            list.Add(uslogin);
-                        }
-                    }
-                }
-                else
-                {
-                    if (DateTime.Parse(item).Date == DateTime.Now.Date)
-                    {
-                        var uslogin = new UserLoginDTO();
-                        uslogin.Time = DateTime.Parse(item);
-                        uslogin.AccessCount = 1;
-                        list.Add(uslogin);
-                    }
-                }
-            }
-            var groupByTime = list.GroupBy(x => x.Time.Hour).Select(g => new
-            {
-                Time = g.Key,
-                AccessCount = g.Count(),
-            }).ToList().OrderBy(x => x.Time);
-            foreach (var time in groupByTime)
-            {
-                foreach (var item in response.Data.Where(x => x.Time.Equals(time.Time.ToString())))
-                {
-                    item.Time = time.Time.ToString();
-                    item.AccessCount = time.AccessCount;
-                }
-            }
-            response.Code = "200";
-            response.Message = BaseCode.SUCCESS_MESSAGE;
-            return response;
-        }
 
         public async Task<BaseResponse<UserCountDTO>> GetTotalUser()
         {
