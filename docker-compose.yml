@@ -66,12 +66,12 @@ services:
         environment:
           - ASPNETCORE_Kestrel__Certificates__Default__Password=Hoainam@123
           - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
-    nginx:
-        build: nginx
-        ports:
-          - 80:80
-          - 443:443
-        depends_on: 
-          - buildingconstructapi
-        restart: always
+    #nginx:
+    #    build: nginx
+    #    ports:
+    #      - 80:80
+    #      - 443:443
+    #    depends_on: 
+    #      - buildingconstructapi
+    #    restart: always
 
