@@ -3,7 +3,7 @@
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
-    <ProjectGuid>30885c15-5fda-419a-9103-19e29450864d</ProjectGuid>
+    <ProjectGuid>add9dc7e-d003-4eac-ad84-d7244b964298</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
     <DockerServiceName>buildingconstructapi</DockerServiceName>
