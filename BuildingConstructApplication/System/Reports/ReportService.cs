@@ -144,7 +144,7 @@ namespace Application.System.Reports
             var result = await query
                     .Include(x => x.Contractor)
                         .ThenInclude(x => x.User)
-                    .Where(x => x.Status == Status.SUCCESS && x.Reports.Any())
+                    .Where(x =>x.Reports.Any())
                      .OrderBy(filter._sortBy + " " + orderBy)
                      .Skip((filter.PageNumber - 1) * filter.PageSize)
                      .Take(filter.PageSize)
@@ -281,7 +281,7 @@ namespace Application.System.Reports
 
             var data = await query
                 .AsNoTracking()
-                .Where(x => x.Reports.Any() && x.MaterialStoreID == storeID && x.Status == true)
+                .Where(x => x.Reports.Any() && x.MaterialStoreID == storeID)
                .OrderBy(filter._sortBy + " " + orderBy)
                .Skip((filter.PageNumber - 1) * filter.PageSize)
                .Take(filter.PageSize)
