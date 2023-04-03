@@ -89,9 +89,9 @@ namespace BuildingConstructApi.Controllers
             return Ok(response);
         }
         [HttpPut("updateProduct")]
-        public async Task<IActionResult> UpdateProduct([FromBody] UpdateProductDTO request, int productId)
+        public async Task<IActionResult> UpdateProduct([FromBody] UpdateProductDTO request)
         {
-            var rs = await materialStoreService.UpdateProduct(request,productId);
+            var rs = await materialStoreService.UpdateProduct(request);
             return Ok(rs);
         }
         [HttpGet("getAllProduct")]

@@ -14,7 +14,7 @@ namespace Application.System.MaterialStores
         Task<BasePagination<List<ProductStoreDTO>>> GetAllProductStore(PaginationFilter filter,bool isAll,int? storeID);
         Task<BaseResponse<ProductDetailDTO>> GetProductDetail(int productId);
         Task<bool> DeleteProduct(int productID);
-        Task<BaseResponse<ProductStoreDTO>> UpdateProduct(UpdateProductDTO request,int productId);
+        Task<BaseResponse<ProductStoreDTO>> UpdateProduct(UpdateProductDTO request);
         Task<BaseResponse<List<MaterialStoreStatisticDTO>>> GetBillStatistic();
     }
 }

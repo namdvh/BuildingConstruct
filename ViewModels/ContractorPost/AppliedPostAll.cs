@@ -1,5 +1,6 @@
 ﻿using Data.Enum;
 using ViewModels.Commitment;
+using ViewModels.Quizzes;
 
 namespace ViewModels.ContractorPost
 {
@@ -28,5 +29,32 @@ namespace ViewModels.ContractorPost
         public decimal? WishSalary { get; set; }
 
         public List<CommitmentGroup>? Groups { get; set; }
+        public int? QuizId { get; set; }
+        public string? QuizName { get; set; }
+        public Guid? TypeId { get; set; }
+        public List<QuizQuestionDTO>? Questions { get; set; }
+
     }
+
+    public class QuizQuestionDTO
+    {
+        public int QuestionId { get; set; }
+
+        public string QuestionName { get; set; } = string.Empty;
+
+        public List<QuizAnswerDTO>? Answers { get; set; }
+
+    }
+
+    public class QuizAnswerDTO
+    {
+        public int AnswerId { get; set; }
+
+        public string AnswerName { get; set; } = string.Empty;
+
+        public bool IsCorrect { get; set; }
+
+        public int Answer { get; set; }
+    }
+
 }

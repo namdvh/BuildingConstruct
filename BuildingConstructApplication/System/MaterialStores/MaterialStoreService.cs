@@ -623,7 +623,7 @@ namespace Application.System.MaterialStores
             return true;
         }
 
-        public async Task<BaseResponse<ProductStoreDTO>> UpdateProduct(UpdateProductDTO request, int productId)
+        public async Task<BaseResponse<ProductStoreDTO>> UpdateProduct(UpdateProductDTO request)
         {
             BaseResponse<ProductStoreDTO> response = new();
 
@@ -633,7 +633,7 @@ namespace Application.System.MaterialStores
 
             var storeID = await _context.Users.Where(x => x.Id.ToString().Equals(userID)).Select(x => x.MaterialStoreID).SingleOrDefaultAsync();
 
-            var existedProduct = await _context.Products.Include("ProductCategories").Where(x => x.Id == productId && x.MaterialStoreID == storeID).FirstOrDefaultAsync();
+            var existedProduct = await _context.Products.Include("ProductCategories").Where(x => x.Id == request.productId && x.MaterialStoreID == storeID).FirstOrDefaultAsync();
 
             // If update => old product will change status == FALSE , add new product 
 

@@ -2,6 +2,8 @@
 {
     public class UpdateProductDTO
     {
+        public int productId { get; set; }
+
         public string Name { get; set; }
 
         public decimal UnitPrice { get; set; }

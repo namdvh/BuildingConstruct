@@ -208,5 +208,13 @@ namespace BuildingConstructApi.Controllers
             return Ok(result);
         }
 
+
+        [HttpGet("quiz/{quizId}")]
+        public async Task<IActionResult> GetDetailQuizSubmit([FromRoute] int quizId,[FromQuery]int builderId)
+        {
+            var result = await _contractorPostService.ViewDetailQuizSubmit(quizId,builderId);
+            return Ok(result);
+        }
+
     }
 }
