@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ViewModels.MaterialStore;
 
 namespace ViewModels.ContractorPost
 {
@@ -45,6 +46,7 @@ namespace ViewModels.ContractorPost
 
         public Status Status { get; set; }
         public int ReportCount { get; set; }
+        public List<Problems> Problems { get; set; }
 
     }
 }
