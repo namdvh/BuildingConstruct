@@ -15,7 +15,6 @@ using Application.System.Users;
 using Application.System.VnPay;
 using BuildingConstructApi.Hubs;
 using Data.DataContext;
-using Data.DbInitiallize;
 using Data.Entities;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -177,18 +176,9 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
-}
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    var environment = services.GetRequiredService<IWebHostEnvironment>();
-    if (environment.IsDevelopment())
-    {
-        var context = services.GetRequiredService<BuildingConstructDbContext>();
-        DbInitializer.Initialize(context);
-    }
 }
 app.UseHttpsRedirection();
 app.UseRouting();
@@ -198,10 +188,6 @@ app.UseCors(x => x
         .AllowAnyHeader()
         .SetIsOriginAllowed(origin => true) // allow any origin
         .AllowCredentials());
-app.UseForwardedHeaders(new ForwardedHeadersOptions
-{
-    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-});
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseAuthorization();
