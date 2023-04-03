@@ -4,8 +4,7 @@ services:
   buildingconstructapi:
     image: ${DOCKER_REGISTRY-}buildingconstructapi
     ports:
-          - "8080:80"
-          #- "8081:433"
+      - "5000:5000"
     build:
       context: .
       dockerfile: BuildingConstructApi/Dockerfile
@@ -13,6 +12,9 @@ services:
           - db
     networks:
         - app-network
+    command: >
+      bash -c "dotnet ef database update &&
+               dotnet watch run"
 
   db:
         image: "mcr.microsoft.com/mssql/server:2019-latest"
@@ -23,18 +25,20 @@ services:
             ACCEPT_EULA: "Y"
         networks:
             - app-network
+       
 
-  #ngnix:
-  #      image: nginx:stable-alpine
-  #      volumes:
-  #          - ./nginx/nginx.conf:/etc/nginx.conf
-  #      ports:
-  #          - 3000:80
-  #      restart: unless-stopped
-  #      depends_on:
-  #          - buildingconstructapi
-  #      networks:
-  #          - app-network
+  ngnix:
+        image: nginx:stable-alpine
+        volumes:
+            - ./nginx/nginx.conf:/etc/nginx.conf
+        ports:
+            - "8080:8080"
+        restart: unless-stopped
+        depends_on:
+            - buildingconstructapi
+            - db
+        networks:
+            - app-network
 
 
 networks:

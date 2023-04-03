@@ -26,6 +26,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using System;
+using System.Net;
 using ViewModels.ContractorPost;
 using ViewModels.Users;
 using static Constants.Constants;
@@ -37,6 +39,11 @@ var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 builder.Services.AddControllers();
 builder.Services.AddSignalR();
+
+//builder.WebHost.UseKestrel(options => options.Listen(IPAddress.Any, 8000));
+
+
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -177,21 +184,19 @@ builder.Services.AddScoped<IQuizServices, QuizServices>();
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+
     app.UseSwagger();
     app.UseSwaggerUI();
-}
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    var environment = services.GetRequiredService<IWebHostEnvironment>();
-    if (environment.IsDevelopment())
-    {
-        var context = services.GetRequiredService<BuildingConstructDbContext>();
-        DbInitializer.Initialize(context);
-    }
-}
+//using (var scope = app.Services.CreateScope())
+//{
+//    var services = scope.ServiceProvider;
+
+//    var context = services.GetRequiredService<BuildingConstructDbContext>();
+//    if (context.Database.GetPendingMigrations().Any())
+//    {
+//        context.Database.Migrate();
+//    }
+//}
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseCors(x => x
