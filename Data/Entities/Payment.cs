@@ -18,6 +18,7 @@ namespace Data.Entities
         public string? PaymentId { get; set; }
         public bool IsRefund { get; set; }
         public string VnPayResponseCode { get; set; }
+        public DateTime? ExtendDate { get; set; }
 
     }
 }

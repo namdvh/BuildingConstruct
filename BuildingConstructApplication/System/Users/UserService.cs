@@ -228,9 +228,16 @@ namespace Application.System.Users
                         var userDTO = MapToDto(us, roleName);
                         var premium = await _context.Payments.Where(x => x.UserId.ToString().Equals(us.Id.ToString())).FirstOrDefaultAsync();
                         bool isPremium = false;
-                        if (premium != null)
+                        if (premium != null )
                         {
-                            isPremium = true;
+                            if(premium.ExpireationDate >= DateTime.Now)
+                            {
+                                isPremium = true;
+                            }
+                            if(premium.ExtendDate!=null && premium.ExtendDate >= DateTime.Now)
+                            {
+                                isPremium = true;
+                            }
                         }
                         var token = await GenerateToken(userDTO);
                         us.Token = token.Data.RefreshToken;
