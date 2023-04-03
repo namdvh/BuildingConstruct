@@ -189,13 +189,13 @@ namespace Application.System.Reports
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = MapListPostDTO(result, Guid.Parse(userID)),
+                    Data =await MapListPostDTO(result, Guid.Parse(userID)),
                     Pagination = pagination
                 };
             }
             return response;
         }
-        private List<ReportPostDTO> MapListPostDTO(List<ContractorPost> list, Guid id)
+        private async Task<List<ReportPostDTO>> MapListPostDTO(List<ContractorPost> list, Guid id)
         {
             List<ReportPostDTO> result = new();
 
@@ -230,9 +230,26 @@ namespace Application.System.Reports
                     ReportCount = item.Reports.Count(),
                     ViewCount = item.ViewCount,
                     LastModifiedAt = item.LastModifiedAt,
+                    Problems=await MapReportProblem(item.Id),
                     Status = item.Status
                 };
                 result.Add(dto);
+            }
+            return result;
+        }
+        private async Task<List<Problems>> MapReportProblem(int Id)
+        {
+            List<Problems> result = new();
+            var query = await _context.Reports.Where(x => x.ProductId == Id).ToListAsync();
+            if (query.Count== 0eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJiNTdiMTcyYS1hMDQ0LTExZWQtYThmYy0wMjQyYWMxMjAwMDIiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDkyNDUxNjczNCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IiIsImV4cCI6MTY4MDU4MzkxMSwiaXNzIjoiaHR0cHM6Ly9CdWlsZGluZ0NvbnN0cnVjdC5jb20udm4iLCJhdWQiOiJodHRwczovL0J1aWxkaW5nQ29uc3RydWN0LmNvbS52biJ9.UzfnOtpBxNlMCNq36yJfjTGaJH1a_FKItH1h1KotT44)
+            {
+                query= await _context.Reports.Where(x => x.ContractorPostId == Id).ToListAsync();
+            }
+            var problem = new Problems();
+            foreach(var item in query)
+            {
+                problem.Problem = item.ReportProblem;
+                result.Add(problem);
             }
             return result;
         }
@@ -311,6 +328,7 @@ namespace Application.System.Reports
                     dto.UnitPrice = item.UnitPrice;
                     dto.SoldQuantities = item.SoldQuantities;
                     dto.LastModifiedAt = item.LastModifiedAt;
+                    dto.Problem = await MapReportProblem(item.Id);
                     dto.ReportCount = item.Reports.Count();
                     string img = item?.Image;
                     if (img != null)
