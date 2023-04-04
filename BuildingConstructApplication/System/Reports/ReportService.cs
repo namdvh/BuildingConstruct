@@ -245,9 +245,9 @@ namespace Application.System.Reports
             {
                 query= await _context.Reports.Where(x => x.ContractorPostId == Id).ToListAsync();
             }
-            var problem = new Problems();
             foreach(var item in query)
             {
+                var problem = new Problems();
                 problem.Problem = item.ReportProblem;
                 result.Add(problem);
             }
