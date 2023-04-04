@@ -10,8 +10,8 @@ services:
       dockerfile: BuildingConstructApi/Dockerfile
       args:
         - ASPNETCORE_ENVIRONMENT=Development
-    volumes:
-      - ./appsettings.Development.json:/app/appsettings.Development.json:ro
+    #volumes:
+    #  - ./appsettings.Development.json:/app/appsettings.Development.json:ro
     networks:
         - app-network
   #db:

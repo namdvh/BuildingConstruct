@@ -13,6 +13,8 @@ COPY ["BuildingConstructApplication/Application.csproj", "BuildingConstructAppli
 COPY ["ViewModels/ViewModels.csproj", "ViewModels/"]
 COPY ["Data/Data.csproj", "Data/"]
 COPY ["Constants/Constants.csproj", "Constants/"]
+COPY appsettings.Development.json /app/appsettings.Development.json
+
 RUN dotnet restore "BuildingConstructApi/BuildingConstructApi.csproj"
 COPY . .
 WORKDIR "/src/BuildingConstructApi"
