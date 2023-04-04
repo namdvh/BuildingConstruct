@@ -184,13 +184,13 @@ builder.Services.AddScoped<IQuizServices, QuizServices>();
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
-{
+//if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
+//{
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
 
-}
+//}
 //using (var scope = app.Services.CreateScope())
 //{
 //    var services = scope.ServiceProvider;
