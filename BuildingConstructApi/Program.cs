@@ -184,16 +184,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    var environment = services.GetRequiredService<IWebHostEnvironment>();
-    if (environment.IsDevelopment())
-    {
-        var context = services.GetRequiredService<BuildingConstructDbContext>();
-        DbInitializer.Initialize(context);
-    }
-}
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseCors(x => x
