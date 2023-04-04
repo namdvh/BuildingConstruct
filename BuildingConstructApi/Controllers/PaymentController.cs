@@ -32,5 +32,12 @@ namespace BuildingConstructApi.Controllers
             var result = await _paymentService.CheckRefundPayment();
             return Ok(result);
         }
+        [HttpGet]
+        public async Task<IActionResult> RefundList()
+        {
+            var result = await _paymentService.RefundList();
+            return Ok(result);
+        }
+
     }
 }
