@@ -12,10 +12,6 @@ services:
           - db
     networks:
         - app-network
-    command: >
-      bash -c "dotnet ef database update &&
-               dotnet watch run"
-
   db:
         image: "mcr.microsoft.com/mssql/server:2019-latest"
         ports:
@@ -27,18 +23,18 @@ services:
             - app-network
        
 
-  ngnix:
-        image: nginx:stable-alpine
-        volumes:
-            - ./nginx/nginx.conf:/etc/nginx.conf
-        ports:
-            - "8080:8080"
-        restart: unless-stopped
-        depends_on:
-            - buildingconstructapi
-            - db
-        networks:
-            - app-network
+  #ngnix:
+  #      image: nginx:stable-alpine
+  #      volumes:
+  #          - ./nginx/nginx.conf:/etc/nginx.conf
+  #      ports:
+  #          - "8080:8080"
+  #      restart: unless-stopped
+  #      depends_on:
+  #          - buildingconstructapi
+  #          - db
+  #      networks:
+  #          - app-network
 
 
 networks:
