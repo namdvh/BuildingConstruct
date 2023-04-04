@@ -12,7 +12,7 @@ namespace Application.System.Payments
     public interface IPaymentsService
     {
         Task<BaseResponse<RefundDTO>> CheckRefundPayment();
-        //Task<BaseResponse<bool>> UpdateIsRefund();
-        Task<BasePagination<List<PaymentDTO>>> RefundList();
+        Task<BaseResponse<bool>> UpdateIsRefund();
+        Task<BasePagination<List<PaymentDTO>>> PaymentList();
     }
 }

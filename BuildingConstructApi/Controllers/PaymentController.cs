@@ -33,11 +33,16 @@ namespace BuildingConstructApi.Controllers
             return Ok(result);
         }
         [HttpGet]
-        public async Task<IActionResult> RefundList()
+        public async Task<IActionResult> PaymentList()
         {
-            var result = await _paymentService.RefundList();
+            var result = await _paymentService.PaymentList();
             return Ok(result);
         }
-
+        [HttpPost("UpdateRefund")]
+        public async Task<IActionResult> UpdateRefund()
+        {
+            var result = await _paymentService.UpdateIsRefund();
+            return Ok(result);
+        }
     }
 }

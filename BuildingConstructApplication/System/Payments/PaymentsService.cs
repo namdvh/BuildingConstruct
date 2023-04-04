@@ -28,7 +28,7 @@ namespace Application.System.Payments
         {
             BaseResponse<RefundDTO> response = new();
             var userId = _accessor.HttpContext?.User?.FindFirst("UserID")?.Value.ToString();
-            var query = await _context.Payments.Where(x => x.UserId.ToString().Equals(userId)).OrderByDescending(x => x.ExpireationDate).ToListAsync();
+            var query = await _context.Payments.Where(x => x.UserId.ToString().Equals(userId) && x.ExpireationDate.Month >= DateTime.Now.Month - 1).OrderByDescending(x => x.ExpireationDate).ToListAsync();
             var viewCheck = await _context.ContractorPosts.Where(x => x.CreateBy.ToString().Equals(userId)).ToListAsync();
             var n = await _context.Users.Where(x => x.BuilderId != null).CountAsync();
             var number = n * 0.2M;
@@ -74,12 +74,12 @@ namespace Application.System.Payments
                         response.Data.IsOver = false;
                         response.Data.EndDate = query.First().ExpireationDate.ToString();
                     }
-                    else if (query.First().ExpireationDate.AddMonths(1).Month != DateTime.Now.Month)
-                    {
-                        response.Code = BaseCode.SUCCESS;
-                        response.Message = BaseCode.SUCCESS_MESSAGE;
-                        response.Data = null;
-                    }
+                    //else if (query.First().ExpireationDate.Month >= DateTime.Now.Month-1)
+                    //{
+                    //    response.Code = BaseCode.SUCCESS;
+                    //    response.Message = BaseCode.SUCCESS_MESSAGE;
+                    //    response.Data = null;
+                    //}
                     else
                     {
                         query.First().ExtendDate = DateTime.Now.AddMonths(1);
@@ -96,13 +96,23 @@ namespace Application.System.Payments
             return response;
         }
 
-        public async Task<BasePagination<List<PaymentDTO>>> RefundList()
+        public async Task<BasePagination<List<PaymentDTO>>> PaymentList()
         {
             var response = new BasePagination<List<PaymentDTO>>();
             response.Data = new();
-            var userId = _accessor.HttpContext?.User.FindFirst("UserID")?.Value.ToString();
+            double totalPages;
+            var totalRecords = await _context.Payments.Include(x => x.Users).CountAsync();
+            totalPages = totalRecords / (double)25;
 
-            var query = await _context.Payments.Include(x=>x.Users).Where(x => x.UserId.ToString().Equals(userId) && x.IsRefund == true).ToListAsync();
+            var roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
+            Pagination pagination = new()
+            {
+                CurrentPage = 1,
+                PageSize = 25,
+                TotalPages = roundedTotalPages,
+                TotalRecords = totalRecords
+            };
+            var query = await _context.Payments.Include(x=>x.Users).ToListAsync();
             if (query.Any())
             {
                 foreach(var item in query)
@@ -122,6 +132,7 @@ namespace Application.System.Payments
                 }
                 response.Message = BaseCode.SUCCESS_MESSAGE;
                 response.Code = BaseCode.SUCCESS;
+                response.Pagination = pagination;
             }
             else
             {
@@ -132,10 +143,28 @@ namespace Application.System.Payments
             return response;
         }
 
-        //public async Task<BaseResponse<bool>> UpdateIsRefund()
-        //{
-        //    var userId = _accessor.HttpContext?.User.FindFirst("UserID")?.Value.ToString();
-        //    var query = await _context.Payments.Where(x => x.UserId.ToString().Equals(userId)).FirstOrDefaultAsync();
-        //}
+        public async Task<BaseResponse<bool>> UpdateIsRefund()
+        {
+            var userId = _accessor.HttpContext?.User.FindFirst("UserID")?.Value.ToString();
+            var query = await _context.Payments.Where(x => x.UserId.ToString().Equals(userId)).OrderByDescending(x=>x.ExpireationDate).ToListAsync();
+            var response = new BaseResponse<bool>();
+            query.First().IsRefund = true;
+            query.First().ExtendDate = null;
+            _context.Payments.Update(query.First());
+            var rs=await _context.SaveChangesAsync();
+            if (rs > 0)
+            {
+                response.Data = true;
+                response.Message = BaseCode.SUCCESS_MESSAGE;
+                response.Code = BaseCode.SUCCESS;
+            }
+            else
+            {
+                response.Data = false;
+                response.Message = BaseCode.ERROR_MESSAGE;
+                response.Code = BaseCode.ERROR;
+            }
+            return response;
+        }
     }
 }

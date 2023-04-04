@@ -517,11 +517,18 @@ namespace Application.System.Users
             await _userService.UpdateAsync(user);
             token.AccessToken = newAccessToken;
             response.Data = new();
-            var premium = await _context.Payments.Where(x => x.UserId.Equals(user.Id)).FirstOrDefaultAsync();
+            var premium = await _context.Payments.Where(x => x.UserId.ToString().Equals(user.Id.ToString())).FirstOrDefaultAsync();
             bool isPremium = false;
             if (premium != null)
             {
-                isPremium = true;
+                if (premium.ExpireationDate >= DateTime.Now)
+                {
+                    isPremium = true;
+                }
+                if (premium.ExtendDate != null && premium.ExtendDate >= DateTime.Now)
+                {
+                    isPremium = true;
+                }
             }
             if (roles.Contains("User"))
             {
