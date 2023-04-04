@@ -118,5 +118,25 @@ namespace BuildingConstructApi.Controllers
             var rs = await materialStoreService.GetBillStatistic();
             return Ok(rs);
         }
+
+
+        [HttpGet("product/search/{storeId}")]
+        public async Task<IActionResult> GetAllProduct([FromQuery] PaginationFilter request, int storeId,string keyword ="")
+        {
+            var validFilter = new PaginationFilter();
+
+            if (request.FilterRequest == null)
+            {
+                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
+            }
+            else
+            {
+                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy, request.FilterRequest);
+
+            }
+
+            var rs = await materialStoreService.SearchProductInStore(validFilter, storeId, keyword);
+            return Ok(rs);
+        }
     }
 }

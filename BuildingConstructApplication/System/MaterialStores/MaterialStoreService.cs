@@ -833,5 +833,72 @@ namespace Application.System.MaterialStores
             response.Message = BaseCode.SUCCESS_MESSAGE;
             return response;
         }
+
+        public async Task<BasePagination<List<ProductStoreDTO>>> SearchProductInStore(PaginationFilter filter, int storeId, string keyword)
+        {
+            BasePagination<List<ProductStoreDTO>> response;
+            var orderBy = filter._orderBy.ToString();
+
+            if (string.IsNullOrEmpty(filter._sortBy))
+            {
+                filter._sortBy = "Id";
+            }
+            orderBy = orderBy switch
+            {
+                "1" => "ascending",
+                "-1" => "descending",
+                _ => orderBy
+            };
+
+            IQueryable<Products> query = _context.Products.Include(x => x.ProductCategories).Include(x => x.MaterialStore).ThenInclude(x => x.User);
+
+
+            var data = await query
+                .AsNoTracking()
+                .Where(x=>x.MaterialStoreID==storeId && x.Name.Contains(keyword))
+               .OrderBy(filter._sortBy + " " + orderBy)
+               .Skip((filter.PageNumber - 1) * filter.PageSize)
+               .Take(filter.PageSize)
+               .ToListAsync();
+            
+            var totalRecords = await _context.Products.CountAsync();
+
+            if (!data.Any())
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.EMPTY_MESSAGE,
+                    Data = new List<ProductStoreDTO>(),
+                };
+            }
+            else
+            {
+                double totalPages;
+
+                totalPages = totalRecords / (double)filter.PageSize;
+
+                var roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
+                Pagination pagination = new()
+                {
+                    CurrentPage = filter.PageNumber,
+                    PageSize = filter.PageSize,
+                    TotalPages = roundedTotalPages,
+                    TotalRecords = totalRecords
+                };
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = await MapListDTO(data, false),
+                    Pagination = pagination
+                };
+            }
+
+            return response;
+
+
+        }
     }
 }
