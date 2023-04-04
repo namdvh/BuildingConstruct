@@ -8,19 +8,19 @@ services:
     build:
       context: .
       dockerfile: BuildingConstructApi/Dockerfile
-    depends_on:
-          - db
+    #depends_on:
+    #      - db
     networks:
         - app-network
-  db:
-        image: "mcr.microsoft.com/mssql/server:2019-latest"
-        ports:
-          - "1455:1433"
-        environment:
-            SA_PASSWORD: "Hoainam@123"
-            ACCEPT_EULA: "Y"
-        networks:
-            - app-network
+  #db:
+  #      image: "mcr.microsoft.com/mssql/server:2019-latest"
+  #      ports:
+  #        - "1455:1433"
+  #      environment:
+  #          SA_PASSWORD: "Hoainam@123"
+  #          ACCEPT_EULA: "Y"
+  #      networks:
+  #          - app-network
        
 
   #ngnix:
