@@ -8,8 +8,10 @@ services:
     build:
       context: .
       dockerfile: BuildingConstructApi/Dockerfile
-      args:
-        - ASPNETCORE_ENVIRONMENT=Development
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    volumes:
+      - ./appsettings.Development.json:/app/appsettings.Development.json
     #volumes:
     #  - ./appsettings.Development.json:/app/appsettings.Development.json:ro
     networks:
