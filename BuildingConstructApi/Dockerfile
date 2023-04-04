@@ -4,7 +4,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 5000
 
-ENV ASPNETCORE_ENVIRONMENT Development
+ENV ASPNETCORE_URLS=http://+:5000
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
@@ -13,6 +13,7 @@ COPY ["BuildingConstructApplication/Application.csproj", "BuildingConstructAppli
 COPY ["ViewModels/ViewModels.csproj", "ViewModels/"]
 COPY ["Data/Data.csproj", "Data/"]
 COPY ["Constants/Constants.csproj", "Constants/"]
+COPY appsettings.Development.json /app/appsettings.Development.json
 
 RUN dotnet restore "BuildingConstructApi/BuildingConstructApi.csproj"
 COPY . .
