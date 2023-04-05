@@ -201,7 +201,7 @@ var app = builder.Build();
 //        context.Database.Migrate();
 //    }
 //}
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseRouting();
 app.UseCors(x => x
         .WithOrigins("https://localhost:4000")
