@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data.Entities
+namespace ViewModels.Payment
 {
-    public class Payment: BaseEntity
+    public class PaymentDTO
     {
-        public int Id { get; set; }
-        public Guid UserId { get; set; }
-        public User Users { get; set; }
+        public string FullName { get; set; }
+        public string Phonenumber { get; set; }
         public DateTime PaymentDate { get; set; }
         public DateTime ExpireationDate { get; set; }
         public string Price { get; set; }
@@ -19,6 +18,5 @@ namespace Data.Entities
         public bool IsRefund { get; set; }
         public string VnPayResponseCode { get; set; }
         public DateTime? ExtendDate { get; set; }
-
     }
 }

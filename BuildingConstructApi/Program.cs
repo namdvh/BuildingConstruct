@@ -6,6 +6,7 @@ using Application.System.ContractorPosts;
 using Application.System.Identification;
 using Application.System.MaterialStores;
 using Application.System.Notifies;
+using Application.System.Payments;
 using Application.System.PostInvite;
 using Application.System.Quizzes;
 using Application.System.Reports;
@@ -159,6 +160,7 @@ builder.Services.AddScoped<RoleManager<Role>, RoleManager<Role>>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITypeService, TypeService>();
 builder.Services.AddScoped<ISaveService, SaveService>();
+builder.Services.AddScoped<IPaymentsService, PaymentsService>();
 builder.Services.AddScoped<IVnPayService, VnPayService>();
 builder.Services.AddScoped<IValidator<RegisterRequestDTO>, RegisterRequestValidatorDTO>();
 builder.Services.AddScoped<IValidator<ContractorPostModels>, ContractorPostValidator>();
@@ -181,16 +183,6 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-}
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    var environment = services.GetRequiredService<IWebHostEnvironment>();
-    if (environment.IsDevelopment())
-    {
-        var context = services.GetRequiredService<BuildingConstructDbContext>();
-        DbInitializer.Initialize(context);
-    }
 }
 app.UseHttpsRedirection();
 app.UseRouting();

@@ -66,6 +66,7 @@ namespace BuildingConstructApi.Controllers
             return Ok(response);
         }
         [HttpGet("getProductDetail/{productId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetProductDetail([FromRoute] int productId)
         {
             var rs = await materialStoreService.GetProductDetail(productId);
@@ -95,6 +96,7 @@ namespace BuildingConstructApi.Controllers
             return Ok(rs);
         }
         [HttpGet("getAllProduct")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllProduct([FromQuery] PaginationFilter request,bool isAll,int? storeID)
         {
             var validFilter = new PaginationFilter();

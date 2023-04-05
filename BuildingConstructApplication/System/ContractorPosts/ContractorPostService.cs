@@ -159,7 +159,7 @@ namespace Application.System.ContractorPosts
         {
             var rs = await _context.ContractorPosts.FirstOrDefaultAsync(x => x.Id == cPostid);
             BaseResponse<ContractorPostDetailDTO> response = new();
-            var userId = _accessor.HttpContext.User.FindFirst("UserID").Value.ToString();
+            var userId = _accessor.HttpContext?.User.FindFirst("UserID")?.Value.ToString();
 
             if (rs == null)
             {
@@ -169,27 +169,28 @@ namespace Application.System.ContractorPosts
                 return response;
             }
             var count = await _context.ContractorPosts.Where(x => x.Id == cPostid).ToListAsync();
-            if (rs.CreateBy.ToString().Equals(userId))
+            if (userId != null)
             {
-                foreach (var item in count)
+                if (rs.CreateBy.ToString().Equals(userId))
                 {
-                    int view = item.ViewCount;
-                    view++;
-                    item.ViewCount = view;
-                    _context.ContractorPosts.Update(item);
-                    await _context.SaveChangesAsync();
+                    foreach (var item in count)
+                    {
+                        int view = item.ViewCount;
+                        view++;
+                        item.ViewCount = view;
+                        _context.ContractorPosts.Update(item);
+                        await _context.SaveChangesAsync();
+                    }
                 }
             }
-            ContractorPostDetailDTO postDetail = await MapToDetailDTO(rs);
+            ContractorPostDetailDTO postDetail = await MapToDetailDTO(rs, userId);
             response.Data = postDetail;
             response.Code = BaseCode.SUCCESS;
             response.Message = "SUCCESS";
             return response;
         }
-        private async Task<ContractorPostDetailDTO> MapToDetailDTO(ContractorPost post)
+        private async Task<ContractorPostDetailDTO> MapToDetailDTO(ContractorPost post,string userID)
         {
-            Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
-            var userID = identifierClaim.Value.ToString();
             bool IsSave = false;
             var save = await _context.Saves.Where(x => x.UserId.ToString().Equals(userID) && x.ContractorPostId == post.Id).FirstOrDefaultAsync();
             if (save != null)

@@ -37,7 +37,7 @@ namespace BuildingConstructApi.Controllers
         public async Task<IActionResult> GetAll([FromBody] PaginationFilter request)
         {
             var validFilter = new PaginationFilter();
-            var id = User.FindFirst("UserID").Value;
+            var id = User.FindFirst("UserID")?.Value;
 
             if (request.FilterRequest == null)
             {
@@ -51,7 +51,7 @@ namespace BuildingConstructApi.Controllers
 
 
 
-            var result = await _contractorPostService.GetPost(request, Guid.Parse(id));
+            var result = await _contractorPostService.GetPost(request,id==null?Guid.Empty:Guid.Parse(id));
             return Ok(result);
         }
 
@@ -85,7 +85,7 @@ namespace BuildingConstructApi.Controllers
         public async Task<IActionResult> GetAllPostContractor([FromBody] PaginationFilter request)
         {
             var validFilter = new PaginationFilter();
-            var id = User.FindFirst("UserID").Value;
+            string? id = User.FindFirst("UserID")?.Value;
 
             if (request.FilterRequest == null)
             {
@@ -96,7 +96,6 @@ namespace BuildingConstructApi.Controllers
                 validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy, request.FilterRequest);
 
             }
-
 
 
             var result = await _contractorPostService.GetPostByContractor(request, Guid.Parse(id));
@@ -191,6 +190,7 @@ namespace BuildingConstructApi.Controllers
             }
             return Ok(response);
         }
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPost([FromRoute] int id)
         {
