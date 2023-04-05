@@ -22,6 +22,7 @@ namespace BuildingConstructApi.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll([FromBody] PaginationFilter request)
         {
             var validFilter = new PaginationFilter();
