@@ -245,17 +245,8 @@ namespace BuildingConstructApi.Controllers
             return Ok(rs);
         }
 
-        [HttpGet("getUserID")]
-        public async Task<IActionResult> Validate()
-        {
-            var rs = User.FindFirst("UserID").Value;
-            //or if u want the list of claims
-            UserID = rs;
-            var claims = User.Claims;
-            return Ok(rs);
-        }
-
         [HttpGet("detail")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetUserDetail(Guid userID)
         {
             if (userID == Guid.Empty)
@@ -269,6 +260,7 @@ namespace BuildingConstructApi.Controllers
         }
 
         [HttpGet("detail/favorite")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetContrusctor([FromQuery] PaginationFilter request)
         {
             var result = await _userService.GetContractorFavorite(request);
@@ -277,6 +269,7 @@ namespace BuildingConstructApi.Controllers
         }
 
         [HttpGet("detail/builder/favorite")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetBuilderFavorite([FromQuery] PaginationFilter request)
         {
             var result = await _userService.GetBuilderFavorite(request);
@@ -285,6 +278,7 @@ namespace BuildingConstructApi.Controllers
         }
 
         [HttpGet("detail/store/favorite")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetStoreFavorite([FromQuery] PaginationFilter request)
         {
             var result = await _userService.GetStoreFavorite(request);
