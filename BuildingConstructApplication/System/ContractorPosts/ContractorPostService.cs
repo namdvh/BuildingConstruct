@@ -12,6 +12,7 @@ using System.Text;
 using ViewModels.Commitment;
 using ViewModels.ContractorPost;
 using ViewModels.Pagination;
+using ViewModels.Quizzes;
 using ViewModels.Response;
 using ViewModels.Users;
 
@@ -507,8 +508,8 @@ namespace Application.System.ContractorPosts
             var appliedPost = await _context.AppliedPosts
                 .Include(x => x.Builder)
                     .ThenInclude(x => x.User)
-                .Include(x=>x.Builder)
-                    .ThenInclude(x=>x.Type)
+                .Include(x => x.Builder)
+                    .ThenInclude(x => x.Type)
                 .Include(x => x.Quiz)
                 .Where(x => x.PostID == postID)
                 .OrderBy(filter._sortBy + " " + orderBy)
@@ -1049,6 +1050,7 @@ namespace Application.System.ContractorPosts
                 .Include(x => x.ContractorPosts)
                     .ThenInclude(x => x.Contractor)
                         .ThenInclude(x => x.User)
+                .Include(x => x.Quiz)
                  .OrderBy(filter._sortBy + " " + orderBy)
                      .Skip((filter.PageNumber - 1) * filter.PageSize)
                      .Take(filter.PageSize)
@@ -1129,12 +1131,74 @@ namespace Application.System.ContractorPosts
                     Title = item.ContractorPosts.Title,
                     AppliedDate = item.AppliedDate,
                     WishSalary = item.WishSalary,
-                    Groups = ls.Any() ? ls : null
+                    Groups = ls.Any() ? ls : null,
+
                 };
+
+                if (item.QuizId != null)
+                {
+                    List<QuizQuestionDTO> questionDTOs = new();
+                    dto.QuizId = item.QuizId;
+                    dto.QuizName = item.Quiz.Name;
+
+
+                    var questionDB = _context.Questions.Where(x => x.QuizId == dto.QuizId).ToList();
+
+                    foreach (var question in questionDB)
+                    {
+                        QuizQuestionDTO tmp = new()
+                        {
+                            QuestionId = question.Id,
+                            QuestionName = question.Name,
+                            Answers = MapListAnswerDTO(question.Id, builderID),
+
+                        };
+                        questionDTOs.Add(tmp);
+
+                    }
+
+                    dto.Questions = questionDTOs;
+
+                }
                 result.Add(dto);
             }
             return result;
         }
+
+        public List<QuizAnswerDTO> MapListAnswerDTO(int questionID, int builderId)
+        {
+            var listAnswers = _context.Answers.Where(x => x.QuestionId == questionID).ToList();
+
+
+
+            var result = new List<QuizAnswerDTO>();
+
+            foreach (var item in listAnswers)
+            {
+                var userAnswerOfQuestion = _context.UserAnswers
+                    .Include(x => x.Answer)
+                    .Where(x => x.BuilderId == builderId && x.Answer.QuestionId == item.QuestionId)
+                    .Select(x => x.AnswerID)
+                    .FirstOrDefault();
+
+                var answer = new QuizAnswerDTO()
+                {
+                    AnswerId = item.Id,
+                    AnswerName = item.Name,
+                    IsCorrect = item.isCorrect,
+                    Answer = userAnswerOfQuestion
+                };
+                result.Add(answer);
+            }
+            return result;
+        }
+
+
+
+
+
+
+
 
         public async Task<BasePagination<List<ContractorPostDTO>>> GetPostByContractor(PaginationFilter filter, Guid id)
         {
@@ -1279,6 +1343,59 @@ namespace Application.System.ContractorPosts
                     Message = BaseCode.SUCCESS_MESSAGE,
                     Data = MapListDTO(result, id),
                     Pagination = pagination
+                };
+            }
+            return response;
+        }
+
+        public async Task<BaseResponse<QuizSubmitDetailDTO>> ViewDetailQuizSubmit(int quizId, int builderId)
+        {
+            BaseResponse<QuizSubmitDetailDTO> response=new();
+            List<QuizQuestionDTO> questionDTOs = new();
+
+
+            var quiz = await _context.Quizzes.FirstOrDefaultAsync(x => x.Id == quizId);
+
+            if (quiz != null)
+            {
+                var questionDB = await _context.Questions.Where(x => x.QuizId == quiz.Id).ToListAsync();
+
+                foreach (var question in questionDB)
+                {
+                    QuizQuestionDTO tmp = new()
+                    {
+                        QuestionId = question.Id,
+                        QuestionName = question.Name,
+                        Answers = MapListAnswerDTO(question.Id, builderId),
+
+                    };
+                    questionDTOs.Add(tmp);
+                }
+
+                QuizSubmitDetailDTO quizSubmitDetailDTO = new()
+                {
+                    QuizId = quiz.Id,
+                    QuizName = quiz.Name,
+                    TypeId = quiz.TypeID,
+                    Questions = questionDTOs
+                };
+
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = quizSubmitDetailDTO
+                };
+
+            }
+            else
+            {
+
+                response = new()
+                {
+                    Code = BaseCode.ERROR,
+                    Message = BaseCode.NOTFOUND_MESSAGE
                 };
             }
             return response;

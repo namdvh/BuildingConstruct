@@ -90,9 +90,9 @@ namespace BuildingConstructApi.Controllers
             return Ok(response);
         }
         [HttpPut("updateProduct")]
-        public async Task<IActionResult> UpdateProduct([FromBody] UpdateProductDTO request, int productId)
+        public async Task<IActionResult> UpdateProduct([FromBody] UpdateProductDTO request)
         {
-            var rs = await materialStoreService.UpdateProduct(request,productId);
+            var rs = await materialStoreService.UpdateProduct(request);
             return Ok(rs);
         }
         [HttpGet("getAllProduct")]
@@ -118,6 +118,26 @@ namespace BuildingConstructApi.Controllers
         public async Task<IActionResult> GetBillStatistic()
         {
             var rs = await materialStoreService.GetBillStatistic();
+            return Ok(rs);
+        }
+
+
+        [HttpGet("product/search/{storeId}")]
+        public async Task<IActionResult> GetAllProduct([FromQuery] PaginationFilter request, int storeId,string keyword ="")
+        {
+            var validFilter = new PaginationFilter();
+
+            if (request.FilterRequest == null)
+            {
+                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
+            }
+            else
+            {
+                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy, request.FilterRequest);
+
+            }
+
+            var rs = await materialStoreService.SearchProductInStore(validFilter, storeId, keyword);
             return Ok(rs);
         }
     }

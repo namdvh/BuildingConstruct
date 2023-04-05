@@ -104,9 +104,9 @@ namespace Application.System.Users
             users.Token = token.Data.RefreshToken;
             users.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;
             await _userService.UpdateAsync(users);
-            u.AccessToken=token.Data.AccessToken;
+            u.AccessToken = token.Data.AccessToken;
             u.RefreshToken = token.Data.RefreshToken;
-            u.RefreshTokenExpiryTime= (DateTime)token.Data.RefreshTokenExpiryTime;
+            u.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;
             response.Data = u;
 
             return response;
@@ -241,7 +241,7 @@ namespace Application.System.Users
                         }
                         var token = await GenerateToken(userDTO);
                         us.Token = token.Data.RefreshToken;
-                        us.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;      
+                        us.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;
                         await _userService.UpdateAsync(us);
                         response.Data = new()
                         {
@@ -260,10 +260,10 @@ namespace Application.System.Users
                             ContractorID = us.ContractorId,
                             StoreID = us.MaterialStoreID,
                             Premium = isPremium,
-                            RefreshToken= token.Data.RefreshToken,
-                            AccessToken= token.Data.AccessToken,
-                            RefreshTokenExpiryTime= (DateTime)token.Data.RefreshTokenExpiryTime
-                    };
+                            RefreshToken = token.Data.RefreshToken,
+                            AccessToken = token.Data.AccessToken,
+                            RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime
+                        };
 
                     }
                 }
@@ -513,7 +513,7 @@ namespace Application.System.Users
                 signingCredentials: creds);
             TokenResponse token = new();
             var newAccessToken = new JwtSecurityTokenHandler().WriteToken(accesstoken);
-            
+
             await _userService.UpdateAsync(user);
             token.AccessToken = newAccessToken;
             response.Data = new();
@@ -768,7 +768,7 @@ namespace Application.System.Users
         }
 
         public async Task<BaseResponse<UserDetailDTO>> GetProfile(Guid userID)
-        {   
+        {
             BaseResponse<UserDetailDTO> response;
             var user = await _context.Users.Where(x => x.Id.Equals(userID)).FirstOrDefaultAsync();
 
@@ -1093,11 +1093,11 @@ namespace Application.System.Users
                 {
                     user.Status = Status.Level3;
                 }
-                else if (user.Avatar != null && user.Contractor.CompanyName != null )
+                else if (user.Avatar != null && user.Contractor.CompanyName != null)
                 {
                     user.Status = Status.Level2;
                 }
-               
+
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
 
@@ -1570,7 +1570,7 @@ namespace Application.System.Users
         {
             BasePagination<List<UserDetailDTO>> response;
             List<UserDetailDTO> ls = new();
-            List<int> storeIDFromDB = new();
+            List<int?>storeIDFromDB = new();
             var orderBy = filter._orderBy.ToString();
             int totalRecord;
             orderBy = orderBy switch
@@ -1584,18 +1584,24 @@ namespace Application.System.Users
                 filter._sortBy = "Id";
             }
 
-            var query = from bill in _context.Bills
-                        group bill by bill.StoreID into storeGroup
-                        orderby storeGroup.Key
-                        select new { storeID = storeGroup.Key, count = storeGroup.Count() };
+            var query = _context.Bills
+                .GroupBy(bill => bill.StoreID)
+                .OrderBy(storeGroup => storeGroup.Key)
+                .Select(storeGroup => new { storeID = storeGroup.Key, count = storeGroup.Count() });
 
 
-            var data = query.Skip((filter.PageNumber - 1) * filter.PageSize)
-                     .Take(filter.PageSize).ToList();
+            var data = query
+                .Skip((filter.PageNumber - 1) * filter.PageSize)
+                .Take(filter.PageSize)
+                .ToList();
 
             if (!data.Any())
             {
-                storeIDFromDB = await _context.Users.Include(x => x.MaterialStore).Where(x => x.MaterialStoreID != null).Select(x => (int)x.MaterialStoreID).ToListAsync();
+                storeIDFromDB = await _context.Users
+                    .Include(x => x.MaterialStore)
+                    .Where(x => x.MaterialStoreID != null)
+                    .Select(x => x.MaterialStoreID)
+                    .ToListAsync();
 
             }
 
@@ -1645,7 +1651,7 @@ namespace Application.System.Users
                 {
                     foreach (var item in storeIDFromDB)
                     {
-                        ls.Add(MapStoreFavorite(item));
+                        ls.Add(MapStoreFavorite(item.Value));
                     }
                 }
                 var final = ls.DistinctBy(x => x.UserId).ToList();

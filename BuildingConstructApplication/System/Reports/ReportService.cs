@@ -241,10 +241,12 @@ namespace Application.System.Reports
         {
             List<Problems> result = new();
             var query = await _context.Reports.Where(x => x.ProductId == Id).ToListAsync();
+
             if (query.Count== 0)
             {
                 query= await _context.Reports.Where(x => x.ContractorPostId == Id).ToListAsync();
             }
+
             foreach(var item in query)
             {
                 var problem = new Problems();
