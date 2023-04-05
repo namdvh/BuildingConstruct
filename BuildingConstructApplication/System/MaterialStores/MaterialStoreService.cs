@@ -47,7 +47,7 @@ namespace Application.System.MaterialStores
                 MaterialStoreID = storeID,
                 Unit = request.Unit,
                 CreatedBy = Guid.Parse(userID),
-                Status=true
+                Status = true
             };
 
             await _context.Products.AddAsync(products);
@@ -196,7 +196,7 @@ namespace Application.System.MaterialStores
             return true;
         }
 
-        public async Task<BasePagination<List<ProductStoreDTO>>> GetAllProductStore(PaginationFilter filter, bool isAll, int? storeID)
+        public async Task<BasePagination<List<ProductStoreDTO>>> GetAllProductStore(PaginationFilter filter, bool isAll, int? storeID, string? keyword)
         {
             BasePagination<List<ProductStoreDTO>> response;
             var orderBy = filter._orderBy.ToString();
@@ -225,11 +225,15 @@ namespace Application.System.MaterialStores
             {
                 data = await query
                 .AsNoTracking()
-                .Where(x => x.MaterialStoreID == storeID && x.Status==true)
+                .Where(x => x.MaterialStoreID == storeID && x.Status == true && x.Name.Contains(keyword) )
                .OrderBy(filter._sortBy + " " + orderBy)
                .Skip((filter.PageNumber - 1) * filter.PageSize)
                .Take(filter.PageSize)
                .ToListAsync();
+            }
+            else
+            {
+
             }
             var totalRecords = await _context.Products.CountAsync();
 
@@ -805,7 +809,7 @@ namespace Application.System.MaterialStores
 
         public async Task<BaseResponse<List<MaterialStoreStatisticDTO>>> GetBillStatistic()
         {
-            var response=new BaseResponse<List<MaterialStoreStatisticDTO>>();
+            var response = new BaseResponse<List<MaterialStoreStatisticDTO>>();
             response.Data = new List<MaterialStoreStatisticDTO>();
             for (int i = 1; i <= 12; i++)
             {
@@ -816,14 +820,14 @@ namespace Application.System.MaterialStores
             }
             Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
             var userID = identifierClaim.Value.ToString();
-            var query = await _context.Bills.Where(x=>x.CreateBy.ToString().Equals(userID)).GroupBy(x=>x.LastModifiedAt.Month).Select(g => new
+            var query = await _context.Bills.Where(x => x.CreateBy.ToString().Equals(userID)).GroupBy(x => x.LastModifiedAt.Month).Select(g => new
             {
                 Month = g.Key,
                 BillCount = g.Count(),
             }).ToListAsync();
             foreach (var i in query)
             {
-                foreach (var item in response.Data.Where(x => x.Month==i.Month))
+                foreach (var item in response.Data.Where(x => x.Month == i.Month))
                 {
                     item.Month = i.Month;
                     item.BillCount = i.BillCount;
@@ -855,12 +859,12 @@ namespace Application.System.MaterialStores
 
             var data = await query
                 .AsNoTracking()
-                .Where(x=>x.MaterialStoreID==storeId && x.Name.Contains(keyword))
+                .Where(x => x.MaterialStoreID == storeId && x.Name.Contains(keyword))
                .OrderBy(filter._sortBy + " " + orderBy)
                .Skip((filter.PageNumber - 1) * filter.PageSize)
                .Take(filter.PageSize)
                .ToListAsync();
-            
+
             var totalRecords = await _context.Products.CountAsync();
 
             if (!data.Any())

@@ -98,7 +98,7 @@ namespace BuildingConstructApi.Controllers
         }
         [HttpGet("getAllProduct")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetAllProduct([FromQuery] PaginationFilter request,bool isAll,int? storeID)
+        public async Task<IActionResult> GetAllProduct([FromQuery] PaginationFilter request,bool isAll,int? storeID,string? keyword="")
         {
             var validFilter = new PaginationFilter();
 
@@ -112,7 +112,7 @@ namespace BuildingConstructApi.Controllers
 
             }
 
-            var rs = await materialStoreService.GetAllProductStore(validFilter,isAll, storeID);
+            var rs = await materialStoreService.GetAllProductStore(validFilter,isAll, storeID,keyword);
             return Ok(rs);
         }
         [HttpGet("getBillStatistic")]
