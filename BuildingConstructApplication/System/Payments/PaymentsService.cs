@@ -60,7 +60,7 @@ namespace Application.System.Payments
             }
             if (flag == false)
             {
-                if (query.Count == 0 || query.Where(x=>x.ExtendDate!=null && x.ExtendDate.Value>=DateTime.Now).Any())
+                if (query.Count == 0 || query.Where(x => x.ExtendDate != null && x.ExtendDate.Value >= DateTime.Now).Any())
                 {
                     response.Code = BaseCode.SUCCESS;
                     response.Message = BaseCode.SUCCESS_MESSAGE;
@@ -98,25 +98,69 @@ namespace Application.System.Payments
             return response;
         }
 
-        public async Task<BasePagination<List<UserPaymentDTO>>> GetTop5PaymentContractor()
+        public async Task<BasePagination<List<StoreOrderStatistic>>> GetTop5OrderStore()
         {
-            var response = new BasePagination<List<UserPaymentDTO>>();
-            var query = await _context.Payments.Include(x => x.Users).Where(x=>x.Users.Contractor!=null).GroupBy(x => x.UserId).Select(gr => new
+            var response = new BasePagination<List<StoreOrderStatistic>>();
+            var query = await _context.Bills.Include(x => x.MaterialStore).GroupBy(x => x.StoreID).Select(gr => new
             {
                 a = gr.Key,
-                c=gr.ToList(),
+                c = gr.ToList(),
                 b = gr.Count(),
-            }).OrderByDescending(x=>x.b).Take(5).ToListAsync();
+            }).OrderByDescending(x => x.b).Take(5).ToListAsync();
 
-            
-          
+
+
             if (query != null)
             {
                 response.Data = new();
 
                 foreach (var user in query)
                 {
-                    var us = _context.Users.Include(x=>x.Contractor).Where(x => x.Id.ToString().Equals(user.a.ToString()) && x.Contractor!=null).FirstOrDefault();
+                    var us = _context.MaterialStores.Where(x => x.Id == user.a).FirstOrDefault();
+                    var storeinfo = new StoreOrderStatistic();
+                    storeinfo.Place = us.Place;
+                    storeinfo.Experience = us.Experience;
+                    storeinfo.Description = us.Description;
+                    storeinfo.TaxCode = us.TaxCode;
+                    storeinfo.Image = us.Image;
+                    storeinfo.Website = us.Website;
+                    storeinfo.Id = us.Id;
+                    storeinfo.OrderCount = user.b;
+                    response.Data.Add(storeinfo);
+
+                }
+                response.Code = BaseCode.SUCCESS;
+                response.Message = BaseCode.SUCCESS_MESSAGE;
+            }
+            else
+            {
+                response.Data = null;
+                response.Code = BaseCode.ERROR;
+                response.Message = BaseCode.ERROR_MESSAGE;
+
+            }
+            return response;
+        }
+
+        public async Task<BasePagination<List<UserPaymentDTO>>> GetTop5PaymentContractor()
+        {
+            var response = new BasePagination<List<UserPaymentDTO>>();
+            var query = await _context.Payments.Include(x => x.Users).Where(x => x.Users.Contractor != null).GroupBy(x => x.UserId).Select(gr => new
+            {
+                a = gr.Key,
+                c = gr.ToList(),
+                b = gr.Count(),
+            }).OrderByDescending(x => x.b).Take(5).ToListAsync();
+
+
+
+            if (query != null)
+            {
+                response.Data = new();
+
+                foreach (var user in query)
+                {
+                    var us = _context.Users.Include(x => x.Contractor).Where(x => x.Id.ToString().Equals(user.a.ToString()) && x.Contractor != null).FirstOrDefault();
                     var contractorInfo = new UserPaymentDTO();
                     contractorInfo.UserId = us.Id;
                     contractorInfo.Address = us.Address;
@@ -217,13 +261,13 @@ namespace Application.System.Payments
                 TotalPages = roundedTotalPages,
                 TotalRecords = totalRecords
             };
-            var query = await _context.Payments.Include(x=>x.Users).ToListAsync();
+            var query = await _context.Payments.Include(x => x.Users).ToListAsync();
             if (query.Any())
             {
-                foreach(var item in query)
+                foreach (var item in query)
                 {
                     var dto = new PaymentDTO();
-                    dto.FullName = item.Users.LastName +" "+ item.Users.FirstName;
+                    dto.FullName = item.Users.LastName + " " + item.Users.FirstName;
                     dto.Phonenumber = item.Users.PhoneNumber;
                     dto.Price = item.Price;
                     dto.PaymentDate = item.PaymentDate;
@@ -251,12 +295,12 @@ namespace Application.System.Payments
         public async Task<BaseResponse<bool>> UpdateIsRefund()
         {
             var userId = _accessor.HttpContext?.User.FindFirst("UserID")?.Value.ToString();
-            var query = await _context.Payments.Where(x => x.UserId.ToString().Equals(userId)).OrderByDescending(x=>x.ExpireationDate).ToListAsync();
+            var query = await _context.Payments.Where(x => x.UserId.ToString().Equals(userId)).OrderByDescending(x => x.ExpireationDate).ToListAsync();
             var response = new BaseResponse<bool>();
             query.First().IsRefund = true;
             query.First().ExtendDate = null;
             _context.Payments.Update(query.First());
-            var rs=await _context.SaveChangesAsync();
+            var rs = await _context.SaveChangesAsync();
             if (rs > 0)
             {
                 response.Data = true;

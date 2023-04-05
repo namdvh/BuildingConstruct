@@ -96,6 +96,23 @@ namespace ViewModels.Users
         public string? Website { get; set; }
 
     }
+    public class StoreOrderStatistic
+    {
+        public int Id { get; set; }
+
+        public string? Website { get; set; }
+
+        public string? Description { get; set; }
+
+        public string? TaxCode { get; set; }
+
+        public string? Experience { get; set; }
+
+        public string? Image { get; set; }
+
+        public Place? Place { get; set; }
+        public int? OrderCount { get; set; }
+    }
 
     public class DetailMaterialStore
     {
@@ -115,4 +132,5 @@ namespace ViewModels.Users
 
 
     }
+    
 }

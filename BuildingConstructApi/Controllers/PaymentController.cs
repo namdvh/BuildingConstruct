@@ -56,5 +56,11 @@ namespace BuildingConstructApi.Controllers
             var result = await _paymentService.GetTop5PaymentStore();
             return Ok(result);
         }
+        [HttpGet("getTop5StoreOrder")]
+        public async Task<IActionResult> GetTop5StoreOrder()
+        {
+            var result = await _paymentService.GetTop5OrderStore();
+            return Ok(result);
+        }
     }
 }

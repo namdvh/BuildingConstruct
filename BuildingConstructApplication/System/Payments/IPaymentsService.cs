@@ -17,6 +17,7 @@ namespace Application.System.Payments
         Task<BasePagination<List<PaymentDTO>>> PaymentList();
         Task<BasePagination<List<UserPaymentDTO>>>GetTop5PaymentContractor();
         Task<BasePagination<List<UserPaymentDTO>>> GetTop5PaymentStore();
+        Task<BasePagination<List<StoreOrderStatistic>>> GetTop5OrderStore();
 
     }
 }
