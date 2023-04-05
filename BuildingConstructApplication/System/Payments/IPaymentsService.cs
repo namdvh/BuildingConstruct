@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ViewModels.Pagination;
 using ViewModels.Payment;
 using ViewModels.Response;
+using ViewModels.Users;
 
 namespace Application.System.Payments
 {
@@ -14,5 +15,6 @@ namespace Application.System.Payments
         Task<BaseResponse<RefundDTO>> CheckRefundPayment();
         Task<BaseResponse<bool>> UpdateIsRefund();
         Task<BasePagination<List<PaymentDTO>>> PaymentList();
+        Task<BasePagination<List<UserDetailDTO>>>GetTop5PaymentContractor();
     }
 }

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using ViewModels.Pagination;
 using ViewModels.Payment;
 using ViewModels.Response;
+using ViewModels.Users;
 
 namespace Application.System.Payments
 {
@@ -58,7 +59,7 @@ namespace Application.System.Payments
             }
             if (flag == false)
             {
-                if (query.Count == 0)
+                if (query.Count == 0 || query.Where(x=>x.ExtendDate!=null && x.ExtendDate.Value>=DateTime.Now).Any())
                 {
                     response.Code = BaseCode.SUCCESS;
                     response.Message = BaseCode.SUCCESS_MESSAGE;
@@ -92,6 +93,55 @@ namespace Application.System.Payments
                         response.Data.EndDate = query.First().ExpireationDate.ToString();
                     }
                 }
+            }
+            return response;
+        }
+
+        public async Task<BasePagination<List<UserDetailDTO>>> GetTop5PaymentContractor()
+        {
+            var response = new BasePagination<List<UserDetailDTO>>();
+            var query = await _context.Payments.Include(x => x.Users).Where(x=>x.Users.Contractor!=null).GroupBy(x => x.UserId).Select(gr => new
+            {
+                a = gr.Key,
+                b = gr.Count(),
+            }).OrderByDescending(x=>x.b).Take(5).ToListAsync();
+
+            var listUser = query.Select(x => x.a).ToList();
+            
+          
+            if (query != null)
+            {
+                response.Data = new();
+
+                foreach (var user in listUser)
+                {
+                    var us = _context.Users.Include(x=>x.Contractor).Where(x => x.Id.ToString().Equals(user.ToString()) && x.Contractor!=null).FirstOrDefault();
+                    var contractorInfo = new UserDetailDTO();
+                    contractorInfo.UserId = us.Id;
+                    contractorInfo.Address = us.Address;
+                    contractorInfo.Phone = us.PhoneNumber;
+                    contractorInfo.Avatar = us.Avatar;
+                    contractorInfo.Status = us.Status;
+                    contractorInfo.Email = us.Email;
+                    contractorInfo.Avatar = us.Avatar;
+                    contractorInfo.FirstName = us.FirstName;
+                    contractorInfo.LastName = us.LastName;
+                    contractorInfo.Contractor = new();
+                    contractorInfo.Contractor.Description = us.Contractor.Description;
+                    contractorInfo.Contractor.Website = us.Contractor.Website;
+                    contractorInfo.Contractor.CompanyName = us.Contractor.CompanyName;
+                    contractorInfo.Contractor.Id = us.Contractor.Id;
+                    response.Data.Add(contractorInfo);
+                }
+                response.Code = BaseCode.SUCCESS;
+                response.Message = BaseCode.SUCCESS_MESSAGE;
+            }
+            else
+            {
+                response.Data = null;
+                response.Code = BaseCode.ERROR;
+                response.Message = BaseCode.ERROR_MESSAGE;
+
             }
             return response;
         }

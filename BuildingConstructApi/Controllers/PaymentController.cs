@@ -12,7 +12,7 @@ namespace BuildingConstructApi.Controllers
 {
     [Route("api/payment")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Bearer")]
+    //[Authorize(AuthenticationSchemes = "Bearer")]
     public class PaymentController : ControllerBase
     {
         private readonly IPaymentsService _paymentService;
@@ -42,6 +42,12 @@ namespace BuildingConstructApi.Controllers
         public async Task<IActionResult> UpdateRefund()
         {
             var result = await _paymentService.UpdateIsRefund();
+            return Ok(result);
+        }
+        [HttpGet("getTop5Payment")]
+        public async Task<IActionResult> GetTop5Payment()
+        {
+            var result = await _paymentService.GetTop5PaymentContractor();
             return Ok(result);
         }
     }
