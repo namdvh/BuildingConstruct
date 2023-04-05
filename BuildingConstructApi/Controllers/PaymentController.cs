@@ -12,7 +12,7 @@ namespace BuildingConstructApi.Controllers
 {
     [Route("api/payment")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = "Bearer")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class PaymentController : ControllerBase
     {
         private readonly IPaymentsService _paymentService;
