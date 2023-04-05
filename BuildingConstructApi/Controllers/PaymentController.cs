@@ -44,10 +44,16 @@ namespace BuildingConstructApi.Controllers
             var result = await _paymentService.UpdateIsRefund();
             return Ok(result);
         }
-        [HttpGet("getTop5Payment")]
-        public async Task<IActionResult> GetTop5Payment()
+        [HttpGet("getTop5ContractorPayment")]
+        public async Task<IActionResult> GetTop5PaymentContractor()
         {
             var result = await _paymentService.GetTop5PaymentContractor();
+            return Ok(result);
+        }
+        [HttpGet("getTop5StorePayment")]
+        public async Task<IActionResult> GetTop5PaymentStore()
+        {
+            var result = await _paymentService.GetTop5PaymentStore();
             return Ok(result);
         }
     }

@@ -19,6 +19,7 @@ namespace Application.System.Payments
     {
         private readonly BuildingConstructDbContext _context;
         private IHttpContextAccessor _accessor;
+
         public PaymentsService(BuildingConstructDbContext context, IHttpContextAccessor accessor)
         {
             _context = context;
@@ -97,26 +98,26 @@ namespace Application.System.Payments
             return response;
         }
 
-        public async Task<BasePagination<List<UserDetailDTO>>> GetTop5PaymentContractor()
+        public async Task<BasePagination<List<UserPaymentDTO>>> GetTop5PaymentContractor()
         {
-            var response = new BasePagination<List<UserDetailDTO>>();
+            var response = new BasePagination<List<UserPaymentDTO>>();
             var query = await _context.Payments.Include(x => x.Users).Where(x=>x.Users.Contractor!=null).GroupBy(x => x.UserId).Select(gr => new
             {
                 a = gr.Key,
+                c=gr.ToList(),
                 b = gr.Count(),
             }).OrderByDescending(x=>x.b).Take(5).ToListAsync();
 
-            var listUser = query.Select(x => x.a).ToList();
             
           
             if (query != null)
             {
                 response.Data = new();
 
-                foreach (var user in listUser)
+                foreach (var user in query)
                 {
-                    var us = _context.Users.Include(x=>x.Contractor).Where(x => x.Id.ToString().Equals(user.ToString()) && x.Contractor!=null).FirstOrDefault();
-                    var contractorInfo = new UserDetailDTO();
+                    var us = _context.Users.Include(x=>x.Contractor).Where(x => x.Id.ToString().Equals(user.a.ToString()) && x.Contractor!=null).FirstOrDefault();
+                    var contractorInfo = new UserPaymentDTO();
                     contractorInfo.UserId = us.Id;
                     contractorInfo.Address = us.Address;
                     contractorInfo.Phone = us.PhoneNumber;
@@ -131,7 +132,61 @@ namespace Application.System.Payments
                     contractorInfo.Contractor.Website = us.Contractor.Website;
                     contractorInfo.Contractor.CompanyName = us.Contractor.CompanyName;
                     contractorInfo.Contractor.Id = us.Contractor.Id;
+                    contractorInfo.TotalMoney = (user.b * 200000).ToString();
                     response.Data.Add(contractorInfo);
+                }
+                response.Code = BaseCode.SUCCESS;
+                response.Message = BaseCode.SUCCESS_MESSAGE;
+            }
+            else
+            {
+                response.Data = null;
+                response.Code = BaseCode.ERROR;
+                response.Message = BaseCode.ERROR_MESSAGE;
+
+            }
+            return response;
+        }
+
+        public async Task<BasePagination<List<UserPaymentDTO>>> GetTop5PaymentStore()
+        {
+            var response = new BasePagination<List<UserPaymentDTO>>();
+            var query = await _context.Payments.Include(x => x.Users).Where(x => x.Users.MaterialStore != null).GroupBy(x => x.UserId).Select(gr => new
+            {
+                a = gr.Key,
+                c = gr.ToList(),
+                b = gr.Count(),
+            }).OrderByDescending(x => x.b).Take(5).ToListAsync();
+
+
+
+            if (query != null)
+            {
+                response.Data = new();
+
+                foreach (var user in query)
+                {
+                    var us = _context.Users.Include(x => x.MaterialStore).Where(x => x.Id.ToString().Equals(user.a.ToString()) && x.MaterialStore != null).FirstOrDefault();
+                    var storeinfo = new UserPaymentDTO();
+                    storeinfo.UserId = us.Id;
+                    storeinfo.Address = us.Address;
+                    storeinfo.Phone = us.PhoneNumber;
+                    storeinfo.Avatar = us.Avatar;
+                    storeinfo.Status = us.Status;
+                    storeinfo.Email = us.Email;
+                    storeinfo.Avatar = us.Avatar;
+                    storeinfo.FirstName = us.FirstName;
+                    storeinfo.LastName = us.LastName;
+                    storeinfo.DetailMaterialStore = new();
+                    storeinfo.DetailMaterialStore.Place = us.MaterialStore.Place;
+                    storeinfo.DetailMaterialStore.Experience = us.MaterialStore.Experience;
+                    storeinfo.DetailMaterialStore.Description = us.MaterialStore.Description;
+                    storeinfo.DetailMaterialStore.TaxCode = us.MaterialStore.TaxCode;
+                    storeinfo.DetailMaterialStore.Image = us.MaterialStore.Image;
+                    storeinfo.DetailMaterialStore.Website = us.MaterialStore.Website;
+                    storeinfo.DetailMaterialStore.Id = us.MaterialStore.Id;
+                    storeinfo.TotalMoney = (user.b * 200000).ToString();
+                    response.Data.Add(storeinfo);
                 }
                 response.Code = BaseCode.SUCCESS;
                 response.Message = BaseCode.SUCCESS_MESSAGE;
@@ -173,7 +228,7 @@ namespace Application.System.Payments
                     dto.Price = item.Price;
                     dto.PaymentDate = item.PaymentDate;
                     dto.ExpireationDate = item.ExpireationDate;
-                    dto.IsRefund = item.IsRefund;
+                    dto.IsRefund = (bool)item.IsRefund;
                     dto.TransactionId = item.TransactionId;
                     dto.VnPayResponseCode = item.VnPayResponseCode;
                     dto.PaymentId = item.PaymentId;

@@ -15,6 +15,8 @@ namespace Application.System.Payments
         Task<BaseResponse<RefundDTO>> CheckRefundPayment();
         Task<BaseResponse<bool>> UpdateIsRefund();
         Task<BasePagination<List<PaymentDTO>>> PaymentList();
-        Task<BasePagination<List<UserDetailDTO>>>GetTop5PaymentContractor();
+        Task<BasePagination<List<UserPaymentDTO>>>GetTop5PaymentContractor();
+        Task<BasePagination<List<UserPaymentDTO>>> GetTop5PaymentStore();
+
     }
 }

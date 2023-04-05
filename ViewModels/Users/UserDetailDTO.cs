@@ -30,6 +30,24 @@ namespace ViewModels.Users
         public string? AccessToken { get; set; }
         public bool? Premium { get; set; }
     }
+    public class UserPaymentDTO
+    {
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string? Email { get; set; }
+        public string? Address { get; set; }
+        public Gender? Gender { get; set; }
+        public DateTime? DOB { get; set; }
+        public string? Avatar { get; set; }
+        public Status? Status { get; set; }
+        public string? IdNumber { get; set; }
+        public string? Phone { get; set; }
+        public Guid? UserId { get; set; }
+        public DetailBuilder? Builder { get; set; }
+        public DetailContractor? Contractor { get; set; }
+        public DetailMaterialStore? DetailMaterialStore { get; set; }
+        public string? TotalMoney { get; set; }
+    }
 
     public class DetailBuilder
     {
