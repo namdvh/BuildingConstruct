@@ -4,7 +4,7 @@ services:
   buildingconstructapi:
     image: ${DOCKER_REGISTRY-}buildingconstructapi
     ports:
-      - "5000:5000"
+      - "8080:8080"
     build:
       context: .
       dockerfile: BuildingConstructApi/Dockerfile
