@@ -181,14 +181,21 @@ builder.Services.AddScoped<IBillServices, BillServices>();
 builder.Services.AddScoped<IIdentificationService, IdentificationService>();
 builder.Services.AddScoped<IPostInviteService, PostIniviteService>();
 builder.Services.AddScoped<IQuizServices, QuizServices>();
-
+if (!builder.Environment.IsDevelopment())
+{
+    builder.Services.AddHttpsRedirection(options =>
+    {
+        options.RedirectStatusCode = (int)HttpStatusCode.PermanentRedirect;
+        options.HttpsPort = 443;
+    });
+}
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 //{
-    app.UseDeveloperExceptionPage();
-    app.UseSwagger();
-    app.UseSwaggerUI();
+app.UseDeveloperExceptionPage();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 //}
 //using (var scope = app.Services.CreateScope())
@@ -201,7 +208,7 @@ var app = builder.Build();
 //        context.Database.Migrate();
 //    }
 //}
-app.UseHttpsRedirection();
+
 app.UseRouting();
 app.UseCors(x => x
         .WithOrigins("https://localhost:4000")
