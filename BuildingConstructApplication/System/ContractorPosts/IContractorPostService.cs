@@ -20,7 +20,7 @@ namespace Application.System.ContractorPosts
 
         Task<bool> CreateContractorPost(ContractorPostModels contractorPostDTO);
 
-        Task<BaseResponse<ContractorPostDetailDTO>> GetDetailPost(int cPostid);
+        Task<BaseResponse<ContractorPostDetailDTO>> GetDetailPost(int cPostid, int? pageSize);
 
         Task<BasePagination<List<AppliedPostAll>>> ViewAllPostApplied(Guid userID, PaginationFilter request);
 
