@@ -404,7 +404,7 @@ namespace Application.System.Commitments
             if (post != null)
             {
 
-                var checkCommitment = await _context.PostCommitments.Where(x => x.BuilderID == request.BuilderID).OrderByDescending(x => x.Id).ToListAsync();
+                var checkCommitment = await _context.PostCommitments.Where(x => x.BuilderID == request.BuilderID && x.Status==Status.SUCCESS).OrderByDescending(x => x.Id).ToListAsync();
                 if (checkCommitment.Any())
                 {
                     if (checkCommitment.First().EndDate > post.StarDate)
@@ -412,7 +412,7 @@ namespace Application.System.Commitments
                         response = new()
                         {
                             Code = BaseCode.ERROR,
-                            Message = "You have a on going commitment",
+                            Message = "Bạn đang có một cam kết hiệu có hiệu lực",
                             Data = "ALREADY_COMMITMENT"
                         };
                         return response;

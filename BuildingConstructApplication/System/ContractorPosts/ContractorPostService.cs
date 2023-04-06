@@ -957,7 +957,7 @@ namespace Application.System.ContractorPosts
                     response = new()
                     {
                         Code = BaseCode.ERROR,
-                        Message = "You have already applied to the post",
+                        Message = "Bạn đã ứng tuyển vào vị trí này ",
                         Data = "ALREADY_APPLIED"
                     };
                     return response;
@@ -978,7 +978,7 @@ namespace Application.System.ContractorPosts
                             response = new()
                             {
                                 Code = BaseCode.ERROR,
-                                Message = "You have a on going commitment",
+                                Message = "Bạn đang có một cam kết có hiệu lực",
                                 Data = "ALREADY_COMMITMENT"
                             };
                             return response;
