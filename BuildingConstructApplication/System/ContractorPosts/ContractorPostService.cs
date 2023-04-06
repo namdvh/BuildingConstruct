@@ -971,15 +971,18 @@ namespace Application.System.ContractorPosts
 
                 if (post != null)
                 {
-                    if (checkCommitment.First().EndDate > post.StarDate)
+                    if (checkCommitment.Any())
                     {
-                        response = new()
+                        if (checkCommitment.First().EndDate > post.StarDate)
                         {
-                            Code = BaseCode.SUCCESS,
-                            Message = "You have a on going commitment",
-                            Data = "ALREADY_COMMITMENT"
-                        };
-                        return response;
+                            response = new()
+                            {
+                                Code = BaseCode.SUCCESS,
+                                Message = "You have a on going commitment",
+                                Data = "ALREADY_COMMITMENT"
+                            };
+                            return response;
+                        }
                     }
 
                 }
