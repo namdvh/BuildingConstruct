@@ -145,6 +145,13 @@ namespace BuildingConstructApi.Controllers
             }
 
             var result = await _commitmentService.CreateCommitment(request, Guid.Parse(contractorID));
+
+
+            if (result.Data.Equals("ALREADY_COMMITMENT"))
+            {
+                return Ok(result);
+            }
+
             var connections = _userConnectionManager.GetUserConnections(result.Data);
 
 

@@ -1,16 +1,18 @@
-using Data.DataContext;
+﻿using Data.DataContext;
 using Data.Entities;
 using Data.Enum;
 using Gridify;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Security.Claims;
 using System.Text;
 using ViewModels.Commitment;
 using ViewModels.ContractorPost;
+using ViewModels.MaterialStore;
 using ViewModels.Pagination;
 using ViewModels.Quizzes;
 using ViewModels.Response;
@@ -155,7 +157,7 @@ namespace Application.System.ContractorPosts
             return false;
         }
 
-        public async Task<BaseResponse<ContractorPostDetailDTO>> GetDetailPost(int cPostid)
+        public async Task<BaseResponse<ContractorPostDetailDTO>> GetDetailPost(int cPostid, int? pageSize)
         {
             var rs = await _context.ContractorPosts.FirstOrDefaultAsync(x => x.Id == cPostid);
             BaseResponse<ContractorPostDetailDTO> response = new();
@@ -183,13 +185,13 @@ namespace Application.System.ContractorPosts
                     }
                 }
             }
-            ContractorPostDetailDTO postDetail = await MapToDetailDTO(rs, userId);
+            ContractorPostDetailDTO postDetail = await MapToDetailDTO(rs, userId, pageSize);
             response.Data = postDetail;
             response.Code = BaseCode.SUCCESS;
             response.Message = "SUCCESS";
             return response;
         }
-        private async Task<ContractorPostDetailDTO> MapToDetailDTO(ContractorPost post,string userID)
+        private async Task<ContractorPostDetailDTO> MapToDetailDTO(ContractorPost post, string userID, int? pageSize)
         {
             bool IsSave = false;
             var save = await _context.Saves.Where(x => x.UserId.ToString().Equals(userID) && x.ContractorPostId == post.Id).FirstOrDefaultAsync();
@@ -248,8 +250,93 @@ namespace Application.System.ContractorPosts
                 Quizzes = listQuiz.Any() ? listQuiz : null,
             };
 
+
+            //checking recommended
+            string keyword = string.Empty;
+            switch (post.PostCategories)
+            {
+                case PostCategories.Categories1:
+                    keyword = "Cổ điển ";
+                    break;
+                case PostCategories.Categories2:
+                    keyword = "Hiện đại";
+                    break;
+                case PostCategories.Categories3:
+                    keyword = "Tân cổ điển";
+                    break;
+            }
+
+            var listStore = _context.ProductCategories
+                            .Where(x => x.CategoriesID == 3 && x.Name.Equals(keyword))
+                            .Select(x => x.Products.MaterialStoreID)
+                            .Distinct().ToList();
+
+            List<int> result = new();
+
+            foreach (var item in listStore)
+            {
+                result.Add(item.Value);
+            }
+
+
+            if (listStore.Count < pageSize)
+            {
+                var remaining = pageSize - listStore.Count;
+
+                var allStoreId = _context.MaterialStores.Where(x => !listStore.Any(storeID => storeID == x.Id)).Select(x => x.Id).Take(remaining.Value).ToList();
+
+                result.AddRange(allStoreId);
+
+            }
+
+            postDTO.RecommendStore = MapListStoreRecommendedDto(result);
+
+
             return postDTO;
         }
+
+        private List<MaterialStoreDTO> MapListStoreRecommendedDto(List<int> listID)
+        {
+            List<MaterialStoreDTO> result = new();
+
+            foreach (var item in listID)
+            {
+
+                var store = _context.MaterialStores.Include(x => x.User).FirstOrDefault(x => x.Id == item);
+
+                MaterialStoreDTO dto = new()
+                {
+
+                    Avatar = store.User.Avatar,
+                    FirstName = store.User.FirstName,
+                    LastName = store.User.LastName,
+                    Description = store.Description,
+                    Id = store.Id,
+                    Place = store.Place,
+                    Experience = store.Experience,
+                    Image = store.Image,
+                    TaxCode = store.TaxCode,
+                    Webstie = store.Website,
+                    UserId = store.User.Id,
+
+                };
+                result.Add(dto);
+            }
+            return result;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
         private async Task<List<TypeModels>> GetTypeAndSkillFromPost(int postID)
         {
             var results = await _context.ContractorPostTypes.Include(x => x.Type).Where(x => x.ContractorPostID == postID).ToListAsync();
@@ -869,11 +956,35 @@ namespace Application.System.ContractorPosts
                 {
                     response = new()
                     {
-                        Code = BaseCode.SUCCESS,
-                        Message = "You have already applied to the post",
+                        Code = BaseCode.ERROR,
+                        Message = "Bạn đã ứng tuyển vào vị trí này ",
                         Data = "ALREADY_APPLIED"
                     };
                     return response;
+                }
+                //first order commitment
+
+                var post = await _context.ContractorPosts.FirstOrDefaultAsync(x => x.Id == request.PostId);
+
+                var checkCommitment = await _context.PostCommitments.Where(x => x.BuilderID == user.BuilderId).OrderByDescending(x => x.Id).ToListAsync();
+
+
+                if (post != null)
+                {
+                    if (checkCommitment.Any())
+                    {
+                        if (checkCommitment.First().EndDate > post.StarDate)
+                        {
+                            response = new()
+                            {
+                                Code = BaseCode.ERROR,
+                                Message = "Bạn đang có một cam kết có hiệu lực",
+                                Data = "ALREADY_COMMITMENT"
+                            };
+                            return response;
+                        }
+                    }
+
                 }
 
 
@@ -1350,7 +1461,7 @@ namespace Application.System.ContractorPosts
 
         public async Task<BaseResponse<QuizSubmitDetailDTO>> ViewDetailQuizSubmit(int quizId, int builderId)
         {
-            BaseResponse<QuizSubmitDetailDTO> response=new();
+            BaseResponse<QuizSubmitDetailDTO> response = new();
             List<QuizQuestionDTO> questionDTOs = new();
 
 

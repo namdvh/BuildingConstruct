@@ -1,6 +1,7 @@
 ﻿using Data.DataContext;
 using Data.Entities;
 using Data.Enum;
+using Emgu.CV.Features2D;
 using Gridify;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -98,7 +99,7 @@ namespace Application.System.Commitments
                             .ThenInclude(x => x.Type)
                         .Include(x => x.Builder)
                             .ThenInclude(x => x.User)
-                        .Include(x=>x.Group)
+                        .Include(x => x.Group)
                         .Where(x => (x.ContractorID.Equals(user.ContractorId)))
                         .OrderBy(filter._sortBy + " " + orderBy)
                         .Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -206,7 +207,7 @@ namespace Application.System.Commitments
 
                 if (item.Group != null)
                 {
-                    var groupMember = _context.GroupMembers.Include(x=>x.Type).Where(x => x.GroupId == item.Group.Id).ToList();
+                    var groupMember = _context.GroupMembers.Include(x => x.Type).Where(x => x.GroupId == item.Group.Id).ToList();
                     group = MapGroup(groupMember);
                 }
 
@@ -229,7 +230,7 @@ namespace Application.System.Commitments
                     BuilderTypeName = item.Builder.Type.Name,
                     BuilderAvatar = item.Builder.User.Avatar,
                     ConstructorAvatar = item.Contractor.User.Avatar,
-                    Groups=group
+                    Groups = group
                 };
                 result.Add(dto);
             }
@@ -353,7 +354,7 @@ namespace Application.System.Commitments
         public async Task<BaseResponse<string>> UpdateCommitment(Guid userID, int id)
         {
             BaseResponse<string> response;
-            var postCommitment = await _context.PostCommitments.Include(x=>x.Contractor).Where(x => x.Id == id).FirstOrDefaultAsync();
+            var postCommitment = await _context.PostCommitments.Include(x => x.Contractor).Where(x => x.Id == id).FirstOrDefaultAsync();
 
             if (postCommitment == null)
             {
@@ -386,8 +387,8 @@ namespace Application.System.Commitments
             {
                 Code = BaseCode.SUCCESS,
                 Message = BaseCode.SUCCESS_MESSAGE,
-                Data= postCommitment.Contractor.CreateBy.ToString(),
-                NavigateId=id
+                Data = postCommitment.Contractor.CreateBy.ToString(),
+                NavigateId = id
             };
             return response;
         }
@@ -402,6 +403,24 @@ namespace Application.System.Commitments
             var post = await _context.ContractorPosts.Where(x => x.Id == request.PostContractorID).FirstOrDefaultAsync();
             if (post != null)
             {
+
+                var checkCommitment = await _context.PostCommitments.Where(x => x.BuilderID == request.BuilderID && x.Status==Status.SUCCESS).OrderByDescending(x => x.Id).ToListAsync();
+                if (checkCommitment.Any())
+                {
+                    if (checkCommitment.First().EndDate > post.StarDate)
+                    {
+                        response = new()
+                        {
+                            Code = BaseCode.ERROR,
+                            Message = "Bạn đang có một cam kết hiệu có hiệu lực",
+                            Data = "ALREADY_COMMITMENT"
+                        };
+                        return response;
+                    }
+
+                }
+
+
                 var group = await _context.Groups.Where(x => x.BuilderID == request.BuilderID && x.PostID == request.PostContractorID).FirstOrDefaultAsync();
                 var builderID = await _context.Users.Where(x => x.BuilderId == request.BuilderID).Select(x => x.Id).FirstOrDefaultAsync();
 

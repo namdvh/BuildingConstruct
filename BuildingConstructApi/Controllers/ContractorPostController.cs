@@ -116,6 +116,11 @@ namespace BuildingConstructApi.Controllers
                 return Ok(result);
             }
 
+            if (result.Data.Equals("ALREADY_COMMITMENT"))
+            {
+                return Ok(result);
+            }
+
             NotificationModels noti = new()
             {
                 NotificationType = NotificationType.CONTRACTOR_POST_NOTIFICATION,
@@ -192,9 +197,9 @@ namespace BuildingConstructApi.Controllers
         }
         [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetPost([FromRoute] int id)
+        public async Task<IActionResult> GetPost([FromRoute] int id,int? pageSize =5)
         {
-            var rs = await _contractorPostService.GetDetailPost(id);
+            var rs = await _contractorPostService.GetDetailPost(id,pageSize);
             return Ok(rs);
         }
 

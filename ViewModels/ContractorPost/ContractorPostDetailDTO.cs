@@ -1,5 +1,6 @@
 ﻿using Data.Entities;
 using Data.Enum;
+using ViewModels.MaterialStore;
 using ViewModels.Users;
 
 namespace ViewModels.ContractorPost
@@ -49,6 +50,8 @@ namespace ViewModels.ContractorPost
         public bool RequiredQuiz { get; set; }
 
         public List<Quiz>? Quizzes { get; set; }
+
+        public List<MaterialStoreDTO>? RecommendStore { get; set; }
 
     }
 

@@ -864,7 +864,7 @@ namespace Data.Extensions
             {
                 CategoriesID = 3,
                 ProductID = 32,
-                Name = "Ý",
+                Name = "Hiện đại",
             });
 
             //PRODUCT 5
@@ -910,7 +910,7 @@ namespace Data.Extensions
             {
                 CategoriesID = 3,
                 ProductID = 33,
-                Name = "Ý",
+                Name = "Cổ điển",
             });
 
             //PRODUCT 6
