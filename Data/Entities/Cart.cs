@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Data.Entities
 {
@@ -12,12 +13,15 @@ namespace Data.Entities
 
         public int? TypeID { get; set; }
 
+        [JsonIgnore]
         public User User { get; set; }
 
+        [JsonIgnore]
         public Products Products { get; set; }
 
         public int Quantity { get; set; }
 
+        [JsonIgnore]
         public ProductType? ProductType { get; set; }
 
         public DateTime LastModifiedAt { get; set; } = DateTime.Now;
