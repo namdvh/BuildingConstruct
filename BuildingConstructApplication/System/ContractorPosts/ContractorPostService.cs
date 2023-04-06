@@ -956,7 +956,7 @@ namespace Application.System.ContractorPosts
                 {
                     response = new()
                     {
-                        Code = BaseCode.SUCCESS,
+                        Code = BaseCode.ERROR,
                         Message = "You have already applied to the post",
                         Data = "ALREADY_APPLIED"
                     };
@@ -977,7 +977,7 @@ namespace Application.System.ContractorPosts
                         {
                             response = new()
                             {
-                                Code = BaseCode.SUCCESS,
+                                Code = BaseCode.ERROR,
                                 Message = "You have a on going commitment",
                                 Data = "ALREADY_COMMITMENT"
                             };

@@ -411,7 +411,7 @@ namespace Application.System.Commitments
                     {
                         response = new()
                         {
-                            Code = BaseCode.SUCCESS,
+                            Code = BaseCode.ERROR,
                             Message = "You have a on going commitment",
                             Data = "ALREADY_COMMITMENT"
                         };
