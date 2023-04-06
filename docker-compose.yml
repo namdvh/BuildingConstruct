@@ -45,5 +45,5 @@ services:
         volumes:
           - ./appsettings.Development.json:/app/appsettings.Development.json
         networks:
-            - app-network
+            - backendnetwork
 
