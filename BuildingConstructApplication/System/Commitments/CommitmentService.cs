@@ -405,17 +405,20 @@ namespace Application.System.Commitments
             {
 
                 var checkCommitment = await _context.PostCommitments.Where(x => x.BuilderID == request.BuilderID).OrderByDescending(x => x.Id).ToListAsync();
-                if (checkCommitment.First().EndDate > post.StarDate)
+                if (checkCommitment.Any())
                 {
-                    response = new()
+                    if (checkCommitment.First().EndDate > post.StarDate)
                     {
-                        Code = BaseCode.SUCCESS,
-                        Message = "You have a on going commitment",
-                        Data = "ALREADY_COMMITMENT"
-                    };
-                    return response;
-                }
+                        response = new()
+                        {
+                            Code = BaseCode.SUCCESS,
+                            Message = "You have a on going commitment",
+                            Data = "ALREADY_COMMITMENT"
+                        };
+                        return response;
+                    }
 
+                }
 
 
                 var group = await _context.Groups.Where(x => x.BuilderID == request.BuilderID && x.PostID == request.PostContractorID).FirstOrDefaultAsync();
