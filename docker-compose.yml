@@ -35,7 +35,7 @@ services:
         ports:
             - 80:80
         environment:
-            - NGINX_HOST =tarebo.click
+            - NGINX_HOST=tarebo.click
         restart: unless-stopped
         depends_on:
             - buildingconstructapi
