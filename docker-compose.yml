@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   buildingconstructapi:
-    image: ${DOCKER_REGISTRY-}buildingconstructapi
+    image: $${DOCKER_REGISTRY-}buildingconstructapi
     ports:
       - "5000:5000"
       #- "5001:443"
@@ -11,7 +11,6 @@ services:
       dockerfile: BuildingConstructApi/Dockerfile
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      ASPNETCORE_HTTPS_PORT: 5000
       #ASPNETCORE_URLS: https://+:443;http://+:80
     volumes:
       - ./appsettings.Development.json:/app/appsettings.Development.json
