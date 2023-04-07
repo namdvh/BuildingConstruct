@@ -3,7 +3,7 @@ version: '3.4'
 services:
   buildingconstructapi:
     #image: ${DOCKER_REGISTRY-}buildingconstructapi
-    image: $${docker_registry}buildingconstructapi
+    image: "$${docker_registry-}buildingconstructapi"
     ports:
       - "5000:5000"
       #- "5001:443"
