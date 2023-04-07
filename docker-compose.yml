@@ -3,8 +3,10 @@ version: '3.4'
 services:
   buildingconstructapi:
     image: ${DOCKER_REGISTRY-}buildingconstructapi
-    ports:
-      - "5000:5000"
+    #ports:
+    #  - "5000:5000"
+    expose:
+    -   5000
     build:
       context: .
       dockerfile: BuildingConstructApi/Dockerfile
@@ -23,18 +25,18 @@ services:
   #          - app-network
        
 
-  #ngnix:
-  #      image: nginx:stable-alpine
-  #      volumes:
-  #          - ./nginx/nginx.conf:/etc/nginx.conf
-  #      ports:
-  #          - "8080:8080"
-  #      restart: unless-stopped
-  #      depends_on:
-  #          - buildingconstructapi
-  #          - db
-  #      networks:
-  #          - app-network
+  ngnix:
+        image: nginx:stable-alpine
+        volumes:
+            - ./nginx/nginx.conf:/etc/nginx.conf
+        ports:
+            - 80:80
+        restart: unless-stopped
+        depends_on:
+            - buildingconstructapi
+            - db
+        networks:
+            - app-network
 
 
 networks:
