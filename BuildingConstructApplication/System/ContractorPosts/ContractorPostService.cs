@@ -1586,5 +1586,38 @@ namespace Application.System.ContractorPosts
             }
             return response;
         }
+
+        public async Task<BaseResponse<bool>> ViewPostAppliedCheck(int builderId, Guid contractorId)
+        {
+            BaseResponse<bool> response;
+
+            var ctor = await _context.Users.FirstOrDefaultAsync(x => x.Id.Equals(contractorId));
+
+            var allPost = await _context.ContractorPosts.Where(x => x.ContractorID == ctor.ContractorId).ToListAsync();
+
+            foreach (var item in allPost)
+            {
+                var check = _context.AppliedPosts.Where(x => x.PostID == item.Id && x.BuilderID == builderId).FirstOrDefault();
+
+                if (check != null)
+                {
+                    response = new()
+                    {
+                        Code = BaseCode.SUCCESS,
+                        Data = true,
+                        Message = BaseCode.SUCCESS_MESSAGE
+                    };
+                    return response;
+                }
+            }
+
+            response = new()
+            {
+                Code = BaseCode.SUCCESS,
+                Data = false,
+                Message = BaseCode.SUCCESS_MESSAGE
+            };
+            return response;
+        }
     }
 }
