@@ -9,10 +9,14 @@
     <DockerServiceName>buildingconstructapi</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
+    <None Include=".aspnet\https\aspnetapp.pfx" />
     <None Include="docker-compose.override.yml">
       <DependentUpon>docker-compose.yml</DependentUpon>
     </None>
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove=".aspnet\**" />
   </ItemGroup>
 </Project>
