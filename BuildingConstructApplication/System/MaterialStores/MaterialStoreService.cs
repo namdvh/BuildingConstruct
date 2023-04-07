@@ -225,7 +225,7 @@ namespace Application.System.MaterialStores
             {
                 data = await query
                 .AsNoTracking()
-                .Where(x => x.MaterialStoreID == storeID && x.Status == true && x.Name.Contains(keyword) )
+                .Where(x => x.MaterialStoreID == storeID && x.Status == true && x.Name.Contains(keyword))
                .OrderBy(filter._sortBy + " " + orderBy)
                .Skip((filter.PageNumber - 1) * filter.PageSize)
                .Take(filter.PageSize)
@@ -903,6 +903,71 @@ namespace Application.System.MaterialStores
             return response;
 
 
+        }
+
+        public async Task<BaseResponse<List<ProductStoreDTO>>> GetTop5SellProduct()
+        {
+            BaseResponse<List<ProductStoreDTO>> response;
+
+
+            var data = await _context.BillDetails.Include(x => x.Products).ThenInclude(x => x.ProductCategories).Include(x => x.Bills).ThenInclude(x => x.MaterialStore)
+                        .GroupBy(x => x.ProductID).Select(x => new
+                        {
+                            a = x.Key,
+                            b = x.Sum(x => x.Quantity)
+                        }).OrderByDescending(x => x.b).ToListAsync();
+
+            if (!data.Any())
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.EMPTY_MESSAGE,
+                    Data = new List<ProductStoreDTO>(),
+                };
+            }
+            else
+            {
+                List<ProductStoreDTO> result = new();
+                foreach (var item in data)
+                {
+
+                    var query = _context.Products.Include(x => x.BillDetails).Include(x => x.ProductCategories).Include(x => x.MaterialStore).Where(x => x.Id == item.a).FirstOrDefault();
+                        ProductStoreDTO dto = new();
+                        dto.Id = query.Id;
+                        dto.Name = query.Name;
+                        dto.Description = query.Description;
+                        dto.Brand = query.Brand;
+                        dto.UnitInStock = query.UnitInStock;
+                        dto.UnitPrice = query.UnitPrice;
+                        dto.SoldQuantities = query.SoldQuantities;
+                        dto.LastModifiedAt = query.LastModifiedAt;
+
+                        string img = query?.Image;
+                        if (img != null)
+                        {
+                            string[] firstImg = img.Split(",");
+                            dto.Image = firstImg[0].Trim();
+                        }
+                        else
+                        {
+                            dto.Image = "";
+                        }
+                        dto.StoreName = query.MaterialStore?.User?.FirstName + query.MaterialStore?.User?.LastName;
+                        dto.StoreID = query.MaterialStoreID;
+                        dto.StoreImage = query.MaterialStore?.Image;
+                        dto.ProductCategories = await GetCategory(query.ProductCategories);
+                        result.Add(dto);
+                }
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = result
+                };
+            }
+
+            return response;
         }
     }
 }
