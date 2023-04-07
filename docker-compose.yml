@@ -12,6 +12,7 @@ services:
       ASPNETCORE_ENVIRONMENT: Development
     volumes:
       - ./appsettings.Development.json:/app/appsettings.Development.json
+      - ASPNETCORE_URLS=https://+:443;http://+:80 
     #volumes:
     #  - ./appsettings.Development.json:/app/appsettings.Development.json:ro
     networks:
