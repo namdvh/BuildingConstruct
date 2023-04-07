@@ -28,14 +28,27 @@ services:
   ngnix:
         image: nginx:stable-alpine
         volumes:
-            - ./nginx/nginx.conf:/etc/nginx.conf
+            #- ./nginx/nginx.conf:/etc/nginx.conf
+            - ./nginx/templates:/etc/nginx/templates
+            - ./certbot/conf:/etc/letsencrypt
+            - ./certbot/www:/var/www/certbot
         ports:
             - 80:80
+        environment:
+            - NGINX_HOST = tarebo.click
         restart: unless-stopped
         depends_on:
             - buildingconstructapi
         networks:
             - app-network
+  certbot:
+         image: certbot/certbot
+         container_name: dotnet-certbot
+         restart: unless-stopped
+         volumes:
+            - ./certbot/conf:/etc/letsencrypt
+            - ./certbot/www:/var/www/certbot
+   
 
 
 networks:
