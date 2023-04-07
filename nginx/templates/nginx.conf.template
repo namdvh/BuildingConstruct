@@ -11,7 +11,7 @@ server {
     }
 
     location / {
-        return 301 https://$server_name$request_uri;
+        return 301 https://159.65.7.165$request_uri;
     }
 }
 
