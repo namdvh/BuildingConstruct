@@ -35,8 +35,8 @@ services:
 
     buildingconstructapi:
         image: ${DOCKER_REGISTRY-}buildingconstructapi
-        expose:
-          - "5000:80"
+        ports:
+          - "5000:5000"
         build:
           context: .
           dockerfile: BuildingConstructApi/Dockerfile
@@ -46,15 +46,15 @@ services:
          - ./appsettings.Development.json:/app/appsettings.Development.json
         networks:
         - backendnetwork
-    proxy:
-        build:
-            context:  ./nginx
-            dockerfile: Dockerfile
-        ports:
-            - "80:80"
-            - "443:443"
-        volumes:
-             - /etc/letsencrypt/:/etc/letsencrypt/
-        links:
-            - buildingconstructapi
+    #proxy:
+    #    build:
+    #        context:  ./nginx
+    #        dockerfile: Dockerfile
+    #    ports:
+    #        - "80:80"
+    #        - "443:443"
+    #    volumes:
+    #         - /etc/letsencrypt/:/etc/letsencrypt/
+    #    links:
+    #        - buildingconstructapi
 

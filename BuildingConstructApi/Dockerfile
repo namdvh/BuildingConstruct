@@ -20,9 +20,6 @@ RUN dotnet build "BuildingConstructApi.csproj" -c Release -o /app/build
 FROM build AS publish
 RUN dotnet publish "BuildingConstructApi.csproj" -c Release -o /app/publish
 
-FROM nginx
-COPY nginx.conf/etc/nginx/nginx.conf
-
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
