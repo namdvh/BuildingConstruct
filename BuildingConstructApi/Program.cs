@@ -181,14 +181,14 @@ builder.Services.AddScoped<IBillServices, BillServices>();
 builder.Services.AddScoped<IIdentificationService, IdentificationService>();
 builder.Services.AddScoped<IPostInviteService, PostIniviteService>();
 builder.Services.AddScoped<IQuizServices, QuizServices>();
-if (!builder.Environment.IsDevelopment())
-{
-    builder.Services.AddHttpsRedirection(options =>
-    {
-        options.RedirectStatusCode = (int)HttpStatusCode.PermanentRedirect;
-        options.HttpsPort = 443;
-    });
-}
+//if (!builder.Environment.IsDevelopment())
+//{
+//    builder.Services.AddHttpsRedirection(options =>
+//    {
+//        options.RedirectStatusCode = (int)HttpStatusCode.PermanentRedirect;
+//        options.HttpsPort = 443;
+//    });
+//}
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
@@ -216,10 +216,10 @@ app.UseCors(x => x
         .AllowAnyHeader()
         .SetIsOriginAllowed(origin => true) // allow any origin
         .AllowCredentials());
-app.UseForwardedHeaders(new ForwardedHeadersOptions
-{
-    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-});
+//app.UseForwardedHeaders(new ForwardedHeadersOptions
+//{
+//    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+//});
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseAuthorization();
