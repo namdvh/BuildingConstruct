@@ -56,6 +56,32 @@ namespace BuildingConstructApi.Controllers
         }
 
 
+        [HttpGet("categories")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllPostByCategories([FromQuery] PaginationFilter request, [FromQuery] PostCategories categories)
+        {
+            var validFilter = new PaginationFilter();
+            var id = User.FindFirst("UserID")?.Value;
+
+            if (request.FilterRequest == null)
+            {
+                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
+            }
+            else
+            {
+                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy, request.FilterRequest);
+
+            }
+
+
+
+            var result = await _contractorPostService.GetPostByCategories(request, id == null ? Guid.Empty : Guid.Parse(id),categories);
+            return Ok(result);
+        }
+
+
+
+
         [HttpPost("{id}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetPostByUserID([FromBody] PaginationFilter filter, [FromRoute] Guid id)

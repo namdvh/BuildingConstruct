@@ -1,4 +1,5 @@
-﻿using ViewModels.ContractorPost;
+﻿using Data.Enum;
+using ViewModels.ContractorPost;
 using ViewModels.Pagination;
 using ViewModels.Response;
 
@@ -7,6 +8,8 @@ namespace Application.System.ContractorPosts
     public interface IContractorPostService
     {
         Task<BasePagination<List<ContractorPostDTO>>> GetPost(PaginationFilter filter, Guid id);
+
+        Task<BasePagination<List<ContractorPostDTO>>> GetPostByCategories(PaginationFilter filter, Guid id,PostCategories categories);
 
         Task<BasePagination<List<ContractorPostDTO>>> GetPostByContractor(PaginationFilter filter, Guid id);
 
