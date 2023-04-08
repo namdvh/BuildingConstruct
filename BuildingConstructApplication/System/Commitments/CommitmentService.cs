@@ -792,9 +792,9 @@ namespace Application.System.Commitments
             return result;
         }
 
-        public async Task<BaseResponse<List<DetailContractor>>> GetTop5CommitmentContractor()
+        public async Task<BaseResponse<List<UserPaymentDTO>>> GetTop5CommitmentContractor()
         {
-            var response = new BasePagination<List<DetailContractor>>();
+            var response = new BasePagination<List<UserPaymentDTO>>();
             var query = await _context.PostCommitments.Include(x => x.Contractor).GroupBy(x => x.ContractorID).Select(gr => new
             {
                 a = gr.Key,
@@ -810,14 +810,23 @@ namespace Application.System.Commitments
 
                 foreach (var user in query)
                 {
-                    var us = _context.Contractors.Where(x => x.Id == user.a).FirstOrDefault();
-                    var contractorinf = new DetailContractor();
-                    contractorinf.Description = us.Description;
-                    contractorinf.Website = us.Website;
-                    contractorinf.CompanyName = us.CompanyName;
-                    contractorinf.Id = us.Id;
-                    response.Data.Add(contractorinf);
-
+                    var us = _context.Contractors.Include(x=>x.User).Where(x => x.Id == user.a).FirstOrDefault();
+                    var contractorInfo = new UserPaymentDTO();
+                    contractorInfo.UserId = us.User.Id;
+                    contractorInfo.Address = us.User.Address;
+                    contractorInfo.Phone = us.User.PhoneNumber;
+                    contractorInfo.Avatar = us.User.Avatar;
+                    contractorInfo.Status = us.User.Status;
+                    contractorInfo.Email = us.User.Email;
+                    contractorInfo.Avatar = us.User.Avatar;
+                    contractorInfo.FirstName = us.User.FirstName;
+                    contractorInfo.LastName = us.User.LastName;
+                    contractorInfo.Contractor = new();
+                    contractorInfo.Contractor.Description = us.Description;
+                    contractorInfo.Contractor.Website = us.Website;
+                    contractorInfo.Contractor.CompanyName = us.CompanyName;
+                    contractorInfo.Contractor.Id = us.Id;
+                    response.Data.Add(contractorInfo);
                 }
                 response.Code = BaseCode.SUCCESS;
                 response.Message = BaseCode.SUCCESS_MESSAGE;
