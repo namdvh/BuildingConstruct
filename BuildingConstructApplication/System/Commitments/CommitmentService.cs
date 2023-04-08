@@ -11,6 +11,7 @@ using ViewModels.Commitment;
 using ViewModels.ContractorPost;
 using ViewModels.Pagination;
 using ViewModels.Response;
+using ViewModels.Users;
 
 namespace Application.System.Commitments
 {
@@ -791,5 +792,44 @@ namespace Application.System.Commitments
             return result;
         }
 
+        public async Task<BaseResponse<List<DetailContractor>>> GetTop5CommitmentContractor()
+        {
+            var response = new BasePagination<List<DetailContractor>>();
+            var query = await _context.PostCommitments.Include(x => x.Contractor).GroupBy(x => x.ContractorID).Select(gr => new
+            {
+                a = gr.Key,
+                c = gr.ToList(),
+                b = gr.Count(),
+            }).OrderByDescending(x => x.b).Take(5).ToListAsync();
+
+
+
+            if (query != null)
+            {
+                response.Data = new();
+
+                foreach (var user in query)
+                {
+                    var us = _context.Contractors.Where(x => x.Id == user.a).FirstOrDefault();
+                    var contractorinf = new DetailContractor();
+                    contractorinf.Description = us.Description;
+                    contractorinf.Website = us.Website;
+                    contractorinf.CompanyName = us.CompanyName;
+                    contractorinf.Id = us.Id;
+                    response.Data.Add(contractorinf);
+
+                }
+                response.Code = BaseCode.SUCCESS;
+                response.Message = BaseCode.SUCCESS_MESSAGE;
+            }
+            else
+            {
+                response.Data = null;
+                response.Code = BaseCode.ERROR;
+                response.Message = BaseCode.ERROR_MESSAGE;
+
+            }
+            return response;
+        }
     }
 }

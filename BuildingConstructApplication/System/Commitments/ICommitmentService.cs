@@ -8,6 +8,7 @@ using ViewModels.Commitment;
 using ViewModels.ContractorPost;
 using ViewModels.Pagination;
 using ViewModels.Response;
+using ViewModels.Users;
 
 namespace Application.System.Commitments
 {
@@ -22,6 +23,8 @@ namespace Application.System.Commitments
         Task<BaseResponse<string>> UpdateCommitment(Guid userID,int commitmenntID );
 
         Task<BaseResponse<string>> CreateCommitment(CreateCommimentRequest request,Guid ContractorID);
+        Task<BaseResponse<List<DetailContractor>>> GetTop5CommitmentContractor();
+
 
         Task<BaseResponse<DetailCommitmentDTO>> GetDetailForCreate(int postID, int builderID, Guid userID);
     }

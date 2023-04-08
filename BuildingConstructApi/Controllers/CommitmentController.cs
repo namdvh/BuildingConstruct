@@ -132,9 +132,13 @@ namespace BuildingConstructApi.Controllers
             }
             return Ok(result);
         }
-
+        [HttpGet("getTop5Commitment")]
+        public async Task<IActionResult> GetTop5CommitmentContractor()
+        {
+            var result = await _commitmentService.GetTop5CommitmentContractor();
+            return Ok(result);
+        }
         [HttpPost]
-        [Authorize(Roles = "Contractor")]
         public async Task<IActionResult> CreateCommitment([FromBody] CreateCommimentRequest request)
         {
             string? contractorID = User.FindFirst("UserID")?.Value;

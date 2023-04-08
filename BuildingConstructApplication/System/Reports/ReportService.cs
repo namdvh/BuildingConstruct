@@ -376,11 +376,12 @@ namespace Application.System.Reports
             var response = new BaseResponse<string>();
             var userID = identifierClaim.Value.ToString();
             var checkrp = await _context.Reports.Where(x => x.ContractorPostId == report.ContractorPostId && x.CreateBy == Guid.Parse(userID)).CountAsync();
+
             var author = await _context.ContractorPosts.Where(x => x.Id == report.ContractorPostId).FirstOrDefaultAsync();
             if (checkrp > 0)
             {
                 response.Code = BaseCode.ERROR;
-                response.Data = author.CreateBy.ToString();
+                response.Data = null;
                 response.Message = "Bạn đã report bài post này rồi";
                 return response;
             }
@@ -418,16 +419,18 @@ namespace Application.System.Reports
             return response;
         }
 
-        public async Task<BaseResponse<bool>> ReportProduct(ReportRequestDTO report)
+        public async Task<BaseResponse<string>> ReportProduct(ReportRequestDTO report)
         {
             Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
-            var response = new BaseResponse<bool>();
+            var response = new BaseResponse<string>();
             var userID = identifierClaim.Value.ToString();
             var checkrp = await _context.Reports.Where(x => x.ProductId == report.ProductId && x.CreateBy == Guid.Parse(userID)).CountAsync();
+            var author = await _context.Products.Where(x => x.Id == report.ProductId).FirstOrDefaultAsync();
+
             if (checkrp > 0)
             {
                 response.Code = BaseCode.ERROR;
-                response.Data = false;
+                response.Data = null;
                 response.Message = "Bạn đã report sản phẩm này rồi";
                 return response;
             }
@@ -453,15 +456,18 @@ namespace Application.System.Reports
             {
                 response.Code = BaseCode.SUCCESS;
                 response.Message = "Report thành công";
-                response.Data = true;
+                response.Data = author.Id.ToString();
+                response.NavigateId = rp.Id;
             }
             else
             {
                 response.Code = BaseCode.ERROR;
-                response.Data = false;
+                response.Data = null;
                 response.Message = "Report không thành công";
             }
             return response;
         }
+
+
     }
 }

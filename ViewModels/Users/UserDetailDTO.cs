@@ -98,6 +98,7 @@ namespace ViewModels.Users
     }
     public class StoreOrderStatistic
     {
+        public string? Name { get; set; }
         public int Id { get; set; }
 
         public string? Website { get; set; }

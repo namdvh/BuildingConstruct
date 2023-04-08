@@ -915,7 +915,7 @@ namespace Application.System.MaterialStores
                         {
                             a = x.Key,
                             b = x.Sum(x => x.Quantity)
-                        }).OrderByDescending(x => x.b).ToListAsync();
+                        }).OrderByDescending(x => x.b).Take(5).ToListAsync();
 
             if (!data.Any())
             {

@@ -88,7 +88,36 @@ namespace BuildingConstructApi.Controllers
         [HttpPost("createReportPost")]
         public async Task<IActionResult> CreatePostReport([FromBody] ReportRequestDTO request)
         {
+           
             var rs = await _reportService.ReportPost(request);
+            NotificationModels noti = new();
+            noti.NotificationType = NotificationType.CREATEREPORT;
+            noti.Message = NotificationMessage.SAVENOTI;
+            var userID = User.FindFirst("UserID")?.Value;
+            noti.CreateBy = Guid.Parse(userID.ToString());
+            noti.UserId = Guid.Parse(rs.Data);
+            var author = await _context.Users.Where(x => x.Id.ToString().Equals(userID.ToString())).FirstOrDefaultAsync();
+            noti.Author = new();
+            noti.Author.FirstName = author.FirstName;
+            noti.Author.LastName = author.LastName;
+            noti.Author.Avatar = author.Avatar;
+            noti.LastModifiedAt = DateTime.Now;
+            noti.NavigateId = rs.NavigateId;
+            var check = await _userConnectionManager.SaveNotification(noti);
+            var connections = _userConnectionManager.GetUserConnections(rs.Data);
+            if (connections != null && connections.Count > 0)
+            {
+                foreach (var connectionId in connections)
+                {
+
+                    if (check != null)
+                    {
+                        noti.Id = check.Data.Id;
+                        await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("sendToUser", noti);
+
+                    }
+                }
+            }
             return Ok(rs);
         }
         [HttpPost("getAllPostReport")]

@@ -116,8 +116,9 @@ namespace Application.System.Payments
 
                 foreach (var user in query)
                 {
-                    var us = _context.MaterialStores.Where(x => x.Id == user.a).FirstOrDefault();
+                    var us = _context.MaterialStores.Include(x=>x.User).Where(x => x.Id == user.a).FirstOrDefault();
                     var storeinfo = new StoreOrderStatistic();
+                    storeinfo.Name=us.User?.FirstName+" "+us.User?.LastName;
                     storeinfo.Place = us.Place;
                     storeinfo.Experience = us.Experience;
                     storeinfo.Description = us.Description;

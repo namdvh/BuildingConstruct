@@ -10,7 +10,7 @@ namespace BuildingConstructApi.Controllers
 {
     [Route("api/store")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = "Bearer")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
 
     public class MaterialStoreController : ControllerBase
     {
