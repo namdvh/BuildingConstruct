@@ -363,7 +363,7 @@ namespace Application.System.Users
                     LastName = request.LastName,
                     UserName = request.Phone,
                     PhoneNumber = request.Phone,
-                    Status = Status.Level1
+                    Status = Status.SUCCESS
                 };
 
                 var rs = await _userService.CreateAsync(user, request.Password);
