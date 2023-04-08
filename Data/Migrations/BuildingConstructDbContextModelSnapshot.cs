@@ -199,28 +199,28 @@ namespace Data.Migrations
                         {
                             PostID = 3,
                             BuilderID = 1,
-                            AppliedDate = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(1778),
+                            AppliedDate = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(4222),
                             Status = 6
                         },
                         new
                         {
                             PostID = 4,
                             BuilderID = 2,
-                            AppliedDate = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(1802),
+                            AppliedDate = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(4234),
                             Status = 6
                         },
                         new
                         {
                             PostID = 4,
                             BuilderID = 3,
-                            AppliedDate = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(1820),
+                            AppliedDate = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(4245),
                             Status = 6
                         },
                         new
                         {
                             PostID = 1,
                             BuilderID = 4,
-                            AppliedDate = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(1837),
+                            AppliedDate = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(4255),
                             QuizId = 1,
                             Status = 6
                         });
@@ -363,7 +363,7 @@ namespace Data.Migrations
                             Certificate = "https://i1.rgstatic.net/publication/311457103_Certificate_of_Design_Builder_Training/links/58480cfb08aeda696825d727/largepreview.png",
                             CreateBy = new Guid("d7285fb7-835b-4680-a18c-673bd71f63d9"),
                             Experience = 3,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 359, DateTimeKind.Local).AddTicks(6037),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 624, DateTimeKind.Local).AddTicks(9539),
                             Place = 60,
                             TypeID = new Guid("4ace8fcb-95eb-48c0-9deb-240e8b4e10e0")
                         },
@@ -373,7 +373,7 @@ namespace Data.Migrations
                             Certificate = "https://i1.rgstatic.net/publication/311457103_Certificate_of_Design_Builder_Training/links/58480cfb08aeda696825d727/largepreview.png",
                             CreateBy = new Guid("d39ae0a6-9b2d-4421-be4a-cc294cec054f"),
                             Experience = 3,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 376, DateTimeKind.Local).AddTicks(18),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 633, DateTimeKind.Local).AddTicks(6876),
                             Place = 61,
                             TypeID = new Guid("bd880489-5c76-4854-93ab-66e3a541bf24")
                         },
@@ -383,7 +383,7 @@ namespace Data.Migrations
                             Certificate = "https://i1.rgstatic.net/publication/311457103_Certificate_of_Design_Builder_Training/links/58480cfb08aeda696825d727/largepreview.png",
                             CreateBy = new Guid("d91f9ece-25a7-4dc6-adde-186b12c04d56"),
                             Experience = 1,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 394, DateTimeKind.Local).AddTicks(5890),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 642, DateTimeKind.Local).AddTicks(4077),
                             Place = 16,
                             TypeID = new Guid("ce9fa65b-d005-46b6-953e-e6462a59cfb3")
                         },
@@ -393,7 +393,7 @@ namespace Data.Migrations
                             Certificate = "https://i1.rgstatic.net/publication/311457103_Certificate_of_Design_Builder_Training/links/58480cfb08aeda696825d727/largepreview.png",
                             CreateBy = new Guid("319d2a06-92cc-434d-abce-7e8a33650a0d"),
                             Experience = 4,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 411, DateTimeKind.Local).AddTicks(3305),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 653, DateTimeKind.Local).AddTicks(387),
                             Place = 52,
                             TypeID = new Guid("ce9fa65b-d005-46b6-953e-e6462a59cfb3")
                         },
@@ -403,7 +403,7 @@ namespace Data.Migrations
                             Certificate = "https://i1.rgstatic.net/publication/311457103_Certificate_of_Design_Builder_Training/links/58480cfb08aeda696825d727/largepreview.png",
                             CreateBy = new Guid("8f314589-0c7c-40a4-b5bc-c73639664922"),
                             Experience = 1,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 426, DateTimeKind.Local).AddTicks(640),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 664, DateTimeKind.Local).AddTicks(431),
                             Place = 42,
                             TypeID = new Guid("cf9fa65b-d005-46b6-953e-e6462a59cfb3")
                         },
@@ -413,7 +413,7 @@ namespace Data.Migrations
                             Certificate = "https://i1.rgstatic.net/publication/311457103_Certificate_of_Design_Builder_Training/links/58480cfb08aeda696825d727/largepreview.png",
                             CreateBy = new Guid("17c76dfe-7a0b-4ac9-ab8b-ba95e588a135"),
                             Experience = 2,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 444, DateTimeKind.Local).AddTicks(6936),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 673, DateTimeKind.Local).AddTicks(7779),
                             Place = 13,
                             TypeID = new Guid("cf9fa65b-d005-46b6-953e-e6462a59cfb3")
                         });
@@ -593,19 +593,19 @@ namespace Data.Migrations
                         new
                         {
                             Id = 6,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(561),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(2890),
                             Name = "Màu vàng"
                         },
                         new
                         {
                             Id = 7,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(586),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(2907),
                             Name = "Màu xám"
                         },
                         new
                         {
                             Id = 1,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(1682),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(4151),
                             Name = "No Color"
                         });
                 });
@@ -680,7 +680,7 @@ namespace Data.Migrations
                             CompanyName = "Công ty xây dưng Khang An",
                             CreateBy = new Guid("d7285fb7-835b-4680-a18c-673bd71f63d7"),
                             Description = "Hoạt động chính trong lĩnh vực: tư vấn, thiết kế, trang trí nội ngoại thất, lập dự toán công trình và xây dựng nhà ở tư nhân, nhà phố, biệt thự – vila, quán Bar – sân vườn, khách sạn, nhà hàng, showroom… Sản phẩm của chúng tôi được xây dựng theo quy trình kiểm tra chất lượng nghiêm ngặt của hệ thống quản lý chất lượng ISO 9001:2008.",
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 458, DateTimeKind.Local).AddTicks(9904),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 682, DateTimeKind.Local).AddTicks(9821),
                             Website = "nhaxanhqn.com"
                         },
                         new
@@ -689,7 +689,7 @@ namespace Data.Migrations
                             CompanyName = "Công ty xây dưng Đất Xanh",
                             CreateBy = new Guid("d7285fb7-835b-4680-a18c-673bd71f63d6"),
                             Description = "Trong những năm vừa qua được sự ưu ái và tín nhiệm của Quý khách hàng Công ty Đất Xanh từng bước trưởng thành và trở thành đơn vị hoạt động trong lĩnh vực tư vấn, thiết kế và xây dựng dân dụng hàng đầu tại Việt Nam.",
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 469, DateTimeKind.Local).AddTicks(1045),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 692, DateTimeKind.Local).AddTicks(4545),
                             Website = "xaydunglaco.vn"
                         },
                         new
@@ -698,7 +698,7 @@ namespace Data.Migrations
                             CompanyName = "Công ty xây dưng Ánh Nhiên Xanh",
                             CreateBy = new Guid("86b8070e-00c5-45de-8db7-199cee7350d9"),
                             Description = "Trong những năm vừa qua được sự ưu ái và tín nhiệm của Quý khách hàng Công ty Ánh Nhiên Xanh từng bước trưởng thành và trở thành đơn vị hoạt động trong lĩnh vực tư vấn, thiết kế và xây dựng dân dụng hàng đầu tại Việt Nam.",
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 483, DateTimeKind.Local).AddTicks(2839),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 702, DateTimeKind.Local).AddTicks(7998),
                             Website = "xaydunganhnhien.vn"
                         });
                 });
@@ -807,7 +807,7 @@ namespace Data.Migrations
                             Description = "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
                             EndDate = new DateTime(2023, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EndTime = "17:30",
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 508, DateTimeKind.Local).AddTicks(9019),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(766),
                             NumberPeople = 20,
                             PeopeRemained = 0,
                             Place = 52,
@@ -834,7 +834,7 @@ namespace Data.Migrations
                             Description = "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
                             EndDate = new DateTime(2023, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EndTime = "17:30",
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 508, DateTimeKind.Local).AddTicks(9140),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(873),
                             NumberPeople = 20,
                             PeopeRemained = 0,
                             Place = 52,
@@ -861,7 +861,7 @@ namespace Data.Migrations
                             Description = "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
                             EndDate = new DateTime(2023, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EndTime = "17:30",
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 508, DateTimeKind.Local).AddTicks(9232),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(973),
                             NumberPeople = 20,
                             PeopeRemained = 0,
                             Place = 52,
@@ -886,7 +886,7 @@ namespace Data.Migrations
                             CreateBy = new Guid("d7285fb7-835b-4680-a18c-673bd71f63d7"),
                             Description = "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
                             EndDate = new DateTime(2023, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 508, DateTimeKind.Local).AddTicks(9275),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(1030),
                             NumberPeople = 20,
                             PeopeRemained = 0,
                             Place = 20,
@@ -910,7 +910,7 @@ namespace Data.Migrations
                             CreateBy = new Guid("d7285fb7-835b-4680-a18c-673bd71f63d6"),
                             Description = "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
                             EndDate = new DateTime(2024, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 508, DateTimeKind.Local).AddTicks(9329),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(1096),
                             NumberPeople = 30,
                             PeopeRemained = 0,
                             Place = 14,
@@ -934,7 +934,7 @@ namespace Data.Migrations
                             CreateBy = new Guid("d7285fb7-835b-4680-a18c-673bd71f63d7"),
                             Description = "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
                             EndDate = new DateTime(2024, 5, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 508, DateTimeKind.Local).AddTicks(9371),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(1326),
                             NumberPeople = 30,
                             PeopeRemained = 0,
                             Place = 14,
@@ -960,7 +960,7 @@ namespace Data.Migrations
                             Description = "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
                             EndDate = new DateTime(2023, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EndTime = "16:30",
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 508, DateTimeKind.Local).AddTicks(9411),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(1490),
                             NumberPeople = 20,
                             PeopeRemained = 0,
                             Place = 52,
@@ -987,7 +987,7 @@ namespace Data.Migrations
                             Description = "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
                             EndDate = new DateTime(2023, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EndTime = "16:30",
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 508, DateTimeKind.Local).AddTicks(9499),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(2099),
                             NumberPeople = 20,
                             PeopeRemained = 0,
                             Place = 52,
@@ -1014,7 +1014,7 @@ namespace Data.Migrations
                             Description = "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
                             EndDate = new DateTime(2023, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EndTime = "16:30",
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 508, DateTimeKind.Local).AddTicks(9600),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(2152),
                             NumberPeople = 20,
                             PeopeRemained = 0,
                             Place = 52,
@@ -1041,7 +1041,7 @@ namespace Data.Migrations
                             Description = "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
                             EndDate = new DateTime(2023, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EndTime = "16:30",
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 508, DateTimeKind.Local).AddTicks(9700),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(2207),
                             NumberPeople = 20,
                             PeopeRemained = 0,
                             Place = 52,
@@ -1329,7 +1329,7 @@ namespace Data.Migrations
                             CreateBy = new Guid("b57b172a-a044-11ed-a8fc-0242ac120002"),
                             Description = "Với mục tiêu cung cấp nhiều gói sản phẩm phong phú về mẫu mã và các tính năng linh hoạt cho nhiều loại hình website như giới thiệu công ty, bán hàng, trang tin tức, thương mại điện tử… cùng với nhiều giao diện phong phú đa dạng độc đáo đã được VNS lọc chọn và đúc kết nhằm giới thiệu tới khách hàng với mong muốn có một website nhanh, đẹp, hiệu quả và giá cả hợp lý.",
                             Experience = "Hiện đang là đại lý cấp 1 phân phối các sản phẩm chất lượng, có thương hiệu nổi tiếng, giá thành phù hợp với giá niêm yết của nhà máy. Công ty còn cung cấp và phân phối nhiều loại cát bê tông và cát xây dựng được sàng và rửa tại dây chuyền sản xuất. Ngoài ra còn phân phối nhiều loại vật liệu xây dựng khác như xi măng, gạch, sắt thép đảm bảo chất lượng cao để sử dụng cho các công trình xây dựng.",
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 497, DateTimeKind.Local).AddTicks(6715),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 712, DateTimeKind.Local).AddTicks(5483),
                             Place = 61,
                             TaxCode = "8156184163",
                             Website = "https://vinasoftware.com.vn/"
@@ -1340,7 +1340,7 @@ namespace Data.Migrations
                             CreateBy = new Guid("be21b564-a044-11ed-a8fc-0242ac120002"),
                             Description = "Về vật liệu xây dựng, công ty luôn có sẵn hàng hóa để khách hàng so sánh và lựa chọn, ngoài ra còn có đội xe lớn nhỏ sẵn sàng giao hàng trong thời gian sớm nhất.",
                             Experience = "Hiện đang là đại lý cấp 1 phân phối các sản phẩm chất lượng, có thương hiệu nổi tiếng, giá thành phù hợp với giá niêm yết của nhà máy. Công ty còn cung cấp và phân phối nhiều loại cát bê tông và cát xây dựng được sàng và rửa tại dây chuyền sản xuất. Ngoài ra còn phân phối nhiều loại vật liệu xây dựng khác như xi măng, gạch, sắt thép đảm bảo chất lượng cao để sử dụng cho các công trình xây dựng.",
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 508, DateTimeKind.Local).AddTicks(8663),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(415),
                             Place = 61,
                             TaxCode = "8156284563"
                         });
@@ -1391,7 +1391,7 @@ namespace Data.Migrations
                             Id = 1,
                             CreateBy = new Guid("d7285fb7-835b-4680-a18c-673bd71f63d9"),
                             IsRead = false,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(1613),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(4027),
                             Message = "Someone has saved your post",
                             NavigateId = 1,
                             Title = "New Notification",
@@ -1403,7 +1403,7 @@ namespace Data.Migrations
                             Id = 2,
                             CreateBy = new Guid("d7285fb7-835b-4680-a18c-673bd71f63d9"),
                             IsRead = false,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(1640),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(4124),
                             Message = "Someone has applied your post",
                             NavigateId = 1,
                             Title = "New Notification",
@@ -1415,7 +1415,7 @@ namespace Data.Migrations
                             Id = 3,
                             CreateBy = new Guid("d7285fb7-835b-4680-a18c-673bd71f63d9"),
                             IsRead = false,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(1662),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(4137),
                             Message = "Create commitment successfully",
                             NavigateId = 1,
                             Title = "New Notification",
@@ -1450,7 +1450,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = 1,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(1734),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(4188),
                             Name = "No Other"
                         });
                 });
@@ -1958,7 +1958,7 @@ namespace Data.Migrations
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Thiết kế nguyên khối sang trọng, hiện đại\r\nNắp bàn cầu đóng êm, kèm vòi rửa nước lạnh Eco-washer\r\nBề mặt nước rộng giúp ngăn mùi hiệu quả\r\nThiết kế thân kín, vành kín tiện dụng cho việc vệ sinh hàng ngày\r\nCông nghệ CeFiONtect giúp lòng bàn cầu siêu nhẵn, hạn chế tối đa các vết bẩn, vi khuẩn\r\nCông nghệ xả G-Max êm, mạnh mẽ hiệu quả",
                             Image = "https://admin.mingstores.com/core/public/themes/mingstores/products/UYZ61ie7Z7i5Hmjd6D7XyUWhBZVL7y8v.jpg",
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(299),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(2724),
                             MaterialStoreID = 1,
                             Name = "Bồn cầu một khối TOTO MS904E4",
                             SoldQuantities = 1500,
@@ -2006,7 +2006,7 @@ namespace Data.Migrations
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "ông nghệ sản xuất tủ lavabo của chúng tôi đã được chuyên nghiệp hóa qua nhiều năm phát triển, với phần khung bên ngoài được làm bằng nhôm, là cấu trúc chính hỗ trợ, giúp toàn bộ tủ chắc chắn, bên cạnh phần bản lề được làm bằng INOX 304 dày, giúp cho việc vận hành được trơn tru, ổn định.\r\n- Các bộ phận chính đều được làm bằng thép không gỉ 304 (INOX 304), tăng độ bền cho sản phẩm trong quá trình sử dụng.\r\n- Cấu hình cạnh và tay nắm cửa được làm bằng máy vát 45 độ đặc biệt, góc nhôm được gắn chặt vào thành bên trong tủ, để bề mặt sản phẩm mịn & tinh tế, tạo sự thoải mái khi sử dụng.\r\n\r\n- Việc sử dụng nhôm để làm vật liệu chính sản xuất tủ Lavabo là lựa chọn tối ưu nhất hiện nay, không chỉ có độ bền cao, nhôm hoàn toàn không độc hại với môi trường cũng như người sử dụng. Một số ưu điểm chính của nhôm:\r\n  + Trọng lượng nhẹ, độ bền cao, khả năng chịu lực lớn.\r\n  + Độ cứng tốt, không dễ biến dạng.\r\n  + Không thấm nước trong môi trường có độ ẩm cao, không bắt lửa và chịu được tác động mạnh.\r\n  + Lớp sơn phủ bền màu, chống ăn mòn do thời tiết hoặc hóa chất thông thường.\r\n  + Tạo không gian sang trọng, thoải mái và tiện lợi.",
                             Image = "https://admin.mingstores.com/core/public/themes/mingstores/products/P5GERhsHMvYboHFoSTcetoIuHKJJApvD.jpg",
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(711),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(3050),
                             MaterialStoreID = 1,
                             Name = "Tủ Lavabo JM843",
                             SoldQuantities = 1500,
@@ -2022,7 +2022,7 @@ namespace Data.Migrations
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Sơn ngoại thất câo cấp đến từ thương hiệu Kansai nổi tiếng",
                             Image = "https://admin.mingstores.com/core/public/themes/mingstores/products/JnLYt6lx4OLgmoplQoxTPU1e9SBjZf9a.jpg",
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(793),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(3093),
                             MaterialStoreID = 1,
                             Name = "K015 Sơn Kansai chống thấm Water Proof 4L, 17L",
                             SoldQuantities = 1500,
@@ -2054,7 +2054,7 @@ namespace Data.Migrations
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "GHR Gạch Granite Hardrock Mờ/Bán bóng ",
                             Image = "https://admin.mingstores.com/core/public/themes/mingstores/products/6TauBDiJiwnvQaJTuCl9D0SYHFayTRHk.jpg",
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(943),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(3188),
                             MaterialStoreID = 1,
                             Name = "GHR Gạch Granite Hardrock Mờ/Bán bóng",
                             SoldQuantities = 1500,
@@ -2070,7 +2070,7 @@ namespace Data.Migrations
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Ngói lợp kiểu Pháp cổ điển",
                             Image = "https://sbo.vn/wp-content/uploads/2021/06/tam-lop-sinh-thai-onduline.jpg",
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(1009),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(3224),
                             MaterialStoreID = 1,
                             Name = "Ngói lợp",
                             SoldQuantities = 3000,
@@ -2086,7 +2086,7 @@ namespace Data.Migrations
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Gạch 2 lỗ cao cấp đến từ thương hiệu nổi tiếng ",
                             Image = "http://www.phudien.vn/upload/Product%20400x200/G%E1%BA%A1ch%20tuynel%20-%20g%E1%BA%A1ch%206%20l%E1%BB%97%20lo%E1%BA%A1i%20nh%E1%BB%8F.png",
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(1028),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(3240),
                             MaterialStoreID = 1,
                             Name = "Gạch lỗ",
                             SoldQuantities = 1500,
@@ -2102,7 +2102,7 @@ namespace Data.Migrations
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Sơn chống thấm Nippon",
                             Image = "https://nipponpaint.com.vn/sites/default/files/inline-images/son-chong-tham-la-gi-1.jpg",
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(1047),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(3260),
                             MaterialStoreID = 1,
                             Name = "Sơn chống thấm",
                             SoldQuantities = 1500,
@@ -2118,7 +2118,7 @@ namespace Data.Migrations
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Cát mịn dành cho xây dựng đặc biệt dành cho ngôi nhà yêu dấu của bạn",
                             Image = "https://sbshouse.vn/wp-content/uploads/2020/09/cat-xay-dung.jpg",
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(1066),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(3287),
                             MaterialStoreID = 1,
                             Name = "Cát Mịn",
                             SoldQuantities = 50,
@@ -2134,7 +2134,7 @@ namespace Data.Migrations
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Miễn phí vận chuyển, lắp đặp tại Hà Nội & HCM",
                             Image = "https://vuongquocnoithat.vn/images/2016/09/22/phong-ngu-phong-cach-cong-chua-jy921.jpg",
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(1085),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(3313),
                             MaterialStoreID = 2,
                             Name = "Giường ngủ công chúa",
                             SoldQuantities = 300,
@@ -2150,7 +2150,7 @@ namespace Data.Migrations
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Nhập khẩu 100%\r\n\r\n -Bảo hành 2 năm\r\n\r\n -Miễn phí vận chuyển, lắp đặp tại Hà Nội & HCMShowroom HN: 3000m2 Tầng 1&2, tòa T2",
                             Image = "https://vuongquocnoithat.vn/images/2018/01/29/den-chum-dong-co-dien-kieu-italia%20atl8501.jpg",
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(1192),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(3674),
                             MaterialStoreID = 2,
                             Name = "Đèn chùm đồng cổ điển phong cách Ý",
                             SoldQuantities = 1,
@@ -2166,7 +2166,7 @@ namespace Data.Migrations
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "- Sơn chống thấm Một thành phần Aqua Shield\r\n\r\n- Chống thấm tuyệt hảo\r\n\r\n- Kháng nước tuyệt đối\r\n\r\n- Che phủ vết nứt, co giãn tốt, dễ thi công (không chứa xi măng)\r\n\r\n",
                             Image = "https://admin.mingstores.com/core/public/themes/mingstores/products/OOUUL3p3xO6kV63bOCyr4qCMZBNDo2yc.jpg",
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(1312),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(3773),
                             MaterialStoreID = 1,
                             Name = "K023 Sơn Kansai chống thấm Aqua Shield 5L, 18L",
                             SoldQuantities = 100,
@@ -2182,7 +2182,7 @@ namespace Data.Migrations
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Sen cây nóng lạnh INAX BFV-515S là sản phẩm sen cây INAX  được thiết kế tay sen cài liền cùng thân sen cây thay vì để gắn tường, giúp cho tổng thể bộ sen cây trở nên gọn gàng, linh hoạt, đặc biệt phù hợp cả với những căn phòng tắm kích thước nhỏ, quý khách hàng vẫn có thể lắp đặt mẫu sen cây này và cảm nhận trải nghiệm khác biệt khi tắm vòi sen cây với bát sen lớn.\r\nMẫu thiết kế sen cây thuộc dòng sản phẩm SEN VÒI INAX có thiết kế đẹp mắt, sáng tạo từ kiểu dáng đến tính năng thích hợp cho mọi loại hình phòng tắm từ những phòng tắm đơn giản, nhỏ hẹp, đến những căn phòng tắm hiện đại, tiện nghi. ",
                             Image = "https://admin.mingstores.com/core/public/themes/mingstores/products/Mjzhtin7lD3gCUXksET0srIdUnABPNE3.jpg",
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(1461),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(3895),
                             MaterialStoreID = 1,
                             Name = "SEN TẮM CÂY INAX BFV-515S",
                             SoldQuantities = 1000,
@@ -2198,7 +2198,7 @@ namespace Data.Migrations
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Là mẫu chậu rửa mặt Inax đặt bàn mới nhất 2017, sản phẩm tiêu biểu cho năm 2018",
                             Image = "https://admin.mingstores.com/core/public/themes/mingstores/products/JnyguIQW8EMvvUqcZ6BZnGSLOeL5OgpK.jpg",
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(1534),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(3955),
                             MaterialStoreID = 1,
                             Name = "Chậu Rửa Lavabo Inax AL-536V",
                             SoldQuantities = 100,
@@ -2232,67 +2232,67 @@ namespace Data.Migrations
                         new
                         {
                             Id = 2,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(58),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(2507),
                             Name = "4.5L"
                         },
                         new
                         {
                             Id = 3,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(81),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(2522),
                             Name = "7.5L"
                         },
                         new
                         {
                             Id = 4,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(606),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(2920),
                             Name = "5M"
                         },
                         new
                         {
                             Id = 5,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(625),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(2932),
                             Name = "10M"
                         },
                         new
                         {
                             Id = 14,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(1152),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(3575),
                             Name = "Giường 1,8m"
                         },
                         new
                         {
                             Id = 15,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(1173),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(3650),
                             Name = "Giường 2m"
                         },
                         new
                         {
                             Id = 10,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(1275),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(3743),
                             Name = "6 bóng"
                         },
                         new
                         {
                             Id = 11,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(1294),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(3759),
                             Name = "8 bóng"
                         },
                         new
                         {
                             Id = 7,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(1384),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(3835),
                             Name = "5L"
                         },
                         new
                         {
                             Id = 8,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(1405),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(3851),
                             Name = "18L"
                         },
                         new
                         {
                             Id = 1,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(1702),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(4165),
                             Name = "No Size"
                         });
                 });
@@ -2533,7 +2533,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = 1,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(1870),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(4280),
                             Name = "Bài test thợ xây ",
                             PostID = 1,
                             TypeID = new Guid("4ace8fcb-95eb-48c0-9deb-240e8b4e10e0")
@@ -2541,7 +2541,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = 2,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 509, DateTimeKind.Local).AddTicks(2223),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 722, DateTimeKind.Local).AddTicks(4576),
                             Name = "Bài test thợ sơn ",
                             PostID = 1,
                             TypeID = new Guid("ce9fa65b-d005-46b6-953e-e6462a59cfb3")
@@ -2609,7 +2609,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("52ec6e78-6732-43bf-adab-9cfa2e5da268"),
-                            ConcurrencyStamp = "1f75367e-e5ad-4279-a1bd-d877346a870c",
+                            ConcurrencyStamp = "07cb79b5-6745-4878-b943-9c59ecd8a267",
                             Description = "Admin",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
@@ -2617,7 +2617,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("dc48ba58-ddcb-41de-96fe-e41327e5f313"),
-                            ConcurrencyStamp = "4049b423-8b33-417f-89bd-950703621b20",
+                            ConcurrencyStamp = "f6dd6931-088b-4d4c-b91c-773075afc1ad",
                             Description = "User",
                             Name = "User",
                             NormalizedName = "USER"
@@ -2625,7 +2625,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("20efd516-f16c-41b3-b11d-bc908cd2056b"),
-                            ConcurrencyStamp = "cb58b8f5-eff7-4794-a560-3e14ba386cd6",
+                            ConcurrencyStamp = "2fd2faeb-c048-4b4c-b59a-727a4875464e",
                             Description = "Contractor",
                             Name = "Contractor",
                             NormalizedName = "CONTRACTOR"
@@ -2633,7 +2633,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = new Guid("a4fbc29e-9749-4ea0-bcaa-67fc9f104bd1"),
-                            ConcurrencyStamp = "9c22fd02-df59-4dba-9dfb-e08102e008d5",
+                            ConcurrencyStamp = "95e07a98-f305-4ca7-927c-02cb845c7090",
                             Description = "Store",
                             Name = "Store",
                             NormalizedName = "STORE"
@@ -2913,17 +2913,17 @@ namespace Data.Migrations
                             Address = "18 Tô Ký , Huyện Châu Thành , Đà Nẵng",
                             Avatar = "https://i1-giaitri.vnecdn.net/2013/08/15/DK-02756-1376528749.jpg?w=680&h=0&q=100&dpr=1&fit=crop&s=mX89l0q4HQgntQ5wJesOcw",
                             BuilderId = 1,
-                            ConcurrencyStamp = "ffeeac3d-1261-495f-aa5f-9c3682e20254",
+                            ConcurrencyStamp = "3fb8ff1e-990f-45c1-aa03-eadef7dc42d1",
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             DOB = new DateTime(2001, 4, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "admin15@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Admin",
                             Gender = 0,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 332, DateTimeKind.Local).AddTicks(6572),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 605, DateTimeKind.Local).AddTicks(1172),
                             LastName = "Admin",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEC/8KCnv0lNfyQhF0F+9i77CnAJv4hNKRSO6KdVcSY4BiBXCFQQNoNKb54iZb5QLUA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEFClc9YZJKbzCaKw1MoTswy6fT80KfXNekwvxnMVdoRb9Bc3qtd1xf62Zz/n1CpPRw==",
                             PhoneNumber = "0909090909",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -2940,17 +2940,17 @@ namespace Data.Migrations
                             Address = "41 Nguyễn Duy Trinh, Huyện Đông Hải, Bạc Liêu",
                             Avatar = "https://i1-giaitri.vnecdn.net/2013/08/15/DK-02756-1376528749.jpg?w=680&h=0&q=100&dpr=1&fit=crop&s=mX89l0q4HQgntQ5wJesOcw",
                             BuilderId = 1,
-                            ConcurrencyStamp = "fe15395e-e202-4b9f-a032-18bab25e7db0",
+                            ConcurrencyStamp = "80f83deb-b366-4eef-b9d8-f73570153be2",
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             DOB = new DateTime(2001, 4, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "namhoaidoan15@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Hoai Nam",
                             Gender = 0,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 345, DateTimeKind.Local).AddTicks(2680),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 616, DateTimeKind.Local).AddTicks(2152),
                             LastName = "Doan Vu",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEG7xfFQa12taQGQhXEL5yb75zlNXDS0nqqMUZ4o3d5fXV1m+N9yFuQVZLsS85x5wtg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDMiArACS44yJXPZH2xx2gn2RO+nwdmtqegB7ODIPLiK680xtFijrnv6I8s/9mjWmw==",
                             PhoneNumber = "0879411575",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -2967,17 +2967,17 @@ namespace Data.Migrations
                             Address = "41 Nguyễn Duy Trinh, Huyện Tân Yên, Bắc Giang",
                             Avatar = "https://scontent.fsgn5-3.fna.fbcdn.net/v/t1.6435-9/86186750_1329130013936346_7257030880831471616_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=174925&_nc_ohc=Z1GTPvzRt7wAX_WbRZ5&_nc_ht=scontent.fsgn5-3.fna&oh=00_AfAYtaD2dHE_84_-PSlDqLaeyBlH9zJ3b308pHcTWucCXw&oe=642552F2",
                             BuilderId = 2,
-                            ConcurrencyStamp = "6223c60e-8bda-471d-8cc1-8ed9caf9df28",
+                            ConcurrencyStamp = "c2199d6c-ed4a-465c-bf6c-8529d9ec0159",
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             DOB = new DateTime(2001, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "namhoaidoan1@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Thinh",
                             Gender = 0,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 359, DateTimeKind.Local).AddTicks(6421),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 624, DateTimeKind.Local).AddTicks(9671),
                             LastName = "Nguyen Anh",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEBCc4KZvryT2e6L7TDNL3fO6Jn3YD78pi/TtjgXC9aO4Fsiw2E2drj48mTvyJtwkVw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDGRnll42sv1ELlHKD5b3xW9GJG+PsrsXtb43pBraBit/Nfp1citDrObMHSWy8YxMg==",
                             PhoneNumber = "0937341639",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -2994,17 +2994,17 @@ namespace Data.Migrations
                             Address = "56 Nguyễn Duy Trinh, Huyện Chợ Đồn, Bắc Kạn",
                             Avatar = "https://scontent.fsgn5-3.fna.fbcdn.net/v/t1.6435-9/86186750_1329130013936346_7257030880831471616_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=174925&_nc_ohc=Z1GTPvzRt7wAX_WbRZ5&_nc_ht=scontent.fsgn5-3.fna&oh=00_AfAYtaD2dHE_84_-PSlDqLaeyBlH9zJ3b308pHcTWucCXw&oe=642552F2",
                             BuilderId = 3,
-                            ConcurrencyStamp = "50c29226-7e7d-4cdb-bc1f-752444334143",
+                            ConcurrencyStamp = "abee9bf4-fefa-4f78-8cc9-cba1f60c2787",
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             DOB = new DateTime(2001, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "namhoaidoan12@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Hieu",
                             Gender = 0,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 376, DateTimeKind.Local).AddTicks(271),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 633, DateTimeKind.Local).AddTicks(6986),
                             LastName = "Nguyen Anh",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEMf3O4kS1dmnjd+wgP2zClBzcEVmGTBd0tZivGnbwvjznOCDpD9e5wLUM41yVe4BVA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEAN0m/dP03x1lPWvsdjJ2Egid0Q14oFN9gwcBbu7PJj5CTlGV9SBajnDOAlHzZae2A==",
                             PhoneNumber = "0101010101",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -3021,17 +3021,17 @@ namespace Data.Migrations
                             Address = "56 Nguyễn Duy Trinh, Huyện Chợ Đồn, Bắc Kạn",
                             Avatar = "https://upload.wikimedia.org/wikipedia/commons/b/b3/%E1%BA%A2nh_ch%C3%A2n_dung_Nguy%E1%BB%85n_V%C4%83n_Minh_Tr%C3%AD.jpg",
                             BuilderId = 4,
-                            ConcurrencyStamp = "ef0c33b4-eca6-4052-bffc-d00fbd290287",
+                            ConcurrencyStamp = "8c824c22-2a33-469f-9686-e3b2cf8ac45e",
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             DOB = new DateTime(2001, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "namhoaidoan13@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Minh",
                             Gender = 0,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 394, DateTimeKind.Local).AddTicks(6217),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 642, DateTimeKind.Local).AddTicks(4214),
                             LastName = "Nguyen Trần",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEB4O29rW+GISv/M+xjHBsvbZWA5jXZpgSLIdarAkFyNFKSTdYGB4cEpcz4c1qSQC1w==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENtYvmicrALgeIApXpg82J9b3mD6LhadVTmo/xxFTFPjTfVxq7HvYcOVp7/5YX1kLw==",
                             PhoneNumber = "0202020202",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -3048,17 +3048,17 @@ namespace Data.Migrations
                             Address = "135 Nguyễn Hiếu, Huyện Chợ Đồn, Bắc Kạn",
                             Avatar = "https://upload.wikimedia.org/wikipedia/commons/1/10/%E1%BA%A2nh-th%E1%BA%BB-v%C6%B0%E1%BB%A3ng.png",
                             BuilderId = 5,
-                            ConcurrencyStamp = "78a3b5aa-34b5-4a5b-9378-0ec57aa42702",
+                            ConcurrencyStamp = "df03fefb-09d4-497f-9dfa-c667f82aff13",
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             DOB = new DateTime(2001, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "namhoaidoan14@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Trúc",
                             Gender = 0,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 411, DateTimeKind.Local).AddTicks(3497),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 653, DateTimeKind.Local).AddTicks(553),
                             LastName = "Phạm Thanh",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEENey7qCTv0NptfQm1uwXEuDo5oyPfMRCnEOUghKA540fJgvU+Fx8UegSvFmB5wYZg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHLP5ifboeYzJO5Jk0SE88/OeV4kmCgiSYhAfcJ8qD1SDXQiOY3GskxqHghnkrzYjQ==",
                             PhoneNumber = "0303030303",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -3075,17 +3075,17 @@ namespace Data.Migrations
                             Address = "135 Nguyễn Hiếu, Huyện Chợ Đồn, Bắc Kạn",
                             Avatar = "https://demoda.vn/wp-content/uploads/2022/03/mau-anh-the-ong-chu-so-mi-trang.jpg",
                             BuilderId = 6,
-                            ConcurrencyStamp = "812852de-f257-4271-b921-68252a28e42d",
+                            ConcurrencyStamp = "1f5dcafc-3766-41e9-8628-555f14b73e6d",
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             DOB = new DateTime(2001, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "namhoaidoan15@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Dương",
                             Gender = 0,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 426, DateTimeKind.Local).AddTicks(818),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 664, DateTimeKind.Local).AddTicks(597),
                             LastName = "Thanh Vàng",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEHYq7GaSUy51ADwf2TCowg8bNIfUix8ONr04zhnZs3n7q5L8Tce+XyGLzaIDnw86wg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEG4abpqTKZpDa56PnuHSv1ND3XhQr7LfTRj8sQwletfD6LixOg2oj/3o1JGLEqODpw==",
                             PhoneNumber = "0404040404",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -3101,7 +3101,7 @@ namespace Data.Migrations
                             AccessFailedCount = 0,
                             Address = "56 Nguyễn Duy Trinh, Huyện Gia Bình, Bắc Ninh",
                             Avatar = "https://www.vietnamworks.com/_next/image?url=https%3A%2F%2Fimages.vietnamworks.com%2Fpictureofcompany%2F78%2F11127264.png&w=128&q=75",
-                            ConcurrencyStamp = "08b9f114-f799-43d2-9996-5fd1df75a328",
+                            ConcurrencyStamp = "747d8e31-2109-4251-8c58-c58bb49b1f0c",
                             ContractorId = 1,
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             DOB = new DateTime(2001, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -3109,10 +3109,10 @@ namespace Data.Migrations
                             EmailConfirmed = false,
                             FirstName = "Công Ty Cổ Phần Xây Dựng Và Công Nghiệp",
                             Gender = 0,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 444, DateTimeKind.Local).AddTicks(7182),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 673, DateTimeKind.Local).AddTicks(7907),
                             LastName = "NSN",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEEprbSakDxQMhPGa1l2FB6O4SuoqfsAl8UY7Vv8j0IZd39s7TW1mjL9e71h7e/kYZw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEVa6uwYKcquMfPzqnj3Wq64TrbXejq9IihyrO7indgsd6K7n0awblZqfrvrjWgsLg==",
                             PhoneNumber = "0912345678",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -3128,7 +3128,7 @@ namespace Data.Migrations
                             AccessFailedCount = 0,
                             Address = "56 Nguyễn Duy Trinh, Huyện Mỏ Cày Nam, Bến Tre",
                             Avatar = "https://www.vietnamworks.com/_next/image?url=https%3A%2F%2Fimages.vietnamworks.com%2Fpictureofcompany%2F69%2F11128477.png&w=128&q=75",
-                            ConcurrencyStamp = "90f75442-d4ab-468a-b63a-0cf5e2d69ea9",
+                            ConcurrencyStamp = "e4833e23-9bf2-4b42-9328-4229a3f157e6",
                             ContractorId = 2,
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             DOB = new DateTime(2001, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -3136,10 +3136,10 @@ namespace Data.Migrations
                             EmailConfirmed = false,
                             FirstName = "Công Ty Cổ Phần Đầu Tư Bất Động Sản",
                             Gender = 0,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 458, DateTimeKind.Local).AddTicks(9967),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 682, DateTimeKind.Local).AddTicks(9943),
                             LastName = "Taseco",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEF7fiQ7lhttGn8Lih6o4Y1F5yW7Q7ENc7ihRJ6uwdeOy83iCm3g7E66vc241lT1gpg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKwmqXptQLAB5NQkfA2jRM74tpDi7pb1GkT9xKuQy6RdJI+L0AzbKS8ksp9HUb6BDw==",
                             PhoneNumber = "09987654321",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -3155,7 +3155,7 @@ namespace Data.Migrations
                             AccessFailedCount = 0,
                             Address = "56 Nguyễn Duy Trinh, Huyện Mỏ Cày Nam, Bến Tre",
                             Avatar = "https://diaocthinhvuong.vn/wp-content/uploads/2021/05/1logo-newtecons.jpg",
-                            ConcurrencyStamp = "210e3f11-d110-4e42-b02b-8cbaa9ecae8e",
+                            ConcurrencyStamp = "74f745b1-a6c1-4ba4-a702-22b7cdbc2e68",
                             ContractorId = 3,
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             DOB = new DateTime(2001, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -3163,10 +3163,10 @@ namespace Data.Migrations
                             EmailConfirmed = false,
                             FirstName = "Công ty TNHH ",
                             Gender = 0,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 469, DateTimeKind.Local).AddTicks(1089),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 692, DateTimeKind.Local).AddTicks(4589),
                             LastName = "Ánh Nhiên Xanh",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEAVbOhxEdpkOvdyQEwaL4kkukYJiJPd5W+chwqDQ/bpKT5Jdm1jt3/tF71lg3aDE2w==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEI5lEInfZUtZGBaDbOiEZcy9i02HJ2Jy9spXg/EUUWO5rV/NMAfB47zMbf+Wr3h6eA==",
                             PhoneNumber = "0888694499",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -3182,18 +3182,18 @@ namespace Data.Migrations
                             AccessFailedCount = 0,
                             Address = "56 Nguyễn Duy Trinh, Huyện An Lão, Bình Định",
                             Avatar = "https://baodautu.vn/Images/chicong/2018/11/28/thi-truong-vat-lieu-xay-dung-mua-kinh-doanh-da-thay-doi1543390455.jpg",
-                            ConcurrencyStamp = "6731897c-cbf9-4eeb-ac12-0e74fd35b3dc",
+                            ConcurrencyStamp = "68618cd3-46c9-40fb-be68-df4e1bc1d3dc",
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             DOB = new DateTime(2001, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "store123@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "TPHCM",
                             Gender = 0,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 483, DateTimeKind.Local).AddTicks(2925),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 702, DateTimeKind.Local).AddTicks(8094),
                             LastName = "Cửa Hàng Vật Liệu",
                             LockoutEnabled = false,
                             MaterialStoreID = 1,
-                            PasswordHash = "AQAAAAEAACcQAAAAECVO22Pg7U90LsvqnWZaYpJX/Ggdv5cZkkLKXae36m4Wv/0s8OMB88t1akqDIQKaMw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBZOIw4L+7SStnXbEdo4xahEogBYJep9MdA0EKd2poSMb+d9JHMMLT/zMWqBd3MUFw==",
                             PhoneNumber = "0924516734",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -3209,18 +3209,18 @@ namespace Data.Migrations
                             AccessFailedCount = 0,
                             Address = "56 Nguyễn Duy Trinh, Huyện Hàm Tân, Bình Thuận",
                             Avatar = "https://thaicong.com/wp-content/uploads/2017/11/img_sub_4.jpg",
-                            ConcurrencyStamp = "bfd124c1-115d-4287-aa22-985c06b5d8ee",
+                            ConcurrencyStamp = "c4d7a18a-f32f-4fd2-aac4-92685ff25d0c",
                             CreateBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             DOB = new DateTime(2001, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "store2@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Cần Thơ",
                             Gender = 0,
-                            LastModifiedAt = new DateTime(2023, 4, 8, 16, 9, 51, 497, DateTimeKind.Local).AddTicks(6768),
+                            LastModifiedAt = new DateTime(2023, 4, 8, 23, 38, 29, 712, DateTimeKind.Local).AddTicks(5536),
                             LastName = "VLXD",
                             LockoutEnabled = false,
                             MaterialStoreID = 2,
-                            PasswordHash = "AQAAAAEAACcQAAAAEMJbA7/UcCvhSfUwTmJEU8/OlOMnvfroefrsZZJ9OHlCPhfgp23RKLC7albPfqCMpQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBqbZzIy2WJovyMgFwx5g6k4kUdGaN+RsaS4blVMr/kgtmbSkfXDv9NeEIAInVaNvQ==",
                             PhoneNumber = "09245167342",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
