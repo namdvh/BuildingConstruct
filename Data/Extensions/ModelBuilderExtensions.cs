@@ -444,7 +444,7 @@ namespace Data.Extensions
                 BuilderId = 6,
                 ConstructionTypeId = 2
             });
-          
+
             #endregion
 
             #region Contractor 1
@@ -602,7 +602,7 @@ namespace Data.Extensions
                 Gender = Enum.Gender.MALE,
                 Token = "xxx",
                 Status = Enum.Status.SUCCESS,
-                Avatar= "https://thaicong.com/wp-content/uploads/2017/11/img_sub_4.jpg",
+                Avatar = "https://thaicong.com/wp-content/uploads/2017/11/img_sub_4.jpg",
                 MaterialStoreID = 2,
                 Address = "56 Nguyễn Duy Trinh, Huyện Hàm Tân, Bình Thuận"
             });
@@ -852,7 +852,7 @@ namespace Data.Extensions
                 SkillID = 3
             });
 
-         
+
             #endregion
 
             #region Contractor Post 4
@@ -1247,7 +1247,7 @@ namespace Data.Extensions
                 SoldQuantities = 1500,
                 Description = "Gạch cao cấp đến từ thương hiệu nổi tiếng NIRO GRANITE",
                 MaterialStoreID = 1,
-                Unit = "Gạch",
+                Unit = "Viên",
                 Brand = "NIRO GRANITE",
                 LastModifiedAt = DateTime.Parse("2022/1/2"),
                 Status = true
@@ -1719,30 +1719,95 @@ namespace Data.Extensions
             modelBuilder.Entity<Products>().HasData(new Products
             {
                 Id = 5,
-                Name = "Xi măng Hà Tiên",
-                UnitInStock = 5000,
-                Unit = "ton",
-                UnitPrice = 80000,
-                Image = "http://ximang.vn/Upload/48/Nam_2022/Thang_5/Ngay_31/ximang_vicemhatien1.jpg",
+                Name = "Giường ngủ công chúa",
+                UnitInStock = 3,
+                Unit = "cái",
+                UnitPrice = 30000000,
+                Image = "https://vuongquocnoithat.vn/images/2016/09/22/phong-ngu-phong-cach-cong-chua-jy921.jpg",
                 SoldQuantities = 300,
-                Description = "Xi măng Hà Tiên",
+                Description = "Miễn phí vận chuyển, lắp đặp tại Hà Nội & HCM",
                 MaterialStoreID = 2,
-                Brand = "Việt Nam",
+                Brand = "Koreana",
                 Status = true
+            });
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 2,
+                ProductID = 5,
+                Name = "Gỗ tự nhiên",
+            });
+            modelBuilder.Entity<ProductType>().HasData(new ProductType
+            {
+                Id = 63,
+                SizeID = 14,
+                ProductID = 5,
+                Quantity = 1,
+                Status = Enum.Status.SUCCESS
+            });
+            modelBuilder.Entity<ProductType>().HasData(new ProductType
+            {
+                Id = 64,
+                SizeID = 15,
+                ProductID = 5,
+                Quantity = 2,
+                Status = Enum.Status.SUCCESS
+            });
+            modelBuilder.Entity<ProductSize>().HasData(new ProductSize
+            {
+                Id = 14,
+                Name = "Giường 1,8m"
+            });
+            modelBuilder.Entity<ProductSize>().HasData(new ProductSize
+            {
+                Id = 15,
+                Name = "Giường 2m"
             });
             modelBuilder.Entity<Products>().HasData(new Products
             {
                 Id = 6,
-                Name = "Gạch 4 lỗ",
-                UnitInStock = 500000,
-                Unit = "ton",
-                UnitPrice = 700000,
-                Image = "https://imgcdn9h.store123doc.com/article/2019_1_w4/508-gach-4-lo-nua-duoc-su-dung-cung-voi-gach-4-lo-nguyen-de-xay-nha.jpeg",
-                SoldQuantities = 2000,
-                Description = "Gạch 4 lỗ",
+                Name = "Đèn chùm đồng cổ điển phong cách Ý",
+                UnitInStock = 3,
+                Unit = "cái",
+                UnitPrice = 2000000,
+                Image = "https://vuongquocnoithat.vn/images/2018/01/29/den-chum-dong-co-dien-kieu-italia%20atl8501.jpg",
+                SoldQuantities = 1,
+                Description = "Nhập khẩu 100%\r\n\r\n -Bảo hành 2 năm\r\n\r\n -Miễn phí vận chuyển, lắp đặp tại Hà Nội & HCMShowroom HN: 3000m2 Tầng 1&2, tòa T2",
                 MaterialStoreID = 2,
-                Brand = "Việt Nam",
+                Brand = "AUSTRIAN LAMP",
                 Status = true
+            });
+            modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
+            {
+                CategoriesID = 2,
+                ProductID = 6,
+                Name = "Đồng",
+
+            });
+            modelBuilder.Entity<ProductType>().HasData(new ProductType
+            {
+                Id = 60,
+                SizeID = 10,
+                ProductID = 6,
+                Quantity = 3,
+                Status = Enum.Status.SUCCESS
+            });
+            modelBuilder.Entity<ProductType>().HasData(new ProductType
+            {
+                Id = 61,
+                SizeID = 11,
+                ProductID = 6,
+                Quantity = 3,
+                Status = Enum.Status.SUCCESS
+            });
+            modelBuilder.Entity<ProductSize>().HasData(new ProductSize
+            {
+                Id = 10,
+                Name = "6 bóng"
+            });
+            modelBuilder.Entity<ProductSize>().HasData(new ProductSize
+            {
+                Id = 11,
+                Name = "8 bóng"
             });
 
 
@@ -1812,7 +1877,7 @@ namespace Data.Extensions
 
             modelBuilder.Entity<ProductType>().HasData(new ProductType
             {
-                Id = 60,
+                Id = 65,
                 SizeID = 7,
                 ColorId = 1,
                 OtherID = 1,
@@ -1823,7 +1888,7 @@ namespace Data.Extensions
             });
             modelBuilder.Entity<ProductType>().HasData(new ProductType
             {
-                Id = 61,
+                Id = 66,
                 SizeID = 8,
                 ColorId = 1,
                 OtherID = 1,
@@ -2099,7 +2164,7 @@ namespace Data.Extensions
                 PostID = 1,
                 AppliedDate = DateTime.Now,
                 Status = Enum.Status.ACCEPTED,
-                QuizId=1
+                QuizId = 1
 
             });
             #endregion
