@@ -60,7 +60,7 @@ namespace Application.System.Payments
             }
             if (flag == false)
             {
-                if (query.Count == 0 || query.Where(x => x.ExtendDate != null && x.ExtendDate.Value >= DateTime.Now).Any())
+                if (query.Count == 0 || query.Where(x => x.IsRefund == true).Any() || query.Where(x => x.ExtendDate != null && x.ExtendDate.Value <= DateTime.Now).Any())
                 {
                     response.Code = BaseCode.SUCCESS;
                     response.Message = BaseCode.SUCCESS_MESSAGE;
@@ -94,6 +94,12 @@ namespace Application.System.Payments
                         response.Data.EndDate = query.First().ExpireationDate.ToString();
                     }
                 }
+            }
+            else
+            {
+                response.Code = BaseCode.SUCCESS;
+                response.Message = BaseCode.SUCCESS_MESSAGE;
+                response.Data = null;
             }
             return response;
         }
