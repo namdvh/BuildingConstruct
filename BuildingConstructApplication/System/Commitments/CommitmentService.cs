@@ -826,6 +826,7 @@ namespace Application.System.Commitments
                     contractorInfo.Contractor.Website = us.Website;
                     contractorInfo.Contractor.CompanyName = us.CompanyName;
                     contractorInfo.Contractor.Id = us.Id;
+                    contractorInfo.CommitCount = user.b;
                     response.Data.Add(contractorInfo);
                 }
                 response.Code = BaseCode.SUCCESS;

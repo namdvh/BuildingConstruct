@@ -129,7 +129,7 @@ namespace Application.System.Payments
                     storeinfo.Experience = us.Experience;
                     storeinfo.Description = us.Description;
                     storeinfo.TaxCode = us.TaxCode;
-                    storeinfo.Image = us.Image;
+                    storeinfo.Image = us.User.Avatar;
                     storeinfo.Website = us.Website;
                     storeinfo.Id = us.Id;
                     storeinfo.OrderCount = user.b;

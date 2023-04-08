@@ -47,6 +47,7 @@ namespace ViewModels.Users
         public DetailContractor? Contractor { get; set; }
         public DetailMaterialStore? DetailMaterialStore { get; set; }
         public string? TotalMoney { get; set; }
+        public int? CommitCount { get; set; }
     }
 
     public class DetailBuilder
