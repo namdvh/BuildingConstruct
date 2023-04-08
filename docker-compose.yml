@@ -42,6 +42,7 @@ services:
           dockerfile: BuildingConstructApi/Dockerfile
         environment:
         - ASPNETCORE_ENVIRONMENT=Development
+        - Authorization__AllowAnonymous=true
         volumes:
          - ./appsettings.Development.json:/app/appsettings.Development.json
         networks:
