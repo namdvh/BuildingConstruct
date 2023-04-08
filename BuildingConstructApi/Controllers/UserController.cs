@@ -41,16 +41,6 @@ namespace BuildingConstructApi.Controllers
                 return BadRequest(ModelState);
             }
             var rs = await _userService.LoginGoogle(request);
-            //if (rs.Data == null)
-            //{
-            //    return Ok(new
-            //    {
-            //        code = BaseCode.ERROR,
-            //        Message = "Username or Password is Incorrect"
-            //    });
-            //}
-            //else
-            //{
             var token = await _userService.GenerateToken(rs.Data);
             if (token != null)
             {

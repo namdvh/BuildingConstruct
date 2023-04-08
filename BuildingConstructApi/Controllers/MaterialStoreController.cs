@@ -10,7 +10,7 @@ namespace BuildingConstructApi.Controllers
 {
     [Route("api/store")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Bearer")]
+    //[Authorize(AuthenticationSchemes = "Bearer")]
 
     public class MaterialStoreController : ControllerBase
     {
@@ -139,6 +139,13 @@ namespace BuildingConstructApi.Controllers
             }
 
             var rs = await materialStoreService.SearchProductInStore(validFilter, storeId, keyword);
+            return Ok(rs);
+        }
+        [HttpGet("getTop5SellProduct")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetTop5SellProduct()
+        {
+            var rs = await materialStoreService.GetTop5SellProduct();
             return Ok(rs);
         }
     }
