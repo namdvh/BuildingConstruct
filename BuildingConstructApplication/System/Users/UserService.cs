@@ -265,16 +265,6 @@ namespace Application.System.Users
                             RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime
                         };
 
-                        var checkingVerification = await _context.Verifies.FirstOrDefaultAsync(x => x.UserID == us.Id);
-
-                        if(checkingVerification != null)
-                        {
-                            if(checkingVerification.Status == Status.PENDING)
-                            {
-                                response.Data.Status = Status.LEVEL_4;
-                            };
-                        }
-
 
                     }
                 }

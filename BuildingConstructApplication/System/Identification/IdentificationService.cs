@@ -45,6 +45,14 @@ namespace Application.System.Identification
                 Status = Status.PENDING,
             };
 
+            var user = await _context.Users.FirstOrDefaultAsync(x=>x.Id.Equals(userID));
+
+            if (user != null)
+            {
+                user.Status = Status.LEVEL_4;
+                _context.Users.Update(user);
+            }
+
             await _context.Verifies.AddAsync(verify);
             await _context.SaveChangesAsync();
 
