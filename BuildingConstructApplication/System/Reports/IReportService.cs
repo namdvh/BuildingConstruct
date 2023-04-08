@@ -14,7 +14,7 @@ namespace Application.System.Reports
     {
         Task<BasePagination<List<ReportProductDTO>>> GetAllReportProduct(PaginationFilter filter);
 
-        Task<BaseResponse<bool>> ReportProduct(ReportRequestDTO report);
+        Task<BaseResponse<string>> ReportProduct(ReportRequestDTO report);
         Task<BasePagination<List<ReportPostDTO>>> GetAllReportPost(PaginationFilter filter);
         Task<BaseResponse<bool>> ReportPost(ReportRequestDTO report);
 

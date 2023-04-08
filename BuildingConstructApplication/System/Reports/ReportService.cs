@@ -370,16 +370,17 @@ namespace Application.System.Reports
             return list;
         }
 
-        public async Task<BaseResponse<bool>> ReportPost(ReportRequestDTO report)
+        public async Task<BaseResponse<string>> ReportPost(ReportRequestDTO report)
         {
             Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
-            var response = new BaseResponse<bool>();
+            var response = new BaseResponse<string>();
             var userID = identifierClaim.Value.ToString();
             var checkrp = await _context.Reports.Where(x => x.ContractorPostId == report.ContractorPostId && x.CreateBy == Guid.Parse(userID)).CountAsync();
+            var author = await _context.ContractorPosts.Where(x => x.Id == report.ContractorPostId).FirstOrDefaultAsync();
             if (checkrp > 0)
             {
                 response.Code = BaseCode.ERROR;
-                response.Data = false;
+                response.Data = author.CreateBy.ToString();
                 response.Message = "Bạn đã report bài post này rồi";
                 return response;
             }
@@ -405,12 +406,13 @@ namespace Application.System.Reports
             {
                 response.Code = BaseCode.SUCCESS;
                 response.Message = "Report thành công";
-                response.Data = true;
+                response.Data = author.CreateBy.ToString();
+                response.NavigateId = rp.Id;
             }
             else
             {
                 response.Code = BaseCode.ERROR;
-                response.Data = false;
+                response.Data = null;
                 response.Message = "Report không thành công";
             }
             return response;
