@@ -2,8 +2,6 @@
 using Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Xml.Linq;
-using static System.Net.WebRequestMethods;
 
 namespace Data.Extensions
 {
@@ -12,6 +10,8 @@ namespace Data.Extensions
 
         public static void Seed(this ModelBuilder modelBuilder)
         {
+
+            #region Role System
             var hasher = new Microsoft.AspNetCore.Identity.PasswordHasher<User>();
             modelBuilder.Entity<Role>().HasData(new Role
             {
@@ -41,8 +41,10 @@ namespace Data.Extensions
                 Name = "Store",
                 NormalizedName = "STORE"
             });
+            #endregion
 
-            //Contrucstion Type
+
+            #region Construction Type
             modelBuilder.Entity<ConstructionType>().HasData(new ConstructionType
             {
                 Id = 1,
@@ -60,6 +62,7 @@ namespace Data.Extensions
                 Id = 3,
                 Name = "Công trình công cộng"
             });
+            #endregion
 
             //ADMIN
             modelBuilder.Entity<User>().HasData(new User
@@ -87,10 +90,7 @@ namespace Data.Extensions
             });
 
 
-
-
-
-            //user
+            #region Builder 1
             modelBuilder.Entity<User>().HasData(new User
             {
                 Id = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d9"),
@@ -117,10 +117,24 @@ namespace Data.Extensions
             modelBuilder.Entity<Builder>().HasData(new Builder()
             {
                 Id = 1,
-                CreateBy=Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d9"),
-                TypeID= Guid.Parse("4ace8fcb-95eb-48c0-9deb-240e8b4e10e0"),
-                Place=Enum.Place._60 
-            }) ;
+                CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d9"),
+                TypeID = Guid.Parse("4ace8fcb-95eb-48c0-9deb-240e8b4e10e0"),
+                Place = Enum.Place._60,
+                Experience = 3,
+                Certificate = "https://i1.rgstatic.net/publication/311457103_Certificate_of_Design_Builder_Training/links/58480cfb08aeda696825d727/largepreview.png",
+            });
+
+            modelBuilder.Entity<BuilderSkill>().HasData(new BuilderSkill()
+            {
+                BuilderSkillID = 1,
+                SkillID = 1
+            });
+
+            modelBuilder.Entity<BuilderSkill>().HasData(new BuilderSkill()
+            {
+                BuilderSkillID = 1,
+                SkillID = 2
+            });
 
             modelBuilder.Entity<WorkerContructionType>().HasData(new WorkerContructionType
             {
@@ -135,8 +149,9 @@ namespace Data.Extensions
             });
 
 
-            //user 2 
+            #endregion
 
+            #region Builder 2
             modelBuilder.Entity<User>().HasData(new User
             {
                 Id = Guid.Parse("d39ae0a6-9b2d-4421-be4a-cc294cec054f"),
@@ -165,8 +180,21 @@ namespace Data.Extensions
                 Id = 2,
                 CreateBy = Guid.Parse("d39ae0a6-9b2d-4421-be4a-cc294cec054f"),
                 TypeID = Guid.Parse("bd880489-5c76-4854-93ab-66e3a541bf24"),
-                
+                Experience = 3,
+                Certificate = "https://i1.rgstatic.net/publication/311457103_Certificate_of_Design_Builder_Training/links/58480cfb08aeda696825d727/largepreview.png",
                 Place = Enum.Place._61
+            });
+
+            modelBuilder.Entity<BuilderSkill>().HasData(new BuilderSkill()
+            {
+                BuilderSkillID = 2,
+                SkillID = 3
+            });
+
+            modelBuilder.Entity<BuilderSkill>().HasData(new BuilderSkill()
+            {
+                BuilderSkillID = 2,
+                SkillID = 4
             });
 
             modelBuilder.Entity<WorkerContructionType>().HasData(new WorkerContructionType
@@ -179,8 +207,9 @@ namespace Data.Extensions
                 BuilderId = 2,
                 ConstructionTypeId = 2
             });
+            #endregion
 
-            //user 3
+            #region Builder 3
             modelBuilder.Entity<User>().HasData(new User
             {
                 Id = Guid.Parse("d91f9ece-25a7-4dc6-adde-186b12c04d56"),
@@ -209,7 +238,21 @@ namespace Data.Extensions
                 Id = 3,
                 CreateBy = Guid.Parse("d91f9ece-25a7-4dc6-adde-186b12c04d56"),
                 TypeID = Guid.Parse("ce9fa65b-d005-46b6-953e-e6462a59cfb3"),
-                Place = Enum.Place._61
+                Place = Enum.Place._16,
+                Experience = 1,
+                Certificate = "https://i1.rgstatic.net/publication/311457103_Certificate_of_Design_Builder_Training/links/58480cfb08aeda696825d727/largepreview.png",
+            });
+
+            modelBuilder.Entity<BuilderSkill>().HasData(new BuilderSkill()
+            {
+                BuilderSkillID = 3,
+                SkillID = 3
+            });
+
+            modelBuilder.Entity<BuilderSkill>().HasData(new BuilderSkill()
+            {
+                BuilderSkillID = 3,
+                SkillID = 4
             });
 
             modelBuilder.Entity<WorkerContructionType>().HasData(new WorkerContructionType
@@ -222,11 +265,68 @@ namespace Data.Extensions
                 BuilderId = 3,
                 ConstructionTypeId = 2
             });
+            #endregion
+
+            #region Builder 4
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = Guid.Parse("319d2a06-92cc-434d-abce-7e8a33650a0d"),
+                Email = "namhoaidoan13@gmail.com",
+                UserName = "namhoaidoan13@gmail.com",
+                PasswordHash = hasher.HashPassword(null, "Hoainam@123"),
+                SecurityStamp = string.Empty,
+                FirstName = "Minh",
+                LastName = "Nguyen Trần",
+                DOB = new DateTime(2001, 9, 15),
+                PhoneNumber = "0202020202",
+                Gender = Enum.Gender.MALE,
+                Token = "xxx",
+                Status = Enum.Status.SUCCESS,
+                Avatar = "https://upload.wikimedia.org/wikipedia/commons/b/b3/%E1%BA%A2nh_ch%C3%A2n_dung_Nguy%E1%BB%85n_V%C4%83n_Minh_Tr%C3%AD.jpg",
+                BuilderId = 4,
+                Address = "56 Nguyễn Duy Trinh, Huyện Chợ Đồn, Bắc Kạn"
+            });
+            modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
+            {
+                RoleId = Guid.Parse("dc48ba58-ddcb-41de-96fe-e41327e5f313"),
+                UserId = Guid.Parse("319d2a06-92cc-434d-abce-7e8a33650a0d"),
+            });
+            modelBuilder.Entity<Builder>().HasData(new Builder()
+            {
+                Id = 4,
+                CreateBy = Guid.Parse("319d2a06-92cc-434d-abce-7e8a33650a0d"),
+                TypeID = Guid.Parse("ce9fa65b-d005-46b6-953e-e6462a59cfb3"),
+                Place = Enum.Place._52,
+                Experience = 4,
+                Certificate = "https://i1.rgstatic.net/publication/311457103_Certificate_of_Design_Builder_Training/links/58480cfb08aeda696825d727/largepreview.png",
+            });
+
+            modelBuilder.Entity<BuilderSkill>().HasData(new BuilderSkill()
+            {
+                BuilderSkillID = 4,
+                SkillID = 3
+            });
+
+            modelBuilder.Entity<BuilderSkill>().HasData(new BuilderSkill()
+            {
+                BuilderSkillID = 4,
+                SkillID = 4
+            });
+
+            modelBuilder.Entity<WorkerContructionType>().HasData(new WorkerContructionType
+            {
+                BuilderId = 4,
+                ConstructionTypeId = 1
+            });
+            modelBuilder.Entity<WorkerContructionType>().HasData(new WorkerContructionType
+            {
+                BuilderId = 4,
+                ConstructionTypeId = 2
+            });
+            #endregion
 
 
-
-
-            //contractor
+            #region Contractor 1
             modelBuilder.Entity<User>().HasData(new User
             {
                 Id = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7"),
@@ -254,10 +354,13 @@ namespace Data.Extensions
             {
                 Id = 1,
                 CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7"),
+                CompanyName = "Công ty xây dưng Khang An",
+                Description = "Hoạt động chính trong lĩnh vực: tư vấn, thiết kế, trang trí nội ngoại thất, lập dự toán công trình và xây dựng nhà ở tư nhân, nhà phố, biệt thự – vila, quán Bar – sân vườn, khách sạn, nhà hàng, showroom… Sản phẩm của chúng tôi được xây dựng theo quy trình kiểm tra chất lượng nghiêm ngặt của hệ thống quản lý chất lượng ISO 9001:2008.",
+                Website = "nhaxanhqn.com",
             });
+            #endregion
 
-
-            //contractor 2
+            #region Contractor 2
             modelBuilder.Entity<User>().HasData(new User
             {
                 Id = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d6"),
@@ -285,11 +388,14 @@ namespace Data.Extensions
             {
                 Id = 2,
                 CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d6"),
+                CompanyName = "Công ty xây dưng Đất Xanh",
+                Description = "Trong những năm vừa qua được sự ưu ái và tín nhiệm của Quý khách hàng Công ty Đất Xanh từng bước trưởng thành và trở thành đơn vị hoạt động trong lĩnh vực tư vấn, thiết kế và xây dựng dân dụng hàng đầu tại Việt Nam.",
+                Website = "xaydunglaco.vn",
+
             });
+            #endregion
 
-
-            //store 
-
+            #region Store 1
             modelBuilder.Entity<User>().HasData(new User
             {
                 Id = Guid.Parse("b57b172a-a044-11ed-a8fc-0242ac120002"),
@@ -319,8 +425,13 @@ namespace Data.Extensions
                 Website = "https://vinasoftware.com.vn/",
                 Description = "Với mục tiêu cung cấp nhiều gói sản phẩm phong phú về mẫu mã và các tính năng linh hoạt cho nhiều loại hình website như giới thiệu công ty, bán hàng, trang tin tức, thương mại điện tử… cùng với nhiều giao diện phong phú đa dạng độc đáo đã được VNS lọc chọn và đúc kết nhằm giới thiệu tới khách hàng với mong muốn có một website nhanh, đẹp, hiệu quả và giá cả hợp lý.",
                 CreateBy = Guid.Parse("b57b172a-a044-11ed-a8fc-0242ac120002"),
+                Experience = "Hiện đang là đại lý cấp 1 phân phối các sản phẩm chất lượng, có thương hiệu nổi tiếng, giá thành phù hợp với giá niêm yết của nhà máy. Công ty còn cung cấp và phân phối nhiều loại cát bê tông và cát xây dựng được sàng và rửa tại dây chuyền sản xuất. Ngoài ra còn phân phối nhiều loại vật liệu xây dựng khác như xi măng, gạch, sắt thép đảm bảo chất lượng cao để sử dụng cho các công trình xây dựng.",
+                Place = Enum.Place._61,
+                TaxCode = "8156184163",
             });
+            #endregion
 
+            #region Store 2
             modelBuilder.Entity<User>().HasData(new User
             {
                 Id = Guid.Parse("be21b564-a044-11ed-a8fc-0242ac120002"),
@@ -348,10 +459,15 @@ namespace Data.Extensions
             {
                 Id = 2,
                 CreateBy = Guid.Parse("be21b564-a044-11ed-a8fc-0242ac120002"),
+                Description = "Về vật liệu xây dựng, công ty luôn có sẵn hàng hóa để khách hàng so sánh và lựa chọn, ngoài ra còn có đội xe lớn nhỏ sẵn sàng giao hàng trong thời gian sớm nhất.",
+                Experience = "Hiện đang là đại lý cấp 1 phân phối các sản phẩm chất lượng, có thương hiệu nổi tiếng, giá thành phù hợp với giá niêm yết của nhà máy. Công ty còn cung cấp và phân phối nhiều loại cát bê tông và cát xây dựng được sàng và rửa tại dây chuyền sản xuất. Ngoài ra còn phân phối nhiều loại vật liệu xây dựng khác như xi măng, gạch, sắt thép đảm bảo chất lượng cao để sử dụng cho các công trình xây dựng.",
+                Place = Enum.Place._61,
+                TaxCode = "8156284563",
             });
+            #endregion
 
+            #region Builder Type
 
-         
             modelBuilder.Entity<Entities.Type>().HasData(new Entities.Type
             {
                 Id = Guid.Parse("4ace8fcb-95eb-48c0-9deb-240e8b4e10e0"),
@@ -372,9 +488,13 @@ namespace Data.Extensions
                 Id = Guid.Parse("cf9fa65b-d005-46b6-953e-e6462a59cfb3"),
                 Name = "Thợ hàn"
             });
+            #endregion
+
+            #region Skills
+
             modelBuilder.Entity<Entities.Skill>().HasData(new Entities.Skill
             {
-                Id=1,
+                Id = 1,
                 Name = "Xây dựng",
                 FromSystem = true,
                 TypeId = Guid.Parse("4ace8fcb-95eb-48c0-9deb-240e8b4e10e0")
@@ -433,40 +553,41 @@ namespace Data.Extensions
                 TypeId = Guid.Parse("ce9fa65b-d005-46b6-953e-e6462a59cfb3")
             });
 
+            #endregion
 
 
-
+            #region Contractor Post 1
 
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
             {
-                Id=1,
+                Id = 1,
                 Title = "Tuyển dụng thợ xây lành nghề CẦN GẤP",
                 ProjectName = "TPHCM - QUẬN 7 - TUYỂN DỤNG GẤP",
                 Description = "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
                 Benefit = "<div>- Tăng lương 6 tháng một lần. Thưởng vào các ngày lễ tết. Cơ hội thăng tiến cao.</div><div>- Xe đưa rước hàng ngày</div><div>- Khám sức khỏe &amp; đi du lịch và các chế độ khác theo quy định của pháp luật Lao động</div>",
                 Required = "<div>1. Trình độ đào tạo:</div><div>• Bằng cấp tối thiểu: Cao đẳng, Đại học</div><div>• Chuyên ngành đào tạo: Xây dựng Dân dụng và Công nghiệp, Cơ khí</div><div>• Chứng chỉ, giấy phép hành nghề (nếu có): không yêu cầu.Ưu tiên nếu có chứng chỉ:….</div><div>• Trình độ Ngoại ngữ (tiếng anh, tiếng nhật, tiếng trung): Tiếng Nhật (bắt buộc, N2 đổ lên )</div><div><br></div><div>2. Kiến thức cần có:</div><div>• Sản phẩm dịch vụ của Công ty</div><div>• Kiến thức về lĩnh vực kết cấu thép (tiêu chuẩn, vật liệu, sản xuất, quy trình thi công, lắp dựng)</div><div><br></div><div>3. Năng lực cần thiết:</div><div>Năng lực quản lý</div><div>•Nếu có kinh nghiệm làm ở Nhật, hoặc ở công ty Nhật lâu năm càng tốt</div><div>Năng lực chuyên môn</div><div>•Có bằng cấp liên quan đến kết cấu thép Nhật càng tốt</div><div>•Kỹ năng vẽ CAD cơ bản, Sử dụng thành thạo Tekla hoặc phần mềm real 4</div><div>•Đọc hiểu bản vẽ lắp dựng, bản vẽ tổng thể, tiêu chuẩn đường hàn, tiêu chuẩn JASS 6, ASTM , …</div><div><br></div><div>Năng lực bổ trợ</div><div>• Kỹ năng giao tiếp</div><div>• Kỹ năng giải quyết vấn đề và ra quyết định</div><div>• Kỹ năng làm việc nhóm</div><div>• Kỹ năng sử dụng thành thạo tin học văn phòng</div><div><br></div><div>4. Thái độ hoặc tố chất</div><div>• Có tinh thần trách nhiệm</div><div>• Cẩn thận, tỉ mỉ, chủ động, cầu tiến</div><div><br></div><div>5. Yêu cầu khác:</div><div>•Có đủ sức khỏe để đáp ứng yêu cầu nhiệm vụ được giao</div><div>•Có thể đi công tác</div>",
-                StarDate =new DateTime(2023,3,15),
-                EndDate=new DateTime(2023,5,15),
-                Status=Enum.Status.SUCCESS,
-                Place=Enum.Place._52,
-                PostCategories=Enum.PostCategories.Categories1,
-                Salaries="10000000 - 15000000",
-                NumberPeople=20,
-                ContractorID=1,
-                Accommodation=true,
-                ConstructionType= "Nhà ở",
-                Transport=true,
-                StartTime="8:00",
-                EndTime="17:30",
-                CreateBy=Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7"),
-                QuizRequired=true
+                StarDate = new DateTime(2023, 3, 15),
+                EndDate = new DateTime(2023, 5, 15),
+                Status = Enum.Status.SUCCESS,
+                Place = Enum.Place._52,
+                PostCategories = Enum.PostCategories.Categories1,
+                Salaries = "10000000 - 15000000",
+                NumberPeople = 20,
+                ContractorID = 1,
+                Accommodation = true,
+                ConstructionType = "Nhà ở",
+                Transport = true,
+                StartTime = "8:00",
+                EndTime = "17:30",
+                CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7"),
+                QuizRequired = true
             });
 
             modelBuilder.Entity<ContractorPostType>().HasData(new ContractorPostType
             {
                 ContractorPostID = 1,
                 TypeID = Guid.Parse("4ace8fcb-95eb-48c0-9deb-240e8b4e10e0")
-            }) ;
+            });
 
             modelBuilder.Entity<ContractorPostType>().HasData(new ContractorPostType
             {
@@ -477,8 +598,8 @@ namespace Data.Extensions
 
             modelBuilder.Entity<ContractorPostSkill>().HasData(new ContractorPostSkill
             {
-               ContractorPostID=1,
-               SkillID=1
+                ContractorPostID = 1,
+                SkillID = 1
             });
 
             modelBuilder.Entity<ContractorPostSkill>().HasData(new ContractorPostSkill
@@ -488,6 +609,11 @@ namespace Data.Extensions
             });
 
 
+
+
+            #endregion
+
+            #region Contractor Post 2
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
             {
                 Id = 2,
@@ -510,7 +636,7 @@ namespace Data.Extensions
                 EndTime = "17:30",
                 ContractorID = 1,
                 CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7"),
-                QuizRequired= true,
+                QuizRequired = true,
 
             });
 
@@ -537,10 +663,9 @@ namespace Data.Extensions
                 ContractorPostID = 2,
                 SkillID = 5
             });
+            #endregion
 
-
-
-
+            #region Contractor Post 3
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
             {
                 Id = 3,
@@ -572,6 +697,10 @@ namespace Data.Extensions
                 SkillID = 3
             });
 
+         
+            #endregion
+
+            #region Contractor Post 4
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
             {
                 Id = 4,
@@ -600,6 +729,9 @@ namespace Data.Extensions
                 ContractorPostID = 4,
                 SkillID = 3
             });
+            #endregion
+
+            #region Contractor Post 5
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
             {
                 Id = 5,
@@ -624,7 +756,9 @@ namespace Data.Extensions
                 ContractorPostID = 5,
                 SkillID = 1
             });
+            #endregion
 
+            #region Contractor Post 6
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
             {
                 Id = 6,
@@ -650,15 +784,14 @@ namespace Data.Extensions
                 ContractorPostID = 6,
                 SkillID = 4
             });
+            #endregion
 
-
-            //Categories
-
+            #region Categories
             modelBuilder.Entity<Categories>().HasData(new Categories
             {
 
-                ID=1,
-                Name="Xuất xứ"
+                ID = 1,
+                Name = "Xuất xứ"
             });
             modelBuilder.Entity<Categories>().HasData(new Categories
             {
@@ -678,31 +811,33 @@ namespace Data.Extensions
                 ID = 4,
                 Name = "Vị trí "
             });
+            #endregion
 
+            #region Products
             //PRODUCT 1
 
             modelBuilder.Entity<Products>().HasData(new Products
             {
-                Id=7,
-                Name= "Sơn Ngoại Thất Bóng Cao Cấp CMC ARMOS07 1 - 4.5L",
-                UnitInStock= 200,
-                UnitPrice= 857000,
-                Image= "https://admin.mingstores.com/core/public/themes/mingstores/products/vx9kXzl3FacoKvdbZLki3kWM6nO3PimJ.jpg",
-                SoldQuantities=1500,
-                Description= "- Màng sơn mịn có độ phủ cao, siêu bóng sang trọng,bám dính tốt\r\n\r\n- Hạn chế vết bẩn, vết nứt nhỏ, chống rêu mốc, độ bền màu cao\r\n\r\n- Thân thiện môi trường và an toàn cho sức khỏe\r\n\r\n- Bảo vệ 10 năm\r\n\r\n- Độ phủ lý thuyết: 12-14m2/lít/ lớp",
-                MaterialStoreID=1,
-                Unit="Lít",
-                Brand= "CMC",
-                LastModifiedAt=DateTime.Parse("2022/12/2"),
-                Status=true
+                Id = 7,
+                Name = "Sơn Ngoại Thất Bóng Cao Cấp CMC ARMOS07 1 - 4.5L",
+                UnitInStock = 200,
+                UnitPrice = 857000,
+                Image = "https://admin.mingstores.com/core/public/themes/mingstores/products/vx9kXzl3FacoKvdbZLki3kWM6nO3PimJ.jpg",
+                SoldQuantities = 1500,
+                Description = "- Màng sơn mịn có độ phủ cao, siêu bóng sang trọng,bám dính tốt\r\n\r\n- Hạn chế vết bẩn, vết nứt nhỏ, chống rêu mốc, độ bền màu cao\r\n\r\n- Thân thiện môi trường và an toàn cho sức khỏe\r\n\r\n- Bảo vệ 10 năm\r\n\r\n- Độ phủ lý thuyết: 12-14m2/lít/ lớp",
+                MaterialStoreID = 1,
+                Unit = "Lít",
+                Brand = "CMC",
+                LastModifiedAt = DateTime.Parse("2022/12/2"),
+                Status = true
             });
 
             modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
             {
-               CategoriesID=1,
-               ProductID=7,
-               Name="Mỹ",
-              
+                CategoriesID = 1,
+                ProductID = 7,
+                Name = "Mỹ",
+
             });
 
             modelBuilder.Entity<ProductCategories>().HasData(new ProductCategories
@@ -715,8 +850,8 @@ namespace Data.Extensions
 
             modelBuilder.Entity<ProductSize>().HasData(new ProductSize
             {
-             Id=2,
-             Name="4.5L"
+                Id = 2,
+                Name = "4.5L"
 
             });
 
@@ -732,11 +867,11 @@ namespace Data.Extensions
                 Id = 12,
                 //Name = "Màu vàng",
                 ProductID = 7,
-                SizeID=2,
-                ColorId=1,
-                OtherID=1,
+                SizeID = 2,
+                ColorId = 1,
+                OtherID = 1,
                 Quantity = 5,
-                Status=Enum.Status.SUCCESS
+                Status = Enum.Status.SUCCESS
             });
 
             modelBuilder.Entity<ProductType>().HasData(new ProductType
@@ -745,8 +880,8 @@ namespace Data.Extensions
                 //Name = "Màu vàng",
                 ProductID = 7,
                 SizeID = 3,
-                OtherID=1,
-                ColorId=1,
+                OtherID = 1,
+                ColorId = 1,
                 Quantity = 10,
                 Status = Enum.Status.SUCCESS
             });
@@ -769,7 +904,7 @@ namespace Data.Extensions
                 Unit = "Gạch",
                 Brand = "NIRO GRANITE",
                 LastModifiedAt = DateTime.Parse("2022/1/2"),
-                Status=true
+                Status = true
 
             });
 
@@ -923,7 +1058,7 @@ namespace Data.Extensions
                 UnitPrice = 520000,
                 Image = "https://admin.mingstores.com/core/public/themes/mingstores/products/U3SmJsX6rBhkAPyQ3Xym2wlyoNTH6pGz.jpg",
                 SoldQuantities = 1500,
-                Description= "Màu sắc: vàng, xám, trắng, đen\r\nKích thước: 30x60, 60x60",
+                Description = "Màu sắc: vàng, xám, trắng, đen\r\nKích thước: 30x60, 60x60",
                 MaterialStoreID = 1,
                 Unit = "Cái",
                 Brand = "NIRO GRANITE",
@@ -973,12 +1108,12 @@ namespace Data.Extensions
 
             modelBuilder.Entity<ProductType>().HasData(new ProductType
             {
-               Id=50,
-               ColorId=6,
-               SizeID=4,
-               OtherID=1,
-               ProductID=34,
-               Quantity=5,
+                Id = 50,
+                ColorId = 6,
+                SizeID = 4,
+                OtherID = 1,
+                ProductID = 34,
+                Quantity = 5,
                 Status = Enum.Status.SUCCESS
             });
 
@@ -987,7 +1122,7 @@ namespace Data.Extensions
                 Id = 51,
                 ColorId = 6,
                 SizeID = 5,
-                OtherID=1,
+                OtherID = 1,
                 ProductID = 34,
                 Quantity = 3,
                 Status = Enum.Status.SUCCESS
@@ -998,7 +1133,7 @@ namespace Data.Extensions
                 Id = 52,
                 ColorId = 7,
                 SizeID = 4,
-                OtherID=1,
+                OtherID = 1,
                 ProductID = 34,
                 Quantity = 5,
                 Status = Enum.Status.SUCCESS
@@ -1009,7 +1144,7 @@ namespace Data.Extensions
                 Id = 53,
                 ColorId = 7,
                 SizeID = 5,
-                OtherID=1,
+                OtherID = 1,
                 ProductID = 34,
                 Quantity = 5,
                 Status = Enum.Status.SUCCESS
@@ -1063,7 +1198,7 @@ namespace Data.Extensions
                 UnitPrice = 750000,
                 Image = "https://admin.mingstores.com/core/public/themes/mingstores/products/JnLYt6lx4OLgmoplQoxTPU1e9SBjZf9a.jpg",
                 SoldQuantities = 1500,
-                Description ="Sơn ngoại thất câo cấp đến từ thương hiệu Kansai nổi tiếng",
+                Description = "Sơn ngoại thất câo cấp đến từ thương hiệu Kansai nổi tiếng",
                 MaterialStoreID = 1,
                 Unit = "Lít",
                 Brand = "KANSAI PAINT",
@@ -1181,7 +1316,7 @@ namespace Data.Extensions
 
             modelBuilder.Entity<Products>().HasData(new Products
             {
-                Id=1,
+                Id = 1,
                 Name = "Ngói lợp",
                 UnitInStock = 300000,
                 UnitPrice = 700,
@@ -1200,7 +1335,7 @@ namespace Data.Extensions
                 UnitInStock = 300000,
                 UnitPrice = 40000,
                 Unit = "ton",
-                Image= "http://www.phudien.vn/upload/Product%20400x200/G%E1%BA%A1ch%20tuynel%20-%20g%E1%BA%A1ch%206%20l%E1%BB%97%20lo%E1%BA%A1i%20nh%E1%BB%8F.png",
+                Image = "http://www.phudien.vn/upload/Product%20400x200/G%E1%BA%A1ch%20tuynel%20-%20g%E1%BA%A1ch%206%20l%E1%BB%97%20lo%E1%BA%A1i%20nh%E1%BB%8F.png",
                 SoldQuantities = 1500,
                 Description = "Gạch 2 lỗ cao cấp đến từ thương hiệu nổi tiếng ",
                 MaterialStoreID = 1,
@@ -1209,12 +1344,12 @@ namespace Data.Extensions
             });
             modelBuilder.Entity<Products>().HasData(new Products
             {
-                Id=3,
+                Id = 3,
                 Name = "Sơn chống thấm",
                 UnitInStock = 2000,
                 Unit = "ton",
                 UnitPrice = 1000000,
-                Image= "https://nipponpaint.com.vn/sites/default/files/inline-images/son-chong-tham-la-gi-1.jpg",
+                Image = "https://nipponpaint.com.vn/sites/default/files/inline-images/son-chong-tham-la-gi-1.jpg",
                 SoldQuantities = 1500,
                 Description = "Sơn chống thấm Nippon",
                 MaterialStoreID = 1,
@@ -1223,7 +1358,7 @@ namespace Data.Extensions
             });
             modelBuilder.Entity<Products>().HasData(new Products
             {
-                Id=4,
+                Id = 4,
                 Name = "Cát Mịn",
                 UnitInStock = 200000,
                 UnitPrice = 50000,
@@ -1237,12 +1372,12 @@ namespace Data.Extensions
             });
             modelBuilder.Entity<Products>().HasData(new Products
             {
-                Id=5,
+                Id = 5,
                 Name = "Xi măng Hà Tiên",
                 UnitInStock = 5000,
                 Unit = "ton",
                 UnitPrice = 80000,
-                Image= "http://ximang.vn/Upload/48/Nam_2022/Thang_5/Ngay_31/ximang_vicemhatien1.jpg",
+                Image = "http://ximang.vn/Upload/48/Nam_2022/Thang_5/Ngay_31/ximang_vicemhatien1.jpg",
                 SoldQuantities = 300,
                 Description = "Xi măng Hà Tiên",
                 MaterialStoreID = 2,
@@ -1251,12 +1386,12 @@ namespace Data.Extensions
             });
             modelBuilder.Entity<Products>().HasData(new Products
             {
-                Id=6,
+                Id = 6,
                 Name = "Gạch 4 lỗ",
                 UnitInStock = 500000,
                 Unit = "ton",
                 UnitPrice = 700000,
-                Image= "https://imgcdn9h.store123doc.com/article/2019_1_w4/508-gach-4-lo-nua-duoc-su-dung-cung-voi-gach-4-lo-nguyen-de-xay-nha.jpeg",
+                Image = "https://imgcdn9h.store123doc.com/article/2019_1_w4/508-gach-4-lo-nua-duoc-su-dung-cung-voi-gach-4-lo-nguyen-de-xay-nha.jpeg",
                 SoldQuantities = 2000,
                 Description = "Gạch 4 lỗ",
                 MaterialStoreID = 2,
@@ -1305,14 +1440,14 @@ namespace Data.Extensions
             {
                 Id = 7,
                 Name = "5L",
-               
+
             });
 
             modelBuilder.Entity<ProductSize>().HasData(new ProductSize
             {
                 Id = 8,
                 Name = "18L",
-               
+
             });
 
             //modelBuilder.Entity<Other>().HasData(new Other
@@ -1332,11 +1467,11 @@ namespace Data.Extensions
             modelBuilder.Entity<ProductType>().HasData(new ProductType
             {
                 Id = 60,
-                SizeID=7,
-                ColorId=1,
-                OtherID=1,
-                ProductID=20,
-                Quantity=5,
+                SizeID = 7,
+                ColorId = 1,
+                OtherID = 1,
+                ProductID = 20,
+                Quantity = 5,
                 Status = Enum.Status.SUCCESS
 
             });
@@ -1344,14 +1479,14 @@ namespace Data.Extensions
             {
                 Id = 61,
                 SizeID = 8,
-                ColorId=1,
-                OtherID=1,
+                ColorId = 1,
+                OtherID = 1,
                 ProductID = 20,
                 Quantity = 3,
                 Status = Enum.Status.SUCCESS
 
             });
-          
+
 
 
 
@@ -1428,35 +1563,34 @@ namespace Data.Extensions
                 ProductID = 22,
                 Name = "Nhà tắm",
             });
+            #endregion
 
-
-
-            //bill 1
+            #region Bill 1
             modelBuilder.Entity<Bill>().HasData(new Bill
             {
-              Id=1,
-              ContractorId=1,
-              CreateBy= Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7"),
-              EndDate=DateTime.Now.AddDays(5),
-              StartDate=DateTime.Now,
-              LastModifiedAt=DateTime.Now,
-              PaymentDate=null,
-              Status=Enum.Status.PENDING,
-              Note= "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
-              StoreID=1,
-              Type=Enum.BillType.Type1,
-              TotalPrice=500000,
+                Id = 1,
+                ContractorId = 1,
+                CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7"),
+                EndDate = DateTime.Now.AddDays(5),
+                StartDate = DateTime.Now,
+                LastModifiedAt = DateTime.Now,
+                PaymentDate = null,
+                Status = Enum.Status.PENDING,
+                Note = "<div>I. THÔNG TIN CHUNG</div><div>1. Quy trình công việc liên quan: Quy trình quản lí dự án (mảng bản vẽ, báo giá, tiến độ)</div><div>2. Cấp trực tiếp quản lý: Giám đốc dự án</div><div>3. Loại hợp đồng: Hợp đồng xác định có thời hạn/không thời hạn</div><div><br></div><div>II. MỤC ĐÍCH CÔNG VIỆC</div><div>Nắm bản vẽ của dự án từ lúc đấu thầu, hiểu rõ các spect của dự án để báo giá. Có khả năng bốc khối lượng để đối ứng với cá báo giá gấp, các hạng mục phát sinh. Khi dự án trúng thấu, có khả năng điều phối dự án ở vai trò quản lí thiết kế, quản lí tiến độ, hoặc quản lí chất lượng (đối với dự án quy mô nhỏ)</div><div><br></div><div>III. TRÁCH NHIỆM VÀ NHIỆM VỤ</div><div>1. Làm báo giá dự án Nhật và hỗ trợ giám đốc dự án đi đấu thầu</div><div>• Nắm rõ bản vẽ của dự án từ lúc đấu thầu</div><div>• Hiểu rõ các vật tư spect của ngành kết cấu thép để báo giá</div><div>• Có khả năng bốc khối lượng cho các dự án gấp</div><div>• Có khả năng lên các bản vẽ đề xuất bằng CAD</div><div>• Cùng với GDDA đi đấu thầu các dự án</div><div>• Tiếp khách, đối ứng khách khi có audit, khách về việt nam</div><div><br></div><div>2. Quản lí dự án trúng thầu mảng quản lí bản vẽ thiết kế, quản lí tiến độ</div><div>• Nắm rõ các thay đổi thiết kế, chỉ thị bản vẽ của khách để triển khai cho shop</div><div>• Sử dụng thành thạo Tekla hoặc phần mềm real 4 để xuất các giấy tờ phục vụ cho quản lí dự án</div><div>• Lên được kế hoạch sản xuất và quản lí sản xuất, xuất hàng</div><div><br></div><div>3. Đối ứng khách hàng</div><div>• Báo cáo tiến độ sản xuất, bản vẽ</div><div>• Tham gia chủ đạo trong các cuộc họp tiến độ với nhà máy</div><div><br></div><div>4 . Nghiên cứu &amp; Phát triển</div><div>• Tham gia nghiên cứu và phát triển giải pháp công nghệ sản xuất</div><div><br></div><div>5. Tổng kết và đúc kết kinh nghiệm quản lí dự án</div><div>• Tổng kết thường xuyên các vướng mắt trong tiến độ, bản vẽ . Các lỗi hay mắc phải, hướng xử lí</div><div>• Đối với NCR đóng vai trò chỉ huy xử lí (liên quan tiến độ, chất lượng)</div><div><br></div><div>6. Cost control</div><div>• Phối hợp với giám đốc dự án trong công tác giám sát ngân sách thực hiện</div><div><br></div><div>7. Nhiệm vụ khác</div><div>• Các nhiệm vụ khác được phân công</div>",
+                StoreID = 1,
+                Type = Enum.BillType.Type1,
+                TotalPrice = 500000,
 
             });
 
             modelBuilder.Entity<BillDetail>().HasData(new BillDetail
             {
-               BillID=1,
-               Id=1,
-               Price=200000,
-               ProductID=20,
-               Quantity=5,
-               ProductTypeId=60
+                BillID = 1,
+                Id = 1,
+                Price = 200000,
+                ProductID = 20,
+                Quantity = 5,
+                ProductTypeId = 60
             });
             modelBuilder.Entity<BillDetail>().HasData(new BillDetail
             {
@@ -1475,7 +1609,9 @@ namespace Data.Extensions
                 ProductID = 22,
                 Quantity = 7,
             });
+            #endregion
 
+            #region Bill 2
             modelBuilder.Entity<Bill>().HasData(new Bill
             {
                 Id = 2,
@@ -1492,7 +1628,7 @@ namespace Data.Extensions
                 TotalPrice = 60000000,
 
             });
-          
+
 
             modelBuilder.Entity<BillDetail>().HasData(new BillDetail
             {
@@ -1518,39 +1654,24 @@ namespace Data.Extensions
                 ProductID = 3,
                 Quantity = 7,
             });
+            #endregion
 
-
-         
-
-            //modelBuilder.Entity<ProductType>().HasData(new ProductType
-            //{
-            //    //Name = "Trắng",
-            //    Id = 3,
-            //    ProductID = 21,
-            //    Quantity = 10,
-            //});
-            //modelBuilder.Entity<ProductType>().HasData(new ProductType
-            //{
-            //    //Name = "Đen",
-            //    Id = 4,
-            //    ProductID = 21,
-            //    Quantity = 10,
-            //});
+            #region Notification
             modelBuilder.Entity<Notification>().HasData(new Notification
             {
                 Id = 1,
-                Type=Enum.NotificationType.CONTRACTOR_POST_NOTIFICATION,
-                Title="New Notification",
-                UserID=Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7"),
-                CreateBy=Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d9"),
-                IsRead=false,
-                LastModifiedAt=DateTime.Now,
-                Message="Someone has saved your post",
-                NavigateId=1
+                Type = Enum.NotificationType.CONTRACTOR_POST_NOTIFICATION,
+                Title = "New Notification",
+                UserID = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7"),
+                CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d9"),
+                IsRead = false,
+                LastModifiedAt = DateTime.Now,
+                Message = "Someone has saved your post",
+                NavigateId = 1
             });
 
             modelBuilder.Entity<Notification>().HasData(new Notification
-            
+
             {
                 Id = 2,
                 Type = Enum.NotificationType.CONTRACTOR_POST_NOTIFICATION,
@@ -1575,11 +1696,14 @@ namespace Data.Extensions
                 Message = "Create commitment successfully",
                 NavigateId = 1
             });
+            #endregion
 
+
+            #region Product Type Default Value
             modelBuilder.Entity<Color>().HasData(new Color
             {
-               Id=1,
-               Name="No Color"
+                Id = 1,
+                Name = "No Color"
             });
 
             modelBuilder.Entity<ProductSize>().HasData(new ProductSize
@@ -1593,17 +1717,17 @@ namespace Data.Extensions
                 Id = 1,
                 Name = "No Other"
             });
+            #endregion
 
-
-
+            #region Applied Post
             modelBuilder.Entity<AppliedPost>().HasData(new AppliedPost
             {
-                BuilderID=1,
-                PostID=1,
-                AppliedDate=DateTime.Now,
-                Status=Enum.Status.ACCEPTED,
-                QuizId=1
-                
+                BuilderID = 1,
+                PostID = 1,
+                AppliedDate = DateTime.Now,
+                Status = Enum.Status.ACCEPTED,
+                QuizId = 1
+
             });
 
             modelBuilder.Entity<AppliedPost>().HasData(new AppliedPost
@@ -1627,41 +1751,19 @@ namespace Data.Extensions
 
 
             });
+            #endregion
 
-
-
-            //QUIZ
+            #region Quiz 1 
             modelBuilder.Entity<Quiz>().HasData(new Quiz
             {
-              Id=1,
-              Name="Bài test thợ xây ",
-              PostID=1,
-              TypeID= Guid.Parse("4ace8fcb-95eb-48c0-9deb-240e8b4e10e0"),
-              LastModifiedAt=DateTime.Now
-
-            });
-
-            modelBuilder.Entity<Quiz>().HasData(new Quiz
-            {
-                Id = 2,
-                Name = "Bài test thợ sơn ",
+                Id = 1,
+                Name = "Bài test thợ xây ",
                 PostID = 1,
-                TypeID = Guid.Parse("ce9fa65b-d005-46b6-953e-e6462a59cfb3"),
-                LastModifiedAt = DateTime.Now,
+                TypeID = Guid.Parse("4ace8fcb-95eb-48c0-9deb-240e8b4e10e0"),
+                LastModifiedAt = DateTime.Now
 
             });
 
-
-
-
-            //QUESTION SECTION
-
-
-
-
-
-
-            //QUESTION 1
 
 
             modelBuilder.Entity<Question>().HasData(new Question
@@ -1673,10 +1775,10 @@ namespace Data.Extensions
 
             modelBuilder.Entity<Answer>().HasData(new Answer
             {
-              Id=1,
-              Name="Máy khoan",
-              isCorrect=false,
-              QuestionId=1
+                Id = 1,
+                Name = "Máy khoan",
+                isCorrect = false,
+                QuestionId = 1
 
             });
 
@@ -1846,6 +1948,20 @@ namespace Data.Extensions
 
 
 
+
+            #endregion
+
+            #region Quiz 2
+            modelBuilder.Entity<Quiz>().HasData(new Quiz
+            {
+                Id = 2,
+                Name = "Bài test thợ sơn ",
+                PostID = 1,
+                TypeID = Guid.Parse("ce9fa65b-d005-46b6-953e-e6462a59cfb3"),
+                LastModifiedAt = DateTime.Now,
+
+            });
+            #endregion
 
         }
     }

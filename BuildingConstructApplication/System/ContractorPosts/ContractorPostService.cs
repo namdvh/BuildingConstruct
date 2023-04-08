@@ -1593,7 +1593,7 @@ namespace Application.System.ContractorPosts
 
             var ctor = await _context.Users.FirstOrDefaultAsync(x => x.Id.Equals(contractorId));
 
-            var allPost = await _context.ContractorPosts.Where(x => x.ContractorID == ctor.ContractorId).ToListAsync();
+            var allPost = await _context.ContractorPosts.Where(x => x.ContractorID == ctor.ContractorId && x.Status==Status.SUCCESS).ToListAsync();
 
             foreach (var item in allPost)
             {
