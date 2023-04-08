@@ -1,7 +1,5 @@
-﻿using Application.System.ContractorPosts;
-using Application.System.Skills;
+﻿using Application.System.Skills;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ViewModels.Pagination;
 using ViewModels.Skills;

@@ -421,6 +421,14 @@ namespace Application.System.Commitments
 
                 }
 
+                var postApplied = await _context.AppliedPosts.FirstOrDefaultAsync(x => x.PostID == request.PostContractorID && x.BuilderID == request.BuilderID);
+
+                if (postApplied != null)
+                {
+                    _context.Remove(postApplied);
+                    await _context.SaveChangesAsync();
+                }
+
 
                 var group = await _context.Groups.Where(x => x.BuilderID == request.BuilderID && x.PostID == request.PostContractorID).FirstOrDefaultAsync();
                 var builderID = await _context.Users.Where(x => x.BuilderId == request.BuilderID).Select(x => x.Id).FirstOrDefaultAsync();

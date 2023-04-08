@@ -51,9 +51,35 @@ namespace BuildingConstructApi.Controllers
 
 
 
-            var result = await _contractorPostService.GetPost(request,id==null?Guid.Empty:Guid.Parse(id));
+            var result = await _contractorPostService.GetPost(request, id == null ? Guid.Empty : Guid.Parse(id));
             return Ok(result);
         }
+
+
+        [HttpGet("categories")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllPostByCategories([FromQuery] PaginationFilter request, [FromQuery] PostCategories categories)
+        {
+            var validFilter = new PaginationFilter();
+            var id = User.FindFirst("UserID")?.Value;
+
+            if (request.FilterRequest == null)
+            {
+                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
+            }
+            else
+            {
+                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy, request.FilterRequest);
+
+            }
+
+
+
+            var result = await _contractorPostService.GetPostByCategories(request, id == null ? Guid.Empty : Guid.Parse(id), categories);
+            return Ok(result);
+        }
+
+
 
 
         [HttpPost("{id}")]
@@ -197,9 +223,9 @@ namespace BuildingConstructApi.Controllers
         }
         [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetPost([FromRoute] int id,int? pageSize =5)
+        public async Task<IActionResult> GetPost([FromRoute] int id, int? pageSize = 5)
         {
-            var rs = await _contractorPostService.GetDetailPost(id,pageSize);
+            var rs = await _contractorPostService.GetDetailPost(id, pageSize);
             return Ok(rs);
         }
 
@@ -215,11 +241,28 @@ namespace BuildingConstructApi.Controllers
 
 
         [HttpGet("quiz/{quizId}")]
-        public async Task<IActionResult> GetDetailQuizSubmit([FromRoute] int quizId,[FromQuery]int builderId)
+        public async Task<IActionResult> GetDetailQuizSubmit([FromRoute] int quizId, [FromQuery] int builderId)
         {
-            var result = await _contractorPostService.ViewDetailQuizSubmit(quizId,builderId);
+            var result = await _contractorPostService.ViewDetailQuizSubmit(quizId, builderId);
             return Ok(result);
         }
+
+        [HttpGet("post/applied/check")]
+        public async Task<IActionResult> ViewPostAppliedBuilder([FromQuery] int builderId)
+        {
+            var id = User.FindFirst("UserID")?.Value;
+
+            if (id != null)
+            {
+
+                var result = await _contractorPostService.ViewPostAppliedCheck(builderId, Guid.Parse(id));
+                return Ok(result);
+            }
+
+            return Ok();
+
+        }
+
 
     }
 }

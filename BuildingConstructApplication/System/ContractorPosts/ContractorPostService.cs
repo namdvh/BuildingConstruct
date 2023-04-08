@@ -1511,5 +1511,113 @@ namespace Application.System.ContractorPosts
             }
             return response;
         }
+
+        public async Task<BasePagination<List<ContractorPostDTO>>> GetPostByCategories(PaginationFilter filter, Guid id, PostCategories categories)
+        {
+            BasePagination<List<ContractorPostDTO>> response;
+            var orderBy = filter._orderBy.ToString();
+            int totalRecord;
+            orderBy = orderBy switch
+            {
+                "1" => "ascending",
+                "-1" => "descending",
+                _ => orderBy
+            };
+            if (string.IsNullOrEmpty(filter._sortBy))
+            {
+                filter._sortBy = "LastModifiedAt";
+            }
+
+
+
+            IQueryable<ContractorPost> query = _context.ContractorPosts;
+
+            var result = await query
+                    .Include(x => x.Contractor)
+                        .ThenInclude(x => x.User)
+                    .Where(x => x.Status == Status.SUCCESS && x.PostCategories == categories)
+                     .OrderBy(filter._sortBy + " " + orderBy)
+                     .Skip((filter.PageNumber - 1) * filter.PageSize)
+                     .Take(filter.PageSize)
+                     .ToListAsync();
+
+
+            if (filter.FilterRequest != null)
+            {
+                totalRecord = result.Count;
+            }
+            else
+            {
+                totalRecord = await _context.ContractorPosts.CountAsync();
+            }
+
+            if (!result.Any())
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.EMPTY_MESSAGE,
+                    Data = new(),
+                    Pagination = null
+                };
+            }
+            else
+            {
+                double totalPages;
+
+                totalPages = ((double)totalRecord / (double)filter.PageSize);
+
+                var roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
+                Pagination pagination = new()
+                {
+                    CurrentPage = filter.PageNumber,
+                    PageSize = filter.PageSize,
+                    TotalPages = roundedTotalPages,
+                    TotalRecords = totalRecord
+                };
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = MapListDTO(result, id),
+                    Pagination = pagination
+                };
+            }
+            return response;
+        }
+
+        public async Task<BaseResponse<bool>> ViewPostAppliedCheck(int builderId, Guid contractorId)
+        {
+            BaseResponse<bool> response;
+
+            var ctor = await _context.Users.FirstOrDefaultAsync(x => x.Id.Equals(contractorId));
+
+            var allPost = await _context.ContractorPosts.Where(x => x.ContractorID == ctor.ContractorId && x.Status==Status.SUCCESS).ToListAsync();
+
+            foreach (var item in allPost)
+            {
+                var check = _context.AppliedPosts.Where(x => x.PostID == item.Id && x.BuilderID == builderId).FirstOrDefault();
+
+                if (check != null)
+                {
+                    response = new()
+                    {
+                        Code = BaseCode.SUCCESS,
+                        Data = true,
+                        Message = BaseCode.SUCCESS_MESSAGE
+                    };
+                    return response;
+                }
+            }
+
+            response = new()
+            {
+                Code = BaseCode.SUCCESS,
+                Data = false,
+                Message = BaseCode.SUCCESS_MESSAGE
+            };
+            return response;
+        }
     }
 }
