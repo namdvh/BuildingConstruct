@@ -711,7 +711,6 @@ namespace Data.Extensions
 
             #endregion
 
-
             #region Contractor Post 1
 
             modelBuilder.Entity<ContractorPost>().HasData(new ContractorPost
@@ -727,7 +726,7 @@ namespace Data.Extensions
                 Status = Enum.Status.SUCCESS,
                 Place = Enum.Place._52,
                 PostCategories = Enum.PostCategories.Categories1,
-                Salaries = "10000000 - 15000000",
+                Salaries = "200000 - 800000",
                 NumberPeople = 20,
                 ContractorID = 1,
                 Accommodation = true,
@@ -783,7 +782,7 @@ namespace Data.Extensions
                 Status = Enum.Status.PENDING,
                 Place = Enum.Place._52,
                 PostCategories = Enum.PostCategories.Categories1,
-                Salaries = "10000000 - 15000000",
+                Salaries = "200000 - 500000",
                 NumberPeople = 20,
                 Accommodation = true,
                 ConstructionType = "Tòa nhà/Chung cư",
@@ -835,7 +834,7 @@ namespace Data.Extensions
                 Status = Enum.Status.SUCCESS,
                 Place = Enum.Place._52,
                 PostCategories = Enum.PostCategories.Categories1,
-                Salaries = "10000000 - 15000000",
+                Salaries = "+600000",
                 NumberPeople = 20,
                 ContractorID = 2,
                 Accommodation = true,
@@ -870,7 +869,7 @@ namespace Data.Extensions
                 Status = Enum.Status.SUCCESS,
                 Place = Enum.Place._20,
                 PostCategories = Enum.PostCategories.Categories1,
-                Salaries = "10000000 - 15000000",
+                Salaries = "+600000",
                 NumberPeople = 20,
                 ContractorID = 1,
                 CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7")
@@ -901,7 +900,7 @@ namespace Data.Extensions
                 Status = Enum.Status.SUCCESS,
                 Place = Enum.Place._14,
                 PostCategories = Enum.PostCategories.Categories2,
-                Salaries = "10000000 - 15000000",
+                Salaries = "+600000",
                 NumberPeople = 30,
                 CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d6"),
                 ContractorID = 2
@@ -928,7 +927,7 @@ namespace Data.Extensions
                 Status = Enum.Status.SUCCESS,
                 Place = Enum.Place._14,
                 PostCategories = Enum.PostCategories.Categories2,
-                Salaries = "10000000 - 15000000",
+                Salaries = "+600000",
                 NumberPeople = 30,
                 ContractorID = 1,
                 CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d7")
@@ -956,7 +955,7 @@ namespace Data.Extensions
                 Status = Enum.Status.SUCCESS,
                 Place = Enum.Place._52,
                 PostCategories = Enum.PostCategories.Categories1,
-                Salaries = "10000000 - 15000000",
+                Salaries = "+600000",
                 NumberPeople = 20,
                 ContractorID = 1,
                 Accommodation = true,
@@ -1008,7 +1007,7 @@ namespace Data.Extensions
                 Status = Enum.Status.SUCCESS,
                 Place = Enum.Place._52,
                 PostCategories = Enum.PostCategories.Categories2,
-                Salaries = "10000000 - 15000000",
+                Salaries = "+600000",
                 NumberPeople = 20,
                 ContractorID = 1,
                 Accommodation = true,
@@ -1055,7 +1054,7 @@ namespace Data.Extensions
                 Status = Enum.Status.SUCCESS,
                 Place = Enum.Place._52,
                 PostCategories = Enum.PostCategories.Categories2,
-                Salaries = "10000000 - 15000000",
+                Salaries = "+600000",
                 NumberPeople = 20,
                 ContractorID = 1,
                 Accommodation = true,
@@ -1101,7 +1100,7 @@ namespace Data.Extensions
                 Status = Enum.Status.SUCCESS,
                 Place = Enum.Place._52,
                 PostCategories = Enum.PostCategories.Categories2,
-                Salaries = "10000000 - 15000000",
+                Salaries = "+600000",
                 NumberPeople = 20,
                 ContractorID = 1,
                 Accommodation = true,
