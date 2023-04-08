@@ -18,6 +18,8 @@ namespace Data.Enum
         public static string UPDATE_BILL_DELIVERD = "đã chuyển sang trạng thái vận chuyển đơn hàng ";
         public static string UPDATE_BILL_RECEIVED = "đã chuyển sang trạng thái nhận đơn hàng thành công";
         public static string UPDATE_BILL_CANCELED = "đã chuyển sang trạng thái hủy";
+        public static string REPORT_PRODUCT = "đã báo cáo sản phẩm của bạn";
+        public static string REPORT_POST = "đã báo cáo bài viết của bạn";
     }
 
 }

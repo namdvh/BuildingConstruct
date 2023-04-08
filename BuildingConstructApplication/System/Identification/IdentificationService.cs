@@ -264,6 +264,7 @@ namespace Application.System.Identification
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = rs.UserID.ToString()
                 };
             }
             else

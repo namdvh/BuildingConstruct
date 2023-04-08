@@ -1,12 +1,16 @@
 ﻿using Application.System.Identification;
+using Application.System.Notifies;
+using BuildingConstructApi.Hubs;
 using Data.Enum;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using System.Drawing;
 using System.Text;
 using ViewModels.Identification;
+using ViewModels.Notificate;
 using ViewModels.Pagination;
 
 namespace BuildingConstructApi.Controllers
@@ -17,10 +21,14 @@ namespace BuildingConstructApi.Controllers
     public class IdentificationController : ControllerBase
     {
         private readonly IIdentificationService _identificationService;
+        private readonly IHubContext<NotificationUserHub> _notificationUserHubContext;
+        private readonly IUserConnectionManager _userConnectionManager;
 
-        public IdentificationController(IIdentificationService identificationService)
+        public IdentificationController(IIdentificationService identificationService, IHubContext<NotificationUserHub> notificationUserHubContext, IUserConnectionManager userConnectionManager)
         {
             _identificationService = identificationService;
+            _notificationUserHubContext = notificationUserHubContext;
+            _userConnectionManager = userConnectionManager;
         }
         [HttpPost("getAll")]
         public async Task<IActionResult> GetAll([FromBody] PaginationFilter request)
@@ -57,13 +65,23 @@ namespace BuildingConstructApi.Controllers
         {
 
             var result = await _identificationService.Update(id, status);
+            var connections = _userConnectionManager.GetUserConnections(result.Data);
+            if (connections != null && connections.Count > 0)
+            {
+                foreach (var connectionId in connections)
+                {
+
+                    await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("UpdateProfile",result.Data);
+
+                }
+            }
             return Ok(result);
         }
 
 
 
         [HttpPost("test")]
-        public async Task<IActionResult> Test([FromBody]DetectFaceRequest request)
+        public async Task<IActionResult> Test([FromBody] DetectFaceRequest request)
         {
             Mat front;
             //var test= new MemoryStream(Encoding.UTF8.GetBytes(request.Image));
