@@ -15,7 +15,7 @@ namespace Data.Configuration
         {
             builder.ToTable("Commitment");
 
-            builder.HasKey(x => new { x.Id,x.PostID, x.BuilderID,x.ContractorID });
+            builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Id)
               .ValueGeneratedOnAdd();

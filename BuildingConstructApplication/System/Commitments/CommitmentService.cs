@@ -405,7 +405,7 @@ namespace Application.System.Commitments
             if (post != null)
             {
 
-                var checkCommitment = await _context.PostCommitments.Where(x => x.BuilderID == request.BuilderID && x.Status==Status.SUCCESS).OrderByDescending(x => x.Id).ToListAsync();
+                var checkCommitment = await _context.PostCommitments.Where(x => x.BuilderID == request.BuilderID && x.Status == Status.SUCCESS).OrderByDescending(x => x.Id).ToListAsync();
                 if (checkCommitment.Any())
                 {
                     if (checkCommitment.First().EndDate > post.StarDate)
@@ -425,7 +425,7 @@ namespace Application.System.Commitments
                     .Where(x => x.BuilderID == request.BuilderID && x.ContractorID == request.PostContractorID && x.ContractorID == ctor.ContractorId)
                     .FirstOrDefaultAsync();
 
-                if(checkExisted != null)
+                if (checkExisted != null)
                 {
                     response = new()
                     {
@@ -495,25 +495,38 @@ namespace Application.System.Commitments
 
                         var contractorPost = await _context.ContractorPosts.Where(x => x.Id == commitment.PostID).FirstOrDefaultAsync();
 
-                        var count = contractorPost.PeopeRemained - groupCount;
+                        if (contractorPost != null)
+                        {
 
-                        contractorPost.PeopeRemained = count;
+                            if (contractorPost.PeopeRemained >= groupCount)
+                            {
+                                var count = contractorPost.PeopeRemained - groupCount;
+                                contractorPost.PeopeRemained = count;
+                                _context.ContractorPosts.Update(contractorPost);
+                                await _context.SaveChangesAsync();
+                            }
+
+                        }
 
 
-                        _context.ContractorPosts.Update(contractorPost);
-                        await _context.SaveChangesAsync();
                     }
                     else
                     {
                         var contractorPost = await _context.ContractorPosts.Where(x => x.Id == commitment.PostID).FirstOrDefaultAsync();
 
-                        var count = contractorPost.PeopeRemained - 1;
+                        if (contractorPost != null)
+                        {
+                            if (contractorPost.PeopeRemained >= 1)
+                            {
+                                var count = contractorPost.PeopeRemained - 1;
+                                contractorPost.PeopeRemained = count;
 
-                        contractorPost.PeopeRemained = count;
+                                _context.ContractorPosts.Update(contractorPost);
+                                await _context.SaveChangesAsync();
 
+                            }
+                        }
 
-                        _context.ContractorPosts.Update(contractorPost);
-                        await _context.SaveChangesAsync();
                     }
 
 
@@ -835,7 +848,7 @@ namespace Application.System.Commitments
 
                 foreach (var user in query)
                 {
-                    var us = _context.Contractors.Include(x=>x.User).Where(x => x.Id == user.a).FirstOrDefault();
+                    var us = _context.Contractors.Include(x => x.User).Where(x => x.Id == user.a).FirstOrDefault();
                     var contractorInfo = new UserPaymentDTO();
                     contractorInfo.UserId = us.User.Id;
                     contractorInfo.Address = us.User.Address;
