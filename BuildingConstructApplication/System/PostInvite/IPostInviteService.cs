@@ -17,7 +17,7 @@ namespace Application.System.PostInvite
 
         Task<BaseResponse<bool>> isInvite(int builderID, int postID);
 
-        Task<BaseResponse<bool>> CheckInvite(int builderID, int contractorId);
+        Task<BaseResponse<List<PostInviteDTO>>> CheckInvite(int builderID, Guid contractorId);
 
         Task<BaseResponse<string>> Create(CreatePostIniviteRequest requests);
 
