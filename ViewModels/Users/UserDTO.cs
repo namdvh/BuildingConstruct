@@ -1,9 +1,4 @@
 ﻿using Data.Enum;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ViewModels.Users
 {
@@ -28,5 +23,10 @@ namespace ViewModels.Users
         public int? BuilderID { get; set; }
         public int? ContractorID { get; set; }
         public bool Premium { get; set; }
+
+
+        public DetailBuilder? Builder { get; set; }
+        public DetailContractor? Contractor { get; set; }
+        public DetailMaterialStore? DetailMaterialStore { get; set; }
     }
 }
