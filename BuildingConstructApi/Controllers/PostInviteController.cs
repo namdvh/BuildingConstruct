@@ -104,5 +104,13 @@ namespace BuildingConstructApi.Controllers
         }
 
 
+        [HttpGet("checkInvite")]
+        public async Task<IActionResult> CheckInvite([FromQuery] int builderID, [FromQuery] int contractorId)
+        {
+            var result = await postInviteService.CheckInvite(builderID, contractorId);
+            return Ok(result);
+        }
+
+
     }
 }

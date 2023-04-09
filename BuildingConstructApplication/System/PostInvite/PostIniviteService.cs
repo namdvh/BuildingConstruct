@@ -17,25 +17,79 @@ namespace Application.System.PostInvite
             _context = context;
         }
 
+        public async Task<BaseResponse<bool>> CheckInvite(int builderID, int contractorId)
+        {
+            BaseResponse<bool> response;
+
+            bool flag = false;
+
+
+            var allPost = await _context.ContractorPosts.Where(x => x.ContractorID == contractorId).ToListAsync();
+
+
+            //loop through all post get post id 
+
+
+            foreach (var post in allPost)
+            {
+
+                if (_context.PostInvites.Any(x => x.BuilderId == builderID && x.ContractorPostId == post.Id))
+                {
+                    flag = true;
+                }
+                else if (_context.AppliedPosts.Any(x => x.BuilderID == builderID && x.PostID == post.Id))
+                {
+                    flag = true;
+                }
+                else if (_context.PostCommitments.Any(x => x.BuilderID == builderID && x.PostID == post.Id))
+                {
+                    flag = true;
+                }
+            }
+
+            if (flag)
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = "Bạn đã mời người này rồi",
+                    Data = true
+                };
+            }
+            else
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = "SUCCESS",
+                    Data = false
+                };
+            }
+
+            return response;
+
+
+        }
+
         public async Task<BaseResponse<string>> Create(CreatePostIniviteRequest requests)
         {
             BaseResponse<string> response;
-          
-
-                Data.Entities.PostInvite postInvite = new()
-                {
-                    BuilderId = requests.BuilderId,
-                    ContractorId = requests.ContractorId,
-                    ContractorPostId = requests.ContractorPostId,
-                    IsRead = false,
-                    LastModifiedAt = DateTime.Now,
-                };
-
-                await _context.PostInvites.AddAsync(postInvite);
-                await _context.SaveChangesAsync();
 
 
-            var sendID = await _context.Users.Where(x=>x.BuilderId==requests.BuilderId).Select(x=>x.Id).FirstOrDefaultAsync(); 
+            Data.Entities.PostInvite postInvite = new()
+            {
+                BuilderId = requests.BuilderId,
+                ContractorId = requests.ContractorId,
+                ContractorPostId = requests.ContractorPostId,
+                IsRead = false,
+                LastModifiedAt = DateTime.Now,
+            };
+
+            await _context.PostInvites.AddAsync(postInvite);
+            await _context.SaveChangesAsync();
+
+
+            var sendID = await _context.Users.Where(x => x.BuilderId == requests.BuilderId).Select(x => x.Id).FirstOrDefaultAsync();
 
             response = new()
             {
@@ -43,7 +97,7 @@ namespace Application.System.PostInvite
                 Message = BaseCode.SUCCESS_MESSAGE,
                 Data = sendID.ToString(),
                 NavigateId = requests.ContractorPostId
-                };
+            };
 
             return response;
 
