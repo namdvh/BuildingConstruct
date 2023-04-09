@@ -265,6 +265,7 @@ namespace Application.System.Users
                             RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime
                         };
 
+
                     }
                 }
                 return response;
@@ -362,7 +363,7 @@ namespace Application.System.Users
                     LastName = request.LastName,
                     UserName = request.Phone,
                     PhoneNumber = request.Phone,
-                    Status = Status.Level1
+                    Status = Status.SUCCESS
                 };
 
                 var rs = await _userService.CreateAsync(user, request.Password);
@@ -643,6 +644,7 @@ namespace Application.System.Users
                 }
                 var appliedCount = _context.AppliedPosts.Where(x => x.BuilderID == user.Builder.Id).Count();
                 var inviteCount = _context.PostInvites.Where(x => x.BuilderId == user.Builder.Id).Count();
+                var commitmentCount = _context.PostCommitments.Where(x=>x.BuilderID==user.Builder.Id).Count();
                 List<string> images = new();
 
                 if (user.Builder.Image != null)
@@ -667,7 +669,8 @@ namespace Application.System.Users
                     ConstructionType = ls,
                     AppliedCount = appliedCount,
                     InviteCount = inviteCount,
-                    Images = images.Any() ? images : null
+                    Images = images.Any() ? images : null,
+                    CommitmentCount = commitmentCount
 
                 };
 
@@ -691,12 +694,18 @@ namespace Application.System.Users
             }
             else if (status == 2)
             {
+                var billCount = _context.Bills.Where(x => x.ContractorId == user.ContractorId).Count();
+                var commitmentCount = _context.PostCommitments.Where(x => x.ContractorID==user.ContractorId).Count();
+
+
                 DetailContractor detailContractor = new()
                 {
                     CompanyName = user.Contractor.CompanyName,
                     Description = user.Contractor.Description,
                     Id = user.Contractor.Id,
-                    Website = user.Contractor.Website
+                    Website = user.Contractor.Website,
+                    BillCount=billCount,
+                    PostCount= commitmentCount,
                 };
 
 
@@ -718,6 +727,9 @@ namespace Application.System.Users
             }
             else
             {
+                var billCount = _context.Bills.Where(x => x.StoreID == user.MaterialStoreID).Count();
+                var productCount = _context.Products.Where(x => x.MaterialStoreID == user.MaterialStoreID).Count();
+
                 DetailMaterialStore detailMaterial = new()
                 {
                     Description = user.MaterialStore.Description,
@@ -726,7 +738,9 @@ namespace Application.System.Users
                     Experience = user.MaterialStore.Experience,
                     Image = user.MaterialStore.Image,
                     Place = user.MaterialStore.Place,
-                    TaxCode = user.MaterialStore.TaxCode
+                    TaxCode = user.MaterialStore.TaxCode,
+                    BillCount= billCount,
+                    ProductCount= productCount,
                 };
 
 

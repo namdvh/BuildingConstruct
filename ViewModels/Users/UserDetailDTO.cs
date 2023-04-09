@@ -76,6 +76,8 @@ namespace ViewModels.Users
 
         public List<string>? Images { get; set; }
 
+        public int? CommitmentCount { get; set; }
+
     }
 
 
@@ -95,6 +97,10 @@ namespace ViewModels.Users
         public string? Description { get; set; }
 
         public string? Website { get; set; }
+
+        public int? PostCount { get; set; }
+
+        public int? BillCount { get; set; }
 
     }
     public class StoreOrderStatistic
@@ -131,6 +137,10 @@ namespace ViewModels.Users
         public string? Image { get; set; }
 
         public Place? Place { get; set; }
+
+        public int? ProductCount { get; set; }
+
+        public int? BillCount { get; set; }
 
 
     }

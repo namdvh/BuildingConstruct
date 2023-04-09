@@ -13,6 +13,7 @@
         PAID,
         RECEIVED,
         CANCEL,
-        DELEDTED
+        DELEDTED,
+        LEVEL_4
     }
 }

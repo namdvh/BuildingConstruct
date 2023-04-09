@@ -194,15 +194,18 @@ namespace Application.System.ContractorPosts
         private async Task<ContractorPostDetailDTO> MapToDetailDTO(ContractorPost post, string userID, int? pageSize)
         {
             bool IsSave = false;
+            
             var save = await _context.Saves.Where(x => x.UserId.ToString().Equals(userID) && x.ContractorPostId == post.Id).FirstOrDefaultAsync();
             if (save != null)
             {
                 IsSave = true;
             }
             var builder = await _context.Builders.Where(x => x.User.Id.ToString().Equals(userID)).FirstOrDefaultAsync();
+            dynamic c = null;
             if (builder != null)
             {
                 var check = await _context.AppliedPosts.Where(x => x.BuilderID == builder.Id && x.ContractorPosts.Id == post.Id).FirstOrDefaultAsync();
+                c = check;
                 if (check != null)
                 {
                     post.isApplied = true;
@@ -211,6 +214,7 @@ namespace Application.System.ContractorPosts
                 {
                     post.isApplied = false;
                 }
+                
             }
             else
             {
@@ -241,6 +245,8 @@ namespace Application.System.ContractorPosts
                 PeopleRemained = post.PeopeRemained,
                 PostCategories = post.PostCategories,
                 Place = post.Place,
+                IsGroup = c?.Group ==null ? false : true,
+                QuizId = c?.QuizId !=null ? c.QuizId : null,
                 IsApplied = post.isApplied,
                 RequiredQuiz = post.QuizRequired,
                 type = await GetTypeAndSkillFromPost(post.Id),
@@ -1593,7 +1599,7 @@ namespace Application.System.ContractorPosts
 
             var ctor = await _context.Users.FirstOrDefaultAsync(x => x.Id.Equals(contractorId));
 
-            var allPost = await _context.ContractorPosts.Where(x => x.ContractorID == ctor.ContractorId && x.Status==Status.SUCCESS).ToListAsync();
+            var allPost = await _context.ContractorPosts.Where(x => x.ContractorID == ctor.ContractorId && x.Status == Status.SUCCESS).ToListAsync();
 
             foreach (var item in allPost)
             {

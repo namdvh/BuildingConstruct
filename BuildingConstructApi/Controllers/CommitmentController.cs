@@ -163,7 +163,7 @@ namespace BuildingConstructApi.Controllers
             NotificationModels noti = new()
             {
                 NotificationType = NotificationType.COMMITMENT_NOTIFICATION,
-                Message = NotificationMessage.SAVENOTI,
+                Message = NotificationMessage.COMMITMENTNOTI,
                 CreateBy = Guid.Parse(contractorID.ToString()),
                 UserId = Guid.Parse(result.Data.ToString()),
                 LastModifiedAt = DateTime.Now,

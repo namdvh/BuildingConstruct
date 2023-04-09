@@ -32,6 +32,10 @@ namespace ViewModels.ContractorPost
         public bool? IsApplied { get; set; }
         public bool? IsSave { get; set; }
 
+        public bool? IsGroup { get; set; }
+
+        public int? QuizId { get; set; }
+
         public DateTime LastModifiedAt { get; set; }
         public Guid CreatedBy { get; set; }
         public UserModelsDTO Author { get; set; }

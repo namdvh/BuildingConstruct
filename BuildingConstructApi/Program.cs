@@ -179,12 +179,12 @@ builder.Services.AddScoped<IQuizServices, QuizServices>();
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-app.UseHttpsRedirection();
+//if (app.Environment.IsDevelopment())
+//{
+app.UseSwagger();
+app.UseSwaggerUI();
+//}
+//app.UseHttpsRedirection();
 app.UseRouting();
 app.UseCors(x => x
         .WithOrigins("https://localhost:4000")
