@@ -55,7 +55,7 @@ namespace Application.System.ContractorPosts
                 NumberPeople = contractorPostDTO.NumberPeople,
                 PeopeRemained = contractorPostDTO.NumberPeople,
                 Status = contractorPostDTO.QuizRequired == true ? Status.PENDING : Status.SUCCESS,
-                PostCategories = PostCategories.Categories1,
+                PostCategories = contractorPostDTO.PostCategories,
                 Benefit = contractorPostDTO.Benefit,
                 Required = contractorPostDTO.Required,
                 LastModifiedAt = DateTime.Now,
@@ -261,13 +261,13 @@ namespace Application.System.ContractorPosts
             string keyword = string.Empty;
             switch (post.PostCategories)
             {
-                case PostCategories.Categories1:
+                case PostCategories.CO_DIEN:
                     keyword = "Cổ điển ";
                     break;
-                case PostCategories.Categories2:
+                case PostCategories.HIEN_DAI:
                     keyword = "Hiện đại";
                     break;
-                case PostCategories.Categories3:
+                case PostCategories.TAN_CO_DIEN:
                     keyword = "Tân cổ điển";
                     break;
             }

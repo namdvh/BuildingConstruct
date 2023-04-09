@@ -362,7 +362,7 @@ namespace Application.System.Bill
                 StoreID = list.First().Bills.StoreID,
                 //StoreName = list.First().Bills.MaterialStore.User.FirstName + " " + list.First().Bills.MaterialStore.User.LastName,
                 TotalPrice = list.First().Bills.TotalPrice,
-                Type = list.First().Bills.Type
+                //Type = list.First().Bills.Type
 
             };
 
@@ -393,7 +393,7 @@ namespace Application.System.Bill
                 Status = bill.Status,
                 StoreID = bill.StoreID,
                 TotalPrice = bill.TotalPrice,
-                Type = bill.Type,
+                //Type = bill.Type,
                 _lastModifiedAt = bill.LastModifiedAt
 
             };

@@ -104,5 +104,16 @@ namespace BuildingConstructApi.Controllers
         }
 
 
+        [HttpGet("checkInvite")]
+        public async Task<IActionResult> CheckInvite([FromQuery] int builderID)
+        {
+            var userID = User.FindFirst("UserID")?.Value;
+
+
+            var result = await postInviteService.CheckInvite(builderID, Guid.Parse(userID));
+            return Ok(result);
+        }
+
+
     }
 }
