@@ -245,7 +245,7 @@ namespace Application.System.ContractorPosts
                 PeopleRemained = post.PeopeRemained,
                 PostCategories = post.PostCategories,
                 Place = post.Place,
-                IsGroup = c?.Group ==null ? false : true,
+                IsGroup = c?.GroupID == null ? false : true,
                 QuizId = c?.QuizId !=null ? c.QuizId : null,
                 IsApplied = post.isApplied,
                 RequiredQuiz = post.QuizRequired,
