@@ -156,6 +156,14 @@ namespace BuildingConstructApi.Controllers
                 return Ok(result);
             }
 
+            if (result.Data.Equals("ALREADY_CREATE_COMMITMENT"))
+            {
+                return Ok(result);
+            }
+
+
+
+
             var connections = _userConnectionManager.GetUserConnections(result.Data);
 
 

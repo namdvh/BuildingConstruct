@@ -421,6 +421,23 @@ namespace Application.System.Commitments
 
                 }
 
+                var checkExisted = await _context.PostCommitments
+                    .Where(x => x.BuilderID == request.BuilderID && x.ContractorID == request.PostContractorID && x.ContractorID == ctor.ContractorId)
+                    .FirstOrDefaultAsync();
+
+                if(checkExisted != null)
+                {
+                    response = new()
+                    {
+                        Code = BaseCode.ERROR,
+                        Message = "Bạn đã tạo cam kết rồi ",
+                        Data = "ALREADY_CREATE_COMMITMENT"
+                    };
+                    return response;
+                }
+
+
+
                 var postApplied = await _context.AppliedPosts.FirstOrDefaultAsync(x => x.PostID == request.PostContractorID && x.BuilderID == request.BuilderID);
 
                 if (postApplied != null)
