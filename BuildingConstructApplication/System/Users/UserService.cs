@@ -644,7 +644,7 @@ namespace Application.System.Users
                 }
                 var appliedCount = _context.AppliedPosts.Where(x => x.BuilderID == user.Builder.Id).Count();
                 var inviteCount = _context.PostInvites.Where(x => x.BuilderId == user.Builder.Id).Count();
-                var commitmentCount = _context.PostCommitments.Where(x=>x.BuilderID==user.Builder.Id).Count();
+                var commitmentCount = _context.PostCommitments.Where(x=>x.BuilderID==user.Builder.Id && x.Status==Status.SUCCESS).Count();
                 List<string> images = new();
 
                 if (user.Builder.Image != null)
@@ -695,7 +695,7 @@ namespace Application.System.Users
             else if (status == 2)
             {
                 var billCount = _context.Bills.Where(x => x.ContractorId == user.ContractorId).Count();
-                var commitmentCount = _context.PostCommitments.Where(x => x.ContractorID==user.ContractorId).Count();
+                var commitmentCount = _context.PostCommitments.Where(x => x.ContractorID==user.ContractorId && x.Status == Status.SUCCESS).Count();
 
 
                 DetailContractor detailContractor = new()
@@ -727,8 +727,8 @@ namespace Application.System.Users
             }
             else
             {
-                var billCount = _context.Bills.Where(x => x.StoreID == user.MaterialStoreID).Count();
-                var productCount = _context.Products.Where(x => x.MaterialStoreID == user.MaterialStoreID).Count();
+                var billCount = _context.Bills.Where(x => x.StoreID == user.MaterialStoreID && x.Status == Status.SUCCESS).Count();
+                var productCount = _context.Products.Where(x => x.MaterialStoreID == user.MaterialStoreID && x.Status==true).Count();
 
                 DetailMaterialStore detailMaterial = new()
                 {
