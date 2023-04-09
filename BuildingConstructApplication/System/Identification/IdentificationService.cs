@@ -45,7 +45,7 @@ namespace Application.System.Identification
                 Status = Status.PENDING,
             };
 
-            var user = await _context.Users.FirstOrDefaultAsync(x=>x.Id.Equals(userID));
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id.Equals(userID));
 
             if (user != null)
             {
@@ -240,29 +240,85 @@ namespace Application.System.Identification
             if (rs != null)
             {
                 var user = await _context.Users
+                    .Include(x => x.MaterialStore)
+                    .Include(x => x.Builder)
+                    .Include(x => x.Contractor)
                     .FirstOrDefaultAsync(x => x.Id.Equals(rs.UserID));
                 if (user != null)
                 {
-                    rs.Status = status;
-                    rs.LastModifiedAt = DateTime.Now;
-                    _context.Update(rs);
-                    await _context.SaveChangesAsync();
-
-                    if (user != null)
+                    if (status == Status.DECLINED)
                     {
-                        if (user.Status == Status.Level2 && status == Status.SUCCESS)
+                        var rolename = _userService.GetRolesAsync(user).Result;
+
+                        if (rolename.First().Equals("User"))
                         {
-                            user.Status = Status.Level3;
+                            if (user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null)
+                            {
+                                user.Status = Status.Level2;
+                            }
+                            else
+                            {
+                                user.Status = Status.SUCCESS;
+                            }
+                            _context.Update(user);
                         }
-                        else if (status == Status.SUCCESS)
+                        else if (rolename.First().Equals("Contractor"))
                         {
-                            user.Status = Status.Level1;
+                            if (user.Avatar != null && user.Contractor.CompanyName != null)
+                            {
+                                user.Status = Status.Level2;
+                            }
+                            else
+                            {
+                                user.Status = Status.SUCCESS;
+                            }
+                            _context.Update(user);
+                        }
+                        else
+                        {
+                            if (user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
+                            {
+                                user.Status = Status.Level2;
+                            }
+                            else
+                            {
+                                user.Status = Status.SUCCESS;
+                            }
+                            _context.Update(user);
                         }
 
-
-                        _context.Update(user);
+                        _context.Remove(rs);
                         await _context.SaveChangesAsync();
+
                     }
+                    else
+                    {
+                        rs.Status = status;
+
+                        rs.LastModifiedAt = DateTime.Now;
+                        _context.Update(rs);
+                        await _context.SaveChangesAsync();
+
+                        if (user != null)
+                        {
+                            if (user.Status == Status.Level2 && status == Status.SUCCESS)
+                            {
+                                user.Status = Status.Level3;
+                            }
+                            else if (status == Status.SUCCESS)
+                            {
+                                user.Status = Status.Level1;
+                            }
+
+
+
+
+
+                            _context.Update(user);
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+
                 }
 
 
