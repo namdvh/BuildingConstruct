@@ -1629,5 +1629,199 @@ namespace Application.System.ContractorPosts
             };
             return response;
         }
+
+        public async Task<BaseResponse<string>> UpdatePost(ContractorPostUpdate request)
+        {
+            BaseResponse<string> response = new();
+            var postId = request.PostId;
+            var query = await _context.ContractorPosts.Where(x => x.Id == postId).FirstOrDefaultAsync();
+            var PostType = query?.ContractorPostTypes;
+            var PostSkill = query?.PostSkills;
+            var checkApplied = await _context.AppliedPosts.Where(x => x.PostID == postId).AnyAsync();
+            var checkCommitment = await _context.PostCommitments.Where(x => x.PostID == postId).AnyAsync();
+            if(checkApplied || checkCommitment)
+            {
+                response.Code = BaseCode.ERROR;
+                response.Message = "Không thể chỉnh sửa bài post này";
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(request.Title))
+                {
+                    query.Title = request.Title;
+                }
+                if (!string.IsNullOrEmpty(request.ProjectName))
+                {
+                    query.ProjectName = request.ProjectName;
+                }
+                if (!string.IsNullOrEmpty(request.Description))
+                {
+                    query.Description = request.Description;
+                }
+                if (!string.IsNullOrEmpty(request.Required))
+                {
+                    query.Required = request.Required;
+                }
+                if (!string.IsNullOrEmpty(request.Benefit))
+                {
+                    query.Benefit = request.Benefit;
+                }
+                if (!string.IsNullOrEmpty(request.StarDate.ToString()))
+                {
+                    query.StarDate = request.StarDate;
+                }
+                if (!string.IsNullOrEmpty(request.EndDate.ToString()))
+                {
+                    query.EndDate = request.EndDate;
+                }
+                if (!string.IsNullOrEmpty(request.EndTime))
+                {
+                    query.EndTime = request.EndTime;
+                }
+                if (!string.IsNullOrEmpty(request.StartTime))
+                {
+                    query.StartTime = request.StartTime;
+                }
+                if (!string.IsNullOrEmpty(request.Salaries))
+                {
+                    query.Salaries = request.Salaries;
+                }
+                if (!string.IsNullOrEmpty(request.Accommodation.ToString()))
+                {
+                    query.Accommodation = request.Accommodation;
+                }
+                if (!string.IsNullOrEmpty(request.Place.ToString()))
+                {
+                    query.Place = request.Place;
+                }
+                if (!string.IsNullOrEmpty(request.Transport.ToString()))
+                {
+                    query.Transport = request.Transport;
+                }
+                if (!string.IsNullOrEmpty(request.NumberPeople.ToString()))
+                {
+                    query.NumberPeople = request.NumberPeople;
+                }
+                if (!string.IsNullOrEmpty(request.PostCategories.ToString()))
+                {
+                    query.PostCategories = request.PostCategories;
+                }
+                if (!string.IsNullOrEmpty(request.PostCategories.ToString()))
+                {
+                    query.PostCategories = request.PostCategories;
+                }
+                if (request.type != null)
+                {
+                    foreach (var item in request.type)
+                    {
+                        _context.Remove(query.ContractorPostTypes);
+                        _context.SaveChanges();
+                        var rType = new Data.Entities.ContractorPostType();
+                        if (item.id != null)
+                        {
+                            rType.TypeID = (Guid)item.id;
+                            rType.ContractorPostID = (int)postId;
+                            _context.ContractorPostTypes.Add(rType);
+
+                            var rs = _context.SaveChanges();
+                            if (rs < 0)
+                            {
+                                response.Code = BaseCode.ERROR;
+                                response.Message = "Cập nhật bài post không thành công";
+                                return response;
+                            }
+                        }
+                    }
+
+                    var flag = false;
+                    foreach (var i in request.type)
+                    {
+                        foreach (var o in i.SkillArr)
+                        {
+                            if (o.fromSystem == false)
+                            {
+                                var rSkill = new Skill
+                                {
+                                    Name = o.name,
+                                    FromSystem = o.fromSystem
+                                };
+                                _context.Skills.Add(rSkill);
+                                _context.SaveChanges();
+                                var cPostSkill = new ContractorPostSkill
+                                {
+                                    ContractorPostID = (int)postId,
+                                    SkillID = rSkill.Id
+                                };
+                                _context.ContractorPostSkills.Add(cPostSkill);
+                                var rs = _context.SaveChanges();
+                                if (rs < 0)
+                                {
+                                    response.Code = BaseCode.ERROR;
+                                    response.Message = "Cập nhật bài post không thành công";
+                                    return response;
+                                }
+                                flag = true;
+                            }
+                            else
+                            {
+                                var rs = await _context.Skills.Include(x => x.Type).Where(x => x.Id == o.id).ToListAsync();
+                                foreach (var c in rs)
+                                {
+                                    var guid = i.id.ToString();
+                                    var cid = c.TypeId.ToString();
+                                    if (guid.Equals(cid))
+                                    {
+
+                                        var cPostSkill = new ContractorPostSkill
+                                        {
+                                            ContractorPostID = (int)postId,
+                                            SkillID = o.id
+                                        };
+                                        _context.ContractorPostSkills.Add(cPostSkill);
+                                        _context.SaveChanges();
+                                        flag = true;
+                                    }
+                                    else
+                                    {
+                                        response.Code = BaseCode.ERROR;
+                                        response.Message = "Cập nhật bài post không thành công";
+                                        return response;
+                                    }
+                                }
+                            }
+                        }
+
+                    };
+                    await _context.SaveChangesAsync();
+                    if (flag)
+                    {
+                        if (PostSkill!=null)
+                        {
+                            _context.ContractorPostSkills.RemoveRange(PostSkill);
+                            _context.SaveChanges();
+                        }
+                        if (PostType != null)
+                        {
+                            _context.ContractorPostTypes.RemoveRange(PostType);
+                            _context.SaveChanges();
+                        }
+
+                    }
+                }
+                var update = _context.ContractorPosts.Update(query);
+                var res = await _context.SaveChangesAsync();
+                if (res > 0)
+                {
+                    response.Code = BaseCode.SUCCESS;
+                    response.Message = "Cập nhật bài viết thành công";
+                }
+                else
+                {
+                    response.Code = BaseCode.ERROR;
+                    response.Message = "Cập nhật bài viết không thành công";
+                }
+            }
+            return response;
+        }
     }
 }
