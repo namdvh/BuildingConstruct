@@ -31,8 +31,8 @@ namespace Data.DataContext
             modelBuilder.ApplyConfiguration(new VerifyConfiguration());
             modelBuilder.ApplyConfiguration(new BuilderSkillConfiguration());
             modelBuilder.ApplyConfiguration(new ContractorPostSkillConfiguration());
-            modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new TypeConfiguration());
+            modelBuilder.ApplyConfiguration(new BuilderConfiguration());
             modelBuilder.ApplyConfiguration(new GroupConfiguration());
             modelBuilder.ApplyConfiguration(new GroupMemberConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());

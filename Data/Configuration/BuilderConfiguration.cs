@@ -14,7 +14,6 @@ namespace Data.Configuration
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
             builder.Property(x => x.LastModifiedAt).HasDefaultValueSql("getutcdate()");
 
-
             builder
                    .HasOne(x => x.User)
                    .WithOne(x => x.Builder).HasForeignKey<User>(x => x.BuilderId).IsRequired(false);
