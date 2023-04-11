@@ -574,6 +574,9 @@ namespace Application.System.Bill
                         var billDetail = await _context.BillDetails.Where(x => x.BillID == billID).ToListAsync();
                         foreach (var item in billDetail)
                         {
+
+                            var product = _context.Products.FirstOrDefault(x => x.Id == item.ProductID);
+
                             Cart cart = new()
                             {
                                 LastModifiedAt = bill.LastModifiedAt,
@@ -583,6 +586,32 @@ namespace Application.System.Bill
                                 UserID = userID,
                             };
                             ls.Add(cart);
+
+                            if(item.ProductTypeId == null)
+                            {
+                                var unitInStockProduct = item.Quantity + product.UnitInStock;
+                                var soldQuantities = product.SoldQuantities - item.Quantity;
+                                product.UnitInStock = unitInStockProduct;
+                                product.SoldQuantities = soldQuantities; 
+                            
+                            }
+                            else
+                            {
+                                var type = _context.ProductTypes.Include(x=>x.Products).FirstOrDefault(x => x.Id == item.ProductTypeId);
+                                if (type != null)
+                                {
+                                    var unitTypeInStock = item.Quantity + type.Quantity;
+                                    var soldQuantities = type.Products.SoldQuantities - item.Quantity;
+                                    product.SoldQuantities = soldQuantities;
+                                    type.Quantity = unitTypeInStock;
+                                }
+                                _context.ProductTypes.Update(type);
+                            }
+
+                            _context.Products.Update(product);
+                            _context.SaveChanges();
+
+
                         }
                         await _context.AddRangeAsync(ls);
                         await _context.SaveChangesAsync();
