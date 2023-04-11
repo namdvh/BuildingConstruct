@@ -62,5 +62,18 @@ namespace BuildingConstructApi.Controllers
             var result = await _paymentService.GetTop5OrderStore();
             return Ok(result);
         }
+
+        [HttpGet("user")]
+        public async Task<IActionResult> GetPaymentListUser()
+        {
+            string? id = User.FindFirst("UserID")?.Value;
+
+            if(id == null)
+            {
+                return Ok();
+            }
+            var result = await _paymentService.PaymentListByUser(Guid.Parse(id));
+            return Ok(result);
+        }
     }
 }

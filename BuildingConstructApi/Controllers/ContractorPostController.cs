@@ -263,6 +263,16 @@ namespace BuildingConstructApi.Controllers
 
         }
 
+        [HttpPut("status/{postId}")]
+        public async Task<IActionResult> UpdatePostStatus([FromQuery] int postId)
+        {
+
+            var result = await _contractorPostService.UpdatePostStatus(postId);
+            return Ok(result);
+
+
+        }
+
 
     }
 }

@@ -1629,5 +1629,26 @@ namespace Application.System.ContractorPosts
             };
             return response;
         }
+
+        public async Task<BaseResponse<string>> UpdatePostStatus(int postId)
+        {
+            BaseResponse<string> response;
+
+            var post = await _context.ContractorPosts.FirstOrDefaultAsync(x=>x.Id== postId);
+
+            if (post != null)
+            {
+                post.Status = Status.CANCEL;
+                _context.Update(post);
+                await _context.SaveChangesAsync();
+            }
+
+            response = new()
+            {
+                Code = BaseCode.SUCCESS,
+                Message = "Cập nhật thành công"
+            };
+            return response;
+        }
     }
 }
