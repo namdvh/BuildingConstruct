@@ -926,9 +926,6 @@ namespace Application.System.Users
 
                 }
 
-
-                //
-
                 if (request.ExperienceDetail != null)
                 {
                     if (request.ExperienceDetail.Length == 0)
@@ -942,9 +939,6 @@ namespace Application.System.Users
                     }
 
                 }
-
-
-
 
                 if (!string.IsNullOrEmpty(request.Experience.ToString()))
                 {
@@ -993,6 +987,7 @@ namespace Application.System.Users
                             SkillID = x
                         };
                         await _context.BuilderSkills.AddAsync(newSkills);
+
                         await _context.SaveChangesAsync();
                     }
                 }
@@ -1027,10 +1022,12 @@ namespace Application.System.Users
                     user.Status = Status.Level2;
                 }
 
-                _context.Users.Update(user);
-                await _context.SaveChangesAsync();
 
 
+
+                _context.Update(user);
+                var rs=await _context.SaveChangesAsync();
+                
                 response = new()
                 {
                     Code = BaseCode.SUCCESS,

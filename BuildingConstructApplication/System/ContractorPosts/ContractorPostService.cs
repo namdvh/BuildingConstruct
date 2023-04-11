@@ -194,7 +194,7 @@ namespace Application.System.ContractorPosts
         private async Task<ContractorPostDetailDTO> MapToDetailDTO(ContractorPost post, string userID, int? pageSize)
         {
             bool IsSave = false;
-            
+
             var save = await _context.Saves.Where(x => x.UserId.ToString().Equals(userID) && x.ContractorPostId == post.Id).FirstOrDefaultAsync();
             if (save != null)
             {
@@ -208,13 +208,17 @@ namespace Application.System.ContractorPosts
                 c = check;
                 if (check != null)
                 {
-                    post.isApplied = true;
+                    var alreadyCommitment = await _context.PostCommitments.Where(x => x.BuilderID == builder.Id && x.ContractorPosts.Id == post.Id).FirstOrDefaultAsync();
+                    if (alreadyCommitment!=null)
+                    {
+                        post.isApplied = true;
+                    }
                 }
                 else
                 {
                     post.isApplied = false;
                 }
-                
+
             }
             else
             {
@@ -246,7 +250,7 @@ namespace Application.System.ContractorPosts
                 PostCategories = post.PostCategories,
                 Place = post.Place,
                 IsGroup = c?.GroupID == null ? false : true,
-                QuizId = c?.QuizId !=null ? c.QuizId : null,
+                QuizId = c?.QuizId != null ? c.QuizId : null,
                 IsApplied = post.isApplied,
                 RequiredQuiz = post.QuizRequired,
                 type = await GetTypeAndSkillFromPost(post.Id),
