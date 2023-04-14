@@ -972,10 +972,22 @@ namespace Application.System.ContractorPosts
                     };
                     return response;
                 }
-                //first order commitment
-
                 var post = await _context.ContractorPosts.FirstOrDefaultAsync(x => x.Id == request.PostId);
 
+                var commitmentInPost = await _context.PostCommitments.Where(x=>x.BuilderID==user.BuilderId && x.PostID == request.PostId).FirstOrDefaultAsync();
+                if (commitmentInPost != null)
+                {
+                    response = new()
+                    {
+                        Code = BaseCode.ERROR,
+                        Message = "Bạn đã ứng tuyển vào vị trí này ",
+                        Data = "ALREADY_APPLIED"
+                    };
+                    return response;
+                }
+
+
+                //first order commitment
                 var checkCommitment = await _context.PostCommitments.Where(x => x.BuilderID == user.BuilderId).OrderByDescending(x => x.Id).ToListAsync();
 
 
