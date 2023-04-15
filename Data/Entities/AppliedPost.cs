@@ -27,6 +27,8 @@ namespace Data.Entities
 
         public Quiz? Quiz { get; set; }
 
+        public string? Video { get; set; }
+
 
 
     }

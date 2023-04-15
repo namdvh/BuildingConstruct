@@ -62,6 +62,7 @@ namespace Application.System.ContractorPosts
                 CreateBy = Guid.Parse(userID),
                 ContractorID = (int)contracID,
                 QuizRequired = contractorPostDTO.QuizRequired,
+                VideoRequired = contractorPostDTO.VideoRequired,
             };
 
             await _context.ContractorPosts.AddAsync(contractorPost);
@@ -253,6 +254,7 @@ namespace Application.System.ContractorPosts
                 QuizId = c?.QuizId != null ? c.QuizId : null,
                 IsApplied = post.isApplied,
                 RequiredQuiz = post.QuizRequired,
+                VideoRequired=post.VideoRequired,
                 type = await GetTypeAndSkillFromPost(post.Id),
                 CreatedBy = post.CreateBy,
                 Author = await GetUserProfile(post.CreateBy),
@@ -698,6 +700,7 @@ namespace Application.System.ContractorPosts
                 AppliedDate = applied.AppliedDate,
                 QuizId = applied.QuizId,
                 QuizName = applied.Quiz?.Name,
+                Video = applied.Video,
                 TypeName = applied.Builder.Type.Name,
                 TotalCorrectAnswers = totalScore,
                 TotalNumberQuestion = totalQuestion,
@@ -730,6 +733,9 @@ namespace Application.System.ContractorPosts
                 LastName = applied.Builder.User.LastName,
                 UserID = applied.Builder.User.Id,
                 WishSalary = applied.WishSalary,
+                Video=applied.Video,
+                QuizId = applied.QuizId,
+                QuizName = applied.Quiz?.Name,
                 Groups = group,
                 AppliedDate = applied.AppliedDate,
                 TotalCorrectAnswers = totalScore,
@@ -1069,7 +1075,8 @@ namespace Application.System.ContractorPosts
                         WishSalary = request.WishSalary,
                         GroupID = group.Id,
                         Status = Status.NOT_RESPONSE,
-                        AppliedDate = DateTime.Now
+                        AppliedDate = DateTime.Now,
+                        Video=request.Video
                     };
 
                     if (request.QuizSubmit != null)
@@ -1117,6 +1124,7 @@ namespace Application.System.ContractorPosts
                         WishSalary = request.WishSalary,
                         Status = Status.NOT_RESPONSE,
                         AppliedDate = DateTime.Now,
+                        Video=request.Video
                     };
 
                     if (request.QuizSubmit != null)
@@ -1264,6 +1272,7 @@ namespace Application.System.ContractorPosts
                     Title = item.ContractorPosts.Title,
                     AppliedDate = item.AppliedDate,
                     WishSalary = item.WishSalary,
+                    Video = item.Video,
                     Groups = ls.Any() ? ls : null,
 
                 };

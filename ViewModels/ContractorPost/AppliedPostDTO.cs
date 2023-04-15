@@ -22,6 +22,8 @@
 
         public int? QuizId { get; set; }
 
+        public string? Video { get; set; }
+
         public string? QuizName { get; set; }
 
         public int? TotalNumberQuestion { get; set; }

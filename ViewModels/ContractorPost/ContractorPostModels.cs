@@ -38,5 +38,7 @@ namespace ViewModels.ContractorPost
 
         public bool QuizRequired { get; set; }
 
+        public bool VideoRequired { get; set; }
+
     }
 }

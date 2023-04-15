@@ -53,6 +53,8 @@ namespace ViewModels.ContractorPost
 
         public bool RequiredQuiz { get; set; }
 
+        public bool VideoRequired { get; set; }
+
         public List<Quiz>? Quizzes { get; set; }
 
         public List<MaterialStoreDTO>? RecommendStore { get; set; }

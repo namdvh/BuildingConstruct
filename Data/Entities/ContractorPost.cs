@@ -45,6 +45,8 @@ namespace Data.Entities
 
         public bool QuizRequired { get; set; }
 
+        public bool VideoRequired { get; set; }
+
         public string? ConstructionType { get; set; }
         
         public string? StartTime { get; set; }
