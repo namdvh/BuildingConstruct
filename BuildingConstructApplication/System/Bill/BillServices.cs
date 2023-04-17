@@ -47,9 +47,9 @@ namespace Application.System.Bill
                         {
                             if (billdetail.Quantity > checkingProduct.UnitInStock)
                             {
-                                response.Data = null;
+                                response.Data = checkingProduct.Id.ToString();
                                 response.Code = BaseCode.ERROR;
-                                response.Message = "Không đủ số lượng";
+                                response.Message = checkingProduct.Name+" Không đủ số lượng";
                                 return response;
                             }
                         }
@@ -62,14 +62,13 @@ namespace Application.System.Bill
                         {
                             if (billdetail.Quantity > checkingProductType.Quantity)
                             {
-                                response.Data = null;
+                                response.Data = checkingProduct.Id.ToString();
                                 response.Code = BaseCode.ERROR;
-                                response.Message = "Không đủ số lượng";
+                                response.Message = checkingProduct.Name + " Không đủ số lượng";
                                 return response;
                             }
                         }
                     }
-
                 }
             }
             foreach (var r in requests)
