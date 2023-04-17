@@ -390,6 +390,7 @@ namespace Application.System.Reports
                 ContractorPostId = report.ContractorPostId,
                 LastModifiedAt = DateTime.Now,
                 CreateBy = Guid.Parse(userID),
+                UserId=Guid.Parse(userID),
                 ReportProblem = report.ReportProblem
             };
             await _context.Reports.AddAsync(rp);
@@ -439,6 +440,7 @@ namespace Application.System.Reports
                 ProductId = report.ProductId,
                 LastModifiedAt = DateTime.Now,
                 CreateBy = Guid.Parse(userID),
+                UserId = Guid.Parse(userID),
                 ReportProblem = report.ReportProblem
             };
             await _context.Reports.AddAsync(rp);
