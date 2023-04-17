@@ -8,8 +8,8 @@ namespace Data.Enum
 {
     public enum PostCategories
     {
-        Categories1=1,
-        Categories2,
-        Categories3,
+        CO_DIEN=1,
+        HIEN_DAI,
+        TAN_CO_DIEN,
     }
 }

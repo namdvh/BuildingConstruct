@@ -24,9 +24,10 @@ namespace Application.System.Bill
             _accessor = accessor;
         }
 
-        public async Task<bool> CreateBill(List<BillDTO> requests)
+        public async Task<BaseResponse<string>> CreateBill(List<BillDTO> requests)
         {
             bool flag = false;
+            BaseResponse<string> response = new();
             Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
             var usID = identifierClaim.Value;
             var contracID = _context.Users.Where(x => x.Id.ToString().Equals(usID)).FirstOrDefault().ContractorId;
@@ -38,7 +39,7 @@ namespace Application.System.Bill
             {
                 foreach (var billdetail in item.ProductBillDetail)
                 {
-                    var checkingProduct = await _context.Products.FirstOrDefaultAsync(x => x.Id == billdetail.ProductId);
+                    var checkingProduct = _context.Products.FirstOrDefault(x => x.Id == billdetail.ProductId);
 
                     if (billdetail.TypeID == null)
                     {
@@ -46,31 +47,30 @@ namespace Application.System.Bill
                         {
                             if (billdetail.Quantity > checkingProduct.UnitInStock)
                             {
-                                return false;
+                                response.Data = checkingProduct.Id.ToString();
+                                response.Code = BaseCode.ERROR;
+                                response.Message = checkingProduct.Name+" Không đủ số lượng";
+                                return response;
                             }
                         }
                     }
                     else
                     {
-                        var checkingProductType = await _context.ProductTypes.FirstOrDefaultAsync(x => x.Id == billdetail.TypeID);
+                        var checkingProductType = _context.ProductTypes.FirstOrDefault(x => x.Id == billdetail.TypeID);
 
                         if (checkingProductType != null)
                         {
                             if (billdetail.Quantity > checkingProductType.Quantity)
                             {
-                                return false;
+                                response.Data = checkingProduct.Id.ToString();
+                                response.Code = BaseCode.ERROR;
+                                response.Message = checkingProduct.Name + " Không đủ số lượng";
+                                return response;
                             }
                         }
                     }
-
                 }
             }
-
-
-
-
-
-
             foreach (var r in requests)
             {
                 var bill = new Data.Entities.Bill();
@@ -134,9 +134,17 @@ namespace Application.System.Bill
                 }
                 _context.RemoveRange(ls);
                 await _context.SaveChangesAsync();
-                return true;
+                response.Data = null;
+                response.Code = BaseCode.SUCCESS;
+                response.Message = "Đặt hàng thành công";
             }
-            return false;
+            else
+            {
+                response.Data = null;
+                response.Code = BaseCode.ERROR;
+                response.Message = "Đặt hàng thất bại";
+            }
+            return response;
         }
 
         public async Task<BasePagination<List<BillDTO>>> GetAllBill(PaginationFilter filter)
@@ -362,7 +370,7 @@ namespace Application.System.Bill
                 StoreID = list.First().Bills.StoreID,
                 //StoreName = list.First().Bills.MaterialStore.User.FirstName + " " + list.First().Bills.MaterialStore.User.LastName,
                 TotalPrice = list.First().Bills.TotalPrice,
-                Type = list.First().Bills.Type
+                //Type = list.First().Bills.Type
 
             };
 
@@ -393,7 +401,7 @@ namespace Application.System.Bill
                 Status = bill.Status,
                 StoreID = bill.StoreID,
                 TotalPrice = bill.TotalPrice,
-                Type = bill.Type,
+                //Type = bill.Type,
                 _lastModifiedAt = bill.LastModifiedAt
 
             };
@@ -574,6 +582,9 @@ namespace Application.System.Bill
                         var billDetail = await _context.BillDetails.Where(x => x.BillID == billID).ToListAsync();
                         foreach (var item in billDetail)
                         {
+
+                            var product = _context.Products.FirstOrDefault(x => x.Id == item.ProductID);
+
                             Cart cart = new()
                             {
                                 LastModifiedAt = bill.LastModifiedAt,
@@ -583,6 +594,32 @@ namespace Application.System.Bill
                                 UserID = userID,
                             };
                             ls.Add(cart);
+
+                            if(item.ProductTypeId == null)
+                            {
+                                var unitInStockProduct = item.Quantity + product.UnitInStock;
+                                var soldQuantities = product.SoldQuantities - item.Quantity;
+                                product.UnitInStock = unitInStockProduct;
+                                product.SoldQuantities = soldQuantities; 
+                            
+                            }
+                            else
+                            {
+                                var type = _context.ProductTypes.Include(x=>x.Products).FirstOrDefault(x => x.Id == item.ProductTypeId);
+                                if (type != null)
+                                {
+                                    var unitTypeInStock = item.Quantity + type.Quantity;
+                                    var soldQuantities = type.Products.SoldQuantities - item.Quantity;
+                                    product.SoldQuantities = soldQuantities;
+                                    type.Quantity = unitTypeInStock;
+                                }
+                                _context.ProductTypes.Update(type);
+                            }
+
+                            _context.Products.Update(product);
+                            _context.SaveChanges();
+
+
                         }
                         await _context.AddRangeAsync(ls);
                         await _context.SaveChangesAsync();

@@ -121,7 +121,7 @@ namespace Data.Extensions
                 TypeID = Guid.Parse("4ace8fcb-95eb-48c0-9deb-240e8b4e10e0"),
                 Place = Enum.Place._60,
                 Experience = 3,
-                Certificate = "https://i1.rgstatic.net/publication/311457103_Certificate_of_Design_Builder_Training/links/58480cfb08aeda696825d727/largepreview.png",
+                Certificate = "Chứng chỉ a;công ty a;09/04/2011;https://i1.rgstatic.net/publication/311457103_Certificate_of_Design_Builder_Training/links/58480cfb08aeda696825d727/largepreview.png|Chứng chỉ b;công ty b;09/04/2011;https://i1.rgstatic.net/publication/311457103_Certificate_of_Design_Builder_Training/links/58480cfb08aeda696825d727/largepreview.png",
             });
 
             modelBuilder.Entity<BuilderSkill>().HasData(new BuilderSkill()
@@ -181,7 +181,7 @@ namespace Data.Extensions
                 CreateBy = Guid.Parse("d39ae0a6-9b2d-4421-be4a-cc294cec054f"),
                 TypeID = Guid.Parse("bd880489-5c76-4854-93ab-66e3a541bf24"),
                 Experience = 3,
-                Certificate = "https://i1.rgstatic.net/publication/311457103_Certificate_of_Design_Builder_Training/links/58480cfb08aeda696825d727/largepreview.png",
+                Certificate = "Chứng chỉ a;công ty a;09/04/2011;https://i1.rgstatic.net/publication/311457103_Certificate_of_Design_Builder_Training/links/58480cfb08aeda696825d727/largepreview.png|Chứng chỉ b;công ty b;09/04/2011;https://i1.rgstatic.net/publication/311457103_Certificate_of_Design_Builder_Training/links/58480cfb08aeda696825d727/largepreview.png",
                 Place = Enum.Place._61
             });
 
@@ -240,7 +240,7 @@ namespace Data.Extensions
                 TypeID = Guid.Parse("ce9fa65b-d005-46b6-953e-e6462a59cfb3"),
                 Place = Enum.Place._16,
                 Experience = 1,
-                Certificate = "https://i1.rgstatic.net/publication/311457103_Certificate_of_Design_Builder_Training/links/58480cfb08aeda696825d727/largepreview.png",
+                Certificate = "Chứng chỉ a;công ty a;09/04/2011;https://i1.rgstatic.net/publication/311457103_Certificate_of_Design_Builder_Training/links/58480cfb08aeda696825d727/largepreview.png|Chứng chỉ b;công ty b;09/04/2011;https://i1.rgstatic.net/publication/311457103_Certificate_of_Design_Builder_Training/links/58480cfb08aeda696825d727/largepreview.png",
             });
 
             modelBuilder.Entity<BuilderSkill>().HasData(new BuilderSkill()
@@ -298,7 +298,7 @@ namespace Data.Extensions
                 TypeID = Guid.Parse("ce9fa65b-d005-46b6-953e-e6462a59cfb3"),
                 Place = Enum.Place._52,
                 Experience = 4,
-                Certificate = "https://i1.rgstatic.net/publication/311457103_Certificate_of_Design_Builder_Training/links/58480cfb08aeda696825d727/largepreview.png",
+                Certificate = "Chứng chỉ a;công ty a;09/04/2011;https://i1.rgstatic.net/publication/311457103_Certificate_of_Design_Builder_Training/links/58480cfb08aeda696825d727/largepreview.png|Chứng chỉ b;công ty b;09/04/2011;https://i1.rgstatic.net/publication/311457103_Certificate_of_Design_Builder_Training/links/58480cfb08aeda696825d727/largepreview.png",
             });
 
             modelBuilder.Entity<BuilderSkill>().HasData(new BuilderSkill()
@@ -356,7 +356,7 @@ namespace Data.Extensions
                 TypeID = Guid.Parse("cf9fa65b-d005-46b6-953e-e6462a59cfb3"),
                 Place = Enum.Place._42,
                 Experience = 1,
-                Certificate = "https://i1.rgstatic.net/publication/311457103_Certificate_of_Design_Builder_Training/links/58480cfb08aeda696825d727/largepreview.png",
+                Certificate = "Chứng chỉ a;công ty a;09/04/2011;https://i1.rgstatic.net/publication/311457103_Certificate_of_Design_Builder_Training/links/58480cfb08aeda696825d727/largepreview.png|Chứng chỉ b;công ty b;09/04/2011;https://i1.rgstatic.net/publication/311457103_Certificate_of_Design_Builder_Training/links/58480cfb08aeda696825d727/largepreview.png",
             });
 
             modelBuilder.Entity<BuilderSkill>().HasData(new BuilderSkill()
@@ -419,7 +419,7 @@ namespace Data.Extensions
                 TypeID = Guid.Parse("cf9fa65b-d005-46b6-953e-e6462a59cfb3"),
                 Place = Enum.Place._13,
                 Experience = 2,
-                Certificate = "https://i1.rgstatic.net/publication/311457103_Certificate_of_Design_Builder_Training/links/58480cfb08aeda696825d727/largepreview.png",
+                Certificate = "Chứng chỉ a;công ty a;09/04/2011;https://i1.rgstatic.net/publication/311457103_Certificate_of_Design_Builder_Training/links/58480cfb08aeda696825d727/largepreview.png|Chứng chỉ b;công ty b;09/04/2011;https://i1.rgstatic.net/publication/311457103_Certificate_of_Design_Builder_Training/links/58480cfb08aeda696825d727/largepreview.png",
             });
 
             modelBuilder.Entity<BuilderSkill>().HasData(new BuilderSkill()
@@ -725,7 +725,7 @@ namespace Data.Extensions
                 EndDate = new DateTime(2023, 5, 15),
                 Status = Enum.Status.SUCCESS,
                 Place = Enum.Place._52,
-                PostCategories = Enum.PostCategories.Categories1,
+                PostCategories = Enum.PostCategories.CO_DIEN,
                 Salaries = "200000 - 800000",
                 NumberPeople = 20,
                 ContractorID = 1,
@@ -781,7 +781,7 @@ namespace Data.Extensions
                 EndDate = new DateTime(2023, 5, 15),
                 Status = Enum.Status.PENDING,
                 Place = Enum.Place._52,
-                PostCategories = Enum.PostCategories.Categories1,
+                PostCategories = Enum.PostCategories.CO_DIEN,
                 Salaries = "200000 - 500000",
                 NumberPeople = 20,
                 Accommodation = true,
@@ -833,7 +833,7 @@ namespace Data.Extensions
                 EndDate = new DateTime(2023, 5, 15),
                 Status = Enum.Status.SUCCESS,
                 Place = Enum.Place._52,
-                PostCategories = Enum.PostCategories.Categories1,
+                PostCategories = Enum.PostCategories.CO_DIEN,
                 Salaries = "+600000",
                 NumberPeople = 20,
                 ContractorID = 2,
@@ -868,7 +868,7 @@ namespace Data.Extensions
                 EndDate = new DateTime(2023, 5, 15),
                 Status = Enum.Status.SUCCESS,
                 Place = Enum.Place._20,
-                PostCategories = Enum.PostCategories.Categories1,
+                PostCategories = Enum.PostCategories.CO_DIEN,
                 Salaries = "+600000",
                 NumberPeople = 20,
                 ContractorID = 1,
@@ -899,7 +899,7 @@ namespace Data.Extensions
                 EndDate = new DateTime(2024, 5, 15),
                 Status = Enum.Status.SUCCESS,
                 Place = Enum.Place._14,
-                PostCategories = Enum.PostCategories.Categories2,
+                PostCategories = Enum.PostCategories.HIEN_DAI,
                 Salaries = "+600000",
                 NumberPeople = 30,
                 CreateBy = Guid.Parse("d7285fb7-835b-4680-a18c-673bd71f63d6"),
@@ -926,7 +926,7 @@ namespace Data.Extensions
                 EndDate = new DateTime(2024, 5, 30),
                 Status = Enum.Status.SUCCESS,
                 Place = Enum.Place._14,
-                PostCategories = Enum.PostCategories.Categories2,
+                PostCategories = Enum.PostCategories.HIEN_DAI,
                 Salaries = "+600000",
                 NumberPeople = 30,
                 ContractorID = 1,
@@ -954,7 +954,7 @@ namespace Data.Extensions
                 EndDate = new DateTime(2023, 5, 15),
                 Status = Enum.Status.SUCCESS,
                 Place = Enum.Place._52,
-                PostCategories = Enum.PostCategories.Categories1,
+                PostCategories = Enum.PostCategories.CO_DIEN,
                 Salaries = "+600000",
                 NumberPeople = 20,
                 ContractorID = 1,
@@ -1006,7 +1006,7 @@ namespace Data.Extensions
                 EndDate = new DateTime(2023, 5, 15),
                 Status = Enum.Status.SUCCESS,
                 Place = Enum.Place._52,
-                PostCategories = Enum.PostCategories.Categories2,
+                PostCategories = Enum.PostCategories.HIEN_DAI,
                 Salaries = "+600000",
                 NumberPeople = 20,
                 ContractorID = 1,
@@ -1053,7 +1053,7 @@ namespace Data.Extensions
                 EndDate = new DateTime(2023, 5, 15),
                 Status = Enum.Status.SUCCESS,
                 Place = Enum.Place._52,
-                PostCategories = Enum.PostCategories.Categories2,
+                PostCategories = Enum.PostCategories.HIEN_DAI,
                 Salaries = "+600000",
                 NumberPeople = 20,
                 ContractorID = 1,
@@ -1099,7 +1099,7 @@ namespace Data.Extensions
                 EndDate = new DateTime(2023, 5, 15),
                 Status = Enum.Status.SUCCESS,
                 Place = Enum.Place._52,
-                PostCategories = Enum.PostCategories.Categories2,
+                PostCategories = Enum.PostCategories.HIEN_DAI,
                 Salaries = "+600000",
                 NumberPeople = 20,
                 ContractorID = 1,

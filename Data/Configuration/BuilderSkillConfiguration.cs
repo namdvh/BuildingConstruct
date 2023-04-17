@@ -8,9 +8,10 @@ namespace Data.Configuration
     {
         public void Configure(EntityTypeBuilder<BuilderSkill> builder)
         {
-            builder.ToTable("BuilderSkills");
+            builder.ToTable("WorkerSkills");
 
             builder.HasKey(x => new { x.BuilderSkillID, x.SkillID });
+            builder.Property(x => x.BuilderSkillID).HasColumnName("WorkerSkillID");
 
 
 

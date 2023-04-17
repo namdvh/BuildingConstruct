@@ -36,15 +36,9 @@ namespace BuildingConstructApi.Controllers
         [HttpPost("createBill")]
         public async Task<IActionResult> CreateBill([FromBody] List<BillDTO> request)
         {
-            BaseResponse<List<BillDTO>> response = new();
             string? userID = User.FindFirst("UserID")?.Value;
 
             var rs = await _billServices.CreateBill(request);
-            if (rs)
-            {
-                response.Code = BaseCode.SUCCESS;
-                response.Message = "Create Bill success";
-                response.Data = request;
 
 
                 foreach (var item in request)
@@ -89,14 +83,7 @@ namespace BuildingConstructApi.Controllers
                         }
                     }
                 }
-            }
-            else
-            {
-
-                response.Code = BaseCode.ERROR;
-                response.Message = "Create Bill Failed , Please checking quantities before buy";
-            }
-            return Ok(response);
+            return Ok(rs);
         }
         [HttpPost("getAll")]
         public async Task<IActionResult> GetAllBill([FromBody] PaginationFilter request)

@@ -29,7 +29,7 @@ namespace Application.System.MaterialStores
             Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
             var userID = identifierClaim.Value.ToString();
             var roles = _accessor.HttpContext.User.FindFirst(ClaimTypes.Role).Value.ToString();
-            if (!roles.ToLower().Equals(("store")))
+            if (roles.ToLower().Equals(("store")))
             {
                 return false;
             }
@@ -798,10 +798,18 @@ namespace Application.System.MaterialStores
 
             }
 
+            ProductStoreDTO newProduct = new()
+            {
+                Id = newUpdateProduct.Id
+            };
+
+
             response = new()
             {
                 Code = BaseCode.SUCCESS,
-                Message = BaseCode.SUCCESS_MESSAGE
+                Message = BaseCode.SUCCESS_MESSAGE,
+                Data= newProduct
+
             };
 
             return response;

@@ -18,6 +18,7 @@ namespace Application.System.ContractorPosts
         Task<BasePagination<List<ContractorPostDTO>>> SearchPost(PaginationFilter filter, string keyword);
 
         Task<BaseResponse<string>> AppliedPost(AppliedPostRequest request, Guid userID);
+        Task<BaseResponse<string>> UpdatePost(ContractorPostUpdate request);
 
         Task<BasePagination<List<AppliedPostDTO>>> ViewAppliedPost(int postID, PaginationFilter filter);
 
@@ -30,5 +31,7 @@ namespace Application.System.ContractorPosts
         Task<BaseResponse<QuizSubmitDetailDTO>> ViewDetailQuizSubmit(int quizId,int builderId);
 
         Task<BaseResponse<bool>> ViewPostAppliedCheck(int builderId,Guid contractorId);
+
+        Task<BaseResponse<string>> UpdatePostStatus(int postId);
     }
 }

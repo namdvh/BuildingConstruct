@@ -1,4 +1,5 @@
 ﻿using Data.DataContext;
+using Data.Entities;
 using Data.Enum;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
@@ -17,25 +18,93 @@ namespace Application.System.PostInvite
             _context = context;
         }
 
+        public async Task<BaseResponse<List<PostInviteDTO>>> CheckInvite(int builderID, Guid userId)
+        {
+            BaseResponse<List<PostInviteDTO>> response;
+
+
+            var contractor = await _context.Users
+                .Include(x => x.Contractor)
+                .FirstOrDefaultAsync(x => x.Id.Equals(userId));
+
+            var builder = await _context.Users
+                .Include(x => x.Builder)
+                .FirstOrDefaultAsync(x => x.BuilderId.Equals(builderID));
+
+
+            List<Data.Entities.ContractorPost>? postAlreadyApllied = new();
+
+            if (contractor != null && builder != null)
+            {
+
+                var allPost = await _context.ContractorPosts
+                    .Where(x => x.ContractorID == contractor.ContractorId && x.Status == Status.SUCCESS)
+                    .ToListAsync();
+
+                foreach (var post in allPost)
+                {
+
+                    if (_context.PostInvites.Any(x => x.BuilderId == builderID && x.ContractorPostId == post.Id))
+                    {
+                        postAlreadyApllied.Add(post);
+                    }
+                    else if (_context.AppliedPosts.Any(x => x.BuilderID == builderID && x.PostID == post.Id))
+                    {
+                        postAlreadyApllied.Add(post);
+
+                    }
+                    else if (_context.PostCommitments.Any(x => x.BuilderID == builderID && x.PostID == post.Id))
+                    {
+                        postAlreadyApllied.Add(post);
+                    }
+                }
+
+
+
+                var distinctAlreadyList = postAlreadyApllied.Distinct().ToList();
+                var result = allPost.Except(distinctAlreadyList).ToList();
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = MapListCheckInivteDTO(result, builder, contractor)
+                };
+
+                return response;
+
+            }
+
+
+            response = new()
+            {
+                Code = BaseCode.ERROR,
+                Message = BaseCode.NOTFOUND_MESSAGE,
+            };
+
+            return response;
+
+
+        }
+
         public async Task<BaseResponse<string>> Create(CreatePostIniviteRequest requests)
         {
             BaseResponse<string> response;
-          
-
-                Data.Entities.PostInvite postInvite = new()
-                {
-                    BuilderId = requests.BuilderId,
-                    ContractorId = requests.ContractorId,
-                    ContractorPostId = requests.ContractorPostId,
-                    IsRead = false,
-                    LastModifiedAt = DateTime.Now,
-                };
-
-                await _context.PostInvites.AddAsync(postInvite);
-                await _context.SaveChangesAsync();
 
 
-            var sendID = await _context.Users.Where(x=>x.BuilderId==requests.BuilderId).Select(x=>x.Id).FirstOrDefaultAsync(); 
+            Data.Entities.PostInvite postInvite = new()
+            {
+                BuilderId = requests.BuilderId,
+                ContractorId = requests.ContractorId,
+                ContractorPostId = requests.ContractorPostId,
+                IsRead = false,
+                LastModifiedAt = DateTime.Now,
+            };
+
+            await _context.PostInvites.AddAsync(postInvite);
+            await _context.SaveChangesAsync();
+
+
+            var sendID = await _context.Users.Where(x => x.BuilderId == requests.BuilderId).Select(x => x.Id).FirstOrDefaultAsync();
 
             response = new()
             {
@@ -43,7 +112,7 @@ namespace Application.System.PostInvite
                 Message = BaseCode.SUCCESS_MESSAGE,
                 Data = sendID.ToString(),
                 NavigateId = requests.ContractorPostId
-                };
+            };
 
             return response;
 
@@ -222,6 +291,36 @@ namespace Application.System.PostInvite
                     Id = item.Id,
                     Places = item.ContractorPost.Place,
                     Salaries = item.ContractorPost.Salaries,
+                };
+                ls.Add(tmp);
+            }
+
+            return ls;
+
+        }
+
+
+
+        private List<PostInviteDTO> MapListCheckInivteDTO(List<Data.Entities.ContractorPost> post, User builder, User contractor)
+        {
+
+            List<PostInviteDTO> ls = new();
+
+            foreach (var item in post)
+            {
+                PostInviteDTO tmp = new()
+                {
+                    BuilderId = builder.BuilderId,
+                    BuilderName = builder.FirstName + " " + builder.LastName,
+                    CompanyName = contractor.Contractor.CompanyName,
+                    ContractorId = contractor.ContractorId,
+                    IsRead = false,
+                    LastModifiedAt = item.LastModifiedAt,
+                    ContractorName = contractor.FirstName + " " + contractor.LastName,
+                    ContractorPostId = item.Id,
+                    ContractorPostName = item.ProjectName,
+                    Places = item.Place,
+                    Salaries = item.Salaries,
                 };
                 ls.Add(tmp);
             }

@@ -228,13 +228,13 @@ namespace Application.System.Users
                         var userDTO = MapToDto(us, roleName);
                         var premium = await _context.Payments.Where(x => x.UserId.ToString().Equals(us.Id.ToString())).FirstOrDefaultAsync();
                         bool isPremium = false;
-                        if (premium != null )
+                        if (premium != null)
                         {
-                            if(premium.ExpireationDate >= DateTime.Now)
+                            if (premium.ExpireationDate >= DateTime.Now)
                             {
                                 isPremium = true;
                             }
-                            if(premium.ExtendDate!=null && premium.ExtendDate >= DateTime.Now)
+                            if (premium.ExtendDate != null && premium.ExtendDate >= DateTime.Now)
                             {
                                 isPremium = true;
                             }
@@ -265,6 +265,31 @@ namespace Application.System.Users
                             RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime
                         };
 
+                        if (roleName.Equals("User"))
+                        {
+
+                            var result = await _context.Users
+                                             .Include(x => x.Builder)
+                                                 .ThenInclude(x => x.Type)
+                                             .Where(x => x.Id.Equals(us.Id))
+                                             .FirstOrDefaultAsync();
+
+                            response.Data.Builder = MapToDetailBuilder(result);
+
+
+                        }
+                        else if (roleName.Equals("Contractor"))
+                        {
+
+                            var result = await _context.Users.Include(x => x.Contractor).Where(x => x.Id.Equals(us.Id)).FirstOrDefaultAsync();
+                            response.Data.Contractor = MapToDetailContractor(result);
+                        }
+                        else
+                        {
+
+                            var result = await _context.Users.Include(x => x.MaterialStore).Where(x => x.Id.Equals(us.Id)).FirstOrDefaultAsync();
+                            response.Data.DetailMaterialStore = MapToDetailStore(result);
+                        }
 
                     }
                 }
@@ -316,11 +341,12 @@ namespace Application.System.Users
                     RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime
                 };
 
+               
+
+
+                return response;
+
             }
-
-
-            return response;
-
         }
         private UserModels MapToDto(User user, string roleName)
         {
@@ -644,7 +670,7 @@ namespace Application.System.Users
                 }
                 var appliedCount = _context.AppliedPosts.Where(x => x.BuilderID == user.Builder.Id).Count();
                 var inviteCount = _context.PostInvites.Where(x => x.BuilderId == user.Builder.Id).Count();
-                var commitmentCount = _context.PostCommitments.Where(x=>x.BuilderID==user.Builder.Id).Count();
+                var commitmentCount = _context.PostCommitments.Where(x => x.BuilderID == user.Builder.Id && x.Status == Status.SUCCESS).Count();
                 List<string> images = new();
 
                 if (user.Builder.Image != null)
@@ -695,7 +721,7 @@ namespace Application.System.Users
             else if (status == 2)
             {
                 var billCount = _context.Bills.Where(x => x.ContractorId == user.ContractorId).Count();
-                var commitmentCount = _context.PostCommitments.Where(x => x.ContractorID==user.ContractorId).Count();
+                var commitmentCount = _context.PostCommitments.Where(x => x.ContractorID == user.ContractorId && x.Status == Status.SUCCESS).Count();
 
 
                 DetailContractor detailContractor = new()
@@ -704,8 +730,8 @@ namespace Application.System.Users
                     Description = user.Contractor.Description,
                     Id = user.Contractor.Id,
                     Website = user.Contractor.Website,
-                    BillCount=billCount,
-                    PostCount= commitmentCount,
+                    BillCount = billCount,
+                    PostCount = commitmentCount,
                 };
 
 
@@ -727,8 +753,8 @@ namespace Application.System.Users
             }
             else
             {
-                var billCount = _context.Bills.Where(x => x.StoreID == user.MaterialStoreID).Count();
-                var productCount = _context.Products.Where(x => x.MaterialStoreID == user.MaterialStoreID).Count();
+                var billCount = _context.Bills.Where(x => x.StoreID == user.MaterialStoreID && x.Status == Status.SUCCESS).Count();
+                var productCount = _context.Products.Where(x => x.MaterialStoreID == user.MaterialStoreID && x.Status == true).Count();
 
                 DetailMaterialStore detailMaterial = new()
                 {
@@ -739,8 +765,8 @@ namespace Application.System.Users
                     Image = user.MaterialStore.Image,
                     Place = user.MaterialStore.Place,
                     TaxCode = user.MaterialStore.TaxCode,
-                    BillCount= billCount,
-                    ProductCount= productCount,
+                    BillCount = billCount,
+                    ProductCount = productCount,
                 };
 
 
@@ -900,9 +926,6 @@ namespace Application.System.Users
 
                 }
 
-
-                //
-
                 if (request.ExperienceDetail != null)
                 {
                     if (request.ExperienceDetail.Length == 0)
@@ -916,9 +939,6 @@ namespace Application.System.Users
                     }
 
                 }
-
-
-
 
                 if (!string.IsNullOrEmpty(request.Experience.ToString()))
                 {
@@ -967,6 +987,7 @@ namespace Application.System.Users
                             SkillID = x
                         };
                         await _context.BuilderSkills.AddAsync(newSkills);
+
                         await _context.SaveChangesAsync();
                     }
                 }
@@ -1001,10 +1022,12 @@ namespace Application.System.Users
                     user.Status = Status.Level2;
                 }
 
-                _context.Users.Update(user);
-                await _context.SaveChangesAsync();
 
 
+
+                _context.Update(user);
+                var rs=await _context.SaveChangesAsync();
+                
                 response = new()
                 {
                     Code = BaseCode.SUCCESS,
@@ -1584,7 +1607,7 @@ namespace Application.System.Users
         {
             BasePagination<List<UserDetailDTO>> response;
             List<UserDetailDTO> ls = new();
-            List<int?>storeIDFromDB = new();
+            List<int?> storeIDFromDB = new();
             var orderBy = filter._orderBy.ToString();
             int totalRecord;
             orderBy = orderBy switch
@@ -1796,5 +1819,117 @@ namespace Application.System.Users
             response.Message = BaseCode.SUCCESS_MESSAGE;
             return response;
         }
+
+
+        public DetailBuilder MapToDetailBuilder(User user)
+        {
+            var tmp = _context.BuilderSkills.Include(x => x.Skill).Where(x => x.BuilderSkillID == user.BuilderId).ToList();
+
+            var contrusctionType = _context.WorkerContructionTypes
+
+                .Include(x => x.ConstructionType)
+                .Where(x => x.BuilderId == user.BuilderId).ToList();
+
+
+            List<WorkerListType> ls = new();
+            foreach (var item in contrusctionType)
+            {
+
+                WorkerListType workerListType = new()
+                {
+                    ConstructionTypeId = item.ConstructionTypeId,
+                    Name = item.ConstructionType.Name
+                };
+                ls.Add(workerListType);
+            }
+            var appliedCount = _context.AppliedPosts.Where(x => x.BuilderID == user.Builder.Id).Count();
+            var inviteCount = _context.PostInvites.Where(x => x.BuilderId == user.Builder.Id).Count();
+            var commitmentCount = _context.PostCommitments.Where(x => x.BuilderID == user.Builder.Id && x.Status == Status.SUCCESS).Count();
+            List<string> images = new();
+
+            if (user.Builder.Image != null)
+            {
+                var splitImage = user.Builder.Image.Split(",").ToList();
+
+                images.AddRange(splitImage);
+            }
+
+
+
+
+            DetailBuilder dto = new()
+            {
+
+                BuilderSkills = MapToSkillDTO(tmp),
+                Id = user.Builder.Id,
+                Place = user.Builder.Place,
+                TypeName = user.Builder.Type?.Name == null ? null : user.Builder.Type?.Name,
+                TypeID = user.Builder.TypeID,
+                ExperienceDetail = user.Builder.ExperienceDetail,
+                Certificate = user.Builder.Certificate,
+                Experience = user.Builder.Experience,
+                Image = user.Builder.Image,
+                ConstructionType = ls,
+                AppliedCount = appliedCount,
+                InviteCount = inviteCount,
+                Images = images.Any() ? images : null,
+                CommitmentCount = commitmentCount
+            };
+
+            return dto;
+        }
+
+
+        public DetailContractor MapToDetailContractor (User user)
+        {
+            var billCount = _context.Bills.Where(x => x.ContractorId == user.ContractorId).Count();
+            var commitmentCount = _context.PostCommitments.Where(x => x.ContractorID == user.ContractorId && x.Status == Status.SUCCESS).Count();
+
+
+            DetailContractor detailContractor = new()
+            {
+                CompanyName = user.Contractor.CompanyName,
+                Description = user.Contractor.Description,
+                Id = user.Contractor.Id,
+                Website = user.Contractor.Website,
+                BillCount = billCount,
+                PostCount = commitmentCount,
+            };
+
+            return detailContractor;
+        }
+
+        public DetailMaterialStore MapToDetailStore(User user)
+        {
+            var billCount = _context.Bills.Where(x => x.StoreID == user.MaterialStoreID && x.Status == Status.SUCCESS).Count();
+            var productCount = _context.Products.Where(x => x.MaterialStoreID == user.MaterialStoreID && x.Status == true).Count();
+
+            DetailMaterialStore detailMaterial = new()
+            {
+                Description = user.MaterialStore.Description,
+                Id = user.MaterialStore.Id,
+                Website = user.MaterialStore.Website,
+                Experience = user.MaterialStore.Experience,
+                Image = user.MaterialStore.Image,
+                Place = user.MaterialStore.Place,
+                TaxCode = user.MaterialStore.TaxCode,
+                BillCount = billCount,
+                ProductCount = productCount,
+            };
+            return detailMaterial;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }

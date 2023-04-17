@@ -55,13 +55,14 @@ namespace Application.System.ContractorPosts
                 NumberPeople = contractorPostDTO.NumberPeople,
                 PeopeRemained = contractorPostDTO.NumberPeople,
                 Status = contractorPostDTO.QuizRequired == true ? Status.PENDING : Status.SUCCESS,
-                PostCategories = PostCategories.Categories1,
+                PostCategories = contractorPostDTO.PostCategories,
                 Benefit = contractorPostDTO.Benefit,
                 Required = contractorPostDTO.Required,
                 LastModifiedAt = DateTime.Now,
                 CreateBy = Guid.Parse(userID),
                 ContractorID = (int)contracID,
                 QuizRequired = contractorPostDTO.QuizRequired,
+                VideoRequired = contractorPostDTO.VideoRequired,
             };
 
             await _context.ContractorPosts.AddAsync(contractorPost);
@@ -194,7 +195,7 @@ namespace Application.System.ContractorPosts
         private async Task<ContractorPostDetailDTO> MapToDetailDTO(ContractorPost post, string userID, int? pageSize)
         {
             bool IsSave = false;
-            
+
             var save = await _context.Saves.Where(x => x.UserId.ToString().Equals(userID) && x.ContractorPostId == post.Id).FirstOrDefaultAsync();
             if (save != null)
             {
@@ -208,13 +209,17 @@ namespace Application.System.ContractorPosts
                 c = check;
                 if (check != null)
                 {
-                    post.isApplied = true;
+                    var alreadyCommitment = await _context.PostCommitments.Where(x => x.BuilderID == builder.Id && x.ContractorPosts.Id == post.Id).FirstOrDefaultAsync();
+                    if (alreadyCommitment!=null)
+                    {
+                        post.isApplied = true;
+                    }
                 }
                 else
                 {
                     post.isApplied = false;
                 }
-                
+
             }
             else
             {
@@ -245,10 +250,11 @@ namespace Application.System.ContractorPosts
                 PeopleRemained = post.PeopeRemained,
                 PostCategories = post.PostCategories,
                 Place = post.Place,
-                IsGroup = c?.Group ==null ? false : true,
-                QuizId = c?.QuizId !=null ? c.QuizId : null,
+                IsGroup = c?.GroupID == null ? false : true,
+                QuizId = c?.QuizId != null ? c.QuizId : null,
                 IsApplied = post.isApplied,
                 RequiredQuiz = post.QuizRequired,
+                VideoRequired=post.VideoRequired,
                 type = await GetTypeAndSkillFromPost(post.Id),
                 CreatedBy = post.CreateBy,
                 Author = await GetUserProfile(post.CreateBy),
@@ -261,13 +267,13 @@ namespace Application.System.ContractorPosts
             string keyword = string.Empty;
             switch (post.PostCategories)
             {
-                case PostCategories.Categories1:
+                case PostCategories.CO_DIEN:
                     keyword = "Cổ điển ";
                     break;
-                case PostCategories.Categories2:
+                case PostCategories.HIEN_DAI:
                     keyword = "Hiện đại";
                     break;
-                case PostCategories.Categories3:
+                case PostCategories.TAN_CO_DIEN:
                     keyword = "Tân cổ điển";
                     break;
             }
@@ -694,6 +700,7 @@ namespace Application.System.ContractorPosts
                 AppliedDate = applied.AppliedDate,
                 QuizId = applied.QuizId,
                 QuizName = applied.Quiz?.Name,
+                Video = applied.Video,
                 TypeName = applied.Builder.Type.Name,
                 TotalCorrectAnswers = totalScore,
                 TotalNumberQuestion = totalQuestion,
@@ -726,6 +733,9 @@ namespace Application.System.ContractorPosts
                 LastName = applied.Builder.User.LastName,
                 UserID = applied.Builder.User.Id,
                 WishSalary = applied.WishSalary,
+                Video=applied.Video,
+                QuizId = applied.QuizId,
+                QuizName = applied.Quiz?.Name,
                 Groups = group,
                 AppliedDate = applied.AppliedDate,
                 TotalCorrectAnswers = totalScore,
@@ -968,10 +978,22 @@ namespace Application.System.ContractorPosts
                     };
                     return response;
                 }
-                //first order commitment
-
                 var post = await _context.ContractorPosts.FirstOrDefaultAsync(x => x.Id == request.PostId);
 
+                var commitmentInPost = await _context.PostCommitments.Where(x=>x.BuilderID==user.BuilderId && x.PostID == request.PostId).FirstOrDefaultAsync();
+                if (commitmentInPost != null)
+                {
+                    response = new()
+                    {
+                        Code = BaseCode.ERROR,
+                        Message = "Bạn đã ứng tuyển vào vị trí này ",
+                        Data = "ALREADY_APPLIED"
+                    };
+                    return response;
+                }
+
+
+                //first order commitment
                 var checkCommitment = await _context.PostCommitments.Where(x => x.BuilderID == user.BuilderId).OrderByDescending(x => x.Id).ToListAsync();
 
 
@@ -1053,7 +1075,8 @@ namespace Application.System.ContractorPosts
                         WishSalary = request.WishSalary,
                         GroupID = group.Id,
                         Status = Status.NOT_RESPONSE,
-                        AppliedDate = DateTime.Now
+                        AppliedDate = DateTime.Now,
+                        Video=request.Video
                     };
 
                     if (request.QuizSubmit != null)
@@ -1101,6 +1124,7 @@ namespace Application.System.ContractorPosts
                         WishSalary = request.WishSalary,
                         Status = Status.NOT_RESPONSE,
                         AppliedDate = DateTime.Now,
+                        Video=request.Video
                     };
 
                     if (request.QuizSubmit != null)
@@ -1248,6 +1272,7 @@ namespace Application.System.ContractorPosts
                     Title = item.ContractorPosts.Title,
                     AppliedDate = item.AppliedDate,
                     WishSalary = item.WishSalary,
+                    Video = item.Video,
                     Groups = ls.Any() ? ls : null,
 
                 };
@@ -1623,6 +1648,221 @@ namespace Application.System.ContractorPosts
                 Data = false,
                 Message = BaseCode.SUCCESS_MESSAGE
             };
+            return response;
+        }
+
+        public async Task<BaseResponse<string>> UpdatePostStatus(int postId)
+        {
+            BaseResponse<string> response;
+
+            var post = await _context.ContractorPosts.FirstOrDefaultAsync(x=>x.Id== postId);
+
+            if (post != null)
+            {
+                post.Status = Status.CANCEL;
+                _context.Update(post);
+                await _context.SaveChangesAsync();
+            }
+
+            response = new()
+            {
+                Code = BaseCode.SUCCESS,
+                Message = "Cập nhật thành công"
+            };
+            return response;
+        }
+
+        public async Task<BaseResponse<string>> UpdatePost(ContractorPostUpdate request)
+        {
+            BaseResponse<string> response = new();
+            var postId = request.PostId;
+            var query = await _context.ContractorPosts.Where(x => x.Id == postId).FirstOrDefaultAsync();
+            var PostType = query?.ContractorPostTypes;
+            var PostSkill = query?.PostSkills;
+            var checkApplied = await _context.AppliedPosts.Where(x => x.PostID == postId).AnyAsync();
+            var checkCommitment = await _context.PostCommitments.Where(x => x.PostID == postId).AnyAsync();
+            if(checkApplied || checkCommitment)
+            {
+                response.Code = BaseCode.ERROR;
+                response.Message = "Không thể chỉnh sửa bài post này";
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(request.Title))
+                {
+                    query.Title = request.Title;
+                }
+                if (!string.IsNullOrEmpty(request.ProjectName))
+                {
+                    query.ProjectName = request.ProjectName;
+                }
+                if (!string.IsNullOrEmpty(request.Description))
+                {
+                    query.Description = request.Description;
+                }
+                if (!string.IsNullOrEmpty(request.Required))
+                {
+                    query.Required = request.Required;
+                }
+                if (!string.IsNullOrEmpty(request.Benefit))
+                {
+                    query.Benefit = request.Benefit;
+                }
+                if (!string.IsNullOrEmpty(request.StarDate.ToString()))
+                {
+                    query.StarDate = request.StarDate;
+                }
+                if (!string.IsNullOrEmpty(request.EndDate.ToString()))
+                {
+                    query.EndDate = request.EndDate;
+                }
+                if (!string.IsNullOrEmpty(request.EndTime))
+                {
+                    query.EndTime = request.EndTime;
+                }
+                if (!string.IsNullOrEmpty(request.StartTime))
+                {
+                    query.StartTime = request.StartTime;
+                }
+                if (!string.IsNullOrEmpty(request.Salaries))
+                {
+                    query.Salaries = request.Salaries;
+                }
+                if (!string.IsNullOrEmpty(request.Accommodation.ToString()))
+                {
+                    query.Accommodation = request.Accommodation;
+                }
+                if (!string.IsNullOrEmpty(request.Place.ToString()))
+                {
+                    query.Place = request.Place;
+                }
+                if (!string.IsNullOrEmpty(request.Transport.ToString()))
+                {
+                    query.Transport = request.Transport;
+                }
+                if (!string.IsNullOrEmpty(request.NumberPeople.ToString()))
+                {
+                    query.NumberPeople = request.NumberPeople;
+                }
+                if (!string.IsNullOrEmpty(request.PostCategories.ToString()))
+                {
+                    query.PostCategories = request.PostCategories;
+                }
+                if (!string.IsNullOrEmpty(request.PostCategories.ToString()))
+                {
+                    query.PostCategories = request.PostCategories;
+                }
+                if (request.type != null)
+                {
+                    foreach (var item in request.type)
+                    {
+                        _context.Remove(query.ContractorPostTypes);
+                        _context.SaveChanges();
+                        var rType = new Data.Entities.ContractorPostType();
+                        if (item.id != null)
+                        {
+                            rType.TypeID = (Guid)item.id;
+                            rType.ContractorPostID = (int)postId;
+                            _context.ContractorPostTypes.Add(rType);
+
+                            var rs = _context.SaveChanges();
+                            if (rs < 0)
+                            {
+                                response.Code = BaseCode.ERROR;
+                                response.Message = "Cập nhật bài post không thành công";
+                                return response;
+                            }
+                        }
+                    }
+
+                    var flag = false;
+                    foreach (var i in request.type)
+                    {
+                        foreach (var o in i.SkillArr)
+                        {
+                            if (o.fromSystem == false)
+                            {
+                                var rSkill = new Skill
+                                {
+                                    Name = o.name,
+                                    FromSystem = o.fromSystem
+                                };
+                                _context.Skills.Add(rSkill);
+                                _context.SaveChanges();
+                                var cPostSkill = new ContractorPostSkill
+                                {
+                                    ContractorPostID = (int)postId,
+                                    SkillID = rSkill.Id
+                                };
+                                _context.ContractorPostSkills.Add(cPostSkill);
+                                var rs = _context.SaveChanges();
+                                if (rs < 0)
+                                {
+                                    response.Code = BaseCode.ERROR;
+                                    response.Message = "Cập nhật bài post không thành công";
+                                    return response;
+                                }
+                                flag = true;
+                            }
+                            else
+                            {
+                                var rs = await _context.Skills.Include(x => x.Type).Where(x => x.Id == o.id).ToListAsync();
+                                foreach (var c in rs)
+                                {
+                                    var guid = i.id.ToString();
+                                    var cid = c.TypeId.ToString();
+                                    if (guid.Equals(cid))
+                                    {
+
+                                        var cPostSkill = new ContractorPostSkill
+                                        {
+                                            ContractorPostID = (int)postId,
+                                            SkillID = o.id
+                                        };
+                                        _context.ContractorPostSkills.Add(cPostSkill);
+                                        _context.SaveChanges();
+                                        flag = true;
+                                    }
+                                    else
+                                    {
+                                        response.Code = BaseCode.ERROR;
+                                        response.Message = "Cập nhật bài post không thành công";
+                                        return response;
+                                    }
+                                }
+                            }
+                        }
+
+                    };
+                    await _context.SaveChangesAsync();
+                    if (flag)
+                    {
+                        if (PostSkill!=null)
+                        {
+                            _context.ContractorPostSkills.RemoveRange(PostSkill);
+                            _context.SaveChanges();
+                        }
+                        if (PostType != null)
+                        {
+                            _context.ContractorPostTypes.RemoveRange(PostType);
+                            _context.SaveChanges();
+                        }
+
+                    }
+                }
+                var update = _context.ContractorPosts.Update(query);
+                var res = await _context.SaveChangesAsync();
+                if (res > 0)
+                {
+                    response.Code = BaseCode.SUCCESS;
+                    response.Message = "Cập nhật bài viết thành công";
+                }
+                else
+                {
+                    response.Code = BaseCode.ERROR;
+                    response.Message = "Cập nhật bài viết không thành công";
+                }
+            }
             return response;
         }
     }

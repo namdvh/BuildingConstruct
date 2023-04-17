@@ -17,6 +17,7 @@ namespace Data.Configuration
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Email).IsRequired().HasMaxLength(50);
             builder.Property(x => x.UserName).IsRequired().HasMaxLength(50);
+            builder.Property(x => x.BuilderId).HasColumnName("WorkerID");
             builder.Property(x => x.Status).IsRequired();
             builder.Property(x => x.LastModifiedAt).HasDefaultValueSql("getutcdate()");
             builder.Property(x => x.Email).IsRequired(false);

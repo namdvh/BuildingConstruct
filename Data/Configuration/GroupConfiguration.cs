@@ -18,7 +18,7 @@ namespace Data.Configuration
 
             builder.Property(x => x.Id)
                   .ValueGeneratedOnAdd();
-
+            builder.Property(x => x.BuilderID).HasColumnName("WorkerID");
             builder
                    .HasOne(x => x.Builder)
                    .WithMany(x => x.Groups).HasForeignKey(x => x.BuilderID).IsRequired(false);
