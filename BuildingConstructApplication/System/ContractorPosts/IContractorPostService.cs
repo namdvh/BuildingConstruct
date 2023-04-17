@@ -31,5 +31,7 @@ namespace Application.System.ContractorPosts
         Task<BaseResponse<QuizSubmitDetailDTO>> ViewDetailQuizSubmit(int quizId,int builderId);
 
         Task<BaseResponse<bool>> ViewPostAppliedCheck(int builderId,Guid contractorId);
+
+        Task<BaseResponse<string>> UpdatePostStatus(int postId);
     }
 }

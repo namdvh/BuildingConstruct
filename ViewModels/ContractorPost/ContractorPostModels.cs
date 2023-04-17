@@ -31,10 +31,13 @@ namespace ViewModels.ContractorPost
         public string? EndTime { get; set; }
 
         public bool Accommodation { get; set; }
-
+         
         public bool Transport { get; set; }
 
         public bool QuizRequired { get; set; }
+
+        public bool VideoRequired { get; set; }
+
 
     }
     public class ContractorPostUpdate
@@ -71,6 +74,8 @@ namespace ViewModels.ContractorPost
         public bool Transport { get; set; }
 
         public bool QuizRequired { get; set; }
+
+        public bool VideoRequired { get; set; }
 
     }
 }

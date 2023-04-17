@@ -299,6 +299,8 @@ namespace Application.System.Payments
             return response;
         }
 
+      
+
         public async Task<BaseResponse<bool>> UpdateIsRefund()
         {
             var userId = _accessor.HttpContext?.User.FindFirst("UserID")?.Value.ToString();
@@ -317,6 +319,60 @@ namespace Application.System.Payments
             else
             {
                 response.Data = false;
+                response.Message = BaseCode.ERROR_MESSAGE;
+                response.Code = BaseCode.ERROR;
+            }
+            return response;
+        }
+
+
+        public async Task<BasePagination<List<PaymentDTO>>> PaymentListByUser(Guid userId)
+        {
+            var response = new BasePagination<List<PaymentDTO>>();
+            response.Data = new();
+            double totalPages;
+            var totalRecords = await _context.Payments
+                .Include(x => x.Users)
+                .Where(x=>x.UserId.Equals(userId))
+                .CountAsync();
+            totalPages = totalRecords / (double)25;
+
+            var roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
+            Pagination pagination = new()
+            {
+                CurrentPage = 1,
+                PageSize = 25,
+                TotalPages = roundedTotalPages,
+                TotalRecords = totalRecords
+            };
+            var query = await _context.Payments
+                .Include(x => x.Users)
+                .Where(x => x.UserId.Equals(userId))
+                .ToListAsync();
+            if (query.Any())
+            {
+                foreach (var item in query)
+                {
+                    var dto = new PaymentDTO();
+                    dto.FullName = item.Users.LastName + " " + item.Users.FirstName;
+                    dto.Phonenumber = item.Users.PhoneNumber;
+                    dto.Price = item.Price;
+                    dto.PaymentDate = item.PaymentDate;
+                    dto.ExpireationDate = item.ExpireationDate;
+                    dto.IsRefund = (bool)item.IsRefund;
+                    dto.TransactionId = item.TransactionId;
+                    dto.VnPayResponseCode = item.VnPayResponseCode;
+                    dto.PaymentId = item.PaymentId;
+                    dto.ExtendDate = item.ExtendDate;
+                    response.Data.Add(dto);
+                }
+                response.Message = BaseCode.SUCCESS_MESSAGE;
+                response.Code = BaseCode.SUCCESS;
+                response.Pagination = pagination;
+            }
+            else
+            {
+                response.Data = null;
                 response.Message = BaseCode.ERROR_MESSAGE;
                 response.Code = BaseCode.ERROR;
             }

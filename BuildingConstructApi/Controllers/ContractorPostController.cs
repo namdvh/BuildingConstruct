@@ -11,7 +11,6 @@ using ViewModels.ContractorPost;
 using ViewModels.Notificate;
 using ViewModels.Pagination;
 using ViewModels.Response;
-
 namespace BuildingConstructApi.Controllers
 {
     [Route("api/contractorpost")]
@@ -48,7 +47,6 @@ namespace BuildingConstructApi.Controllers
                 validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy, request.FilterRequest);
 
             }
-
 
 
             var result = await _contractorPostService.GetPost(request, id == null ? Guid.Empty : Guid.Parse(id));
@@ -266,6 +264,16 @@ namespace BuildingConstructApi.Controllers
             }
 
             return Ok();
+
+        }
+
+        [HttpPut("status/{postId}")]
+        public async Task<IActionResult> UpdatePostStatus([FromQuery] int postId)
+        {
+
+            var result = await _contractorPostService.UpdatePostStatus(postId);
+            return Ok(result);
+
 
         }
 
