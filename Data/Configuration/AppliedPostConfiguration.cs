@@ -16,6 +16,7 @@ namespace Data.Configuration
             builder.ToTable("AppliedPost");
 
             builder.HasKey(x => new { x.PostID, x.BuilderID });
+            builder.Property(x => x.BuilderID).HasColumnName("WorkerID");
 
 
 

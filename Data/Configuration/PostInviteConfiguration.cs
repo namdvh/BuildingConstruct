@@ -18,6 +18,7 @@ namespace Data.Configuration
             builder.Property(x => x.Id)
                              .ValueGeneratedOnAdd();
 
+            builder.Property(x => x.BuilderId).HasColumnName("WorkerID");
 
 
             builder.HasOne(x => x.Builder).WithMany(x => x.PostInvites).HasForeignKey(x => x.BuilderId);

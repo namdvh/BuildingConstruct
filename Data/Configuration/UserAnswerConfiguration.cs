@@ -16,6 +16,7 @@ namespace Data.Configuration
             builder.ToTable("UserAnswer");
 
             builder.HasKey(x => new { x.BuilderId, x.AnswerID });
+            builder.Property(x => x.BuilderId).HasColumnName("WorkerID");
 
         }
 

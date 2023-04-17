@@ -24,9 +24,10 @@ namespace Application.System.Bill
             _accessor = accessor;
         }
 
-        public async Task<bool> CreateBill(List<BillDTO> requests)
+        public async Task<BaseResponse<string>> CreateBill(List<BillDTO> requests)
         {
             bool flag = false;
+            BaseResponse<string> response = new();
             Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
             var usID = identifierClaim.Value;
             var contracID = _context.Users.Where(x => x.Id.ToString().Equals(usID)).FirstOrDefault().ContractorId;
@@ -38,7 +39,7 @@ namespace Application.System.Bill
             {
                 foreach (var billdetail in item.ProductBillDetail)
                 {
-                    var checkingProduct = await _context.Products.FirstOrDefaultAsync(x => x.Id == billdetail.ProductId);
+                    var checkingProduct = _context.Products.FirstOrDefault(x => x.Id == billdetail.ProductId);
 
                     if (billdetail.TypeID == null)
                     {
@@ -46,31 +47,31 @@ namespace Application.System.Bill
                         {
                             if (billdetail.Quantity > checkingProduct.UnitInStock)
                             {
-                                return false;
+                                response.Data = null;
+                                response.Code = BaseCode.ERROR;
+                                response.Message = "Không đủ số lượng";
+                                return response;
                             }
                         }
                     }
                     else
                     {
-                        var checkingProductType = await _context.ProductTypes.FirstOrDefaultAsync(x => x.Id == billdetail.TypeID);
+                        var checkingProductType = _context.ProductTypes.FirstOrDefault(x => x.Id == billdetail.TypeID);
 
                         if (checkingProductType != null)
                         {
                             if (billdetail.Quantity > checkingProductType.Quantity)
                             {
-                                return false;
+                                response.Data = null;
+                                response.Code = BaseCode.ERROR;
+                                response.Message = "Không đủ số lượng";
+                                return response;
                             }
                         }
                     }
 
                 }
             }
-
-
-
-
-
-
             foreach (var r in requests)
             {
                 var bill = new Data.Entities.Bill();
@@ -134,9 +135,17 @@ namespace Application.System.Bill
                 }
                 _context.RemoveRange(ls);
                 await _context.SaveChangesAsync();
-                return true;
+                response.Data = null;
+                response.Code = BaseCode.SUCCESS;
+                response.Message = "Đặt hàng thành công";
             }
-            return false;
+            else
+            {
+                response.Data = null;
+                response.Code = BaseCode.ERROR;
+                response.Message = "Đặt hàng thất bại";
+            }
+            return response;
         }
 
         public async Task<BasePagination<List<BillDTO>>> GetAllBill(PaginationFilter filter)
