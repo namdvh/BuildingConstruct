@@ -209,15 +209,21 @@ namespace Application.System.ContractorPosts
                 c = check;
                 if (check != null)
                 {
-                    var alreadyCommitment = await _context.PostCommitments.Where(x => x.BuilderID == builder.Id && x.ContractorPosts.Id == post.Id).FirstOrDefaultAsync();
-                    if (alreadyCommitment!=null)
-                    {
-                        post.isApplied = true;
-                    }
+                    post.isApplied = true;
+
                 }
                 else
                 {
-                    post.isApplied = false;
+                    var alreadyCommitment = await _context.PostCommitments.Where(x => x.BuilderID == builder.Id && x.ContractorPosts.Id == post.Id).FirstOrDefaultAsync();
+                    if (alreadyCommitment != null)
+                    {
+                        post.isApplied = true;
+                    }
+                    else
+                    {
+                        post.isApplied = false;
+
+                    }
                 }
 
             }
