@@ -341,7 +341,7 @@ namespace Application.System.Users
                     RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime
                 };
 
-               
+
 
 
                 return response;
@@ -1013,11 +1013,11 @@ namespace Application.System.Users
                     }
                 }
 
-                if (user.Status == Status.Level1 && user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null)
+                if (user.Status == Status.Level1 && user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null && user.IdNumber != null)
                 {
                     user.Status = Status.Level3;
                 }
-                else if (user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null)
+                else if (user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null && user.IdNumber != null)
                 {
                     user.Status = Status.Level2;
                 }
@@ -1026,8 +1026,8 @@ namespace Application.System.Users
 
 
                 _context.Update(user);
-                var rs=await _context.SaveChangesAsync();
-                
+                var rs = await _context.SaveChangesAsync();
+
                 response = new()
                 {
                     Code = BaseCode.SUCCESS,
@@ -1126,11 +1126,11 @@ namespace Application.System.Users
                     user.Contractor.Website = request.Website;
                 }
 
-                if (user.Status == Status.Level1 && user.Avatar != null && user.Contractor.CompanyName != null)
+                if (user.Status == Status.Level1 && user.Avatar != null && user.Contractor.CompanyName != null && user.IdNumber != null)
                 {
                     user.Status = Status.Level3;
                 }
-                else if (user.Avatar != null && user.Contractor.CompanyName != null)
+                else if (user.Avatar != null && user.Contractor.CompanyName != null && user.IdNumber != null)
                 {
                     user.Status = Status.Level2;
                 }
@@ -1251,7 +1251,7 @@ namespace Application.System.Users
                 {
                     user.Status = Status.Level3;
                 }
-                else if (user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
+                else if (user.Avatar != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
                 {
                     user.Status = Status.Level2;
                 }
@@ -1880,7 +1880,7 @@ namespace Application.System.Users
         }
 
 
-        public DetailContractor MapToDetailContractor (User user)
+        public DetailContractor MapToDetailContractor(User user)
         {
             var billCount = _context.Bills.Where(x => x.ContractorId == user.ContractorId).Count();
             var commitmentCount = _context.PostCommitments.Where(x => x.ContractorID == user.ContractorId && x.Status == Status.SUCCESS).Count();
@@ -1923,7 +1923,7 @@ namespace Application.System.Users
         {
             BaseResponse<string> response = new();
             var query = await _userService.FindByNameAsync(request.PhoneNumber);
-            if(query == null)
+            if (query == null)
             {
                 response.Data = null;
                 response.Message = "Tài khoản này không tồn tại";
@@ -1932,7 +1932,7 @@ namespace Application.System.Users
             else
             {
                 var token = await _userService.GeneratePasswordResetTokenAsync(query);
-                var resetresult =await _userService.ResetPasswordAsync(query,token, request.NewPassword);
+                var resetresult = await _userService.ResetPasswordAsync(query, token, request.NewPassword);
                 if (!resetresult.Succeeded)
                 {
                     response.Data = null;

@@ -252,7 +252,7 @@ namespace Application.System.Identification
 
                         if (rolename.First().Equals("User"))
                         {
-                            if (user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null)
+                            if (user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null && user.IdNumber != null)
                             {
                                 user.Status = Status.Level2;
                             }
@@ -264,7 +264,7 @@ namespace Application.System.Identification
                         }
                         else if (rolename.First().Equals("Contractor"))
                         {
-                            if (user.Avatar != null && user.Contractor.CompanyName != null)
+                            if (user.Avatar != null && user.Contractor.CompanyName != null && user.IdNumber != null)
                             {
                                 user.Status = Status.Level2;
                             }
@@ -276,7 +276,7 @@ namespace Application.System.Identification
                         }
                         else
                         {
-                            if (user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
+                            if (user.Avatar != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
                             {
                                 user.Status = Status.Level2;
                             }
