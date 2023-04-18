@@ -1047,7 +1047,8 @@ namespace Application.System.ContractorPosts
                     response = new()
                     {
                         Code = BaseCode.SUCCESS,
-                        Message = "ALREADY_APPLIED"
+                        Message = "ALREADY_APPLIED",
+                        Data= "ALREADY_APPLIED"
                     };
 
                     return response;
