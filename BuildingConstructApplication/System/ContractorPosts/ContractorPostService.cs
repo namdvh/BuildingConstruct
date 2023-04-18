@@ -1015,6 +1015,24 @@ namespace Application.System.ContractorPosts
 
                 }
 
+                if(request.IsGroup== true && request.QuizSubmit != null)
+                {
+                    List<UserAnswer> ls = new();
+
+                    foreach (var item in request.QuizSubmit.AnswerId)
+                    {
+                        UserAnswer answer = new()
+                        {
+                            AnswerID = item,
+                            BuilderId = user.BuilderId.Value
+                        };
+
+                        ls.Add(answer);
+
+                    }
+                    await _context.AddRangeAsync(ls);
+                    await _context.SaveChangesAsync();
+                }
 
 
                 //Group is not null
