@@ -260,7 +260,7 @@ namespace Application.System.ContractorPosts
                 QuizId = c?.QuizId != null ? c.QuizId : null,
                 IsApplied = post.isApplied,
                 RequiredQuiz = post.QuizRequired,
-                VideoRequired=post.VideoRequired,
+                VideoRequired = post.VideoRequired,
                 type = await GetTypeAndSkillFromPost(post.Id),
                 CreatedBy = post.CreateBy,
                 Author = await GetUserProfile(post.CreateBy),
@@ -269,13 +269,16 @@ namespace Application.System.ContractorPosts
             };
 
             //checking hasAppliedQuiz 
-
-            var appliedQuiz = _context.UserAnswers.Any(x => x.BuilderId == builder.Id && listQuiz.Contains(x.Answer.Question.Quiz));
-
-            if (appliedQuiz)
+            if (builder != null)
+            {
+            var appliedQuiz =await _context.UserAnswers.Where(x => x.BuilderId == builder.Id && listQuiz.Contains(x.Answer.Question.Quiz)).ToListAsync();
+            if (appliedQuiz.Any())
             {
                 postDTO.IsQuizAnswer = true;
             }
+
+            }
+
 
 
 
