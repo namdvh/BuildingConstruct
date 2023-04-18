@@ -321,6 +321,14 @@ namespace BuildingConstructApi.Controllers
 
             return Ok(rs);
         }
+        [HttpPost("resetPassword")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO request)
+        {
+            var rs = await _userService.ResetPassword(request);
+
+            return Ok(rs);
+        }
 
         [HttpGet("getTotalUser")]
         [AllowAnonymous]

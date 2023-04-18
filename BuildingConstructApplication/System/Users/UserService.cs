@@ -1919,17 +1919,34 @@ namespace Application.System.Users
             return detailMaterial;
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
+        public async Task<BaseResponse<string>> ResetPassword(ResetPasswordDTO request)
+        {
+            BaseResponse<string> response = new();
+            var query = await _userService.FindByNameAsync(request.PhoneNumber);
+            if(query == null)
+            {
+                response.Data = null;
+                response.Message = "Tài khoản này không tồn tại";
+                response.Code = "200";
+            }
+            else
+            {
+                var token = await _userService.GeneratePasswordResetTokenAsync(query);
+                var resetresult =await _userService.ResetPasswordAsync(query,token, request.NewPassword);
+                if (!resetresult.Succeeded)
+                {
+                    response.Data = null;
+                    response.Message = "Reset password không thanh cong";
+                    response.Code = "200";
+                }
+                else
+                {
+                    response.Data = null;
+                    response.Message = "Reset password thanh cong";
+                    response.Code = "200";
+                }
+            }
+            return response;
+        }
     }
 }

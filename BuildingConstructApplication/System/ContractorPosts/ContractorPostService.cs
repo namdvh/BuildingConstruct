@@ -209,15 +209,21 @@ namespace Application.System.ContractorPosts
                 c = check;
                 if (check != null)
                 {
-                    var alreadyCommitment = await _context.PostCommitments.Where(x => x.BuilderID == builder.Id && x.ContractorPosts.Id == post.Id).FirstOrDefaultAsync();
-                    if (alreadyCommitment!=null)
-                    {
-                        post.isApplied = true;
-                    }
+                    post.isApplied = true;
+
                 }
                 else
                 {
-                    post.isApplied = false;
+                    var alreadyCommitment = await _context.PostCommitments.Where(x => x.BuilderID == builder.Id && x.ContractorPosts.Id == post.Id).FirstOrDefaultAsync();
+                    if (alreadyCommitment != null)
+                    {
+                        post.isApplied = true;
+                    }
+                    else
+                    {
+                        post.isApplied = false;
+
+                    }
                 }
 
             }
@@ -261,6 +267,17 @@ namespace Application.System.ContractorPosts
                 IsSave = IsSave,
                 Quizzes = listQuiz.Any() ? listQuiz : null,
             };
+
+            //checking hasAppliedQuiz 
+
+            var appliedQuiz = _context.UserAnswers.Any(x => x.BuilderId == builder.Id && listQuiz.Contains(x.Answer.Question.Quiz));
+
+            if (appliedQuiz)
+            {
+                postDTO.IsQuizAnswer = true;
+            }
+
+
 
 
             //checking recommended
@@ -1015,6 +1032,33 @@ namespace Application.System.ContractorPosts
 
                 }
 
+                if(request.IsGroup== true && request.QuizSubmit != null)
+                {
+                    List<UserAnswer> ls = new();
+
+                    foreach (var item in request.QuizSubmit.AnswerId)
+                    {
+                        UserAnswer answer = new()
+                        {
+                            AnswerID = item,
+                            BuilderId = user.BuilderId.Value
+                        };
+
+                        ls.Add(answer);
+
+                    }
+                    await _context.AddRangeAsync(ls);
+                    await _context.SaveChangesAsync();
+
+                    response = new()
+                    {
+                        Code = BaseCode.SUCCESS,
+                        Message = "ALREADY_APPLIED",
+                        Data= "ALREADY_APPLIED"
+                    };
+
+                    return response;
+                }
 
 
                 //Group is not null
