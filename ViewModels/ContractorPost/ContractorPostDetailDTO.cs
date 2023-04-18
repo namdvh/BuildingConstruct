@@ -36,6 +36,8 @@ namespace ViewModels.ContractorPost
 
         public int? QuizId { get; set; }
 
+        public bool IsQuizAnswer { get; set; }
+
         public DateTime LastModifiedAt { get; set; }
         public Guid CreatedBy { get; set; }
         public UserModelsDTO Author { get; set; }

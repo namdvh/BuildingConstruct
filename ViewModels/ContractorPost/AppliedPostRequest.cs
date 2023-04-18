@@ -12,8 +12,8 @@ namespace ViewModels.ContractorPost
         public int PostId { get; set; }   
         public decimal? WishSalary { get; set; }
         public string? Video { get; set; }
-        public List<AppliedGroup>? GroupMember { get; set; } 
-        public bool IsGroup { get; set; }
+        public List<AppliedGroup>? GroupMember { get; set; }
+        public bool IsGroup { get; set; } = false;
         public QuizSubmit? QuizSubmit { get; set; }
     }
 

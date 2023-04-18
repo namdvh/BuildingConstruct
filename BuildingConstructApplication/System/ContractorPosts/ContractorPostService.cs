@@ -262,6 +262,17 @@ namespace Application.System.ContractorPosts
                 Quizzes = listQuiz.Any() ? listQuiz : null,
             };
 
+            //checking hasAppliedQuiz 
+
+            var appliedQuiz = _context.UserAnswers.Any(x => x.BuilderId == builder.Id && listQuiz.Contains(x.Answer.Question.Quiz));
+
+            if (appliedQuiz)
+            {
+                postDTO.IsQuizAnswer = true;
+            }
+
+
+
 
             //checking recommended
             string keyword = string.Empty;
@@ -1032,6 +1043,14 @@ namespace Application.System.ContractorPosts
                     }
                     await _context.AddRangeAsync(ls);
                     await _context.SaveChangesAsync();
+
+                    response = new()
+                    {
+                        Code = BaseCode.SUCCESS,
+                        Message = "ALREADY_APPLIED"
+                    };
+
+                    return response;
                 }
 
 
