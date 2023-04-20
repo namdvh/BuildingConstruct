@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -341,7 +342,7 @@ namespace Application.System.Users
                     RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime
                 };
 
-               
+
 
 
                 return response;
@@ -1026,8 +1027,8 @@ namespace Application.System.Users
 
 
                 _context.Update(user);
-                var rs=await _context.SaveChangesAsync();
-                
+                var rs = await _context.SaveChangesAsync();
+
                 response = new()
                 {
                     Code = BaseCode.SUCCESS,
@@ -1321,7 +1322,7 @@ namespace Application.System.Users
 
             if (!data.Any())
             {
-                contractorIDFromDB = await _context.Users.Include(x => x.Contractor).Where(x => x.ContractorId != null).Select(x => (int)x.ContractorId).ToListAsync();
+                contractorIDFromDB = await _context.Users.Include(x => x.Contractor).Where(x => x.ContractorId != null && x.Status == Status.Level3).Select(x => (int)x.ContractorId).ToListAsync();
 
             }
 
@@ -1379,7 +1380,7 @@ namespace Application.System.Users
 
 
 
-                var final = ls.DistinctBy(x => x.UserId).ToList();
+                var final = ls.DistinctBy(x => x.UserId).Where(x => x.Status == Status.Level3).ToList();
 
 
 
@@ -1521,7 +1522,7 @@ namespace Application.System.Users
                     }
                 }
 
-                var final = ls.DistinctBy(x => x.UserId).ToList();
+                var final = ls.DistinctBy(x => x.UserId).Where(x => x.Status == Status.Level3).ToList();
 
 
                 response = new()
@@ -1880,7 +1881,7 @@ namespace Application.System.Users
         }
 
 
-        public DetailContractor MapToDetailContractor (User user)
+        public DetailContractor MapToDetailContractor(User user)
         {
             var billCount = _context.Bills.Where(x => x.ContractorId == user.ContractorId).Count();
             var commitmentCount = _context.PostCommitments.Where(x => x.ContractorID == user.ContractorId && x.Status == Status.SUCCESS).Count();
@@ -1923,7 +1924,7 @@ namespace Application.System.Users
         {
             BaseResponse<string> response = new();
             var query = await _userService.FindByNameAsync(request.PhoneNumber);
-            if(query == null)
+            if (query == null)
             {
                 response.Data = null;
                 response.Message = "Tài khoản này không tồn tại";
@@ -1932,7 +1933,7 @@ namespace Application.System.Users
             else
             {
                 var token = await _userService.GeneratePasswordResetTokenAsync(query);
-                var resetresult =await _userService.ResetPasswordAsync(query,token, request.NewPassword);
+                var resetresult = await _userService.ResetPasswordAsync(query, token, request.NewPassword);
                 if (!resetresult.Succeeded)
                 {
                     response.Data = null;
@@ -1948,5 +1949,248 @@ namespace Application.System.Users
             }
             return response;
         }
+
+        public async Task<BasePagination<List<UserDetailDTO>>> GetAllUser(PaginationFilter filter)
+        {
+            BasePagination<List<UserDetailDTO>> response;
+            var orderBy = filter._orderBy.ToString();
+            int totalRecord;
+            orderBy = orderBy switch
+            {
+                "1" => "ascending",
+                "-1" => "descending",
+                _ => orderBy
+            };
+            if (string.IsNullOrEmpty(filter._sortBy))
+            {
+                filter._sortBy = "Id";
+            }
+
+            IQueryable<User> query = _context.Users;
+
+
+            var userAdminRole = await _context.Users.Where(x => x.BuilderId == null && x.ContractorId == null && x.MaterialStoreID == null).ToListAsync();
+
+            var result = await query
+                      .Include(x => x.Builder)
+                          .ThenInclude(x => x.Type)
+                       .Include(x=>x.Contractor)
+                       .Include(x=>x.MaterialStore)
+                      .Where(x=>!userAdminRole.Contains(x))
+                     .OrderBy(filter._sortBy + " " + orderBy)
+                     .Skip((filter.PageNumber - 1) * filter.PageSize)
+                     .Take(filter.PageSize)
+                     .ToListAsync();
+
+            totalRecord = await _context.Users.CountAsync();
+
+            if (!result.Any())
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.EMPTY_MESSAGE,
+                    Data = new(),
+                    Pagination = null
+                };
+            }
+            else
+
+            {
+                double totalPages;
+
+                totalPages = ((double)totalRecord / (double)filter.PageSize);
+
+                var roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
+                Pagination pagination = new()
+                {
+                    CurrentPage = filter.PageNumber,
+                    PageSize = filter.PageSize,
+                    TotalPages = roundedTotalPages,
+                    TotalRecords = totalRecord
+                };
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = MapToDetailDTO(result),
+                    Pagination = pagination
+                };
+            }
+
+            return response;
+        }
+
+        private List<UserDetailDTO> MapToDetailDTO(List<User> listUsers)
+        {
+            //1 Builder
+            //2 Ctor
+            //3 Material Store
+
+            List<UserDetailDTO> listResult = new();
+
+            foreach (var user in listUsers)
+            {
+
+                UserDetailDTO userDetail = null;
+
+                var rolename = _userService.GetRolesAsync(user).Result;
+
+                if (rolename.First().Equals("User"))
+                {
+
+                    var tmp = _context.BuilderSkills.Include(x => x.Skill).Where(x => x.BuilderSkillID == user.BuilderId).ToList();
+
+                    var contrusctionType = _context.WorkerContructionTypes
+
+                        .Include(x => x.ConstructionType)
+                        .Where(x => x.BuilderId == user.BuilderId).ToList();
+
+
+                    List<WorkerListType> ls = new();
+                    foreach (var item in contrusctionType)
+                    {
+
+                        WorkerListType workerListType = new()
+                        {
+                            ConstructionTypeId = item.ConstructionTypeId,
+                            Name = item.ConstructionType.Name
+                        };
+                        ls.Add(workerListType);
+                    }
+                    var appliedCount = _context.AppliedPosts.Where(x => x.BuilderID == user.Builder.Id).Count();
+                    var inviteCount = _context.PostInvites.Where(x => x.BuilderId == user.Builder.Id).Count();
+                    var commitmentCount = _context.PostCommitments.Where(x => x.BuilderID == user.Builder.Id && x.Status == Status.SUCCESS).Count();
+                    List<string> images = new();
+
+                    if (user.Builder.Image != null)
+                    {
+                        var splitImage = user.Builder.Image.Split(",").ToList();
+
+                        images.AddRange(splitImage);
+                    }
+
+
+                    DetailBuilder detailBuilder = new()
+                    {
+                        BuilderSkills = MapToSkillDTO(tmp),
+                        Id = user.Builder.Id,
+                        Place = user.Builder.Place,
+                        TypeName = user.Builder.Type?.Name == null ? null : user.Builder.Type?.Name,
+                        TypeID = user.Builder.TypeID,
+                        ExperienceDetail = user.Builder.ExperienceDetail,
+                        Certificate = user.Builder.Certificate,
+                        Experience = user.Builder.Experience,
+                        Image = user.Builder.Image,
+                        ConstructionType = ls,
+                        AppliedCount = appliedCount,
+                        InviteCount = inviteCount,
+                        Images = images.Any() ? images : null,
+                        CommitmentCount = commitmentCount
+
+                    };
+
+
+                    userDetail = new()
+                    {
+                        Address = user.Address,
+                        Avatar = user.Avatar,
+                        DOB = user.DOB,
+                        Email = user.Email,
+                        FirstName = user.FirstName,
+                        Gender = user.Gender,
+                        IdNumber = user.IdNumber,
+                        LastName = user.LastName,
+                        Status = user.Status,
+                        Phone = user.PhoneNumber,
+                        Builder = detailBuilder,
+                        LastModifiedAt = user.LastModifiedAt
+                    };
+
+                }
+                else if (rolename.First().Equals("Contractor"))
+                {
+                    var billCount = _context.Bills.Where(x => x.ContractorId == user.ContractorId).Count();
+                    var commitmentCount = _context.PostCommitments.Where(x => x.ContractorID == user.ContractorId && x.Status == Status.SUCCESS).Count();
+
+
+                    DetailContractor detailContractor = new()
+                    {
+                        CompanyName = user.Contractor.CompanyName,
+                        Description = user.Contractor.Description,
+                        Id = user.Contractor.Id,
+                        Website = user.Contractor.Website,
+                        BillCount = billCount,
+                        PostCount = commitmentCount,
+                    };
+
+
+                    userDetail = new()
+                    {
+                        Address = user.Address,
+                        Avatar = user.Avatar,
+                        DOB = user.DOB,
+                        Email = user.Email,
+                        FirstName = user.FirstName,
+                        Gender = user.Gender,
+                        IdNumber = user.IdNumber,
+                        LastName = user.LastName,
+                        Status = user.Status,
+                        Phone = user.PhoneNumber,
+                        Contractor = detailContractor,
+                        LastModifiedAt = user.LastModifiedAt
+                    };
+                }
+                else if (rolename.First().Equals("Store"))
+                {
+                    var billCount = _context.Bills.Where(x => x.StoreID == user.MaterialStoreID && x.Status == Status.SUCCESS).Count();
+                    var productCount = _context.Products.Where(x => x.MaterialStoreID == user.MaterialStoreID && x.Status == true).Count();
+
+                    DetailMaterialStore detailMaterial = new()
+                    {
+                        Description = user.MaterialStore.Description,
+                        Id = user.MaterialStore.Id,
+                        Website = user.MaterialStore.Website,
+                        Experience = user.MaterialStore.Experience,
+                        Image = user.MaterialStore.Image,
+                        Place = user.MaterialStore.Place,
+                        TaxCode = user.MaterialStore.TaxCode,
+                        BillCount = billCount,
+                        ProductCount = productCount,
+                    };
+
+
+                    userDetail = new()
+                    {
+                        Address = user.Address,
+                        Avatar = user.Avatar,
+                        DOB = user.DOB,
+                        Email = user.Email,
+                        FirstName = user.FirstName,
+                        Gender = user.Gender,
+                        IdNumber = user.IdNumber,
+                        LastName = user.LastName,
+                        Status = user.Status,
+                        Phone = user.PhoneNumber,
+                        DetailMaterialStore = detailMaterial,
+                        LastModifiedAt = user.LastModifiedAt
+                    };
+                }
+
+                if (userDetail != null)
+                {
+                    listResult.Add(userDetail);
+                }
+            }
+
+
+
+
+            return listResult;
+        }
+
+
+
     }
 }

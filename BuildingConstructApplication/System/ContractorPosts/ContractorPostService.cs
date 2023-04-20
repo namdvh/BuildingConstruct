@@ -260,21 +260,24 @@ namespace Application.System.ContractorPosts
                 QuizId = c?.QuizId != null ? c.QuizId : null,
                 IsApplied = post.isApplied,
                 RequiredQuiz = post.QuizRequired,
-                VideoRequired=post.VideoRequired,
+                VideoRequired = post.VideoRequired,
                 type = await GetTypeAndSkillFromPost(post.Id),
                 CreatedBy = post.CreateBy,
                 Author = await GetUserProfile(post.CreateBy),
                 IsSave = IsSave,
+                Status = post.Status,
                 Quizzes = listQuiz.Any() ? listQuiz : null,
             };
 
             //checking hasAppliedQuiz 
-
-            var appliedQuiz = _context.UserAnswers.Any(x => x.BuilderId == builder.Id && listQuiz.Contains(x.Answer.Question.Quiz));
-
-            if (appliedQuiz)
+            if (builder != null)
             {
-                postDTO.IsQuizAnswer = true;
+                var appliedQuiz = _context.UserAnswers.Any(x => x.BuilderId == builder.Id && listQuiz.Contains(x.Answer.Question.Quiz));
+
+                if (appliedQuiz)
+                {
+                    postDTO.IsQuizAnswer = true;
+                }
             }
 
 
@@ -750,7 +753,7 @@ namespace Application.System.ContractorPosts
                 LastName = applied.Builder.User.LastName,
                 UserID = applied.Builder.User.Id,
                 WishSalary = applied.WishSalary,
-                Video=applied.Video,
+                Video = applied.Video,
                 QuizId = applied.QuizId,
                 QuizName = applied.Quiz?.Name,
                 Groups = group,
@@ -997,7 +1000,7 @@ namespace Application.System.ContractorPosts
                 }
                 var post = await _context.ContractorPosts.FirstOrDefaultAsync(x => x.Id == request.PostId);
 
-                var commitmentInPost = await _context.PostCommitments.Where(x=>x.BuilderID==user.BuilderId && x.PostID == request.PostId).FirstOrDefaultAsync();
+                var commitmentInPost = await _context.PostCommitments.Where(x => x.BuilderID == user.BuilderId && x.PostID == request.PostId).FirstOrDefaultAsync();
                 if (commitmentInPost != null)
                 {
                     response = new()
@@ -1032,7 +1035,7 @@ namespace Application.System.ContractorPosts
 
                 }
 
-                if(request.IsGroup== true && request.QuizSubmit != null)
+                if (request.IsGroup == true && request.QuizSubmit != null)
                 {
                     List<UserAnswer> ls = new();
 
@@ -1054,7 +1057,7 @@ namespace Application.System.ContractorPosts
                     {
                         Code = BaseCode.SUCCESS,
                         Message = "ALREADY_APPLIED",
-                        Data= "ALREADY_APPLIED"
+                        Data = "ALREADY_APPLIED"
                     };
 
                     return response;
@@ -1120,7 +1123,7 @@ namespace Application.System.ContractorPosts
                         GroupID = group.Id,
                         Status = Status.NOT_RESPONSE,
                         AppliedDate = DateTime.Now,
-                        Video=request.Video
+                        Video = request.Video
                     };
 
                     if (request.QuizSubmit != null)
@@ -1168,7 +1171,7 @@ namespace Application.System.ContractorPosts
                         WishSalary = request.WishSalary,
                         Status = Status.NOT_RESPONSE,
                         AppliedDate = DateTime.Now,
-                        Video=request.Video
+                        Video = request.Video
                     };
 
                     if (request.QuizSubmit != null)
@@ -1699,7 +1702,7 @@ namespace Application.System.ContractorPosts
         {
             BaseResponse<string> response;
 
-            var post = await _context.ContractorPosts.FirstOrDefaultAsync(x=>x.Id== postId);
+            var post = await _context.ContractorPosts.FirstOrDefaultAsync(x => x.Id == postId);
 
             if (post != null)
             {
@@ -1725,7 +1728,7 @@ namespace Application.System.ContractorPosts
             var PostSkill = query?.PostSkills;
             var checkApplied = await _context.AppliedPosts.Where(x => x.PostID == postId).AnyAsync();
             var checkCommitment = await _context.PostCommitments.Where(x => x.PostID == postId).AnyAsync();
-            if(checkApplied || checkCommitment)
+            if (checkApplied || checkCommitment)
             {
                 response.Code = BaseCode.ERROR;
                 response.Message = "Không thể chỉnh sửa bài post này";
@@ -1881,7 +1884,7 @@ namespace Application.System.ContractorPosts
                     await _context.SaveChangesAsync();
                     if (flag)
                     {
-                        if (PostSkill!=null)
+                        if (PostSkill != null)
                         {
                             _context.ContractorPostSkills.RemoveRange(PostSkill);
                             _context.SaveChanges();

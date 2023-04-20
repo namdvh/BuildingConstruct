@@ -29,5 +29,6 @@ namespace Application.System.Users
         Task<BaseResponse<string>> UpdateStoreProfile(UpdateStoreRequest request, Guid userID);
         Task<BaseResponse<UserDetailDTO>> GetProfile(RefreshToken refreshToken);
         Task<BaseResponse<UserCountDTO>> GetTotalUser();
+        Task<BasePagination<List<UserDetailDTO>>> GetAllUser(PaginationFilter request);
     }
 }
