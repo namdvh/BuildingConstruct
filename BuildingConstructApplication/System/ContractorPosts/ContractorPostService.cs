@@ -174,7 +174,7 @@ namespace Application.System.ContractorPosts
             var count = await _context.ContractorPosts.Where(x => x.Id == cPostid).ToListAsync();
             if (userId != null)
             {
-                if (rs.CreateBy.ToString().Equals(userId))
+                if (!rs.CreateBy.ToString().Equals(userId))
                 {
                     foreach (var item in count)
                     {
