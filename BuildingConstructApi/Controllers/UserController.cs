@@ -337,5 +337,26 @@ namespace BuildingConstructApi.Controllers
             var rs = await _userService.GetTotalUser();
             return Ok(rs);
         }
+
+        [HttpGet("getAll")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllUser([FromQuery] PaginationFilter request)
+        {
+            var validFilter = new PaginationFilter();
+
+            if (request.FilterRequest == null)
+            {
+                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
+            }
+            else
+            {
+                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy, request.FilterRequest);
+
+            }
+
+            var rs = await _userService.GetAllUser(validFilter);
+            return Ok(rs);
+        }
+
     }
 }

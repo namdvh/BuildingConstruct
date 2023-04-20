@@ -53,6 +53,8 @@ namespace ViewModels.ContractorPost
 
         public bool Transport { get; set; }
 
+        public Status Status { get; set; }
+
         public bool RequiredQuiz { get; set; }
 
         public bool VideoRequired { get; set; }
