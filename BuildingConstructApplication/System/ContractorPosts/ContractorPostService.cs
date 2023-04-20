@@ -272,13 +272,14 @@ namespace Application.System.ContractorPosts
             //checking hasAppliedQuiz 
             if (builder != null)
             {
-                var appliedQuiz = _context.UserAnswers.Any(x => x.BuilderId == builder.Id && listQuiz.Contains(x.Answer.Question.Quiz));
-
-                if (appliedQuiz)
-                {
-                    postDTO.IsQuizAnswer = true;
-                }
+            var appliedQuiz =await _context.UserAnswers.Where(x => x.BuilderId == builder.Id && listQuiz.Contains(x.Answer.Question.Quiz)).ToListAsync();
+            if (appliedQuiz.Any())
+            {
+                postDTO.IsQuizAnswer = true;
             }
+
+            }
+
 
 
 

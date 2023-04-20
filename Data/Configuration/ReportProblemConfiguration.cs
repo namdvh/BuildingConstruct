@@ -21,7 +21,7 @@ namespace Data.Configuration
 
             report.HasOne(x => x.ContractorPosts).WithMany(x => x.Reports).HasForeignKey(x => x.ContractorPostId).IsRequired(false);
             report.HasOne(x => x.Products).WithMany(x => x.Reports).HasForeignKey(x => x.ProductId).IsRequired(false);
-
+            report.HasOne(x => x.User).WithMany(x => x.Reports).HasForeignKey(x => x.UserId);
 
         }
     }

@@ -1014,11 +1014,11 @@ namespace Application.System.Users
                     }
                 }
 
-                if (user.Status == Status.Level1 && user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null)
+                if (user.Status == Status.Level1 && user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null && user.IdNumber != null)
                 {
                     user.Status = Status.Level3;
                 }
-                else if (user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null)
+                else if (user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null && user.IdNumber != null)
                 {
                     user.Status = Status.Level2;
                 }
@@ -1127,11 +1127,11 @@ namespace Application.System.Users
                     user.Contractor.Website = request.Website;
                 }
 
-                if (user.Status == Status.Level1 && user.Avatar != null && user.Contractor.CompanyName != null)
+                if (user.Status == Status.Level1 && user.Avatar != null && user.Contractor.CompanyName != null && user.IdNumber != null)
                 {
                     user.Status = Status.Level3;
                 }
-                else if (user.Avatar != null && user.Contractor.CompanyName != null)
+                else if (user.Avatar != null && user.Contractor.CompanyName != null && user.IdNumber != null)
                 {
                     user.Status = Status.Level2;
                 }
@@ -1252,7 +1252,7 @@ namespace Application.System.Users
                 {
                     user.Status = Status.Level3;
                 }
-                else if (user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
+                else if (user.Avatar != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
                 {
                     user.Status = Status.Level2;
                 }

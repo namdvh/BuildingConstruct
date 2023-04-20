@@ -14,5 +14,7 @@ namespace Data.Entities
         public ContractorPost ContractorPosts { get; set; }
         public Products Products { get; set; }
         public string ReportProblem { get; set; }
+        public Guid UserId { get; set; }
+        public User User { get; set; }
     }
 }
