@@ -227,7 +227,7 @@ namespace Application.System.Users
                         }
                         var roles = await _userService.GetRolesAsync(us);
                         var userDTO = MapToDto(us, roleName);
-                        var premium = await _context.Payments.Where(x => x.UserId.ToString().Equals(us.Id.ToString())).FirstOrDefaultAsync();
+                        var premium = await _context.Payments.Where(x => x.UserId.ToString().Equals(us.Id.ToString())).OrderByDescending(x => x.ExpireationDate).FirstOrDefaultAsync();
                         bool isPremium = false;
                         if (premium != null)
                         {
@@ -545,7 +545,7 @@ namespace Application.System.Users
             await _userService.UpdateAsync(user);
             token.AccessToken = newAccessToken;
             response.Data = new();
-            var premium = await _context.Payments.Where(x => x.UserId.ToString().Equals(user.Id.ToString())).FirstOrDefaultAsync();
+            var premium = await _context.Payments.Where(x => x.UserId.ToString().Equals(user.Id.ToString())).OrderByDescending(x => x.ExpireationDate).FirstOrDefaultAsync();
             bool isPremium = false;
             if (premium != null)
             {
@@ -1974,9 +1974,9 @@ namespace Application.System.Users
             var result = await query
                       .Include(x => x.Builder)
                           .ThenInclude(x => x.Type)
-                       .Include(x=>x.Contractor)
-                       .Include(x=>x.MaterialStore)
-                      .Where(x=>!userAdminRole.Contains(x))
+                       .Include(x => x.Contractor)
+                       .Include(x => x.MaterialStore)
+                      .Where(x => !userAdminRole.Contains(x))
                      .OrderBy(filter._sortBy + " " + orderBy)
                      .Skip((filter.PageNumber - 1) * filter.PageSize)
                      .Take(filter.PageSize)
