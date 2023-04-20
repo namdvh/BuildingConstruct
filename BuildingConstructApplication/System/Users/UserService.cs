@@ -1982,7 +1982,7 @@ namespace Application.System.Users
                      .Take(filter.PageSize)
                      .ToListAsync();
 
-            totalRecord = await _context.Users.CountAsync();
+            totalRecord = await _context.Users.Where(x => !userAdminRole.Contains(x)).CountAsync();
 
             if (!result.Any())
             {
