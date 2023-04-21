@@ -187,7 +187,7 @@ app.UseSwaggerUI();
 //app.UseHttpsRedirection();
 app.UseRouting();
 app.UseCors(x => x
-        .WithOrigins("https://localhost:4000")
+        .WithOrigins("https://localhost:4000", "https://buildingconstruct.space")
         .AllowAnyMethod()
         .AllowAnyHeader()
         .SetIsOriginAllowed(origin => true) // allow any origin

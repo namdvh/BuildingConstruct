@@ -91,7 +91,7 @@ namespace BuildingConstructApi.Controllers
            
             var rs = await _reportService.ReportPost(request);
             NotificationModels noti = new();
-            noti.NotificationType = NotificationType.CREATEREPORT;
+            noti.NotificationType = NotificationType.CONTRACTOR_POST_NOTIFICATION;
             noti.Message = NotificationMessage.REPORT_POST;
             var userID = User.FindFirst("UserID")?.Value;
             noti.CreateBy = Guid.Parse(userID.ToString());

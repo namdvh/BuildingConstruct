@@ -285,6 +285,10 @@ namespace Application.System.Users
                             var result = await _context.Users.Include(x => x.Contractor).Where(x => x.Id.Equals(us.Id)).FirstOrDefaultAsync();
                             response.Data.Contractor = MapToDetailContractor(result);
                         }
+                        else if (roleName.Equals("Admin"))
+                        {
+                            return response;
+                        }
                         else
                         {
 
