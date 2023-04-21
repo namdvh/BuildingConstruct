@@ -110,18 +110,18 @@ namespace Application.System.SavePost
             if (dto.ContractorPost != null)
             {
                 dto.UserId = save.UserId;
-                dto.ContractorPost = await GetContractorPost(save.ContractorPost);
+                dto.ContractorPost = await GetContractorPost(save.ContractorPost, save.UserId);
                 dto.CreatedDate = save.Date;
             }
             else
             {
                 dto.UserId = save.UserId;
-                dto.ContractorPost = await GetContractorPost(save.ContractorPost);
+                dto.ContractorPost = await GetContractorPost(save.ContractorPost, save.UserId);
                 dto.CreatedDate = save.Date;
             }
             return dto;
         }
-        private async Task<List<ContractorPostDetailDTO>> GetContractorPost(ContractorPost post)
+        private async Task<List<ContractorPostDetailDTO>> GetContractorPost(ContractorPost post,Guid userId)
         {
             var results = await _context.ContractorPosts.Where(x => x.Id == post.Id).ToListAsync();
 
@@ -147,6 +147,15 @@ namespace Application.System.SavePost
                 dto.StarDate = x.StarDate;
                 dto.EndDate = x.EndDate;
                 dto.Author = await GetUserProfile(post.CreateBy);
+                dto.Status = x.Status;
+
+                var save = _context.Saves.Where(x => x.UserId.Equals(userId) && x.ContractorPostId == x.Id).FirstOrDefault();
+                if (save != null)
+                {
+                    dto.IsSave = true;
+                }
+
+
                 final.Add(dto);
             }
             return final;

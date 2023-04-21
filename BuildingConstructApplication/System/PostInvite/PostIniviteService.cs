@@ -289,9 +289,17 @@ namespace Application.System.PostInvite
                     ContractorPostId = item.ContractorPostId,
                     ContractorPostName = item.ContractorPost.ProjectName,
                     Id = item.Id,
+                    Status=item.ContractorPost.Status,
                     Places = item.ContractorPost.Place,
                     Salaries = item.ContractorPost.Salaries,
                 };
+
+                var save = _context.Saves.Where(x => x.UserId.Equals(item.ContractorPost.CreateBy) && x.ContractorPostId == item.ContractorPostId).FirstOrDefault();
+                if (save != null)
+                {
+                    tmp.IsSave = true;
+                }
+
                 ls.Add(tmp);
             }
 
