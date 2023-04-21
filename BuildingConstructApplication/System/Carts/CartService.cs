@@ -455,7 +455,7 @@ namespace Application.System.Carts
                 Image = cart.Products.Image,
                 LastModifiedAt = cart.LastModifiedAt,
                 MaterialStoreID = cart.Products.MaterialStoreID,
-                MaterialStoreName = cart.Products.MaterialStore.User?.LastName + " " + cart.Products.MaterialStore.User?.FirstName,
+                MaterialStoreName = cart.Products.MaterialStore.User?.FirstName + " " + cart.Products.MaterialStore.User?.LastName,
                 ProductID = cart.ProductID,
                 ProductName = cart.Products.Name,
                 Quantity = cart.Quantity,

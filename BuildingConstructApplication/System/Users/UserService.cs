@@ -1014,14 +1014,19 @@ namespace Application.System.Users
                     }
                 }
 
-                if (user.Status == Status.Level1 && user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null && user.IdNumber != null)
+                if (user.Status != Status.Level3)
                 {
-                    user.Status = Status.Level3;
+
+                    if (user.Status == Status.Level1 && user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null && user.IdNumber != null)
+                    {
+                        user.Status = Status.Level3;
+                    }
+                    else if (user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null && user.IdNumber != null)
+                    {
+                        user.Status = Status.Level2;
+                    }
                 }
-                else if (user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null && user.IdNumber != null)
-                {
-                    user.Status = Status.Level2;
-                }
+
 
 
 
@@ -1127,14 +1132,19 @@ namespace Application.System.Users
                     user.Contractor.Website = request.Website;
                 }
 
-                if (user.Status == Status.Level1 && user.Avatar != null && user.Contractor.CompanyName != null && user.IdNumber != null)
+                if (user.Status != Status.Level3)
                 {
-                    user.Status = Status.Level3;
+                    if (user.Status == Status.Level1 && user.Avatar != null && user.Contractor.CompanyName != null && user.IdNumber != null)
+                    {
+                        user.Status = Status.Level3;
+                    }
+                    else if (user.Avatar != null && user.Contractor.CompanyName != null && user.IdNumber != null)
+                    {
+                        user.Status = Status.Level2;
+                    }
                 }
-                else if (user.Avatar != null && user.Contractor.CompanyName != null && user.IdNumber != null)
-                {
-                    user.Status = Status.Level2;
-                }
+
+
 
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
@@ -1248,14 +1258,19 @@ namespace Application.System.Users
 
                 }
 
-                if (user.Status == Status.Level1 && user.Avatar != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
+                if (user.Status != Status.Level3)
                 {
-                    user.Status = Status.Level3;
+                    if (user.Status == Status.Level1 && user.Avatar != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
+                    {
+                        user.Status = Status.Level3;
+                    }
+                    else if (user.Avatar != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
+                    {
+                        user.Status = Status.Level2;
+                    }
                 }
-                else if (user.Avatar != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
-                {
-                    user.Status = Status.Level2;
-                }
+
+
 
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
@@ -1974,9 +1989,9 @@ namespace Application.System.Users
             var result = await query
                       .Include(x => x.Builder)
                           .ThenInclude(x => x.Type)
-                       .Include(x=>x.Contractor)
-                       .Include(x=>x.MaterialStore)
-                      .Where(x=>!userAdminRole.Contains(x))
+                       .Include(x => x.Contractor)
+                       .Include(x => x.MaterialStore)
+                      .Where(x => !userAdminRole.Contains(x))
                      .OrderBy(filter._sortBy + " " + orderBy)
                      .Skip((filter.PageNumber - 1) * filter.PageSize)
                      .Take(filter.PageSize)
