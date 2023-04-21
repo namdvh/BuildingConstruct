@@ -1777,7 +1777,7 @@ namespace Application.System.Users
                 return response;
             }
             var us = await _context.Users.Where(x => x.Token.Equals(refreshToken.refreshToken)).FirstOrDefaultAsync();
-            if (us == null || us.Token != refreshToken.refreshToken || us.RefreshTokenExpiryTime <= DateTime.UtcNow)
+            if (us == null || us.RefreshTokenExpiryTime <= DateTime.UtcNow)
             {
                 response.Code = "500";
                 response.Message = "Expired Refresh Token in getProfile";
