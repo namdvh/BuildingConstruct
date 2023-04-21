@@ -1335,6 +1335,10 @@ namespace Application.System.ContractorPosts
                 {
                     dto.IsSave = true;
                 }
+                else
+                {
+                    dto.IsSave = false;
+                }
 
 
 

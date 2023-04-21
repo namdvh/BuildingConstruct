@@ -299,6 +299,10 @@ namespace Application.System.PostInvite
                 {
                     tmp.IsSave = true;
                 }
+                else
+                {
+                    tmp.IsSave = false;
+                }
 
                 ls.Add(tmp);
             }

@@ -154,6 +154,10 @@ namespace Application.System.SavePost
                 {
                     dto.IsSave = true;
                 }
+                else
+                {
+                    dto.IsSave = false;
+                }
 
 
                 final.Add(dto);
