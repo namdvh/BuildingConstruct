@@ -5,6 +5,7 @@ using Gridify;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Dynamic.Core;
@@ -1277,6 +1278,9 @@ namespace Application.System.ContractorPosts
         {
             List<AppliedPostAll> result = new();
 
+            var userId = _context.Users.Where(x => x.BuilderId == builderID).Select(x=>x.Id).FirstOrDefault();
+
+        
 
 
             foreach (var item in list)
@@ -1321,9 +1325,24 @@ namespace Application.System.ContractorPosts
                     AppliedDate = item.AppliedDate,
                     WishSalary = item.WishSalary,
                     Video = item.Video,
+                    Status=item.ContractorPosts.Status,
                     Groups = ls.Any() ? ls : null,
 
                 };
+
+                var save = _context.Saves.Where(x => x.UserId.Equals(userId) && x.ContractorPostId == item.PostID).FirstOrDefault();
+                if (save != null)
+                {
+                    dto.IsSave = true;
+                }
+                else
+                {
+                    dto.IsSave = false;
+                }
+
+
+
+
 
                 if (item.QuizId != null)
                 {

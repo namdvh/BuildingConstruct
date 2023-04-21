@@ -30,6 +30,10 @@ namespace ViewModels.ContractorPost
 
         public string? Video { get; set; }
 
+        public Status Status { get; set; }  
+
+        public bool? IsSave { get; set; }
+
         public List<CommitmentGroup>? Groups { get; set; }
         public int? QuizId { get; set; }
         public string? QuizName { get; set; }

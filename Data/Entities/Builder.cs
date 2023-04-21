@@ -21,7 +21,7 @@ namespace Data.Entities
 
         public Guid? TypeID { get; set; }
 
-        public Type Type { get; set; }
+        public Type? Type { get; set; }
         
         public List<Group>? Groups { get; set; }
 
