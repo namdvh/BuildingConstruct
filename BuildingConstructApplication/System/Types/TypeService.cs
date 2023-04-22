@@ -31,9 +31,11 @@ namespace Application.System.Types
                 Id = new Guid(),
                 Name = type.Name
             };
-            var check = await _context.Types.Where(x => x.Name.ToString().Equals(types.Name.ToString())).FirstOrDefaultAsync();
-            if (check == null)
+            var check = await _context.Types.Where(x => x.Id.ToString().Equals(types.Id.ToString())).FirstOrDefaultAsync();
+            var checkDuplicateName = await _context.Types.Where(x => x.Name.Equals(types.Name)).CountAsync();
+            if (check == null && checkDuplicateName==0)
             {
+
                 await _context.Types.AddAsync(types);
                 var rs = await _context.SaveChangesAsync();
                 if (rs > 0)
@@ -47,6 +49,11 @@ namespace Application.System.Types
                     response.Code = BaseCode.ERROR;
                     response.Message = BaseCode.ERROR_MESSAGE;
                 }
+            }
+            else
+            {
+                response.Code = BaseCode.ERROR;
+                response.Message = BaseCode.ERROR_MESSAGE;
             }
             return response;
         }
