@@ -497,14 +497,14 @@ namespace Application.System.Commitments
 
                         if (contractorPost != null)
                         {
+                            var count = contractorPost.PeopeRemained - groupCount;
+                            contractorPost.PeopeRemained = count;
+                            _context.ContractorPosts.Update(contractorPost);
+                            await _context.SaveChangesAsync();
 
-                            if (contractorPost.PeopeRemained >= groupCount)
-                            {
-                                var count = contractorPost.PeopeRemained - groupCount;
-                                contractorPost.PeopeRemained = count;
-                                _context.ContractorPosts.Update(contractorPost);
-                                await _context.SaveChangesAsync();
-                            }
+                            //if (contractorPost.PeopeRemained >= groupCount)
+                            //{
+                            //}
 
                         }
 
@@ -516,15 +516,15 @@ namespace Application.System.Commitments
 
                         if (contractorPost != null)
                         {
-                            if (contractorPost.PeopeRemained >= 1)
-                            {
-                                var count = contractorPost.PeopeRemained - 1;
-                                contractorPost.PeopeRemained = count;
+                            var count = contractorPost.PeopeRemained - 1;
+                            contractorPost.PeopeRemained = count;
 
-                                _context.ContractorPosts.Update(contractorPost);
-                                await _context.SaveChangesAsync();
+                            _context.ContractorPosts.Update(contractorPost);
+                            await _context.SaveChangesAsync();
 
-                            }
+                            //if (contractorPost.PeopeRemained >= 1)
+                            //{
+                            //}
                         }
 
                     }
