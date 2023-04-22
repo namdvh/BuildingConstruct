@@ -726,7 +726,7 @@ namespace Application.System.Users
             else if (status == 2)
             {
                 var billCount = _context.Bills.Where(x => x.ContractorId == user.ContractorId).Count();
-                var commitmentCount = _context.PostCommitments.Where(x => x.ContractorID == user.ContractorId && x.Status == Status.SUCCESS).Count();
+                var postCount = _context.ContractorPosts.Where(x => x.ContractorID == user.ContractorId && x.Status == Status.SUCCESS).Count();
 
 
                 DetailContractor detailContractor = new()
@@ -736,7 +736,7 @@ namespace Application.System.Users
                     Id = user.Contractor.Id,
                     Website = user.Contractor.Website,
                     BillCount = billCount,
-                    PostCount = commitmentCount,
+                    PostCount = postCount,
                 };
 
 
@@ -1018,14 +1018,19 @@ namespace Application.System.Users
                     }
                 }
 
-                if (user.Status == Status.Level1 && user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null && user.IdNumber != null)
+                if (user.Status != Status.Level3)
                 {
-                    user.Status = Status.Level3;
+
+                    if (user.Status == Status.Level1 && user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null && user.IdNumber != null)
+                    {
+                        user.Status = Status.Level3;
+                    }
+                    else if (user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null && user.IdNumber != null)
+                    {
+                        user.Status = Status.Level2;
+                    }
                 }
-                else if (user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null && user.IdNumber != null)
-                {
-                    user.Status = Status.Level2;
-                }
+
 
 
 
@@ -1131,14 +1136,19 @@ namespace Application.System.Users
                     user.Contractor.Website = request.Website;
                 }
 
-                if (user.Status == Status.Level1 && user.Avatar != null && user.Contractor.CompanyName != null && user.IdNumber != null)
+                if (user.Status != Status.Level3)
                 {
-                    user.Status = Status.Level3;
+                    if (user.Status == Status.Level1 && user.Avatar != null && user.Contractor.CompanyName != null && user.IdNumber != null)
+                    {
+                        user.Status = Status.Level3;
+                    }
+                    else if (user.Avatar != null && user.Contractor.CompanyName != null && user.IdNumber != null)
+                    {
+                        user.Status = Status.Level2;
+                    }
                 }
-                else if (user.Avatar != null && user.Contractor.CompanyName != null && user.IdNumber != null)
-                {
-                    user.Status = Status.Level2;
-                }
+
+
 
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
@@ -1252,14 +1262,19 @@ namespace Application.System.Users
 
                 }
 
-                if (user.Status == Status.Level1 && user.Avatar != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
+                if (user.Status != Status.Level3)
                 {
-                    user.Status = Status.Level3;
+                    if (user.Status == Status.Level1 && user.Avatar != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
+                    {
+                        user.Status = Status.Level3;
+                    }
+                    else if (user.Avatar != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
+                    {
+                        user.Status = Status.Level2;
+                    }
                 }
-                else if (user.Avatar != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
-                {
-                    user.Status = Status.Level2;
-                }
+
+
 
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();

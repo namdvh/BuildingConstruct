@@ -102,6 +102,7 @@ namespace ViewModels.Users
 
         public int? BillCount { get; set; }
 
+
     }
     public class StoreOrderStatistic
     {

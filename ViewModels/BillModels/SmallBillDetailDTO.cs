@@ -11,7 +11,9 @@ namespace ViewModels.BillModels
     {
         public BigBillDetail? Bill { get; set; }
         public StoreDTO? Store { get; set; }
+        public BuyerInfo? BuyerInfo { get; set; }
         public List<SmallBillDTO> Details { get; set; }
+
     }
 
 
@@ -30,9 +32,20 @@ namespace ViewModels.BillModels
     public class StoreDTO
     {
         public int? Id { get; set; }
-        public Guid? UserId { get; set; }   
+        public Guid? UserId { get; set; }
         public string? StoreName { get; set; }
         public string? Avatar { get; set; }
         public string? Email { get; set; }
+    }
+
+
+    public class BuyerInfo
+    {
+        public string? Name { get; set; }
+
+        public string? Phone { get; set; }
+
+        public string? Address { get; set; }
+
     }
 }

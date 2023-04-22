@@ -314,6 +314,8 @@ namespace Application.System.Bill
             var result = await _context.Bills
                 .Include(x => x.MaterialStore)
                     .ThenInclude(x => x.User)
+                .Include(x=>x.Contractor)
+                    .ThenInclude(x=>x.User)
                 .Where(x => x.Id == billID).FirstOrDefaultAsync();
 
             if (result != null)
@@ -357,13 +359,15 @@ namespace Application.System.Bill
                 product.Add(pro);
             }
 
+            
+
 
             BigBillDetail bill = new()
             {
                 ContractorId = list.First().Bills.ContractorId.Value,
                 EndDate = list.First().Bills.EndDate,
                 Id = list.First().Bills.Id,
-                Note = list.First().Bills.Note,
+                Note = list.First().Bills?.Note,
                 PaymentDate = list.First().Bills.PaymentDate,
                 StartDate = list.First().Bills.StartDate,
                 Status = list.First().Bills.Status,
@@ -379,6 +383,7 @@ namespace Application.System.Bill
             {
                 Bill = bill,
                 Products = product,
+                
             };
             return dto;
         }
@@ -409,11 +414,11 @@ namespace Application.System.Bill
 
             StoreDTO store = new()
             {
-                Avatar = bill.MaterialStore.User.Avatar,
-                Email = bill.MaterialStore.User.Email,
+                Avatar = bill.MaterialStore?.User?.Avatar,
+                Email = bill.MaterialStore?.User?.Email,
                 Id = bill.StoreID,
-                StoreName = bill.MaterialStore.User.FirstName + " " + bill.MaterialStore.User.LastName,
-                UserId = bill.MaterialStore.User.Id
+                StoreName = bill.MaterialStore?.User?.FirstName + " " + bill.MaterialStore?.User?.LastName,
+                UserId = bill.MaterialStore?.User?.Id
             };
 
             SmallBillDTO small = new()
@@ -423,13 +428,19 @@ namespace Application.System.Bill
             };
             smallDetails.Add(small);
 
-
+            BuyerInfo buyerInfo = new()
+            {
+                Address = bill.Contractor?.User?.Address,
+                Name = bill.Contractor?.User?.FirstName + " " + bill.Contractor?.User?.LastName,
+                Phone = bill.Contractor?.User?.PhoneNumber
+            };
 
             SmallBillDetailDTO dto = new()
             {
                 Bill = BillDTO,
                 Details = smallDetails,
-                Store = store
+                Store = store,
+                BuyerInfo = buyerInfo
             };
             return dto;
         }
