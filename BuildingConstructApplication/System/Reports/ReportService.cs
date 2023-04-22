@@ -409,7 +409,7 @@ namespace Application.System.Reports
                 response.Code = BaseCode.SUCCESS;
                 response.Message = "Report thành công";
                 response.Data = author.CreateBy.ToString();
-                response.NavigateId = rp.Id;
+                response.NavigateId = report.ContractorPostId;
             }
             else
             {
@@ -459,7 +459,7 @@ namespace Application.System.Reports
                 response.Code = BaseCode.SUCCESS;
                 response.Message = "Report thành công";
                 response.Data = author.ToString();
-                response.NavigateId = rp.Id;
+                response.NavigateId = report.ProductId;
             }
             else
             {
