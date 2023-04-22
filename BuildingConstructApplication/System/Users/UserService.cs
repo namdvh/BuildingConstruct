@@ -722,7 +722,7 @@ namespace Application.System.Users
             else if (status == 2)
             {
                 var billCount = _context.Bills.Where(x => x.ContractorId == user.ContractorId).Count();
-                var commitmentCount = _context.PostCommitments.Where(x => x.ContractorID == user.ContractorId && x.Status == Status.SUCCESS).Count();
+                var postCount = _context.ContractorPosts.Where(x => x.ContractorID == user.ContractorId && x.Status == Status.SUCCESS).Count();
 
 
                 DetailContractor detailContractor = new()
@@ -732,7 +732,7 @@ namespace Application.System.Users
                     Id = user.Contractor.Id,
                     Website = user.Contractor.Website,
                     BillCount = billCount,
-                    PostCount = commitmentCount,
+                    PostCount = postCount,
                 };
 
 
