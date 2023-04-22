@@ -46,7 +46,7 @@ namespace Application.System.Reports
 
 
 
-            IQueryable<ContractorPost> query = _context.ContractorPosts.Include(x => x.Reports);
+            IQueryable<ContractorPost> query = _context.ContractorPosts.Where(x=>x.CreateBy.ToString().Equals(userID)).Include(x => x.Reports);
             StringBuilder salariesSearch = new();
             StringBuilder placeSearch = new();
             StringBuilder categoriesSearch = new();
