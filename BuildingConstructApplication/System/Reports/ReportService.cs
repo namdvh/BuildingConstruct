@@ -381,7 +381,7 @@ namespace Application.System.Reports
             if (checkrp > 0)
             {
                 response.Code = BaseCode.ERROR;
-                response.Data = null;
+                response.Data = author.CreateBy.ToString();
                 response.Message = "Bạn đã report bài post này rồi";
                 return response;
             }
@@ -426,12 +426,12 @@ namespace Application.System.Reports
             var response = new BaseResponse<string>();
             var userID = identifierClaim.Value.ToString();
             var checkrp = await _context.Reports.Where(x => x.ProductId == report.ProductId && x.CreateBy == Guid.Parse(userID)).CountAsync();
-            var author = await _context.Products.Where(x => x.Id == report.ProductId).FirstOrDefaultAsync();
+            var author = await _context.Products.Include(x=>x.MaterialStore).ThenInclude(x=>x.User).Where(x => x.Id == report.ProductId).Select(x=>x.MaterialStore.User.Id).FirstOrDefaultAsync();
 
             if (checkrp > 0)
             {
                 response.Code = BaseCode.ERROR;
-                response.Data = null;
+                response.Data = author.ToString();
                 response.Message = "Bạn đã report sản phẩm này rồi";
                 return response;
             }
@@ -458,7 +458,7 @@ namespace Application.System.Reports
             {
                 response.Code = BaseCode.SUCCESS;
                 response.Message = "Report thành công";
-                response.Data = author.Id.ToString();
+                response.Data = author.ToString();
                 response.NavigateId = rp.Id;
             }
             else

@@ -31,7 +31,7 @@ namespace Application.System.Types
                 Id = new Guid(),
                 Name = type.Name
             };
-            var check = await _context.Types.Where(x => x.Id.ToString().Equals(types.Id.ToString())).FirstOrDefaultAsync();
+            var check = await _context.Types.Where(x => x.Name.ToString().Equals(types.Name.ToString())).FirstOrDefaultAsync();
             if (check == null)
             {
                 await _context.Types.AddAsync(types);
