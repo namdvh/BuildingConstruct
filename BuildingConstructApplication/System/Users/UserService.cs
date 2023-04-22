@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Linq.Dynamic.Core;
@@ -1402,12 +1403,41 @@ namespace Application.System.Users
                 var final = ls.DistinctBy(x => x.UserId).Where(x => x.Status == Status.Level3).ToList();
 
 
+                var allListUserId = final.Select(x => x.UserId).ToList();
+
+
+                List<UserDetailDTO> result = new();
+
+                foreach (var item in final)
+                {
+                    result.Add(item);
+                }
+
+
+                if (final.Count < 10)
+                {
+                    var remaining = 10 - final.Count;
+
+                    var allContractorItem = await _context.Users.Where(x => x.Status==Status.Level3 && x.ContractorId != null).Select(x => x.ContractorId).Take(remaining).ToListAsync();
+
+                    foreach (var item in allContractorItem)
+                    {
+                        result.Add(MapToDetailDTO(item.Value));
+                    }
+
+
+                }
+
+                var testFinal = result.DistinctBy(x => x.UserId).ToList();
+
+
+
 
                 response = new()
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = final,
+                    Data = testFinal,
                     Pagination = pagination
                 };
             }
