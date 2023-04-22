@@ -514,6 +514,7 @@ namespace Application.System.MaterialStores
             productDetail.Store = await GetStore((int)rs.MaterialStoreID);
             productDetail.ProductCategories = await GetCategory(rs.ProductCategories);
             productDetail.CreatedBy = rs.CreatedBy;
+            productDetail.Avatar = rs.MaterialStore.User.Avatar;
             response.Data = productDetail;
             response.Code = BaseCode.SUCCESS;
             response.Message = "SUCCESS";
