@@ -471,6 +471,18 @@ namespace Application.System.Carts
                 ProductType = listType.Any() ? types : null,
             };
 
+            if (dto.TypeID != null)
+            {
+                if (dto.ProductType != null)
+                {
+                    var unitInStock = dto.ProductType.Where(x => x.Id == dto.TypeID).Select(x => x.Quantity).FirstOrDefault();
+
+                    dto.UnitInStock = unitInStock;
+                }
+
+            }
+
+
             if (cart.ProductType?.Color?.Name != null)
             {
                 dto.Color = cart.ProductType?.Color?.Name != "No Color" ? cart.ProductType?.Color.Name : null;
