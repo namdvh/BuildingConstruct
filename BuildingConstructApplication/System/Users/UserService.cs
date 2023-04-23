@@ -1024,21 +1024,31 @@ namespace Application.System.Users
 
                     if (user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null && user.IdNumber != null)
                     {
-                        var identificationVerifies = await _context.Verifies.FirstOrDefaultAsync(x => x.UserID.Equals(user.Id));
 
-                        if (identificationVerifies != null)
+                        if (user.Status == Status.SUCCESS)
                         {
-                            if(identificationVerifies.Status == Status.SUCCESS)
+                            user.Status = Status.Level2;
+                        }
+                        else
+                        {
+                            var identificationVerifies = await _context.Verifies.FirstOrDefaultAsync(x => x.UserID.Equals(user.Id));
+
+                            if (identificationVerifies != null)
                             {
-                                user.Status = Status.Level3;
-                            }
-                            else
-                            {
-                                user.Status = Status.Level2;
+                                if (identificationVerifies.Status == Status.SUCCESS)
+                                {
+                                    user.Status = Status.Level3;
+                                }
+                                else
+                                {
+                                    user.Status = Status.Level2;
+                                }
                             }
                         }
+                       
+                      
                     }
-         
+
                 }
 
 
@@ -1150,21 +1160,33 @@ namespace Application.System.Users
                 {
                     if (user.Avatar != null && user.Contractor.CompanyName != null && user.IdNumber != null)
                     {
-                        var identificationVerifies = await _context.Verifies.FirstOrDefaultAsync(x => x.UserID.Equals(user.Id));
 
-                        if (identificationVerifies != null)
+                        if (user.Status == Status.SUCCESS)
                         {
-                            if (identificationVerifies.Status == Status.SUCCESS)
+                            user.Status = Status.Level2;
+
+                        }
+                        else
+                        {
+                            var identificationVerifies = await _context.Verifies.FirstOrDefaultAsync(x => x.UserID.Equals(user.Id));
+
+                            if (identificationVerifies != null)
                             {
-                                user.Status = Status.Level3;
+                                if (identificationVerifies.Status == Status.SUCCESS)
+                                {
+                                    user.Status = Status.Level3;
+                                }
+                                else
+                                {
+                                    user.Status = Status.Level2;
+                                }
                             }
-                            else
-                            {
-                                user.Status = Status.Level2;
-                            }
+
                         }
 
+
                     }
+
                 }
 
 
@@ -1283,21 +1305,37 @@ namespace Application.System.Users
 
                 if (user.Status != Status.Level3)
                 {
-                    if ( user.Avatar != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
+                    if (user.Avatar != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
                     {
-                        var identificationVerifies = await _context.Verifies.FirstOrDefaultAsync(x => x.UserID.Equals(user.Id));
 
-                        if (identificationVerifies != null)
+                        if (user.Status == Status.SUCCESS)
                         {
-                            if (identificationVerifies.Status == Status.SUCCESS)
-                            {
-                                user.Status = Status.Level3;
-                            }
-                            else
-                            {
-                                user.Status = Status.Level2;
-                            }
+                            user.Status = Status.Level2;
+
                         }
+                        else
+                        {
+                            var identificationVerifies = await _context.Verifies.FirstOrDefaultAsync(x => x.UserID.Equals(user.Id));
+
+                            if (identificationVerifies != null)
+                            {
+                                if (identificationVerifies.Status == Status.SUCCESS)
+                                {
+                                    user.Status = Status.Level3;
+                                }
+                                else
+                                {
+                                    user.Status = Status.Level2;
+                                }
+
+                            }
+
+
+
+
+
+                        }
+
                     }
 
 
@@ -2266,8 +2304,6 @@ namespace Application.System.Users
 
             return listResult;
         }
-
-
 
     }
 }
