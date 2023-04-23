@@ -556,7 +556,7 @@ namespace Application.System.ContractorPosts
             var result = await query
                     .Include(x => x.Contractor)
                         .ThenInclude(x => x.User)
-                    .Where(x => x.Status == Status.SUCCESS)
+                    .Where(x => x.Status == Status.SUCCESS && x.CreateBy.Equals(id))
                      .OrderBy(filter._sortBy + " " + orderBy)
                      .Skip((filter.PageNumber - 1) * filter.PageSize)
                      .Take(filter.PageSize)

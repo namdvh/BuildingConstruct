@@ -1031,8 +1031,12 @@ namespace Application.System.Users
                                 }
                                 else
                                 {
-                                    user.Status = Status.Level2;
+                                    user.Status = Status.LEVEL_4;
                                 }
+                            }
+                            else
+                            {
+                                user.Status = Status.Level2;
                             }
                         }
                         flag = true;
@@ -1052,7 +1056,9 @@ namespace Application.System.Users
 
                 if (flag)
                 {
-                    response.Data = user.Status.ToString();
+
+                    int value = (int)user.Status;
+                    response.Data = value.ToString();
                 }
 
 
@@ -1170,8 +1176,12 @@ namespace Application.System.Users
                                 }
                                 else
                                 {
-                                    user.Status = Status.Level2;
+                                    user.Status = Status.LEVEL_4;
                                 }
+                            }
+                            else
+                            {
+                                user.Status = Status.Level2;
                             }
 
                         }
@@ -1196,7 +1206,9 @@ namespace Application.System.Users
 
                 if (flag)
                 {
-                    response.Data = user.Status.ToString();
+
+                    int value = (int)user.Status;
+                    response.Data = value.ToString();
                 }
 
 
@@ -1324,9 +1336,13 @@ namespace Application.System.Users
                                 }
                                 else
                                 {
-                                    user.Status = Status.Level2;
+                                    user.Status = Status.LEVEL_4;
                                 }
 
+                            }
+                            else
+                            {
+                                user.Status = Status.Level2;
                             }
                         }
                         flag = true;
@@ -1349,7 +1365,8 @@ namespace Application.System.Users
                 };
                 if (flag)
                 {
-                    response.Data = user.Status.ToString();
+                    int value = (int)user.Status;
+                    response.Data = value.ToString();
                 }
 
 
