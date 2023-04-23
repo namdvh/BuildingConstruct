@@ -10,6 +10,7 @@ using System.Linq.Dynamic.Core;
 using ViewModels.Identification;
 using ViewModels.Pagination;
 using ViewModels.Response;
+using static Emgu.CV.Stitching.Stitcher;
 
 
 namespace Application.System.Identification
@@ -42,15 +43,75 @@ namespace Application.System.Identification
                 IdentificateType = requests.IdentificateType,
                 LastModifiedAt = DateTime.Now,
                 PreCodition = requests.PreCodition,
-                Status = Status.PENDING,
+                Status = Data.Enum.Status.PENDING,
             };
 
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id.Equals(userID));
+            var user = await _context.Users
+                .Include(x => x.Builder)
+                .Include(x => x.Contractor)
+                .Include(x => x.MaterialStore)
+                .FirstOrDefaultAsync(x => x.Id.Equals(userID));
 
             if (user != null)
             {
-                user.Status = Status.LEVEL_4;
-                _context.Users.Update(user);
+                //user.Status = Status.LEVEL_4;
+                //_context.Users.Update(user);
+                var rolename = _userService.GetRolesAsync(user).Result;
+
+
+                if (rolename.First().Equals("User"))
+                {
+                    if (user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null && user.IdNumber != null)
+                    {
+                        user.Status = Data.Enum.Status.LEVEL_4;
+                    }
+                    else
+                    {
+                        user.Status = Data.Enum.Status.Level1;
+                    }
+
+                    _context.Update(user);
+                    await _context.SaveChangesAsync();
+
+
+                }
+                else if (rolename.First().Equals("Contractor"))
+                {
+                    if (user.Avatar != null && user.Contractor.CompanyName != null && user.IdNumber != null)
+                    {
+                        user.Status = Data.Enum.Status.LEVEL_4;
+                    }
+                    else
+                    {
+                        user.Status = Data.Enum.Status.Level1;
+                    }
+
+                    _context.Update(user);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    if (user.Avatar != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
+                    {
+                        user.Status = Data.Enum.Status.LEVEL_4;
+
+                    }
+                    else
+                    {
+                        user.Status = Data.Enum.Status.Level1;
+
+                    }
+
+                    _context.Update(user);
+                    await _context.SaveChangesAsync();
+
+                }
+
+
+
+
+
+
             }
 
             await _context.Verifies.AddAsync(verify);
@@ -232,7 +293,7 @@ namespace Application.System.Identification
             return response;
         }
 
-        public async Task<BaseResponse<string>> Update(int id, Status status)
+        public async Task<BaseResponse<string>> Update(int id, Data.Enum.Status status)
         {
             BaseResponse<string> response;
 
@@ -246,19 +307,19 @@ namespace Application.System.Identification
                     .FirstOrDefaultAsync(x => x.Id.Equals(rs.UserID));
                 if (user != null)
                 {
-                    if (status == Status.DECLINED)
+                    if (status == Data.Enum.Status.DECLINED)
                     {
                         var rolename = _userService.GetRolesAsync(user).Result;
 
                         if (rolename.First().Equals("User"))
                         {
-                            if (user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null && user.IdNumber != null)
+                            if (user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null && user.IdNumber != null )
                             {
-                                user.Status = Status.Level2;
+                                user.Status = Data.Enum.Status.Level2;
                             }
                             else
                             {
-                                user.Status = Status.SUCCESS;
+                                user.Status = Data.Enum.Status.SUCCESS;
                             }
                             _context.Update(user);
                         }
@@ -266,11 +327,11 @@ namespace Application.System.Identification
                         {
                             if (user.Avatar != null && user.Contractor.CompanyName != null && user.IdNumber != null)
                             {
-                                user.Status = Status.Level2;
+                                user.Status = Data.Enum.Status.Level2;
                             }
                             else
                             {
-                                user.Status = Status.SUCCESS;
+                                user.Status = Data.Enum.Status.SUCCESS;
                             }
                             _context.Update(user);
                         }
@@ -278,11 +339,11 @@ namespace Application.System.Identification
                         {
                             if (user.Avatar != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
                             {
-                                user.Status = Status.Level2;
+                                user.Status = Data.Enum.Status.Level2;
                             }
                             else
                             {
-                                user.Status = Status.SUCCESS;
+                                user.Status = Data.Enum.Status.SUCCESS;
                             }
                             _context.Update(user);
                         }
@@ -301,21 +362,55 @@ namespace Application.System.Identification
 
                         if (user != null)
                         {
-                            if (user.Status == Status.Level2 && status == Status.SUCCESS)
+
+                            var rolename = _userService.GetRolesAsync(user).Result;
+
+
+                            if (rolename.First().Equals("User"))
                             {
-                                user.Status = Status.Level3;
+                                if (user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null && user.IdNumber != null && status == Data.Enum.Status.SUCCESS)
+                                {
+                                    user.Status = Data.Enum.Status.Level3;
+                                }
+                                else if (status == Data.Enum.Status.SUCCESS)
+                                {
+                                    user.Status = Data.Enum.Status.Level1;
+                                }
+
+                                _context.Update(user);
+                                await _context.SaveChangesAsync();
+
+
                             }
-                            else if (status == Status.SUCCESS)
+                            else if (rolename.First().Equals("Contractor"))
                             {
-                                user.Status = Status.Level1;
+                                if (user.Avatar != null && user.Contractor.CompanyName != null && user.IdNumber != null && status == Data.Enum.Status.SUCCESS)
+                                {
+                                    user.Status = Data.Enum.Status.Level3;
+                                }
+                                else if (status == Data.Enum.Status.SUCCESS)
+                                {
+                                    user.Status = Data.Enum.Status.Level1;
+                                }
+
+                                _context.Update(user);
+                                await _context.SaveChangesAsync();
                             }
+                            else
+                            {
+                                if (user.Avatar != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null && status == Data.Enum.Status.SUCCESS)
+                                {
+                                    user.Status = Data.Enum.Status.Level3;
+                                }
+                                else if (status == Data.Enum.Status.SUCCESS)
+                                {
+                                    user.Status = Data.Enum.Status.Level1;
+                                }
 
+                                _context.Update(user);
+                                await _context.SaveChangesAsync();
 
-
-
-
-                            _context.Update(user);
-                            await _context.SaveChangesAsync();
+                            }
                         }
                     }
 
