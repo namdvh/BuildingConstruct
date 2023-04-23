@@ -14,6 +14,8 @@ using System.Text;
 using ViewModels.Pagination;
 using ViewModels.Response;
 using ViewModels.Users;
+using Gridify;
+using System.Linq;
 
 namespace Application.System.Users
 {
@@ -2319,5 +2321,131 @@ namespace Application.System.Users
             return listResult;
         }
 
+        public async Task<BasePagination<List<UserDetailDTO>>> GetAllBuilder(PaginationFilter filter)
+        {
+            BasePagination<List<UserDetailDTO>> response;
+            var orderBy = filter._orderBy.ToString();
+            int totalRecord;
+            orderBy = orderBy switch
+            {
+                "1" => "ascending",
+                "-1" => "descending",
+                _ => orderBy
+            };
+            if (string.IsNullOrEmpty(filter._sortBy))
+            {
+                filter._sortBy = "Id";
+            }
+
+
+
+            IQueryable<Builder> query = _context.Builders.Include(x=>x.User);
+            StringBuilder placeSearch = new();
+            StringBuilder typesSearch = new();
+            StringBuilder titleSearch = new();
+
+            if (filter.FilterRequest != null)
+            {
+                
+
+                if (filter.FilterRequest.Places!=null)
+                {
+                    var count = filter.FilterRequest.Places.Count;
+                    for (int i = 0; i < count; i++)
+                    {
+                        if (i == count - 1)
+                        {
+                            placeSearch.Append("Place=" + filter.FilterRequest.Places[i]);
+                            break;
+                        }
+                        placeSearch.Append("Place=" + filter.FilterRequest.Places[i] + "|");
+                    }
+                    query = query.ApplyFiltering(placeSearch.ToString());
+                }
+
+
+
+                if (filter.FilterRequest.Types!=null)
+                {
+                    var count = filter.FilterRequest.Types.Count;
+                    for (int i = 0; i < count; i++)
+                    {
+                        if (i == count - 1)
+                        {
+                            typesSearch.Append("TypeID=" + filter.FilterRequest.Types[i]);
+                            break;
+                        }
+                        typesSearch.Append("TypeID=" + filter.FilterRequest.Types[i] + "|");
+                    }
+                    query = query.ApplyFiltering(typesSearch.ToString());
+                }
+                if(filter.FilterRequest.Title != null)
+                {
+                    query = query.Where(x => x.User.FirstName.Contains(filter.FilterRequest.Title) || x.User.LastName.Contains(filter.FilterRequest.Title));
+                }
+
+            }
+
+            var result = await query
+                    .Where(x => x.User.Status == Status.Level3 )
+                     .OrderBy(filter._sortBy + " " + orderBy)
+                     .Skip((filter.PageNumber - 1) * filter.PageSize)
+                     .Take(filter.PageSize)
+                     .Select(x=>x.Id)
+                     .ToListAsync();
+
+
+            if (filter.FilterRequest != null)
+            {
+                totalRecord = result.Count;
+            }
+            else
+            {
+                totalRecord = await _context.ContractorPosts.CountAsync();
+            }
+
+            if (!result.Any())
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.EMPTY_MESSAGE,
+                    Data = new(),
+                    Pagination = null
+                };
+            }
+            else
+            {
+                double totalPages;
+
+                totalPages = ((double)totalRecord / (double)filter.PageSize);
+
+                var roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
+                Pagination pagination = new()
+                {
+                    CurrentPage = filter.PageNumber,
+                    PageSize = filter.PageSize,
+                    TotalPages = roundedTotalPages,
+                    TotalRecords = totalRecord
+                };
+
+                List<UserDetailDTO> list = new();
+
+                foreach (var item in result)
+                {
+                    list.Add(MapBuilderFavorite(item));
+                }
+
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = list,
+                    Pagination = pagination
+                };
+            }
+            return response;
+        }
     }
 }
