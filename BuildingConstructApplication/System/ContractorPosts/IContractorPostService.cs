@@ -9,6 +9,8 @@ namespace Application.System.ContractorPosts
     {
         Task<BasePagination<List<ContractorPostDTO>>> GetPost(PaginationFilter filter, Guid id);
 
+        Task<BasePagination<List<ContractorPostDTO>>> GetPostByUserId(PaginationFilter filter, Guid id);
+
         Task<BasePagination<List<ContractorPostDTO>>> GetPostByCategories(PaginationFilter filter, Guid id,PostCategories categories);
 
         Task<BasePagination<List<ContractorPostDTO>>> GetPostByContractor(PaginationFilter filter, Guid id);
