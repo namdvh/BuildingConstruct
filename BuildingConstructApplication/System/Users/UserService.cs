@@ -2,25 +2,15 @@
 using Data.DataContext;
 using Data.Entities;
 using Data.Enum;
-using Emgu.CV.Features2D;
-using Emgu.CV.Ocl;
 using FluentValidation.Results;
-using Gridify;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System.Collections.Generic;
-using System.Drawing.Printing;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Linq.Dynamic.Core;
-using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
-using ViewModels.ContractorPost;
 using ViewModels.Pagination;
 using ViewModels.Response;
 using ViewModels.Users;
@@ -876,7 +866,7 @@ namespace Application.System.Users
         public async Task<BaseResponse<string>> UpdateBuilderProfile(UpdateBuilderRequest request, Guid userID)
         {
             BaseResponse<string> response;
-
+            bool flag = false;
             var user = await _context.Users.Include(x => x.Builder).FirstOrDefaultAsync(x => x.Id.Equals(userID));
 
             if (user != null)
@@ -1024,26 +1014,32 @@ namespace Application.System.Users
 
                     if (user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null && user.IdNumber != null)
                     {
-                        var identificationVerifies = await _context.Verifies.FirstOrDefaultAsync(x => x.UserID.Equals(user.Id));
 
-                        if (identificationVerifies != null)
+                        if (user.Status == Status.SUCCESS)
                         {
-                            if(identificationVerifies.Status == Status.SUCCESS)
+                            user.Status = Status.Level2;
+                        }
+                        else
+                        {
+                            var identificationVerifies = await _context.Verifies.FirstOrDefaultAsync(x => x.UserID.Equals(user.Id));
+
+                            if (identificationVerifies != null)
                             {
-                                user.Status = Status.Level3;
-                            }
-                            else
-                            {
-                                user.Status = Status.Level2;
+                                if (identificationVerifies.Status == Status.SUCCESS)
+                                {
+                                    user.Status = Status.Level3;
+                                }
+                                else
+                                {
+                                    user.Status = Status.Level2;
+                                }
                             }
                         }
+                        flag = true;
+
                     }
-         
+
                 }
-
-
-
-
 
                 _context.Update(user);
                 var rs = await _context.SaveChangesAsync();
@@ -1053,6 +1049,11 @@ namespace Application.System.Users
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE
                 };
+
+                if (flag)
+                {
+                    response.Data = user.Status.ToString();
+                }
 
 
             }
@@ -1078,6 +1079,7 @@ namespace Application.System.Users
         public async Task<BaseResponse<string>> UpdateContractorProfile(UpdateContractorRequest request, Guid userID)
         {
             BaseResponse<string> response;
+            bool flag = false;
 
             var user = await _context.Users.Include(x => x.Contractor).FirstOrDefaultAsync(x => x.Id.Equals(userID));
 
@@ -1150,21 +1152,34 @@ namespace Application.System.Users
                 {
                     if (user.Avatar != null && user.Contractor.CompanyName != null && user.IdNumber != null)
                     {
-                        var identificationVerifies = await _context.Verifies.FirstOrDefaultAsync(x => x.UserID.Equals(user.Id));
 
-                        if (identificationVerifies != null)
+                        if (user.Status == Status.SUCCESS)
                         {
-                            if (identificationVerifies.Status == Status.SUCCESS)
-                            {
-                                user.Status = Status.Level3;
-                            }
-                            else
-                            {
-                                user.Status = Status.Level2;
-                            }
+                            user.Status = Status.Level2;
+
                         }
+                        else
+                        {
+                            var identificationVerifies = await _context.Verifies.FirstOrDefaultAsync(x => x.UserID.Equals(user.Id));
+
+                            if (identificationVerifies != null)
+                            {
+                                if (identificationVerifies.Status == Status.SUCCESS)
+                                {
+                                    user.Status = Status.Level3;
+                                }
+                                else
+                                {
+                                    user.Status = Status.Level2;
+                                }
+                            }
+
+                        }
+                        flag = true;
+
 
                     }
+
                 }
 
 
@@ -1178,6 +1193,11 @@ namespace Application.System.Users
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE
                 };
+
+                if (flag)
+                {
+                    response.Data = user.Status.ToString();
+                }
 
 
             }
@@ -1195,6 +1215,7 @@ namespace Application.System.Users
         public async Task<BaseResponse<string>> UpdateStoreProfile(UpdateStoreRequest request, Guid userID)
         {
             BaseResponse<string> response;
+            bool flag = false;
 
             var user = await _context.Users.Include(x => x.MaterialStore).FirstOrDefaultAsync(x => x.Id.Equals(userID));
 
@@ -1283,21 +1304,33 @@ namespace Application.System.Users
 
                 if (user.Status != Status.Level3)
                 {
-                    if ( user.Avatar != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
+                    if (user.Avatar != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
                     {
-                        var identificationVerifies = await _context.Verifies.FirstOrDefaultAsync(x => x.UserID.Equals(user.Id));
 
-                        if (identificationVerifies != null)
+                        if (user.Status == Status.SUCCESS)
                         {
-                            if (identificationVerifies.Status == Status.SUCCESS)
+                            user.Status = Status.Level2;
+
+                        }
+                        else
+                        {
+                            var identificationVerifies = await _context.Verifies.FirstOrDefaultAsync(x => x.UserID.Equals(user.Id));
+
+                            if (identificationVerifies != null)
                             {
-                                user.Status = Status.Level3;
-                            }
-                            else
-                            {
-                                user.Status = Status.Level2;
+                                if (identificationVerifies.Status == Status.SUCCESS)
+                                {
+                                    user.Status = Status.Level3;
+                                }
+                                else
+                                {
+                                    user.Status = Status.Level2;
+                                }
+
                             }
                         }
+                        flag = true;
+
                     }
 
 
@@ -1314,6 +1347,10 @@ namespace Application.System.Users
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE
                 };
+                if (flag)
+                {
+                    response.Data = user.Status.ToString();
+                }
 
 
             }
@@ -2262,12 +2299,8 @@ namespace Application.System.Users
             }
 
 
-
-
             return listResult;
         }
-
-
 
     }
 }
