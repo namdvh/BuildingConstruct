@@ -46,7 +46,7 @@ namespace Application.System.MaterialStores
                 SoldQuantities = 0,
                 MaterialStoreID = storeID,
                 Unit = request.Unit,
-                CreatedBy = Guid.Parse(userID),
+                CreateBy = Guid.Parse(userID),
                 Status = true
             };
 
@@ -513,7 +513,7 @@ namespace Application.System.MaterialStores
             productDetail.ProductType = await GetProductType(rs.ProductTypes);
             productDetail.Store = await GetStore((int)rs.MaterialStoreID);
             productDetail.ProductCategories = await GetCategory(rs.ProductCategories);
-            productDetail.CreatedBy = rs.CreatedBy;
+            productDetail.CreatedBy = rs.CreateBy;
             productDetail.Avatar = rs.MaterialStore.User.Avatar;
             response.Data = productDetail;
             response.Code = BaseCode.SUCCESS;
@@ -669,7 +669,7 @@ namespace Application.System.MaterialStores
                 Image = request.Image,
                 Status = true,
                 MaterialStoreID = existedProduct.MaterialStoreID,
-                CreatedBy = Guid.Parse(userID),
+                CreateBy = Guid.Parse(userID),
                 SoldQuantities = existedProduct.SoldQuantities,
             };
 

@@ -228,7 +228,7 @@ namespace Application.System.Users
                         }
                         var roles = await _userService.GetRolesAsync(us);
                         var userDTO = MapToDto(us, roleName);
-                        var premium = await _context.Payments.Where(x => x.UserId.ToString().Equals(us.Id.ToString())).FirstOrDefaultAsync();
+                        var premium = await _context.Payments.Where(x => x.UserId.ToString().Equals(us.Id.ToString())).OrderByDescending(x => x.ExpireationDate).FirstOrDefaultAsync();
                         bool isPremium = false;
                         if (premium != null)
                         {
@@ -285,6 +285,10 @@ namespace Application.System.Users
 
                             var result = await _context.Users.Include(x => x.Contractor).Where(x => x.Id.Equals(us.Id)).FirstOrDefaultAsync();
                             response.Data.Contractor = MapToDetailContractor(result);
+                        }
+                        else if (roleName.Equals("Admin"))
+                        {
+                            return response;
                         }
                         else
                         {
@@ -546,7 +550,7 @@ namespace Application.System.Users
             await _userService.UpdateAsync(user);
             token.AccessToken = newAccessToken;
             response.Data = new();
-            var premium = await _context.Payments.Where(x => x.UserId.ToString().Equals(user.Id.ToString())).FirstOrDefaultAsync();
+            var premium = await _context.Payments.Where(x => x.UserId.ToString().Equals(user.Id.ToString())).OrderByDescending(x => x.ExpireationDate).FirstOrDefaultAsync();
             bool isPremium = false;
             if (premium != null)
             {
@@ -1846,7 +1850,7 @@ namespace Application.System.Users
                 return response;
             }
             var us = await _context.Users.Where(x => x.Token.Equals(refreshToken.refreshToken)).FirstOrDefaultAsync();
-            if (us == null || us.Token != refreshToken.refreshToken || us.RefreshTokenExpiryTime <= DateTime.UtcNow)
+            if (us == null || us.RefreshTokenExpiryTime <= DateTime.UtcNow)
             {
                 response.Code = "500";
                 response.Message = "Expired Refresh Token in getProfile";
