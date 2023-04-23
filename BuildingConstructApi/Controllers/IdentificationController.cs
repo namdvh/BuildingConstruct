@@ -65,7 +65,7 @@ namespace BuildingConstructApi.Controllers
         {
 
             var result = await _identificationService.Update(id, status);
-            var connections = _userConnectionManager.GetUserConnections(result.Data);
+            var connections = _userConnectionManager.GetUserConnections(result.Data.Id);
             if (connections != null && connections.Count > 0)
             {
                 foreach (var connectionId in connections)
