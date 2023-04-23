@@ -129,11 +129,20 @@ namespace Application.System.Bill
                     foreach (var pro in item.ProductBillDetail)
                     {
                         var product = _context.Carts.Where(x => x.ProductID == pro.ProductId && x.UserID.ToString().Equals(usID.ToString()) && x.TypeID == pro.TypeID).FirstOrDefault();
+                        if (product != null)
+                        {
                         ls.Add(product);
+
+                        }
                     }
                 }
-                _context.RemoveRange(ls);
-                await _context.SaveChangesAsync();
+
+                if (ls.Any())
+                {
+                    _context.RemoveRange(ls);
+                    await _context.SaveChangesAsync();
+
+                }
                 response.Data = null;
                 response.Code = BaseCode.SUCCESS;
                 response.Message = "Đặt hàng thành công";

@@ -1022,14 +1022,23 @@ namespace Application.System.Users
                 if (user.Status != Status.Level3)
                 {
 
-                    if (user.Status == Status.Level1 && user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null && user.IdNumber != null)
+                    if (user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null && user.IdNumber != null)
                     {
-                        user.Status = Status.Level3;
+                        var identificationVerifies = await _context.Verifies.FirstOrDefaultAsync(x => x.UserID.Equals(user.Id));
+
+                        if (identificationVerifies != null)
+                        {
+                            if(identificationVerifies.Status == Status.SUCCESS)
+                            {
+                                user.Status = Status.Level3;
+                            }
+                            else
+                            {
+                                user.Status = Status.Level2;
+                            }
+                        }
                     }
-                    else if (user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null && user.IdNumber != null)
-                    {
-                        user.Status = Status.Level2;
-                    }
+         
                 }
 
 
@@ -1139,13 +1148,22 @@ namespace Application.System.Users
 
                 if (user.Status != Status.Level3)
                 {
-                    if (user.Status == Status.Level1 && user.Avatar != null && user.Contractor.CompanyName != null && user.IdNumber != null)
+                    if (user.Avatar != null && user.Contractor.CompanyName != null && user.IdNumber != null)
                     {
-                        user.Status = Status.Level3;
-                    }
-                    else if (user.Avatar != null && user.Contractor.CompanyName != null && user.IdNumber != null)
-                    {
-                        user.Status = Status.Level2;
+                        var identificationVerifies = await _context.Verifies.FirstOrDefaultAsync(x => x.UserID.Equals(user.Id));
+
+                        if (identificationVerifies != null)
+                        {
+                            if (identificationVerifies.Status == Status.SUCCESS)
+                            {
+                                user.Status = Status.Level3;
+                            }
+                            else
+                            {
+                                user.Status = Status.Level2;
+                            }
+                        }
+
                     }
                 }
 
@@ -1265,14 +1283,24 @@ namespace Application.System.Users
 
                 if (user.Status != Status.Level3)
                 {
-                    if (user.Status == Status.Level1 && user.Avatar != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
+                    if ( user.Avatar != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
                     {
-                        user.Status = Status.Level3;
+                        var identificationVerifies = await _context.Verifies.FirstOrDefaultAsync(x => x.UserID.Equals(user.Id));
+
+                        if (identificationVerifies != null)
+                        {
+                            if (identificationVerifies.Status == Status.SUCCESS)
+                            {
+                                user.Status = Status.Level3;
+                            }
+                            else
+                            {
+                                user.Status = Status.Level2;
+                            }
+                        }
                     }
-                    else if (user.Avatar != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
-                    {
-                        user.Status = Status.Level2;
-                    }
+
+
                 }
 
 
@@ -1418,7 +1446,7 @@ namespace Application.System.Users
                 {
                     var remaining = 10 - final.Count;
 
-                    var allContractorItem = await _context.Users.Where(x => x.Status==Status.Level3 && x.ContractorId != null).Select(x => x.ContractorId).Take(remaining).ToListAsync();
+                    var allContractorItem = await _context.Users.Where(x => x.Status == Status.Level3 && x.ContractorId != null).Select(x => x.ContractorId).Take(remaining).ToListAsync();
 
                     foreach (var item in allContractorItem)
                     {
