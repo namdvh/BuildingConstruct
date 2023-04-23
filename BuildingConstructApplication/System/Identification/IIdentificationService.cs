@@ -15,7 +15,7 @@ namespace Application.System.Identification
 
         Task<BaseResponse<string>> Create(Guid userID, CreateIndetificationRequest requests);
 
-        Task<BaseResponse<string>> Update(int id, Status status);
+        Task<BaseResponse<UserIdentification>> Update(int id, Status status);
 
         public BaseResponse<string> DetectFace(Mat image);
 

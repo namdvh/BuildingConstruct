@@ -293,9 +293,9 @@ namespace Application.System.Identification
             return response;
         }
 
-        public async Task<BaseResponse<string>> Update(int id, Data.Enum.Status status)
+        public async Task<BaseResponse<UserIdentification>> Update(int id, Data.Enum.Status status)
         {
-            BaseResponse<string> response;
+            BaseResponse<UserIdentification> response;
 
             var rs = await _context.Verifies.FirstOrDefaultAsync(x => x.Id == id);
             if (rs != null)
@@ -417,13 +417,17 @@ namespace Application.System.Identification
                 }
 
 
-
+                UserIdentification identification = new()
+                {
+                    Id = rs.UserID.ToString(),
+                    IsSuccess = status == Data.Enum.Status.SUCCESS ? true : false,
+                };
 
                 response = new()
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = rs.UserID.ToString()
+                    Data = identification
                 };
             }
             else
