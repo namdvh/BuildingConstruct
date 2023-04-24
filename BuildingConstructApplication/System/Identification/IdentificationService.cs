@@ -46,7 +46,7 @@ namespace Application.System.Identification
                 Status = Data.Enum.Status.PENDING,
             };
 
-            if(verify.FaceImage != null && verify.FrontID != null)
+            if (verify.FaceImage != null && verify.FrontID != null)
             {
                 var client = new HttpClient();
                 var request = new HttpRequestMessage
@@ -66,15 +66,22 @@ namespace Application.System.Identification
                 };
                 using (var responsed = await client.SendAsync(request))
                 {
-                    responsed.EnsureSuccessStatusCode();
-                    var body = await responsed.Content.ReadAsStringAsync();
+                    if (responsed.IsSuccessStatusCode)
+                    {
+                        var body = await responsed.Content.ReadAsStringAsync();
 
-                    dynamic stuff = JsonConvert.DeserializeObject(body);
-                    string test = stuff.data.resultMessage;
-                    double percent = stuff.data.similarPercent;
-                    var finalNumber = Math.Round(percent, 2) * 100;
+                        dynamic stuff = JsonConvert.DeserializeObject(body);
+                        string test = stuff.data.resultMessage;
+                        double percent = stuff.data.similarPercent;
+                        var finalNumber = Math.Round(percent, 2) * 100;
 
-                    verify.PreCodition = finalNumber.ToString();
+                        verify.PreCodition = finalNumber.ToString();
+                    }
+                    else
+                    {
+                        verify.PreCodition = "0";
+
+                    }
                 }
             }
             else
@@ -353,7 +360,7 @@ namespace Application.System.Identification
 
                         if (rolename.First().Equals("User"))
                         {
-                            if (user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null && user.IdNumber != null )
+                            if (user.Avatar != null && user.Builder.TypeID != null && user.Builder.Place != null && user.IdNumber != null)
                             {
                                 user.Status = Data.Enum.Status.Level2;
                             }
