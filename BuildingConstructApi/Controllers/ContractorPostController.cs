@@ -93,12 +93,9 @@ namespace BuildingConstructApi.Controllers
             else
             {
                 validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize, filter._sortBy, filter._orderBy, filter.FilterRequest);
-
             }
 
-
-
-            var result = await _contractorPostService.GetPost(filter, id);
+            var result = await _contractorPostService.GetPostByUserId(filter, id);
             return Ok(result);
         }
 
