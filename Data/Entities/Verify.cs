@@ -20,7 +20,7 @@ namespace Data.Entities
 
         public IdentificateType IdentificateType { get; set; }
 
-        public bool PreCodition { get; set; }
+        public string? PreCodition { get; set; }
 
         public Status Status { get; set; }
 

@@ -5,6 +5,7 @@ using Emgu.CV;
 using Emgu.CV.Features2D;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Drawing;
 using System.Linq.Dynamic.Core;
 using ViewModels.Identification;
@@ -42,9 +43,48 @@ namespace Application.System.Identification
                 FrontID = requests.FrontID,
                 IdentificateType = requests.IdentificateType,
                 LastModifiedAt = DateTime.Now,
-                PreCodition = requests.PreCodition,
                 Status = Data.Enum.Status.PENDING,
             };
+
+            if(verify.FaceImage != null && verify.FrontID != null)
+            {
+                var client = new HttpClient();
+                var request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Post,
+                    RequestUri = new Uri("https://face-verification2.p.rapidapi.com/faceverification"),
+                    Headers =
+    {
+        { "X-RapidAPI-Key", "0af973177dmsh33b9953ecf57384p18ca21jsn3df8789084ce" },
+        { "X-RapidAPI-Host", "face-verification2.p.rapidapi.com" },
+    },
+                    Content = new FormUrlEncodedContent(new Dictionary<string, string>
+    {
+        { "linkFile1", verify.FaceImage },
+        { "linkFile2", verify.FrontID },
+    }),
+                };
+                using (var responsed = await client.SendAsync(request))
+                {
+                    responsed.EnsureSuccessStatusCode();
+                    var body = await responsed.Content.ReadAsStringAsync();
+
+                    dynamic stuff = JsonConvert.DeserializeObject(body);
+                    string test = stuff.data.resultMessage;
+                    double percent = stuff.data.similarPercent;
+                    var finalNumber = Math.Round(percent, 2) * 100;
+
+                    verify.PreCodition = finalNumber.ToString();
+                }
+            }
+            else
+            {
+                verify.PreCodition = "0";
+            }
+
+
+
+
 
             var user = await _context.Users
                 .Include(x => x.Builder)
