@@ -1488,10 +1488,6 @@ namespace Application.System.Users
 
                 var final = ls.DistinctBy(x => x.UserId).Where(x => x.Status == Status.Level3).ToList();
 
-
-                var allListUserId = final.Select(x => x.UserId).ToList();
-
-
                 List<UserDetailDTO> result = new();
 
                 foreach (var item in final)
@@ -1659,12 +1655,39 @@ namespace Application.System.Users
 
                 var final = ls.DistinctBy(x => x.UserId).Where(x => x.Status == Status.Level3).ToList();
 
+                List<UserDetailDTO> result = new();
+
+                foreach (var item in final)
+                {
+                    result.Add(item);
+                }
+
+
+                if (final.Count < 10)
+                {
+                    var remaining = 10 - final.Count;
+
+                    var allBuilderItem = await _context.Users.Where(x => x.Status == Status.Level3 && x.BuilderId != null).Select(x => x.BuilderId).Take(remaining).ToListAsync();
+
+                    foreach (var item in allBuilderItem)
+                    {
+                        result.Add(MapBuilderFavorite(item.Value));
+                    }
+
+
+                }
+
+                var testFinal = result.DistinctBy(x => x.UserId).ToList();
+
+
+
+
 
                 response = new()
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = final,
+                    Data = testFinal,
                     Pagination = pagination
                 };
             }
