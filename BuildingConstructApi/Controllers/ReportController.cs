@@ -68,18 +68,22 @@ namespace BuildingConstructApi.Controllers
             noti.Author.Avatar = author.Avatar;
             noti.LastModifiedAt = DateTime.Now;
             noti.NavigateId = rs.NavigateId;
-            var check = await _userConnectionManager.SaveNotification(noti);
-            var connections = _userConnectionManager.GetUserConnections(rs.Data);
-            if (connections != null && connections.Count > 0)
+            if (rs.Data != null)
             {
-                foreach (var connectionId in connections)
+                var check = await _userConnectionManager.SaveNotification(noti);
+
+                var connections = _userConnectionManager.GetUserConnections(rs.Data);
+                if (connections != null && connections.Count > 0)
                 {
-
-                    if (check != null)
+                    foreach (var connectionId in connections)
                     {
-                        noti.Id = check.Data.Id;
-                        await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("sendToUser", noti);
 
+                        if (check != null)
+                        {
+                            noti.Id = check.Data.Id;
+                            await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("sendToUser", noti);
+
+                        }
                     }
                 }
             }
@@ -88,7 +92,7 @@ namespace BuildingConstructApi.Controllers
         [HttpPost("createReportPost")]
         public async Task<IActionResult> CreatePostReport([FromBody] ReportRequestDTO request)
         {
-           
+
             var rs = await _reportService.ReportPost(request);
             NotificationModels noti = new();
             noti.NotificationType = NotificationType.CONTRACTOR_POST_NOTIFICATION;
@@ -103,18 +107,21 @@ namespace BuildingConstructApi.Controllers
             noti.Author.Avatar = author.Avatar;
             noti.LastModifiedAt = DateTime.Now;
             noti.NavigateId = rs.NavigateId;
-            var check = await _userConnectionManager.SaveNotification(noti);
-            var connections = _userConnectionManager.GetUserConnections(rs.Data);
-            if (connections != null && connections.Count > 0)
+            if (rs.Data != null)
             {
-                foreach (var connectionId in connections)
+                var check = await _userConnectionManager.SaveNotification(noti);
+                var connections = _userConnectionManager.GetUserConnections(rs.Data);
+                if (connections != null && connections.Count > 0)
                 {
-
-                    if (check != null)
+                    foreach (var connectionId in connections)
                     {
-                        noti.Id = check.Data.Id;
-                        await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("sendToUser", noti);
 
+                        if (check != null)
+                        {
+                            noti.Id = check.Data.Id;
+                            await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("sendToUser", noti);
+
+                        }
                     }
                 }
             }

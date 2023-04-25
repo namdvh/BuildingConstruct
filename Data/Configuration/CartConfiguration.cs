@@ -15,7 +15,7 @@ namespace Data.Configuration
         {
             builder.ToTable("Carts");
 
-            builder.HasKey(x => new { x.UserID, x.ProductID,x.Id });
+            builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Id)
                   .ValueGeneratedOnAdd();
