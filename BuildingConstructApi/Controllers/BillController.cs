@@ -146,8 +146,8 @@ namespace BuildingConstructApi.Controllers
                     notiAuthor = new()
                     {
                         Avatar = author.MaterialStore?.User?.Avatar,
-                        FirstName = author.MaterialStore?.User?.FirstName,
-                        LastName = author.MaterialStore?.User?.LastName,
+                        FirstName = "Đơn hàng",
+                        LastName = "của bạn",
                     };
 
                     noti = new()
