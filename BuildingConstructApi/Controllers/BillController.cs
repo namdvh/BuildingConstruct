@@ -52,8 +52,8 @@ namespace BuildingConstructApi.Controllers
                     NotificateAuthor notiAuthor = new()
                     {
                         Avatar = author.Avatar,
-                        FirstName = author.FirstName,
-                        LastName = author.LastName,
+                        FirstName = "Bạn",
+                        LastName = "có",
                     };
 
                     NotificationModels noti = new()
@@ -146,8 +146,8 @@ namespace BuildingConstructApi.Controllers
                     notiAuthor = new()
                     {
                         Avatar = author.MaterialStore?.User?.Avatar,
-                        FirstName = author.MaterialStore?.User?.FirstName,
-                        LastName = author.MaterialStore?.User?.LastName,
+                        FirstName = "Đơn hàng",
+                        LastName = "của bạn",
                     };
 
                     noti = new()

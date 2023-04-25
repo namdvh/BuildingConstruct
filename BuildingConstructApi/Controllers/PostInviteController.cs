@@ -61,7 +61,7 @@ namespace BuildingConstructApi.Controllers
             {
                 LastModifiedAt = DateTime.Now,
                 CreateBy =author.Id,
-                NavigateId = result.NavigateId,
+                NavigateId = requests.ContractorPostId,
                 UserId = Guid.Parse(result.Data),
                 Message = NotificationMessage.SEND_INVITE,
                 NotificationType = NotificationType.CONTRACTOR_POST_NOTIFICATION,
