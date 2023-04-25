@@ -1,10 +1,4 @@
-﻿using Data.Entities;
-using Data.Enum;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Data.Enum;
 
 namespace ViewModels.Identification
 {
@@ -26,7 +20,7 @@ namespace ViewModels.Identification
 
         public IdentificateType IdentificateType { get; set; }
 
-        public bool PreCodition { get; set; }
+        public string? PreCodition { get; set; }
 
         public Status Status { get; set; }
 

@@ -358,5 +358,27 @@ namespace BuildingConstructApi.Controllers
             return Ok(rs);
         }
 
+
+
+        [HttpPost("builder/getAll")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllBuilder([FromBody] PaginationFilter request)
+        {
+            var validFilter = new PaginationFilter();
+
+            if (request.FilterRequest == null)
+            {
+                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
+            }
+            else
+            {
+                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy, request.FilterRequest);
+
+            }
+
+
+            var result = await _userService.GetAllBuilder(validFilter);
+            return Ok(result);
+        }
     }
 }

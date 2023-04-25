@@ -22,6 +22,7 @@ namespace Application.System.Users
         Task<BasePagination<List<UserDetailDTO>>> GetContractorFavorite(PaginationFilter request);
         Task<BasePagination<List<UserDetailDTO>>> GetBuilderFavorite(PaginationFilter request);
         Task<BasePagination<List<UserDetailDTO>>> GetStoreFavorite(PaginationFilter request);
+        Task<BasePagination<List<UserDetailDTO>>> GetAllBuilder(PaginationFilter request);
         Task<BaseResponse<string>> ResetPassword(ResetPasswordDTO request);
 
         Task<BaseResponse<string>> UpdateBuilderProfile(UpdateBuilderRequest request, Guid userID);
@@ -30,5 +31,6 @@ namespace Application.System.Users
         Task<BaseResponse<UserDetailDTO>> GetProfile(RefreshToken refreshToken);
         Task<BaseResponse<UserCountDTO>> GetTotalUser();
         Task<BasePagination<List<UserDetailDTO>>> GetAllUser(PaginationFilter request);
+
     }
 }

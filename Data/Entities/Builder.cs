@@ -1,4 +1,4 @@
-﻿using Data.Enum;
+﻿    using Data.Enum;
 
 namespace Data.Entities
 {

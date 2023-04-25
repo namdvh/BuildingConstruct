@@ -1,6 +1,8 @@
 ﻿using Application.System.Skills;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Security.Cryptography;
 using ViewModels.Pagination;
 using ViewModels.Skills;
 
@@ -55,5 +57,6 @@ namespace BuildingConstructApi.Controllers
             var rs = await _skillService.UpdateSkill(skill);
             return Ok(rs);
         }
+
     }
 }
