@@ -52,8 +52,8 @@ namespace BuildingConstructApi.Controllers
                     NotificateAuthor notiAuthor = new()
                     {
                         Avatar = author.Avatar,
-                        FirstName = author.FirstName,
-                        LastName = author.LastName,
+                        FirstName = "Bạn",
+                        LastName = "có",
                     };
 
                     NotificationModels noti = new()
