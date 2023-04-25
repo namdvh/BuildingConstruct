@@ -75,6 +75,12 @@ namespace Application.System.Identification
                         double percent = stuff.data.similarPercent;
                         var finalNumber = Math.Round(percent, 2) * 100;
 
+                        if (finalNumber < 60)
+                        {
+                            verify.PreCodition = "0";
+
+                        }
+
                         verify.PreCodition = finalNumber.ToString();
                     }
                     else
