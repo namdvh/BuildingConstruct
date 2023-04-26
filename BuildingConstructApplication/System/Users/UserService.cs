@@ -246,7 +246,7 @@ namespace Application.System.Users
                             Status = us.Status,
                             Id = us.Id,
                             Address = us.Address,
-                            IdNumber=us.IdNumber,
+                            IdNumber = us.IdNumber,
                             Avatar = us.Avatar,
                             DOB = us.DOB,
                             Gender = us.Gender,
@@ -1504,7 +1504,7 @@ namespace Application.System.Users
 
                     foreach (var item in allContractorItem)
                     {
-                        result.Add(MapToDetailDTO(item.Value));
+                        result.Add(MapToDetailContractractorDTO(item.Value));
                     }
 
 
@@ -1563,6 +1563,45 @@ namespace Application.System.Users
             };
             return userDetail;
         }
+
+
+        private UserDetailDTO MapToDetailContractractorDTO(int contractorId)
+        {
+            UserDetailDTO userDetail;
+
+            var post = _context.Contractors
+                        .Include(x => x.User)
+                .Where(x => x.Id == contractorId).FirstOrDefault();
+
+
+            DetailContractor detailContractor = new()
+            {
+                CompanyName = post?.CompanyName,
+                Description = post?.Description,
+                Id = post.Id,
+                Website = post?.Website
+            };
+
+
+            userDetail = new()
+            {
+                Address = post.User?.Address,
+                Avatar = post.User?.Avatar,
+                DOB = post.User?.DOB,
+                Email = post.User?.Email,
+                FirstName = post.User?.FirstName,
+                Gender = post.User?.Gender,
+                IdNumber = post.User?.IdNumber,
+                LastName = post.User?.LastName,
+                Status = post.User?.Status,
+                Phone = post.User?.PhoneNumber,
+                Contractor = detailContractor,
+                LastModifiedAt = post.User?.LastModifiedAt,
+                UserId = post.CreateBy
+            };
+            return userDetail;
+        }
+
 
         public async Task<BasePagination<List<UserDetailDTO>>> GetBuilderFavorite(PaginationFilter filter)
         {
@@ -2364,16 +2403,16 @@ namespace Application.System.Users
 
 
 
-            IQueryable<Builder> query = _context.Builders.Include(x=>x.User);
+            IQueryable<Builder> query = _context.Builders.Include(x => x.User);
             StringBuilder placeSearch = new();
             StringBuilder typesSearch = new();
             StringBuilder titleSearch = new();
 
             if (filter.FilterRequest != null)
             {
-                
 
-                if (filter.FilterRequest.Places!=null)
+
+                if (filter.FilterRequest.Places != null)
                 {
                     var count = filter.FilterRequest.Places.Count;
                     for (int i = 0; i < count; i++)
@@ -2390,7 +2429,7 @@ namespace Application.System.Users
 
 
 
-                if (filter.FilterRequest.Types!=null)
+                if (filter.FilterRequest.Types != null)
                 {
                     var count = filter.FilterRequest.Types.Count;
                     for (int i = 0; i < count; i++)
@@ -2404,7 +2443,7 @@ namespace Application.System.Users
                     }
                     query = query.ApplyFiltering(typesSearch.ToString());
                 }
-                if(filter.FilterRequest.Title != null)
+                if (filter.FilterRequest.Title != null)
                 {
                     query = query.Where(x => x.User.FirstName.Contains(filter.FilterRequest.Title) || x.User.LastName.Contains(filter.FilterRequest.Title));
                 }
@@ -2412,11 +2451,11 @@ namespace Application.System.Users
             }
 
             var result = await query
-                    .Where(x => x.User.Status == Status.Level3 )
+                    .Where(x => x.User.Status == Status.Level3)
                      .OrderBy(filter._sortBy + " " + orderBy)
                      .Skip((filter.PageNumber - 1) * filter.PageSize)
                      .Take(filter.PageSize)
-                     .Select(x=>x.Id)
+                     .Select(x => x.Id)
                      .ToListAsync();
 
 
