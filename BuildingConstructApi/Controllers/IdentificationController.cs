@@ -7,11 +7,13 @@ using Emgu.CV.Structure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
 using System.Drawing;
 using System.Text;
 using ViewModels.Identification;
 using ViewModels.Notificate;
 using ViewModels.Pagination;
+using ViewModels.Response;
 
 namespace BuildingConstructApi.Controllers
 {
@@ -71,7 +73,7 @@ namespace BuildingConstructApi.Controllers
                 foreach (var connectionId in connections)
                 {
 
-                    await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("UpdateProfile",result.Data);
+                    await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("UpdateProfile", result.Data);
 
                 }
             }
@@ -106,6 +108,73 @@ namespace BuildingConstructApi.Controllers
             }
 
         }
+
+        [HttpPost("rapidTest")]
+        [AllowAnonymous]
+        public async Task<IActionResult> DetectFaceRapid([FromBody] DetectFaceRequest faceRequest)
+        {
+            var client = new HttpClient();
+            BaseResponse<string> codeResponse;
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri("https://face-detection11.p.rapidapi.com/FaceDetection"),
+                Headers =
+    {
+        { "X-RapidAPI-Key", "0af973177dmsh33b9953ecf57384p18ca21jsn3df8789084ce" },
+        { "X-RapidAPI-Host", "face-detection11.p.rapidapi.com" },
+    },
+                Content = new FormUrlEncodedContent(new Dictionary<string, string>
+    {
+        { "linkFile", faceRequest.Image },
+    }),
+            };
+            using (var response = await client.SendAsync(request))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var body = await response.Content.ReadAsStringAsync();
+
+                    dynamic stuff = JsonConvert.DeserializeObject(body);
+
+                    string statusCode = stuff.statusCode;
+
+                    if (statusCode.Equals("200"))
+                    {
+                        codeResponse = new()
+                        {
+                            Code = BaseCode.SUCCESS,
+                            Message = "Detected"
+                        };
+
+                    }
+                    else
+                    {
+                        codeResponse = new()
+                        {
+                            Code = BaseCode.SUCCESS,
+                            Message = "Not Detected"
+                        };
+                    }
+
+
+
+                }
+                else
+                {
+                    codeResponse = new()
+                    {
+                        Code = BaseCode.SUCCESS,
+                        Message = "Not Detected"
+                    };
+                }
+
+            }
+            return Ok(codeResponse);
+
+        }
+
+
 
         private Mat GetMatFromSDImage(System.Drawing.Image image)
         {
