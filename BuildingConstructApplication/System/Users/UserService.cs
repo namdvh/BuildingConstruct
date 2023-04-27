@@ -16,6 +16,7 @@ using ViewModels.Response;
 using ViewModels.Users;
 using Gridify;
 using System.Linq;
+using Emgu.CV.Ocl;
 
 namespace Application.System.Users
 {
@@ -2510,6 +2511,72 @@ namespace Application.System.Users
                 };
             }
             return response;
+        }
+
+        public async Task<BaseResponse<UserMonth>> GetAllRegisterUserByMonth()
+        {
+            BaseResponse<UserMonth> response = new();
+            UserMonth userMonth = new();
+
+            var userCountsByMonth = await _context.Users
+                .Where(x => x.LastModifiedAt.Year == DateTime.Now.Year)
+                .GroupBy(x => new { Month = x.LastModifiedAt.Month })
+                .Select(x => new { Month = x.Key.Month, Count = x.Count() })
+                .ToListAsync();
+
+            foreach (var item in userCountsByMonth)
+            {
+                switch (item.Month)
+                {
+
+                    case 1:
+                        userMonth.January = item.Count;
+                        break;
+                    case 2:
+                        userMonth.February = item.Count;
+                        break;
+                    case 3:
+                        userMonth.March = item.Count;
+                        break;
+                    case 4:
+                        userMonth.April = item.Count;
+                        break;
+                    case 5:
+                        userMonth.May = item.Count;
+                        break;
+                    case 6:
+                        userMonth.June = item.Count;
+                        break;
+                    case 7:
+                        userMonth.July = item.Count;
+                        break;
+                    case 8:
+                        userMonth.August = item.Count;
+                        break;
+                    case 9:
+                        userMonth.September = item.Count;
+                        break;
+                    case 10:
+                        userMonth.October = item.Count;
+                        break;
+                    case 11:
+                        userMonth.November = item.Count;
+                        break;
+                    case 12:
+                        userMonth.December = item.Count;
+                        break;
+                }
+            }
+
+            response = new()
+            {
+                Code = BaseCode.SUCCESS,
+                Message = BaseCode.SUCCESS_MESSAGE,
+                Data = userMonth
+            };
+
+            return response;
+
         }
     }
 }
