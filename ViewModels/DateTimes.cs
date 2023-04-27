@@ -12,7 +12,7 @@ namespace ViewModels
 
         public DateTimes(DateTime realtime)
         {
-            this.realtime =  = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok")); ;
+            this.realtime =TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok")); ;
         }
     }
 }
