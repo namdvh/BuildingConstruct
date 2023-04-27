@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using ViewModels;
 using ViewModels.Notificate;
 using ViewModels.Pagination;
 using ViewModels.Response;
@@ -21,15 +22,17 @@ namespace BuildingConstructApi.Controllers
     {
         private readonly IHubContext<NotificationUserHub> _notificationUserHubContext;
         private readonly IUserConnectionManager _userConnectionManager;
+        private DateTimes _datetime;
         private readonly BuildingConstructDbContext _context;
         private readonly ISaveService _saveService;
 
-        public SavePostController(ISaveService saveService, IUserConnectionManager userConnectionManager, IHubContext<NotificationUserHub> notificationUserHubContext, BuildingConstructDbContext context)
+        public SavePostController(ISaveService saveService, IUserConnectionManager userConnectionManager, IHubContext<NotificationUserHub> notificationUserHubContext, BuildingConstructDbContext context, DateTimes datetime)
         {
             _saveService = saveService;
             _userConnectionManager = userConnectionManager;
             _notificationUserHubContext = notificationUserHubContext;
             _context = context;
+            _datetime = datetime;
         }
 
 
@@ -48,11 +51,11 @@ namespace BuildingConstructApi.Controllers
             noti.Author.FirstName = author.FirstName;
             noti.Author.LastName = author.LastName;
             noti.Author.Avatar = author.Avatar;
-            DateTime now = DateTime.Now;
-            TimeZoneInfo timezone = TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok");
-            DateTime bangkokTime = TimeZoneInfo.ConvertTime(now, TimeZoneInfo.Local, timezone);
-            var datetime = bangkokTime;
-            noti.LastModifiedAt = datetime;
+            //DateTime now = DateTime.Now;
+            //TimeZoneInfo timezone = TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok");
+            //DateTime bangkokTime = TimeZoneInfo.ConvertTime(now, TimeZoneInfo.Local, timezone);
+            //var datetime = bangkokTime;
+            noti.LastModifiedAt = _datetime.realtime;
             noti.NavigateId = rs.NavigateId;
             var check = await _userConnectionManager.SaveNotification(noti);
             var connections = _userConnectionManager.GetUserConnections(rs.Data);
