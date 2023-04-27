@@ -381,13 +381,10 @@ namespace Application.System.Commitments
             //    await _context.SaveChangesAsync();
             //}
 
-
-
-
             response = new()
             {
                 Code = BaseCode.SUCCESS,
-                Message = BaseCode.SUCCESS_MESSAGE,
+                Message = "Cập nhật trạng thái",
                 Data = postCommitment.Contractor.CreateBy.ToString(),
                 NavigateId = id
             };
@@ -533,7 +530,7 @@ namespace Application.System.Commitments
                     response = new()
                     {
                         Code = BaseCode.SUCCESS,
-                        Message = BaseCode.SUCCESS_MESSAGE,
+                        Message = "Tạo cam kết thành công",
                         Data = builderID.ToString(),
                         NavigateId = commitment.Id
                     };

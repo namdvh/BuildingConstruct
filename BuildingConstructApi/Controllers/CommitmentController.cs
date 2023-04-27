@@ -99,8 +99,8 @@ namespace BuildingConstructApi.Controllers
                 notiAuthor = new()
                 {
                     Avatar = author.Avatar,
-                    FirstName = author.FirstName,
-                    LastName = author.LastName,
+                    FirstName = "Cam",
+                    LastName = "kết",
                 };
 
                 NotificationModels noti = new()
@@ -182,8 +182,8 @@ namespace BuildingConstructApi.Controllers
             {
                 noti.Author = new()
                 {
-                    FirstName = author.FirstName,
-                    LastName = author.LastName,
+                    FirstName = "Bạn có",
+                    LastName = "một",
                     Avatar = author.Avatar
                 };
                 var check = await _userConnectionManager.SaveNotification(noti);

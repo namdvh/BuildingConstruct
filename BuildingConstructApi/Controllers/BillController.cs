@@ -181,8 +181,8 @@ namespace BuildingConstructApi.Controllers
                     notiAuthor = new()
                     {
                         Avatar = author.MaterialStore?.User?.Avatar,
-                        FirstName = author.MaterialStore?.User?.FirstName,
-                        LastName = author.MaterialStore?.User?.LastName,
+                        FirstName = "Đơn hàng",
+                        LastName = "của bạn",
                     };
 
                     noti = new()
@@ -216,8 +216,8 @@ namespace BuildingConstructApi.Controllers
                     notiAuthor = new()
                     {
                         Avatar = author.Contractor?.User?.Avatar,
-                        FirstName = author.Contractor?.User?.FirstName,
-                        LastName = author.Contractor?.User?.LastName,
+                        FirstName = "Đơn hàng",
+                        LastName = "của bạn",
                     };
 
                     noti = new()
@@ -251,8 +251,8 @@ namespace BuildingConstructApi.Controllers
                     notiAuthor = new()
                     {
                         Avatar = author.Contractor?.User?.Avatar,
-                        FirstName = author.Contractor?.User?.FirstName,
-                        LastName = author.Contractor?.User?.LastName,
+                        FirstName = "Đơn hàng",
+                        LastName = "của bạn",
                     };
 
                     noti = new()
