@@ -22,17 +22,15 @@ namespace BuildingConstructApi.Controllers
     {
         private readonly IHubContext<NotificationUserHub> _notificationUserHubContext;
         private readonly IUserConnectionManager _userConnectionManager;
-        private DateTimes _datetime;
         private readonly BuildingConstructDbContext _context;
         private readonly ISaveService _saveService;
 
-        public SavePostController(ISaveService saveService, IUserConnectionManager userConnectionManager, IHubContext<NotificationUserHub> notificationUserHubContext, BuildingConstructDbContext context, DateTimes datetime)
+        public SavePostController(ISaveService saveService, IUserConnectionManager userConnectionManager, IHubContext<NotificationUserHub> notificationUserHubContext, BuildingConstructDbContext context)
         {
             _saveService = saveService;
             _userConnectionManager = userConnectionManager;
             _notificationUserHubContext = notificationUserHubContext;
             _context = context;
-            _datetime = datetime;
         }
 
 
@@ -55,7 +53,7 @@ namespace BuildingConstructApi.Controllers
             //TimeZoneInfo timezone = TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok");
             //DateTime bangkokTime = TimeZoneInfo.ConvertTime(now, TimeZoneInfo.Local, timezone);
             //var datetime = bangkokTime;
-            noti.LastModifiedAt = _datetime.realtime;
+            noti.LastModifiedAt = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok"));
             noti.NavigateId = rs.NavigateId;
             var check = await _userConnectionManager.SaveNotification(noti);
             var connections = _userConnectionManager.GetUserConnections(rs.Data);
