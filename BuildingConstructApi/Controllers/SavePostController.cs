@@ -48,8 +48,10 @@ namespace BuildingConstructApi.Controllers
             noti.Author.FirstName = author.FirstName;
             noti.Author.LastName = author.LastName;
             noti.Author.Avatar = author.Avatar;
-            TimeZoneInfo asia = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
-            var datetime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.Now, asia);
+            DateTime now = DateTime.Now;
+            TimeZoneInfo timezone = TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok");
+            DateTime bangkokTime = TimeZoneInfo.ConvertTime(now, TimeZoneInfo.Local, timezone);
+            var datetime = bangkokTime;
             noti.LastModifiedAt = datetime;
             noti.NavigateId = rs.NavigateId;
             var check = await _userConnectionManager.SaveNotification(noti);
