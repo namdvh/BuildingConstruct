@@ -48,7 +48,7 @@ namespace BuildingConstructApi.Controllers
             noti.Author.FirstName = author.FirstName;
             noti.Author.LastName = author.LastName;
             noti.Author.Avatar = author.Avatar;
-            noti.LastModifiedAt = DateTime.Now;
+            noti.LastModifiedAt = DateTime.UtcNow;
             noti.NavigateId = rs.NavigateId;
             var check = await _userConnectionManager.SaveNotification(noti);
             var connections = _userConnectionManager.GetUserConnections(rs.Data);
