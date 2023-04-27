@@ -919,7 +919,7 @@ namespace Application.System.MaterialStores
             BaseResponse<List<ProductStoreDTO>> response;
 
 
-            var data = await _context.BillDetails.Include(x => x.Products).ThenInclude(x => x.ProductCategories).Include(x => x.Bills).ThenInclude(x => x.MaterialStore)
+            var data = await _context.BillDetails.Include(x => x.Products).ThenInclude(x => x.ProductCategories).Where(x=>x.Bills.Status==Status.SUCCESS).Include(x => x.Bills).ThenInclude(x => x.MaterialStore)
                         .GroupBy(x => x.ProductID).Select(x => new
                         {
                             a = x.Key,
