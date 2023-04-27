@@ -8,6 +8,11 @@ namespace ViewModels
 {
     public class DateTimes
     {
-        public DateTime realtime { get; set; } = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok"));
+        public DateTime realtime { get; set; }
+
+        public DateTimes(DateTime realtime)
+        {
+            this.realtime =  = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok")); ;
+        }
     }
 }
