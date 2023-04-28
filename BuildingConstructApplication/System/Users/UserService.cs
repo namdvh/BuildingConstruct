@@ -43,6 +43,14 @@ namespace Application.System.Users
         {
             BaseResponse<UserModels> response = new();
             var users = await _userService.FindByNameAsync(request.Email);
+
+            if (users != null)
+            {
+                users.PhoneNumber = request.Phone;
+                _context.Update(users);
+                await _context.SaveChangesAsync();
+            }
+
             var roleNames = await _context.Roles.Where(x => x.Id.ToString().Equals(request.RoleId)).Select(x => x.Name).SingleOrDefaultAsync();
 
             if (request.RoleId == BaseCode.UsRole)
@@ -123,7 +131,7 @@ namespace Application.System.Users
                     UserName = request.Email,
                     Avatar = request.Avatar,
                     Provider = Provider.GOOGLE,
-                    Status = Status.Level1,
+                    Status = Status.SUCCESS,
                     Email = request.Email,
                 };
                 var rs = await _userService.CreateAsync(user, request.Email);
