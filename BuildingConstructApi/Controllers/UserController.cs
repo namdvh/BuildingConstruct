@@ -41,34 +41,49 @@ namespace BuildingConstructApi.Controllers
                 return BadRequest(ModelState);
             }
             var rs = await _userService.LoginGoogle(request);
-            var token = await _userService.GenerateToken(rs.Data);
-            if (token != null)
+            if (rs.Data == null)
             {
-                try
+                return Ok(new
                 {
-                    var userPrincipalac = this.ValidateToken(token.Data.AccessToken);
-                    var authProperties = new AuthenticationProperties
-                    {
-                        ExpiresUtc = DateTimeOffset.UtcNow.AddSeconds(30),
-                        IsPersistent = true,
-                        AllowRefresh = true,
-                    };
-                    await HttpContext.SignInAsync(userPrincipalac, authProperties);
-                }
-                catch (Exception)
-                {
-                }
-                //token.Message = "Login Success";
-                //token.Code = BaseCode.SUCCESS;
-                //rs.Code = token.Code;
-                //rs.Message = token.Message;
-
-                rs.Data.AccessToken = token.Data.AccessToken;
-                rs.Data.RefreshToken = token.Data.RefreshToken;
-                rs.Data.RefreshTokenExpiryTime = token.Data.RefreshTokenExpiryTime;
+                    code = BaseCode.ERROR,
+                    Message = "Username or Password is Incorrect"
+                });
             }
-            return Ok(rs);
-            //}
+            else
+            {
+                var userModels = new UserModels()
+                {
+                    UserName = rs.Data.UserName,
+                    Id = rs.Data.Id,
+                    Phone = rs.Data.Phone,
+                };
+                var token = rs;
+                if (token != null)
+                {
+                    try
+                    {
+                        var userPrincipalac = this.ValidateToken(token.Data.AccessToken);
+                        var authProperties = new AuthenticationProperties
+                        {
+                            ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(60),
+                            IsPersistent = true,
+                            AllowRefresh = true,
+                        };
+                        await HttpContext.SignInAsync(userPrincipalac, authProperties);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    token.Message = "Login Success";
+                    token.Code = BaseCode.SUCCESS;
+                    rs.Code = token.Code;
+                    rs.Message = token.Message;
+                    rs.Data.AccessToken = token.Data.AccessToken;
+                    rs.Data.RefreshToken = token.Data.RefreshToken;
+                    rs.Data.RefreshTokenExpiryTime = token.Data.RefreshTokenExpiryTime;
+                }
+                return Ok(rs);
+            }
         }
 
         [HttpPost("SetRole")]

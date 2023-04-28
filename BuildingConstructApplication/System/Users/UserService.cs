@@ -100,10 +100,24 @@ namespace Application.System.Users
                 Avatar = users.Avatar,
                 FirstName = users.FirstName,
                 LastName = users.LastName,
+                Phone=users.PhoneNumber,
                 Role = roleName,
                 UserName = users.UserName
             };
             var userDTO = MapToDto(users, roleName);
+            var premium = await _context.Payments.Where(x => x.UserId.ToString().Equals(users.Id.ToString())).OrderByDescending(x => x.ExpireationDate).FirstOrDefaultAsync();
+            bool isPremium = false;
+            if (premium != null)
+            {
+                if (premium.ExpireationDate >= DateTime.Now)
+                {
+                    isPremium = true;
+                }
+                if (premium.ExtendDate != null && premium.ExtendDate >= DateTime.Now)
+                {
+                    isPremium = true;
+                }
+            }
             var token = await GenerateToken(userDTO);
             users.Token = token.Data.RefreshToken;
             users.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;
@@ -111,7 +125,58 @@ namespace Application.System.Users
             u.AccessToken = token.Data.AccessToken;
             u.RefreshToken = token.Data.RefreshToken;
             u.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;
-            response.Data = u;
+            response.Data = new()
+            {
+                UserName = u.UserName,
+                Phone = u.Phone,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Status = u.Status,
+                Id = u.Id,
+                Address = u.Address,
+                IdNumber = u.IdNumber,
+                Avatar = u.Avatar,
+                DOB = u.DOB,
+                Gender = u.Gender,
+                Role = roleName,
+                BuilderID = users.BuilderId,
+                ContractorID = users.ContractorId,
+                StoreID = users.MaterialStoreID,
+                Premium = isPremium,
+                RefreshToken = token.Data.RefreshToken,
+                AccessToken = token.Data.AccessToken,
+                RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime
+            };
+            if (roleName.Equals("User"))
+            {
+
+                var result = await _context.Users
+                                 .Include(x => x.Builder)
+                                     .ThenInclude(x => x.Type)
+                                 .Where(x => x.Id.Equals(users.Id))
+                                 .FirstOrDefaultAsync();
+
+                response.Data.Builder = MapToDetailBuilder(result);
+
+
+            }
+            else if (roleName.Equals("Contractor"))
+            {
+
+                var result = await _context.Users.Include(x => x.Contractor).Where(x => x.Id.Equals(users.Id)).FirstOrDefaultAsync();
+                response.Data.Contractor = MapToDetailContractor(result);
+            }
+            else if (roleName.Equals("Admin"))
+            {
+                return response;
+            }
+            else
+            {
+
+                var result = await _context.Users.Include(x => x.MaterialStore).Where(x => x.Id.Equals(users.Id)).FirstOrDefaultAsync();
+                response.Data.DetailMaterialStore = MapToDetailStore(result);
+            }
+
 
             return response;
         }
