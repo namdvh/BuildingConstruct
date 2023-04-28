@@ -2005,7 +2005,7 @@ namespace Application.System.Users
                         ls.Add(MapStoreFavorite(item.Value));
                     }
                 }
-                var final = ls.DistinctBy(x => x.UserId).ToList();
+                var final = ls.DistinctBy(x => x.UserId).Where(x => x.Status == Status.Level3).ToList();
 
 
 
