@@ -47,6 +47,7 @@ namespace Application.System.MaterialStores
                 MaterialStoreID = storeID,
                 Unit = request.Unit,
                 CreateBy = Guid.Parse(userID),
+                LastModifiedAt= TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok")),
                 Status = true
             };
 

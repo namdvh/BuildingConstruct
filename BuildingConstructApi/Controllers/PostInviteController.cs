@@ -48,7 +48,7 @@ namespace BuildingConstructApi.Controllers
         {
             var result = await postInviteService.Create(requests);
 
-            var author = await _context.Users.Where(x => x.ContractorId==requests.ContractorId).FirstOrDefaultAsync();
+            var author = await _context.Users.Where(x => x.ContractorId == requests.ContractorId).FirstOrDefaultAsync();
 
             NotificateAuthor notiAuthor = new()
             {
@@ -57,10 +57,11 @@ namespace BuildingConstructApi.Controllers
                 LastName = author.LastName,
             };
 
-            NotificationModels noti = new() 
+            NotificationModels noti = new()
             {
-                LastModifiedAt = DateTime.Now,
-                CreateBy =author.Id,
+
+                LastModifiedAt = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok")),
+                CreateBy = author.Id,
                 NavigateId = requests.ContractorPostId,
                 UserId = Guid.Parse(result.Data),
                 Message = NotificationMessage.SEND_INVITE,

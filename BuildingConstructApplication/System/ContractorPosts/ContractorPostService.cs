@@ -34,9 +34,9 @@ namespace Application.System.ContractorPosts
 
         public async Task<bool> CreateContractorPost(ContractorPostModels contractorPostDTO)
         {
-            Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
+            Claim identifierClaim = _accessor.HttpContext.User?.FindFirst("UserID");
             var userID = identifierClaim?.Value;
-            var contracID = _context.Users.Where(x => x.Id.ToString().Equals(userID)).FirstOrDefault().ContractorId;
+            var contracID = _context.Users?.Where(x => x.Id.ToString().Equals(userID)).FirstOrDefault().ContractorId;
 
             var contractorPost = new ContractorPost
             {
@@ -59,7 +59,7 @@ namespace Application.System.ContractorPosts
                 PostCategories = contractorPostDTO.PostCategories,
                 Benefit = contractorPostDTO.Benefit,
                 Required = contractorPostDTO.Required,
-                LastModifiedAt = DateTime.Now,
+                LastModifiedAt = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok")),
                 CreateBy = Guid.Parse(userID),
                 ContractorID = (int)contracID,
                 QuizRequired = contractorPostDTO.QuizRequired,

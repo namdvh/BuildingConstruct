@@ -52,7 +52,7 @@ namespace BuildingConstructApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateIndetificationRequest requests)
         {
-            var userID = User.FindFirst("UserID").Value;
+            var userID = User.FindFirst("UserID")?.Value;
 
             if (userID == null)
             {
