@@ -148,7 +148,7 @@ namespace BuildingConstructApi.Controllers
                 Message = NotificationMessage.APPLIEDNOTI,
                 CreateBy = Guid.Parse(rs.ToString()),
                 UserId = Guid.Parse(result.Data.ToString()),
-                LastModifiedAt = DateTime.Now,
+                LastModifiedAt = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok")),
                 NavigateId = result.NavigateId,
             };
             var author = await _context.Users.Where(x => x.Id.ToString().Equals(noti.CreateBy.ToString())).FirstOrDefaultAsync();
@@ -233,7 +233,7 @@ namespace BuildingConstructApi.Controllers
         [HttpGet("post/applied")]
         public async Task<IActionResult> ViewPostApplied([FromQuery] PaginationFilter request)
         {
-            var id = User.FindFirst("UserID").Value;
+            var id = User.FindFirst("UserID")?.Value;
             var validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
 
             var result = await _contractorPostService.ViewAllPostApplied(Guid.Parse(id), validFilter);

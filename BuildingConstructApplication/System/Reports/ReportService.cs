@@ -381,7 +381,7 @@ namespace Application.System.Reports
             if (checkrp > 0)
             {
                 response.Code = BaseCode.ERROR;
-                response.Data = author.CreateBy.ToString();
+                response.Data = null;
                 response.Message = "Bạn đã report bài post này rồi";
                 return response;
             }
@@ -431,7 +431,7 @@ namespace Application.System.Reports
             if (checkrp > 0)
             {
                 response.Code = BaseCode.ERROR;
-                response.Data = author.ToString();
+                response.Data = null;
                 response.Message = "Bạn đã report sản phẩm này rồi";
                 return response;
             }

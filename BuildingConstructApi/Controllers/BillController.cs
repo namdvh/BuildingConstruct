@@ -58,7 +58,7 @@ namespace BuildingConstructApi.Controllers
 
                     NotificationModels noti = new()
                     {
-                        LastModifiedAt = DateTime.Now,
+                        LastModifiedAt = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok")),
                         CreateBy = Guid.Parse(userID),
                         NavigateId = newestBill,
                         UserId = store.Id,
@@ -152,7 +152,7 @@ namespace BuildingConstructApi.Controllers
 
                     noti = new()
                     {
-                        LastModifiedAt = DateTime.Now,
+                        LastModifiedAt = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok")),
                         CreateBy = author.MaterialStore.CreateBy,
                         NavigateId = rs.NavigateId,
                         UserId = author.Contractor.CreateBy,
@@ -187,7 +187,7 @@ namespace BuildingConstructApi.Controllers
 
                     noti = new()
                     {
-                        LastModifiedAt = DateTime.Now,
+                        LastModifiedAt = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok")),
                         CreateBy = author.MaterialStore.CreateBy,
                         NavigateId = rs.NavigateId,
                         UserId = author.Contractor.CreateBy,
@@ -222,7 +222,7 @@ namespace BuildingConstructApi.Controllers
 
                     noti = new()
                     {
-                        LastModifiedAt = DateTime.Now,
+                        LastModifiedAt = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok")),
                         CreateBy = author.Contractor.CreateBy,
                         NavigateId = rs.NavigateId,
                         UserId = author.MaterialStore.CreateBy,
@@ -257,7 +257,7 @@ namespace BuildingConstructApi.Controllers
 
                     noti = new()
                     {
-                        LastModifiedAt = DateTime.Now,
+                        LastModifiedAt = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok")),
                         CreateBy = author.Contractor.CreateBy,
                         NavigateId = rs.NavigateId,
                         UserId = author.MaterialStore.CreateBy,

@@ -105,7 +105,7 @@ namespace BuildingConstructApi.Controllers
 
                 NotificationModels noti = new()
                 {
-                    LastModifiedAt = DateTime.Now,
+                    LastModifiedAt = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok")),
                     CreateBy = Guid.Parse(userID),
                     NavigateId = result.NavigateId,
                     UserId = Guid.Parse(result.Data.ToString()),
@@ -174,7 +174,7 @@ namespace BuildingConstructApi.Controllers
                 Message = NotificationMessage.COMMITMENTNOTI,
                 CreateBy = Guid.Parse(contractorID.ToString()),
                 UserId = Guid.Parse(result.Data.ToString()),
-                LastModifiedAt = DateTime.Now,
+                LastModifiedAt = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok")),
                 NavigateId = result.NavigateId
             };
             var author = await _context.Users.Where(x => x.Id.ToString().Equals(noti.CreateBy.ToString())).FirstOrDefaultAsync();

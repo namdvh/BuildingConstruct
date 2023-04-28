@@ -66,7 +66,7 @@ namespace BuildingConstructApi.Controllers
             noti.Author.FirstName = author.FirstName;
             noti.Author.LastName = author.LastName;
             noti.Author.Avatar = author.Avatar;
-            noti.LastModifiedAt = DateTime.Now;
+            noti.LastModifiedAt = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok"));
             noti.NavigateId = rs.NavigateId;
             if (rs.Data != null)
             {
@@ -102,10 +102,10 @@ namespace BuildingConstructApi.Controllers
             noti.UserId = Guid.Parse(rs.Data);
             var author = await _context.Users.Where(x => x.Id.ToString().Equals(userID.ToString())).FirstOrDefaultAsync();
             noti.Author = new();
-            noti.Author.FirstName = author.FirstName;
-            noti.Author.LastName = author.LastName;
+            noti.Author.FirstName = author?.FirstName;
+            noti.Author.LastName = author?.LastName;
             noti.Author.Avatar = author.Avatar;
-            noti.LastModifiedAt = DateTime.Now;
+            noti.LastModifiedAt = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok"));
             noti.NavigateId = rs.NavigateId;
             if (rs.Data != null)
             {
