@@ -200,17 +200,7 @@ namespace Application.System.Users
                     Email = request.Email,
                 };
                 var rs = await _userService.CreateAsync(user, request.Email);
-
-                UserDTO us = new()
-                {
-                    Id = user.Id,
-                    UserName = user.UserName,
-                    Avatar = user.Avatar,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                };
-
-                response.Data = us;
+                response.Data = null;
                 response.Code = "201";
                 response.Message = "Regist successfully but haven't got role";
                 return response;
