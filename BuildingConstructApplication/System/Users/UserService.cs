@@ -249,6 +249,35 @@ namespace Application.System.Users
                     AccessToken = token.Data.AccessToken,
                     RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime
                 };
+                if (roleName.Equals("User"))
+                {
+
+                    var result = await _context.Users
+                                     .Include(x => x.Builder)
+                                         .ThenInclude(x => x.Type)
+                                     .Where(x => x.Id.Equals(users.Id))
+                                     .FirstOrDefaultAsync();
+
+                    response.Data.Builder = MapToDetailBuilder(result);
+
+
+                }
+                else if (roleName.Equals("Contractor"))
+                {
+
+                    var result = await _context.Users.Include(x => x.Contractor).Where(x => x.Id.Equals(users.Id)).FirstOrDefaultAsync();
+                    response.Data.Contractor = MapToDetailContractor(result);
+                }
+                else if (roleName.Equals("Admin"))
+                {
+                    return response;
+                }
+                else
+                {
+
+                    var result = await _context.Users.Include(x => x.MaterialStore).Where(x => x.Id.Equals(users.Id)).FirstOrDefaultAsync();
+                    response.Data.DetailMaterialStore = MapToDetailStore(result);
+                }
                 response.Code = "200";
                 response.Message = "Login Success";
             }
