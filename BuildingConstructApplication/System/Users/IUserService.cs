@@ -32,7 +32,7 @@ namespace Application.System.Users
         Task<BaseResponse<UserCountDTO>> GetTotalUser();
         Task<BasePagination<List<UserDetailDTO>>> GetAllUser(PaginationFilter request);
 
-        Task<BaseResponse<UserMonth>> GetAllRegisterUserByMonth();
+        Task<BaseResponse<List<UserMonth>>> GetAllRegisterUserByMonth();
 
     }
 }

@@ -113,8 +113,33 @@ namespace Application.System.Notifies
                 if (user != null)
                 {
                     dto.Author = new();
-                    dto.Author.FirstName = user.FirstName;
-                    dto.Author.LastName = user.LastName;
+
+                    if (item.Message != null && item.Message.Equals(NotificationMessage.COMMITMENTNOTI.ToString()))
+                    {
+                        dto.Author.FirstName = "Bạn có";
+                        dto.Author.LastName = "một";
+                    }
+                    else if (item.Message != null && item.Message.Equals(NotificationMessage.UPDATE_COMMIMENT.ToString()))
+                    {
+                        dto.Author.FirstName = "Bạn có";
+                        dto.Author.LastName = "một";
+                    }
+                    else if (item.Message != null && item.Message.Equals(NotificationMessage.CREATE_BILL.ToString()))
+                    {
+                        dto.Author.FirstName = "Bạn";
+                        dto.Author.LastName = "đã";
+                    }
+                    else if (item.Message != null &&
+                        (item.Message.Equals(NotificationMessage.UPDATE_BILL_ACCEPTED.ToString())
+                        || item.Message.Equals(NotificationMessage.UPDATE_BILL_DELIVERD.ToString())
+                        || item.Message.Equals(NotificationMessage.UPDATE_BILL_RECEIVED.ToString())
+                        || item.Message.Equals(NotificationMessage.UPDATE_BILL_CANCELED.ToString())
+                        ))
+                    {
+                        dto.Author.FirstName = "Đơn";
+                        dto.Author.LastName = "hàng";
+                    }
+
                     dto.Author.Avatar = user.Avatar;
                 }
 

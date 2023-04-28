@@ -17,6 +17,7 @@ using ViewModels.Users;
 using Gridify;
 using System.Linq;
 using Emgu.CV.Ocl;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Application.System.Users
 {
@@ -2513,10 +2514,10 @@ namespace Application.System.Users
             return response;
         }
 
-        public async Task<BaseResponse<UserMonth>> GetAllRegisterUserByMonth()
+        public async Task<BaseResponse<List<UserMonth>>> GetAllRegisterUserByMonth()
         {
-            BaseResponse<UserMonth> response = new();
-            UserMonth userMonth = new();
+            BaseResponse<List<UserMonth>> response = new();
+            List<UserMonth> listUserMonth = new();
 
             var userCountsByMonth = await _context.Users
                 .Where(x => x.LastModifiedAt.Year == DateTime.Now.Year)
@@ -2526,53 +2527,43 @@ namespace Application.System.Users
 
             foreach (var item in userCountsByMonth)
             {
-                switch (item.Month)
+                UserMonth userMonth = new()
                 {
+                    Month = item.Month,
+                    Count = item.Count
+                };
+                listUserMonth.Add(userMonth);
 
-                    case 1:
-                        userMonth.January = item.Count;
-                        break;
-                    case 2:
-                        userMonth.February = item.Count;
-                        break;
-                    case 3:
-                        userMonth.March = item.Count;
-                        break;
-                    case 4:
-                        userMonth.April = item.Count;
-                        break;
-                    case 5:
-                        userMonth.May = item.Count;
-                        break;
-                    case 6:
-                        userMonth.June = item.Count;
-                        break;
-                    case 7:
-                        userMonth.July = item.Count;
-                        break;
-                    case 8:
-                        userMonth.August = item.Count;
-                        break;
-                    case 9:
-                        userMonth.September = item.Count;
-                        break;
-                    case 10:
-                        userMonth.October = item.Count;
-                        break;
-                    case 11:
-                        userMonth.November = item.Count;
-                        break;
-                    case 12:
-                        userMonth.December = item.Count;
-                        break;
+            }
+
+            for (int i = 1; i <= 12; i++)
+            {
+                UserMonth userMonth = new()
+                {
+                    Month = i
+                };
+
+                if (!listUserMonth.Exists(x=>x.Month==i))
+                {
+                    userMonth.Month = i;
+                    userMonth.Count = 0;
+                    listUserMonth.Add(userMonth);
                 }
             }
+
+            
+
+
+            var finalList = listUserMonth.OrderBy(x => x.Month).ToList();
+
+
+
 
             response = new()
             {
                 Code = BaseCode.SUCCESS,
                 Message = BaseCode.SUCCESS_MESSAGE,
-                Data = userMonth
+                Data = finalList
             };
 
             return response;
