@@ -8,8 +8,8 @@ namespace Application.System.Users
     public interface IUserService
     {
 
-        public Task<BaseResponse<UserModels>> LoginGoogle(LoginGoogleRequest request);
-        public Task<BaseResponse<UserModels>> UpdateRole(UpdateRoleRequest request);
+        public Task<BaseResponse<UserDTO>> LoginGoogle(LoginGoogleRequest request);
+        public Task<BaseResponse<UserDTO>> UpdateRole(UpdateRoleRequest request);
 
 
         public Task<BaseResponse<UserDTO>> Login(LoginRequestDTO request);

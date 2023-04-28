@@ -39,9 +39,9 @@ namespace Application.System.Users
         }
 
 
-        public async Task<BaseResponse<UserModels>> UpdateRole(UpdateRoleRequest request)
+        public async Task<BaseResponse<UserDTO>> UpdateRole(UpdateRoleRequest request)
         {
-            BaseResponse<UserModels> response = new();
+            BaseResponse<UserDTO> response = new();
             var users = await _userService.FindByNameAsync(request.Email);
 
             if (users != null)
@@ -94,7 +94,7 @@ namespace Application.System.Users
                             join userRole in _context.UserRoles on users.Id equals userRole.UserId
                             join role in _context.Roles on userRole.RoleId equals role.Id
                             select role.Name).FirstOrDefault();
-            UserModels u = new()
+            UserDTO u = new()
             {
                 Id = users.Id,
                 Avatar = users.Avatar,
@@ -116,9 +116,9 @@ namespace Application.System.Users
             return response;
         }
 
-        public async Task<BaseResponse<UserModels>> LoginGoogle(LoginGoogleRequest request)
+        public async Task<BaseResponse<UserDTO>> LoginGoogle(LoginGoogleRequest request)
         {
-            BaseResponse<UserModels> response = new();
+            BaseResponse<UserDTO> response = new();
 
             var users = await _userService.FindByNameAsync(request.Email.ToUpper());// check email exist or not
 
@@ -136,7 +136,7 @@ namespace Application.System.Users
                 };
                 var rs = await _userService.CreateAsync(user, request.Email);
 
-                UserModels us = new()
+                UserDTO us = new()
                 {
                     Id = user.Id,
                     UserName = user.UserName,
@@ -158,7 +158,7 @@ namespace Application.System.Users
                                 select role.Name).FirstOrDefault();  //get roleName from db
                 if (roleName == null)
                 {
-                    UserModels us = new()
+                    UserDTO us = new()
                     {
                         UserName = users.UserName,
                         Avatar = users.Avatar,
@@ -170,23 +170,30 @@ namespace Application.System.Users
                     response.Message = "Role Name is null";
                     return response;
                 }
-                UserModels u = new()
-                {
-                    Id = users.Id,
-                    UserName = users.UserName,
-                    Avatar = users.Avatar,
-                    FirstName = users.FirstName,
-                    LastName = users.LastName,
-                    Role = roleName
-                };
                 var userDTO = MapToDto(users, roleName);
                 var token = await GenerateToken(userDTO);
                 users.Token = token.Data.RefreshToken;
                 users.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;
                 await _userService.UpdateAsync(users);
 
-                response.Data = userDTO;
-                response.Data = u;
+                response.Data = new()
+                {
+                    UserName = users.UserName,
+                    Phone = users.PhoneNumber,
+                    FirstName = users.LastName,
+                    LastName = users.PhoneNumber,
+                    Status = users.Status,
+                    Id = users.Id,
+                    Address = users.Address,
+                    Avatar = users.Avatar,
+                    DOB = users.DOB,
+                    Gender = users.Gender,
+                    IdNumber = users.IdNumber,
+                    Role = roleName,
+                    RefreshToken = token.Data.RefreshToken,
+                    AccessToken = token.Data.AccessToken,
+                    RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime
+                };
                 response.Code = "200";
                 response.Message = "Login Success";
             }
@@ -201,7 +208,7 @@ namespace Application.System.Users
         {
             BaseResponse<UserDTO> response = new();
             dynamic rs;
-            //var user = await _userService.FindByNameAsync(request.UserName);
+            //var users = await _userService.FindByNameAsync(request.UserName);
             rs = await _signInManager.PasswordSignInAsync(request.UserName, request.Password, request.RememberMe, true);// hàm login
 
             if (!rs.Succeeded)
