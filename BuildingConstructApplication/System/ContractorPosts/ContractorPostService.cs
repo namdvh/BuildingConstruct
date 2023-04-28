@@ -298,6 +298,9 @@ namespace Application.System.ContractorPosts
                 case PostCategories.TAN_CO_DIEN:
                     keyword = "Tân cổ điển";
                     break;
+                case PostCategories.TOI_GIAN:
+                    keyword = "Tối giản";
+                    break;
             }
 
             var listStore = _context.ProductCategories
