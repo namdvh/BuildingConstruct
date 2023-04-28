@@ -101,6 +101,7 @@ namespace Application.System.Users
                 FirstName = users.FirstName,
                 LastName = users.LastName,
                 Phone=users.PhoneNumber,
+                Status=users.Status,
                 Role = roleName,
                 UserName = users.UserName
             };
@@ -226,6 +227,19 @@ namespace Application.System.Users
                     return response;
                 }
                 var userDTO = MapToDto(users, roleName);
+                var premium = await _context.Payments.Where(x => x.UserId.ToString().Equals(users.Id.ToString())).OrderByDescending(x => x.ExpireationDate).FirstOrDefaultAsync();
+                bool isPremium = false;
+                if (premium != null)
+                {
+                    if (premium.ExpireationDate >= DateTime.Now)
+                    {
+                        isPremium = true;
+                    }
+                    if (premium.ExtendDate != null && premium.ExtendDate >= DateTime.Now)
+                    {
+                        isPremium = true;
+                    }
+                }
                 var token = await GenerateToken(userDTO);
                 users.Token = token.Data.RefreshToken;
                 users.RefreshTokenExpiryTime = (DateTime)token.Data.RefreshTokenExpiryTime;
@@ -240,6 +254,7 @@ namespace Application.System.Users
                     Status = users.Status,
                     Id = users.Id,
                     Address = users.Address,
+                    Premium=isPremium,
                     Avatar = users.Avatar,
                     DOB = users.DOB,
                     Gender = users.Gender,
