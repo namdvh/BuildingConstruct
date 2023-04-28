@@ -139,6 +139,12 @@ namespace Application.System.Notifies
                         dto.Author.FirstName = "Đơn";
                         dto.Author.LastName = "hàng";
                     }
+                    else
+                    {
+
+                        dto.Author.FirstName =user.FirstName;
+                        dto.Author.LastName =user.LastName ;
+                    }
 
                     dto.Author.Avatar = user.Avatar;
                 }
