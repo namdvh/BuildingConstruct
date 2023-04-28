@@ -380,5 +380,15 @@ namespace BuildingConstructApi.Controllers
             var result = await _userService.GetAllBuilder(validFilter);
             return Ok(result);
         }
+
+
+        [HttpGet("getTotalRegister")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetTotalUserRegister()
+        {
+            var rs = await _userService.GetAllRegisterUserByMonth();
+            return Ok(rs);
+        }
+
     }
 }

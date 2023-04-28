@@ -16,6 +16,8 @@ using ViewModels.Response;
 using ViewModels.Users;
 using Gridify;
 using System.Linq;
+using Emgu.CV.Ocl;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Application.System.Users
 {
@@ -2510,6 +2512,62 @@ namespace Application.System.Users
                 };
             }
             return response;
+        }
+
+        public async Task<BaseResponse<List<UserMonth>>> GetAllRegisterUserByMonth()
+        {
+            BaseResponse<List<UserMonth>> response = new();
+            List<UserMonth> listUserMonth = new();
+
+            var userCountsByMonth = await _context.Users
+                .Where(x => x.LastModifiedAt.Year == DateTime.Now.Year)
+                .GroupBy(x => new { Month = x.LastModifiedAt.Month })
+                .Select(x => new { Month = x.Key.Month, Count = x.Count() })
+                .ToListAsync();
+
+            foreach (var item in userCountsByMonth)
+            {
+                UserMonth userMonth = new()
+                {
+                    Month = item.Month,
+                    Count = item.Count
+                };
+                listUserMonth.Add(userMonth);
+
+            }
+
+            for (int i = 1; i <= 12; i++)
+            {
+                UserMonth userMonth = new()
+                {
+                    Month = i
+                };
+
+                if (!listUserMonth.Exists(x=>x.Month==i))
+                {
+                    userMonth.Month = i;
+                    userMonth.Count = 0;
+                    listUserMonth.Add(userMonth);
+                }
+            }
+
+            
+
+
+            var finalList = listUserMonth.OrderBy(x => x.Month).ToList();
+
+
+
+
+            response = new()
+            {
+                Code = BaseCode.SUCCESS,
+                Message = BaseCode.SUCCESS_MESSAGE,
+                Data = finalList
+            };
+
+            return response;
+
         }
     }
 }
