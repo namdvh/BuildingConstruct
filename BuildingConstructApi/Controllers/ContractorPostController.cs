@@ -224,7 +224,7 @@ namespace BuildingConstructApi.Controllers
         }
         [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetPost([FromRoute] int id, int? pageSize = 5)
+        public async Task<IActionResult> GetPost([FromRoute] int id, int? pageSize = 3)
         {
             var rs = await _contractorPostService.GetDetailPost(id, pageSize);
             return Ok(rs);

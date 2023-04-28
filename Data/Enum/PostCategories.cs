@@ -11,5 +11,6 @@ namespace Data.Enum
         CO_DIEN=1,
         HIEN_DAI,
         TAN_CO_DIEN,
+        TOI_GIAN
     }
 }

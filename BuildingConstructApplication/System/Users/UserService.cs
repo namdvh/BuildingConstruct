@@ -1498,9 +1498,9 @@ namespace Application.System.Users
                 }
 
 
-                if (final.Count < 10)
+                if (final.Count < 5)
                 {
-                    var remaining = 10 - final.Count;
+                    var remaining = 5 - final.Count;
 
                     var allContractorItem = await _context.Users.Where(x => x.Status == Status.Level3 && x.ContractorId != null).Select(x => x.ContractorId).Take(remaining).ToListAsync();
 
