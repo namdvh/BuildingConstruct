@@ -355,6 +355,7 @@ namespace Application.System.MaterialStores
 
             var result = await query
                 .Include(x => x.User)
+                .Where(x=>x.User.Status==Status.Level3)
                .OrderBy(filter._orderBy + " " + orderBy)
                .Skip((filter.PageNumber - 1) * filter.PageSize)
                .Take(filter.PageSize)

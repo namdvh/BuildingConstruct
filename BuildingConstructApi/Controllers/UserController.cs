@@ -405,5 +405,27 @@ namespace BuildingConstructApi.Controllers
             return Ok(rs);
         }
 
+        [HttpGet("search")]
+        [AllowAnonymous]
+        public async Task<IActionResult> SearchAll([FromQuery] string keyword, PaginationFilter request)
+        {
+            var validFilter = new PaginationFilter();
+
+            if (request.FilterRequest == null)
+            {
+                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
+            }
+            else
+            {
+                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy, request.FilterRequest);
+
+            }
+
+
+            var rs = await _userService.SearchAll(keyword, validFilter);
+            return Ok(rs);
+        }
+
+
     }
 }

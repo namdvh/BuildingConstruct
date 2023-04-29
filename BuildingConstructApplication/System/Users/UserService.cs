@@ -2683,5 +2683,77 @@ namespace Application.System.Users
             return response;
 
         }
+
+        public async Task<BaseResponse<List<UserDetailDTO>>> SearchAll(string keyword, PaginationFilter filter)
+        {
+            BasePagination<List<UserDetailDTO>> response;
+            var orderBy = filter._orderBy.ToString();
+            int totalRecord;
+            orderBy = orderBy switch
+            {
+                "1" => "ascending",
+                "-1" => "descending",
+                _ => orderBy
+            };
+            if (string.IsNullOrEmpty(filter._sortBy))
+            {
+                filter._sortBy = "Id";
+            }
+
+            IQueryable<User> query = _context.Users;
+
+
+            var userAdminRole = await _context.Users.Where(x => x.BuilderId == null && x.ContractorId == null && x.MaterialStoreID == null).ToListAsync();
+
+            var result = await query
+                      .Include(x => x.Builder)
+                          .ThenInclude(x => x.Type)
+                       .Include(x => x.Contractor)
+                       .Include(x => x.MaterialStore)
+                      .Where(x => !userAdminRole.Contains(x) && x.FirstName.Contains(keyword)||x.LastName.Contains(keyword))
+                     .OrderBy(filter._sortBy + " " + orderBy)
+                     .Skip((filter.PageNumber - 1) * filter.PageSize)
+                     .Take(filter.PageSize)
+                     .ToListAsync();
+
+            totalRecord = await _context.Users.Where(x => !userAdminRole.Contains(x)).CountAsync();
+
+            if (!result.Any())
+            {
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.EMPTY_MESSAGE,
+                    Data = new(),
+                    Pagination = null
+                };
+            }
+            else
+
+            {
+                double totalPages;
+
+                totalPages = ((double)totalRecord / (double)filter.PageSize);
+
+                var roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
+                Pagination pagination = new()
+                {
+                    CurrentPage = filter.PageNumber,
+                    PageSize = filter.PageSize,
+                    TotalPages = roundedTotalPages,
+                    TotalRecords = totalRecord
+                };
+
+                response = new()
+                {
+                    Code = BaseCode.SUCCESS,
+                    Message = BaseCode.SUCCESS_MESSAGE,
+                    Data = MapToDetailDTO(result),
+                    Pagination = pagination
+                };
+            }
+
+            return response;
+        }
     }
 }
