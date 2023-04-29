@@ -34,5 +34,7 @@ namespace Application.System.Users
 
         Task<BaseResponse<List<UserMonth>>> GetAllRegisterUserByMonth();
 
+        Task<BaseResponse<List<UserDetailDTO>>> SearchAll(string keyword, PaginationFilter request);
+
     }
 }
