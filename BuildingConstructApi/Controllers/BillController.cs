@@ -104,14 +104,6 @@ namespace BuildingConstructApi.Controllers
             return Ok(result);
         }
 
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> GetBillDetail([FromRoute] int id)
-        //{
-        //    var rs = await _billServices.GetDetail(id);
-
-        //    return Ok(rs);
-        //}
-
         [HttpGet("small/{id}")]
         public async Task<IActionResult> GetSmallBill([FromRoute] int id)
         {
@@ -296,7 +288,7 @@ namespace BuildingConstructApi.Controllers
         [HttpGet("history")]
         public async Task<IActionResult> GetHistoryProductBill([FromQuery] PaginationFilter request)
         {
-            var userID = User.FindFirst("UserID").Value;
+            var userID = User.FindFirst("UserID")?.Value;
             var validFilter = new PaginationFilter();
 
 

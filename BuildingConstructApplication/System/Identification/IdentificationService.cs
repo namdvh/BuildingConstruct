@@ -1,4 +1,5 @@
-﻿using Data.DataContext;
+﻿using Application.Library;
+using Data.DataContext;
 using Data.Entities;
 using Data.Enum;
 using Emgu.CV;
@@ -35,18 +36,18 @@ namespace Application.System.Identification
 
             Verify verify = new()
             {
-                BackID = requests.BackID,
-                BusinessLicense = requests.BusinessLicense,
+                BackID = requests.BackID != null ? EncryptionHelper.EncryptString(requests.BackID) : null,
+                BusinessLicense = requests.BusinessLicense != null ? EncryptionHelper.EncryptString(requests.BusinessLicense) : null,
                 CreateBy = userID,
                 UserID = userID,
-                FaceImage = requests.FaceImage,
-                FrontID = requests.FrontID,
+                FaceImage = requests.FaceImage != null ? EncryptionHelper.EncryptString(requests.FaceImage) : null,
+                FrontID = requests.FrontID != null ? EncryptionHelper.EncryptString(requests.FrontID) : null,
                 IdentificateType = requests.IdentificateType,
                 LastModifiedAt = DateTime.Now,
                 Status = Data.Enum.Status.PENDING,
             };
 
-            if (verify.FaceImage != null && verify.FrontID != null)
+            if (requests.FaceImage != null && requests.FrontID != null)
             {
                 var client = new HttpClient();
                 var request = new HttpRequestMessage
@@ -60,8 +61,8 @@ namespace Application.System.Identification
     },
                     Content = new FormUrlEncodedContent(new Dictionary<string, string>
     {
-        { "linkFile1", verify.FaceImage },
-        { "linkFile2", verify.FrontID },
+        { "linkFile1", requests.FaceImage },
+        { "linkFile2", requests.FrontID },
     }),
                 };
                 using (var responsed = await client.SendAsync(request))
@@ -69,19 +70,29 @@ namespace Application.System.Identification
                     if (responsed.IsSuccessStatusCode)
                     {
                         var body = await responsed.Content.ReadAsStringAsync();
-
                         dynamic stuff = JsonConvert.DeserializeObject(body);
-                        string test = stuff.data.resultMessage;
-                        double percent = stuff.data.similarPercent;
-                        var finalNumber = Math.Round(percent, 2) * 100;
 
-                        if (finalNumber < 60)
+                        if (stuff.statusCode != "451")
+                        {
+                            string test = stuff.data.resultMessage;
+                            double percent = stuff.data.similarPercent;
+                            var finalNumber = Math.Round(percent, 2) * 100;
+
+                            if (finalNumber < 60)
+                            {
+                                verify.PreCodition = "0";
+
+                            }
+
+                            verify.PreCodition = finalNumber.ToString();
+                        }
+                        else
                         {
                             verify.PreCodition = "0";
 
                         }
 
-                        verify.PreCodition = finalNumber.ToString();
+
                     }
                     else
                     {
@@ -507,11 +518,11 @@ namespace Application.System.Identification
                 IdentificationDTO tmp = new()
                 {
                     Id = item.Id,
-                    BackID = item.BackID,
-                    BusinessLicense = item.BusinessLicense,
+                    BackID = item.BackID != null ? EncryptionHelper.DecryptString(item.BackID) : null,
+                    BusinessLicense = item.BusinessLicense != null ? EncryptionHelper.DecryptString(item.BusinessLicense) : null,
                     UserID = item.UserID,
-                    FaceImage = item.FaceImage,
-                    FrontID = item.FrontID,
+                    FaceImage = item.FaceImage != null ? EncryptionHelper.DecryptString(item.FaceImage) : null,
+                    FrontID = item.FrontID != null ? EncryptionHelper.DecryptString(item.FrontID) : null,
                     IdentificateType = item.IdentificateType,
                     LastModifiedAt = item.LastModifiedAt,
                     PreCodition = item.PreCodition,
