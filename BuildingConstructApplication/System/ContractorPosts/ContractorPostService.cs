@@ -2103,5 +2103,22 @@ namespace Application.System.ContractorPosts
             }
             return response;
         }
+
+        public async Task<BaseResponse<StatisticCount>> GetStatisticCount()
+        {
+            var response = new BaseResponse<StatisticCount>();
+            var commitment =await _context.PostCommitments.CountAsync();
+            var bill = await _context.Bills.CountAsync();
+            var apply = await _context.AppliedPosts.CountAsync();
+            var post = await _context.ContractorPosts.CountAsync();
+            response.Data = new();
+            response.Data.Commitment = commitment;
+            response.Data.Bill = bill;
+            response.Data.Apply = apply;
+            response.Data.Post = post;
+            response.Code = BaseCode.SUCCESS;
+            response.Message = BaseCode.SUCCESS_MESSAGE;
+            return response;
+        }
     }
 }

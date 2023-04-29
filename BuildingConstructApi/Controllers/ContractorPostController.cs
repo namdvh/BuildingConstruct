@@ -273,7 +273,16 @@ namespace BuildingConstructApi.Controllers
 
 
         }
+        [AllowAnonymous]
+        [HttpGet("statisticCount")]
+        public async Task<IActionResult> StatisticCount()
+        {
 
+            var result = await _contractorPostService.GetStatisticCount();
+
+            return Ok(result);
+
+        }
 
     }
 }
