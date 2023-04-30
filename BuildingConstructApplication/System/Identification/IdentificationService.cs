@@ -290,7 +290,7 @@ namespace Application.System.Identification
                 {
                     BackID = rs.BackID,
                     BusinessLicense = rs.BusinessLicense,
-                    UserID = rs.UserID,
+                    UserId = rs.UserID,
                     FaceImage = rs.FaceImage,
                     FrontID = rs.FrontID,
                     IdentificateType = rs.IdentificateType,
