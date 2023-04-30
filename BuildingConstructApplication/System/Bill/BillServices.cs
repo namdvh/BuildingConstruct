@@ -31,6 +31,7 @@ namespace Application.System.Bill
             Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
             var usID = identifierClaim.Value;
             var contracID = _context.Users.Where(x => x.Id.ToString().Equals(usID)).FirstOrDefault().ContractorId;
+            dynamic data = null;
 
 
             //Checking quantities for product before create bill 
@@ -113,6 +114,7 @@ namespace Application.System.Bill
                             await _context.SaveChangesAsync();
                         }
                     }
+                    data = bill.Id;
                 }
                 flag = true;
             }
@@ -144,6 +146,7 @@ namespace Application.System.Bill
 
                 }
                 response.Data = null;
+                response.NavigateId = data;
                 response.Code = BaseCode.SUCCESS;
                 response.Message = "Đặt hàng thành công";
             }

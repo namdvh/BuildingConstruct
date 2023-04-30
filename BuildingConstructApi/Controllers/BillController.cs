@@ -60,7 +60,7 @@ namespace BuildingConstructApi.Controllers
                     {
                         LastModifiedAt = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok")),
                         CreateBy = Guid.Parse(userID),
-                        NavigateId = newestBill,
+                        NavigateId = rs.NavigateId,
                         UserId = store.Id,
                         Message = NotificationMessage.CREATE_BILL,
                         NotificationType = NotificationType.BILL_NOTIFICATION,
