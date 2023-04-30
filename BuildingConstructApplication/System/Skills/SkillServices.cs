@@ -48,7 +48,8 @@ namespace Application.System.Skills
             {
                 Name = skill.Name,
                 FromSystem = true,
-                TypeId = Guid.Parse(skill.TypeId)
+                TypeId = Guid.Parse(skill.TypeId),
+                Status=Status.Active
             };
             var check = await _context.Skills.Where(x => x.Id == skills.Id).FirstOrDefaultAsync();
             if (check == null)

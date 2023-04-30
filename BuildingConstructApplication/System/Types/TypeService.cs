@@ -52,7 +52,8 @@ namespace Application.System.Types
             var types = new Data.Entities.Type()
             {
                 Id = new Guid(),
-                Name = type.Name
+                Name = type.Name,
+                Status=Status.Active
             };
             var check = await _context.Types.Where(x => x.Id.ToString().Equals(types.Id.ToString())).FirstOrDefaultAsync();
             var checkDuplicateName = await _context.Types.Where(x => x.Name.Equals(types.Name)).CountAsync();
