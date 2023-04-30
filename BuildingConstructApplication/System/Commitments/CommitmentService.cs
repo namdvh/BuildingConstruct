@@ -811,7 +811,7 @@ namespace Application.System.Commitments
                     ContractorID = item.Contractor.Id,
                     Description = item.ContractorPosts.Description,
                     EndDate = item.EndDate,
-                    Id = item.Id,
+                    Id = item.ContractorPosts.Id,
                     NumberPeople = item.ContractorPosts.NumberPeople,
                     Place = item.ContractorPosts.Place,
                     PostCategories = item.ContractorPosts.PostCategories,
