@@ -142,11 +142,11 @@ namespace Application.System.Types
             return response;
         }
 
-        public async Task<BaseResponse<List<TypeModels>>> GetAllTypeAndSkillsAdmin()
+        public async Task<BaseResponse<List<TypeAdmins>>> GetAllTypeAndSkillsAdmin()
         {
-            BaseResponse<List<TypeModels>> response = new();
+            BaseResponse<List<TypeAdmins>> response = new();
             response.Data = new();
-            var lType = new List<TypeModels>();
+            var lType = new List<TypeAdmins>();
             var rs = await _context.Types.Include(x => x.Skill).ToListAsync();
             if (rs != null)
             {
@@ -154,9 +154,10 @@ namespace Application.System.Types
                 response.Message = BaseCode.SUCCESS_MESSAGE;
                 foreach (var item in rs)
                 {
-                    var type = new TypeModels();
+                    var type = new TypeAdmins();
                     type.id = item.Id;
                     type.name = item.Name;
+                    type.Status = item.Status;
                     var lSkillArr = new List<SkillArr>();
                     foreach (var i in item.Skill)
                     {
