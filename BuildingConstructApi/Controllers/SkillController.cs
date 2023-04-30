@@ -39,6 +39,25 @@ namespace BuildingConstructApi.Controllers
             var result = await _skillService.GetAll(validFilter);
             return Ok(result);
         }
+        [HttpGet("getAllSkillAdmin")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllSkillAdmin([FromQuery] PaginationFilter request)
+        {
+            dynamic validFilter;
+
+            if (request.FilterRequest == null)
+            {
+                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
+            }
+            else
+            {
+                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy, request.FilterRequest);
+
+            }
+
+            var result = await _skillService.GetAllSkillForAdmin(validFilter);
+            return Ok(result);
+        }
         [HttpPost]
         public async Task<IActionResult> CreateSkill(SkillRequest skill)
         {
@@ -49,6 +68,12 @@ namespace BuildingConstructApi.Controllers
         public async Task<IActionResult> DeleteSkill(int skillId)
         {
             var rs = await _skillService.DeleteSkill(skillId);
+            return Ok(rs);
+        }
+        [HttpPut("active")]
+        public async Task<IActionResult> ActiveSkill(int skillId)
+        {
+            var rs = await _skillService.ActiveSkill(skillId);
             return Ok(rs);
         }
         [HttpPut("update")]

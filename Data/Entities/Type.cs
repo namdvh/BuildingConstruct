@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Data.Enum;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,7 @@ namespace Data.Entities
         public List<Skill> Skill { get; set; }
         public List<ContractorPostType>? ContractorPostTypes { get; set; }
         public List<Quiz>? Quiz { get; set; }
+        public Status Status { get; set; }
 
     }
 }

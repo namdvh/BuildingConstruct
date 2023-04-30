@@ -73,7 +73,7 @@ namespace BuildingConstructApi.Controllers
             var rs = await materialStoreService.GetProductDetail(productId);
             return Ok(rs);
         }
-        [HttpDelete("deleteProduct/{productId}")]
+        [HttpPut("deleteProduct/{productId}")]
         public async Task<IActionResult> DeleteProduct([FromRoute] int productId)
         {
             BaseResponse<ProductDTO> response = new();

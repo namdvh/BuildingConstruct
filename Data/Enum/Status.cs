@@ -14,6 +14,8 @@
         RECEIVED,
         CANCEL,
         DELEDTED,
-        LEVEL_4
+        LEVEL_4,
+        Active,
+        Deactive
     }
 }

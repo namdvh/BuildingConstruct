@@ -12,8 +12,11 @@ namespace Application.System.Types
     public interface ITypeService
     { 
         Task<BaseResponse<List<TypeModels>>> GetAllTypeAndSkills();
+        Task<BaseResponse<List<TypeModels>>> GetAllTypeAndSkillsAdmin();
+
         Task<BaseResponse<string>> CreateType(TypeRequest type);
         Task<BaseResponse<string>> DeleteType(string typeId);
+        Task<BaseResponse<string>> ActiveType(string typeId);
         Task<BaseResponse<string>> UpdateType(TypeRequest type);  
     }
 }

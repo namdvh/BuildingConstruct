@@ -88,7 +88,7 @@ namespace Application.System.Bill
                 var rs = await _context.SaveChangesAsync();
                 if (rs > 0)
                 {
-
+                    data = bill.Id;
                     foreach (var item in r.ProductBillDetail)
                     {
                         var billDetail = new BillDetail();
@@ -113,12 +113,12 @@ namespace Application.System.Bill
                             else
                             {
                                 product.SoldQuantities+=item.Quantity;
+                                _context.Products.Update(product);
                             }
 
                             await _context.SaveChangesAsync();
                         }
                     }
-                    data = bill.Id;
                 }
                 flag = true;
             }
