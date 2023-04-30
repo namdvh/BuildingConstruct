@@ -726,7 +726,7 @@ namespace Application.System.ContractorPosts
                 QuizId = applied.QuizId,
                 QuizName = applied.Quiz?.Name,
                 Video = applied.Video,
-                TypeName = applied.Builder.Type.Name,
+                TypeName = applied.Builder.Type?.Name,
                 TotalCorrectAnswers = totalScore,
                 TotalNumberQuestion = totalQuestion,
 
@@ -752,7 +752,7 @@ namespace Application.System.ContractorPosts
             }
             AppliedPostDTO rs = new()
             {
-                Avatar = applied.Builder.User.Avatar,
+                Avatar = applied.Builder.User?.Avatar,
                 BuilderID = applied.BuilderID,
                 FirstName = applied.Builder.User.FirstName,
                 LastName = applied.Builder.User.LastName,
@@ -761,6 +761,7 @@ namespace Application.System.ContractorPosts
                 Video = applied.Video,
                 QuizId = applied.QuizId,
                 QuizName = applied.Quiz?.Name,
+                TypeName = applied.Builder.Type?.Name,
                 Groups = group,
                 AppliedDate = applied.AppliedDate,
                 TotalCorrectAnswers = totalScore,

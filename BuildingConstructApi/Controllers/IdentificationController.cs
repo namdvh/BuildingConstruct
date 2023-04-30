@@ -9,9 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using System.Drawing;
-using System.Text;
 using ViewModels.Identification;
-using ViewModels.Notificate;
 using ViewModels.Pagination;
 using ViewModels.Response;
 
@@ -32,10 +30,10 @@ namespace BuildingConstructApi.Controllers
             _notificationUserHubContext = notificationUserHubContext;
             _userConnectionManager = userConnectionManager;
         }
+
         [HttpPost("getAll")]
         public async Task<IActionResult> GetAll([FromBody] PaginationFilter request)
         {
-
             var result = await _identificationService.GetAll(request);
             return Ok(result);
         }
@@ -43,11 +41,9 @@ namespace BuildingConstructApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetDetail(int id)
         {
-
             var result = await _identificationService.GetDetail(id);
             return Ok(result);
         }
-
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateIndetificationRequest requests)
@@ -65,22 +61,17 @@ namespace BuildingConstructApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, Status status)
         {
-
             var result = await _identificationService.Update(id, status);
             var connections = _userConnectionManager.GetUserConnections(result.Data.Id);
             if (connections != null && connections.Count > 0)
             {
                 foreach (var connectionId in connections)
                 {
-
                     await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("UpdateProfile", result.Data);
-
                 }
             }
             return Ok(result);
         }
-
-
 
         [HttpPost("test")]
         public async Task<IActionResult> Test([FromBody] DetectFaceRequest request)
@@ -92,10 +83,9 @@ namespace BuildingConstructApi.Controllers
             //    await test.CopyToAsync(memoryStream);
             //    using (var img = Image.FromStream(test))
             //    {
-            //       
+            //
 
-            //    }
-            //}
+            //    }           //}
 
             byte[] bytes = Convert.FromBase64String(request.Image);
 
@@ -106,7 +96,6 @@ namespace BuildingConstructApi.Controllers
                 front = GetMatFromSDImage(image);
                 return Ok(_identificationService.DetectFace(front));
             }
-
         }
 
         [HttpPost("rapidTest")]
@@ -120,14 +109,14 @@ namespace BuildingConstructApi.Controllers
                 Method = HttpMethod.Post,
                 RequestUri = new Uri("https://face-detection11.p.rapidapi.com/FaceDetection"),
                 Headers =
-    {
-        { "X-RapidAPI-Key", "0af973177dmsh33b9953ecf57384p18ca21jsn3df8789084ce" },
-        { "X-RapidAPI-Host", "face-detection11.p.rapidapi.com" },
-    },
+                {
+                    { "X-RapidAPI-Key", "0af973177dmsh33b9953ecf57384p18ca21jsn3df8789084ce" },
+                    { "X-RapidAPI-Host", "face-detection11.p.rapidapi.com" },
+                },
                 Content = new FormUrlEncodedContent(new Dictionary<string, string>
-    {
-        { "linkFile", faceRequest.Image },
-    }),
+                {
+                    { "linkFile", faceRequest.Image },
+                }),
             };
             using (var response = await client.SendAsync(request))
             {
@@ -146,7 +135,6 @@ namespace BuildingConstructApi.Controllers
                             Code = BaseCode.SUCCESS,
                             Message = "Detected"
                         };
-
                     }
                     else
                     {
@@ -156,9 +144,6 @@ namespace BuildingConstructApi.Controllers
                             Message = "Not Detected"
                         };
                     }
-
-
-
                 }
                 else
                 {
@@ -168,13 +153,9 @@ namespace BuildingConstructApi.Controllers
                         Message = "Not Detected"
                     };
                 }
-
             }
             return Ok(codeResponse);
-
         }
-
-
 
         private Mat GetMatFromSDImage(System.Drawing.Image image)
         {
