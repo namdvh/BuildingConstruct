@@ -3,7 +3,6 @@ using Data.DataContext;
 using Data.Entities;
 using Data.Enum;
 using Emgu.CV;
-using Emgu.CV.Features2D;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -12,8 +11,6 @@ using System.Linq.Dynamic.Core;
 using ViewModels.Identification;
 using ViewModels.Pagination;
 using ViewModels.Response;
-using static Emgu.CV.Stitching.Stitcher;
-
 
 namespace Application.System.Identification
 {
@@ -22,13 +19,11 @@ namespace Application.System.Identification
         private readonly BuildingConstructDbContext _context;
         private readonly UserManager<User> _userService;
 
-
         public IdentificationService(BuildingConstructDbContext context, UserManager<User> userService)
         {
             _context = context;
             _userService = userService;
         }
-
 
         public async Task<BaseResponse<string>> Create(Guid userID, CreateIndetificationRequest requests)
         {
@@ -45,6 +40,7 @@ namespace Application.System.Identification
                 IdentificateType = requests.IdentificateType,
                 LastModifiedAt = DateTime.Now,
                 Status = Data.Enum.Status.PENDING,
+                PreCodition = "0"
             };
 
             if (requests.FaceImage != null && requests.FrontID != null)
@@ -55,15 +51,15 @@ namespace Application.System.Identification
                     Method = HttpMethod.Post,
                     RequestUri = new Uri("https://face-verification2.p.rapidapi.com/faceverification"),
                     Headers =
-    {
-        { "X-RapidAPI-Key", "0af973177dmsh33b9953ecf57384p18ca21jsn3df8789084ce" },
-        { "X-RapidAPI-Host", "face-verification2.p.rapidapi.com" },
-    },
+                    {
+                        { "X-RapidAPI-Key", "0af973177dmsh33b9953ecf57384p18ca21jsn3df8789084ce" },
+                        { "X-RapidAPI-Host", "face-verification2.p.rapidapi.com" },
+                    },
                     Content = new FormUrlEncodedContent(new Dictionary<string, string>
-    {
-        { "linkFile1", requests.FaceImage },
-        { "linkFile2", requests.FrontID },
-    }),
+                        {
+                            { "linkFile1", requests.FaceImage },
+                            { "linkFile2", requests.FrontID },
+                        }),
                 };
                 using (var responsed = await client.SendAsync(request))
                 {
@@ -78,50 +74,25 @@ namespace Application.System.Identification
                             double percent = stuff.data.similarPercent;
                             var finalNumber = Math.Round(percent, 2) * 100;
 
-                            if (finalNumber < 60)
+                            if (finalNumber > 60)
                             {
-                                verify.PreCodition = "0";
-
+                                verify.PreCodition = finalNumber.ToString();
                             }
 
-                            verify.PreCodition = finalNumber.ToString();
                         }
-                        else
-                        {
-                            verify.PreCodition = "0";
-
-                        }
-
-
-                    }
-                    else
-                    {
-                        verify.PreCodition = "0";
-
                     }
                 }
             }
-            else
-            {
-                verify.PreCodition = "0";
-            }
-
-
-
-
 
             var user = await _context.Users
-                .Include(x => x.Builder)
-                .Include(x => x.Contractor)
-                .Include(x => x.MaterialStore)
-                .FirstOrDefaultAsync(x => x.Id.Equals(userID));
+                  .Include(x => x.Builder)
+                  .Include(x => x.Contractor)
+                  .Include(x => x.MaterialStore)
+                  .FirstOrDefaultAsync(x => x.Id.Equals(userID));
 
             if (user != null)
             {
-                //user.Status = Status.LEVEL_4;
-                //_context.Users.Update(user);
                 var rolename = _userService.GetRolesAsync(user).Result;
-
 
                 if (rolename.First().Equals("User"))
                 {
@@ -136,8 +107,6 @@ namespace Application.System.Identification
 
                     _context.Update(user);
                     await _context.SaveChangesAsync();
-
-
                 }
                 else if (rolename.First().Equals("Contractor"))
                 {
@@ -158,24 +127,15 @@ namespace Application.System.Identification
                     if (user.Avatar != null && user.MaterialStore.Place != null && user.MaterialStore.TaxCode != null)
                     {
                         user.Status = Data.Enum.Status.LEVEL_4;
-
                     }
                     else
                     {
                         user.Status = Data.Enum.Status.Level1;
-
                     }
 
                     _context.Update(user);
                     await _context.SaveChangesAsync();
-
                 }
-
-
-
-
-
-
             }
 
             await _context.Verifies.AddAsync(verify);
@@ -188,7 +148,6 @@ namespace Application.System.Identification
             };
 
             return response;
-
         }
 
         public BaseResponse<string> DetectFace(Mat image)
@@ -284,7 +243,6 @@ namespace Application.System.Identification
                 totalRecords = await _context.Verifies.CountAsync();
             }
 
-
             if (!data.Any())
             {
                 response = new()
@@ -319,7 +277,6 @@ namespace Application.System.Identification
             }
 
             return response;
-
         }
 
         public async Task<BaseResponse<IdentificationDTO>> GetDetail(int id)
@@ -414,7 +371,6 @@ namespace Application.System.Identification
 
                         _context.Remove(rs);
                         await _context.SaveChangesAsync();
-
                     }
                     else
                     {
@@ -426,9 +382,7 @@ namespace Application.System.Identification
 
                         if (user != null)
                         {
-
                             var rolename = _userService.GetRolesAsync(user).Result;
-
 
                             if (rolename.First().Equals("User"))
                             {
@@ -443,8 +397,6 @@ namespace Application.System.Identification
 
                                 _context.Update(user);
                                 await _context.SaveChangesAsync();
-
-
                             }
                             else if (rolename.First().Equals("Contractor"))
                             {
@@ -473,13 +425,10 @@ namespace Application.System.Identification
 
                                 _context.Update(user);
                                 await _context.SaveChangesAsync();
-
                             }
                         }
                     }
-
                 }
-
 
                 UserIdentification identification = new()
                 {
@@ -501,16 +450,13 @@ namespace Application.System.Identification
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.NOTFOUND_MESSAGE,
                 };
-
             }
 
             return response;
         }
 
-
         private List<IdentificationDTO> MapListDTO(List<Data.Entities.Verify> verifies)
         {
-
             List<IdentificationDTO> ls = new();
 
             foreach (var item in verifies)
@@ -533,8 +479,6 @@ namespace Application.System.Identification
             }
 
             return ls;
-
         }
-
     }
 }
