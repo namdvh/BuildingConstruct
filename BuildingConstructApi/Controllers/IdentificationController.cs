@@ -9,9 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using System.Drawing;
-using System.Text;
 using ViewModels.Identification;
-using ViewModels.Notificate;
 using ViewModels.Pagination;
 using ViewModels.Response;
 
@@ -32,6 +30,7 @@ namespace BuildingConstructApi.Controllers
             _notificationUserHubContext = notificationUserHubContext;
             _userConnectionManager = userConnectionManager;
         }
+
         [HttpPost("getAll")]
         public async Task<IActionResult> GetAll([FromBody] PaginationFilter request)
         {
@@ -62,7 +61,6 @@ namespace BuildingConstructApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, Status status)
         {
-
             var result = await _identificationService.Update(id, status);
             var connections = _userConnectionManager.GetUserConnections(result.Data.Id);
             if (connections != null && connections.Count > 0)
@@ -85,7 +83,7 @@ namespace BuildingConstructApi.Controllers
             //    await test.CopyToAsync(memoryStream);
             //    using (var img = Image.FromStream(test))
             //    {
-            //       
+            //
 
             //    }           //}
 
@@ -98,7 +96,7 @@ namespace BuildingConstructApi.Controllers
                 front = GetMatFromSDImage(image);
                 return Ok(_identificationService.DetectFace(front));
             }
-     }
+        }
 
         [HttpPost("rapidTest")]
         [AllowAnonymous]
@@ -137,7 +135,6 @@ namespace BuildingConstructApi.Controllers
                             Code = BaseCode.SUCCESS,
                             Message = "Detected"
                         };
-
                     }
                     else
                     {
