@@ -204,8 +204,11 @@ namespace Application.System.ContractorPosts
             }
             var builder = await _context.Builders.Where(x => x.User.Id.ToString().Equals(userID)).FirstOrDefaultAsync();
             dynamic c = null;
+            dynamic commitment = null;
+            PostCommitment? hasCommitmentPost;
             if (builder != null)
             {
+                hasCommitmentPost = await _context.PostCommitments.FirstOrDefaultAsync(x => x.PostID == post.Id && x.BuilderID == builder.Id);
                 var check = await _context.AppliedPosts.Where(x => x.BuilderID == builder.Id && x.ContractorPosts.Id == post.Id).FirstOrDefaultAsync();
                 c = check;
                 if (check != null)
@@ -234,6 +237,7 @@ namespace Application.System.ContractorPosts
             }
 
             var listQuiz = await _context.Quizzes.Where(x => x.PostID == post.Id).ToListAsync();
+
 
 
             ContractorPostDetailDTO postDTO = new()
@@ -267,6 +271,7 @@ namespace Application.System.ContractorPosts
                 Author = await GetUserProfile(post.CreateBy),
                 IsSave = IsSave,
                 Status = post.Status,
+                CommitmentId = hasCommitmentPost != null ? hasCommitmentPost.Id : null,
                 Quizzes = listQuiz.Any() ? listQuiz : null,
             };
 
@@ -280,10 +285,6 @@ namespace Application.System.ContractorPosts
             }
 
             }
-
-
-
-
 
             //checking recommended
             string keyword = string.Empty;
