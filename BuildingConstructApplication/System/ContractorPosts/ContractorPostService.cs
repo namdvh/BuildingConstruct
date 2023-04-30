@@ -205,10 +205,10 @@ namespace Application.System.ContractorPosts
             var builder = await _context.Builders.Where(x => x.User.Id.ToString().Equals(userID)).FirstOrDefaultAsync();
             dynamic c = null;
             dynamic commitment = null;
-            PostCommitment? hasCommitmentPost;
+            PostCommitment? hasCommitmentPost=null;
             if (builder != null)
             {
-                hasCommitmentPost = await _context.PostCommitments.FirstOrDefaultAsync(x => x.PostID == post.Id && x.BuilderID == builder.Id);
+                hasCommitmentPost = await _context.PostCommitments.FirstOrDefaultAsync(x => x.PostID == post.Id && x.BuilderID == builder.Id );
                 var check = await _context.AppliedPosts.Where(x => x.BuilderID == builder.Id && x.ContractorPosts.Id == post.Id).FirstOrDefaultAsync();
                 c = check;
                 if (check != null)
