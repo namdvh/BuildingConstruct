@@ -110,6 +110,10 @@ namespace Application.System.Bill
                                 pType.Quantity -= item.Quantity;
                                 product.SoldQuantities += item.Quantity;
                             }
+                            else
+                            {
+                                product.SoldQuantities+=item.Quantity;
+                            }
 
                             await _context.SaveChangesAsync();
                         }
