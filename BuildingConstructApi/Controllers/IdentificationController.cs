@@ -35,7 +35,6 @@ namespace BuildingConstructApi.Controllers
         [HttpPost("getAll")]
         public async Task<IActionResult> GetAll([FromBody] PaginationFilter request)
         {
-
             var result = await _identificationService.GetAll(request);
             return Ok(result);
         }
@@ -43,11 +42,9 @@ namespace BuildingConstructApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetDetail(int id)
         {
-
             var result = await _identificationService.GetDetail(id);
             return Ok(result);
         }
-
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateIndetificationRequest requests)
@@ -72,15 +69,11 @@ namespace BuildingConstructApi.Controllers
             {
                 foreach (var connectionId in connections)
                 {
-
                     await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("UpdateProfile", result.Data);
-
                 }
             }
             return Ok(result);
         }
-
-
 
         [HttpPost("test")]
         public async Task<IActionResult> Test([FromBody] DetectFaceRequest request)
@@ -94,8 +87,7 @@ namespace BuildingConstructApi.Controllers
             //    {
             //       
 
-            //    }
-            //}
+            //    }           //}
 
             byte[] bytes = Convert.FromBase64String(request.Image);
 
@@ -106,8 +98,7 @@ namespace BuildingConstructApi.Controllers
                 front = GetMatFromSDImage(image);
                 return Ok(_identificationService.DetectFace(front));
             }
-
-        }
+     }
 
         [HttpPost("rapidTest")]
         [AllowAnonymous]
@@ -120,14 +111,14 @@ namespace BuildingConstructApi.Controllers
                 Method = HttpMethod.Post,
                 RequestUri = new Uri("https://face-detection11.p.rapidapi.com/FaceDetection"),
                 Headers =
-    {
-        { "X-RapidAPI-Key", "0af973177dmsh33b9953ecf57384p18ca21jsn3df8789084ce" },
-        { "X-RapidAPI-Host", "face-detection11.p.rapidapi.com" },
-    },
+                {
+                    { "X-RapidAPI-Key", "0af973177dmsh33b9953ecf57384p18ca21jsn3df8789084ce" },
+                    { "X-RapidAPI-Host", "face-detection11.p.rapidapi.com" },
+                },
                 Content = new FormUrlEncodedContent(new Dictionary<string, string>
-    {
-        { "linkFile", faceRequest.Image },
-    }),
+                {
+                    { "linkFile", faceRequest.Image },
+                }),
             };
             using (var response = await client.SendAsync(request))
             {
@@ -156,9 +147,6 @@ namespace BuildingConstructApi.Controllers
                             Message = "Not Detected"
                         };
                     }
-
-
-
                 }
                 else
                 {
@@ -168,13 +156,9 @@ namespace BuildingConstructApi.Controllers
                         Message = "Not Detected"
                     };
                 }
-
             }
             return Ok(codeResponse);
-
         }
-
-
 
         private Mat GetMatFromSDImage(System.Drawing.Image image)
         {
