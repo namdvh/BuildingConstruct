@@ -28,6 +28,9 @@ namespace ViewModels.ContractorPost
         public string Salaries { get; set; }
 
         public int NumberPeople { get; set; }
+
+        public int? CommitmentId { get; set; }
+
         public int PeopleRemained { get; set; }
         public bool? IsApplied { get; set; }
         public bool? IsSave { get; set; }

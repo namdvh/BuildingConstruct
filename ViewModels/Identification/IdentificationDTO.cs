@@ -14,7 +14,7 @@ namespace ViewModels.Identification
 
         public string? BusinessLicense { get; set; }
 
-        public Guid? UserID { get; set; }
+        public Guid? UserId { get; set; }
 
         public string? Name { get; set; }
 

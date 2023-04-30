@@ -290,7 +290,7 @@ namespace Application.System.Identification
                 {
                     BackID = rs.BackID,
                     BusinessLicense = rs.BusinessLicense,
-                    UserID = rs.UserID,
+                    UserId = rs.UserID,
                     FaceImage = rs.FaceImage,
                     FrontID = rs.FrontID,
                     IdentificateType = rs.IdentificateType,
@@ -466,7 +466,7 @@ namespace Application.System.Identification
                     Id = item.Id,
                     BackID = item.BackID != null ? EncryptionHelper.DecryptString(item.BackID) : null,
                     BusinessLicense = item.BusinessLicense != null ? EncryptionHelper.DecryptString(item.BusinessLicense) : null,
-                    UserID = item.UserID,
+                    UserId = item.UserID,
                     FaceImage = item.FaceImage != null ? EncryptionHelper.DecryptString(item.FaceImage) : null,
                     FrontID = item.FrontID != null ? EncryptionHelper.DecryptString(item.FrontID) : null,
                     IdentificateType = item.IdentificateType,

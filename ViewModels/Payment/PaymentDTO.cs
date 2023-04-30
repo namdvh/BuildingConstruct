@@ -8,6 +8,7 @@ namespace ViewModels.Payment
 {
     public class PaymentDTO
     {
+        public Guid UserId { get; set; }
         public string FullName { get; set; }
         public string Phonenumber { get; set; }
         public DateTime PaymentDate { get; set; }

@@ -274,6 +274,7 @@ namespace Application.System.Payments
                 foreach (var item in query)
                 {
                     var dto = new PaymentDTO();
+                    dto.UserId = item.Users.Id;
                     dto.FullName = item.Users.LastName + " " + item.Users.FirstName;
                     dto.Phonenumber = item.Users.PhoneNumber;
                     dto.Price = item.Price;
