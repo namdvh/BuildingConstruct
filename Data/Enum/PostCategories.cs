@@ -8,9 +8,11 @@ namespace Data.Enum
 {
     public enum PostCategories
     {
-        CO_DIEN=1,
+        CO_DIEN,
         HIEN_DAI,
         TAN_CO_DIEN,
-        TOI_GIAN
+        TOI_GIAN,
+        BAC_AU
+
     }
 }
