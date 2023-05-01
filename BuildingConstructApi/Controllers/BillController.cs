@@ -89,7 +89,6 @@ namespace BuildingConstructApi.Controllers
 
                 }
 
-            }
             return Ok(rs);
         }
         [HttpPost("getAll")]
