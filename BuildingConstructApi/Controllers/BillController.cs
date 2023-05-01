@@ -41,14 +41,14 @@ namespace BuildingConstructApi.Controllers
             var rs = await _billServices.CreateBill(request);
 
 
-                foreach (var item in request)
+            foreach (var item in request)
+            {
+                var contractorID = await _context.Users.Where(x => x.Id.Equals(Guid.Parse(userID))).Select(x => x.ContractorId).FirstOrDefaultAsync();
+                var author = await _context.Users.Where(x => x.MaterialStoreID.Equals(item.StoreID)).FirstOrDefaultAsync();
+
+                var store = await _context.Users.Where(x => x.MaterialStoreID == item.StoreID).FirstOrDefaultAsync();
+                foreach (var i in rs.Data)
                 {
-                    var contractorID = await _context.Users.Where(x => x.Id.Equals(Guid.Parse(userID))).Select(x => x.ContractorId).FirstOrDefaultAsync();
-                    var author = await _context.Users.Where(x => x.MaterialStoreID.Equals(item.StoreID)).FirstOrDefaultAsync();
-                    var newestBill = await _context.Bills.Where(x => x.StoreID.Equals(item.StoreID) && x.ContractorId == contractorID).Select(x => x.Id).FirstOrDefaultAsync();
-
-                    var store = await _context.Users.Where(x => x.MaterialStoreID == item.StoreID).FirstOrDefaultAsync();
-
                     NotificateAuthor notiAuthor = new()
                     {
                         Avatar = author.Avatar,
@@ -60,7 +60,7 @@ namespace BuildingConstructApi.Controllers
                     {
                         LastModifiedAt = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok")),
                         CreateBy = Guid.Parse(userID),
-                        NavigateId = rs.NavigateId,
+                        NavigateId = int.Parse(i),
                         UserId = store.Id,
                         Message = NotificationMessage.CREATE_BILL,
                         NotificationType = NotificationType.BILL_NOTIFICATION,
@@ -83,6 +83,8 @@ namespace BuildingConstructApi.Controllers
                         }
                     }
                 }
+
+            }
             return Ok(rs);
         }
         [HttpPost("getAll")]

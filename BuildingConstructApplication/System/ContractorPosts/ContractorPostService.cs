@@ -400,8 +400,7 @@ namespace Application.System.ContractorPosts
                             id = i.SkillID,
                             name = i.Skills.Name,
                             fromSystem = i.Skills.FromSystem,
-                            TypeId = i.Skills.TypeId
-                        };
+                            TypeId = i.Skills.TypeId                        };
                         type.SkillArr.Add(skillArr);
                     }
                 }
