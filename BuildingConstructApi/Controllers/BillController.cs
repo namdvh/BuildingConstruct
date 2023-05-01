@@ -45,43 +45,48 @@ namespace BuildingConstructApi.Controllers
             {
                 var contractorID = await _context.Users.Where(x => x.Id.Equals(Guid.Parse(userID))).Select(x => x.ContractorId).FirstOrDefaultAsync();
                 var author = await _context.Users.Where(x => x.MaterialStoreID.Equals(item.StoreID)).FirstOrDefaultAsync();
+                var store = await _context.Users.Where(x => x.MaterialStoreID == item.StoreID).ToListAsync();
 
-                var store = await _context.Users.Where(x => x.MaterialStoreID == item.StoreID).FirstOrDefaultAsync();
                 foreach (var i in rs.Data)
                 {
-                    NotificateAuthor notiAuthor = new()
+                    foreach (var c in store)
                     {
-                        Avatar = author.Avatar,
-                        FirstName = "Bạn",
-                        LastName = "có",
-                    };
-
-                    NotificationModels noti = new()
-                    {
-                        LastModifiedAt = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok")),
-                        CreateBy = Guid.Parse(userID),
-                        NavigateId = int.Parse(i),
-                        UserId = store.Id,
-                        Message = NotificationMessage.CREATE_BILL,
-                        NotificationType = NotificationType.BILL_NOTIFICATION,
-                        Author = notiAuthor,
-                    };
-
-                    var check = await _userConnectionManager.SaveNotification(noti);
-                    var connections = _userConnectionManager.GetUserConnections(store.Id.ToString());
-                    if (connections != null && connections.Count > 0)
-                    {
-                        foreach (var connectionId in connections)
+                        NotificateAuthor notiAuthor = new()
                         {
+                            Avatar = author.Avatar,
+                            FirstName = "Bạn",
+                            LastName = "có",
+                        };
 
-                            if (check != null)
+                        NotificationModels noti = new()
+                        {
+                            LastModifiedAt = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok")),
+                            CreateBy = Guid.Parse(userID),
+                            NavigateId = int.Parse(i),
+                            UserId = c.Id,
+                            Message = NotificationMessage.CREATE_BILL,
+                            NotificationType = NotificationType.BILL_NOTIFICATION,
+                            Author = notiAuthor,
+                        };
+
+                        var check = await _userConnectionManager.SaveNotification(noti);
+                        var connections = _userConnectionManager.GetUserConnections(c.Id.ToString());
+                        if (connections != null && connections.Count > 0)
+                        {
+                            foreach (var connectionId in connections)
                             {
-                                noti.Id = check.Data.Id;
-                                await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("sendToUser", noti);
 
+                                if (check != null)
+                                {
+                                    noti.Id = check.Data.Id;
+                                    await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("sendToUser", noti);
+
+                                }
                             }
                         }
                     }
+
+
                 }
 
             }
