@@ -136,8 +136,8 @@ namespace Application.System.Notifies
                         || item.Message.Equals(NotificationMessage.UPDATE_BILL_CANCELED.ToString())
                         ))
                     {
-                        dto.Author.FirstName = "Đơn";
-                        dto.Author.LastName = "hàng";
+                        dto.Author.FirstName = "Đơn hàng";
+                        dto.Author.LastName = "của bạn";
                     }
                     else
                     {
