@@ -31,7 +31,7 @@ namespace Application.System.Payments
             BaseResponse<RefundDTO> response = new();
             var userId = _accessor.HttpContext?.User?.FindFirst("UserID")?.Value.ToString();
             var query = await _context.Payments.Where(x => x.UserId.ToString().Equals(userId) && x.ExpireationDate.Month >= DateTime.Now.Month - 1).OrderByDescending(x => x.ExpireationDate).ToListAsync();
-            var viewCheck = await _context.ContractorPosts.Where(x => x.CreateBy.ToString().Equals(userID)).ToListAsync();
+            var viewCheck = await _context.ContractorPosts.Where(x => x.CreateBy.ToString().Equals(userId)).ToListAsync();
             var n = await _context.Users.Where(x => x.BuilderId != null).CountAsync();
             var number = n * 0.2M;
             var flag = false;
@@ -44,7 +44,7 @@ namespace Application.System.Payments
             }
             if (flag == true)
             {
-                var check = await _context.ContractorPosts.Include(x => x.AppliedPosts).Where(x => x.CreateBy.ToString().Equals(userID)).ToListAsync();
+                var check = await _context.ContractorPosts.Include(x => x.AppliedPosts).Where(x => x.CreateBy.ToString().Equals(userId)).ToListAsync();
                 foreach (var i in check)
                 {
                     if (i.AppliedPosts.Count() < 0)
