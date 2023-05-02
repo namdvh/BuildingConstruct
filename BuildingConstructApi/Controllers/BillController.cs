@@ -43,15 +43,16 @@ namespace BuildingConstructApi.Controllers
 
             foreach (var item in request)
             {
-                var contractorID = await _context.Users.Where(x => x.Id.Equals(Guid.Parse(userID))).Select(x => x.ContractorId).FirstOrDefaultAsync();
-                var author = await _context.Users.Where(x => x.MaterialStoreID.Equals(item.StoreID)).FirstOrDefaultAsync();
 
-
-                foreach (var i in rs.Data)
+                if (rs.Code.Equals(BaseCode.SUCCESS))
                 {
-                    var store = await _context.Bills.Include(x => x.MaterialStore).Where(x => x.Id == int.Parse(i)).Select(x => x.StoreID).FirstOrDefaultAsync();
-                    var storeId = await _context.Users.Where(x => x.MaterialStoreID == store).Select(x => x.Id).FirstOrDefaultAsync();
-                    NotificateAuthor notiAuthor = new()
+                    var author = await _context.Users.Where(x => x.MaterialStoreID.Equals(item.StoreID)).FirstOrDefaultAsync();
+
+                    foreach (var i in rs.Data)
+                    {
+                        var store = await _context.Bills.Include(x => x.MaterialStore).Where(x => x.Id == int.Parse(i)).Select(x => x.StoreID).FirstOrDefaultAsync();
+                        var storeId = await _context.Users.Where(x => x.MaterialStoreID == store).Select(x => x.Id).FirstOrDefaultAsync();
+                        NotificateAuthor notiAuthor = new()
                         {
                             Avatar = author.Avatar,
                             FirstName = "Bạn",
@@ -85,8 +86,7 @@ namespace BuildingConstructApi.Controllers
                             }
                         }
                     }
-
-
+                }
                 }
 
             return Ok(rs);
