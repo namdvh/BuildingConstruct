@@ -1,4 +1,5 @@
 ﻿using Data.Enum;
+using ViewModels.Commitment;
 using ViewModels.ContractorPost;
 using ViewModels.Pagination;
 using ViewModels.Response;
@@ -35,5 +36,7 @@ namespace Application.System.ContractorPosts
         Task<BaseResponse<bool>> ViewPostAppliedCheck(int builderId,Guid contractorId);
 
         Task<BaseResponse<string>> UpdatePostStatus(int postId);
+        Task<BaseResponse<StatisticCount>> GetStatisticCount();
+
     }
 }

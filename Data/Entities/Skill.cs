@@ -1,4 +1,6 @@
-﻿namespace Data.Entities
+﻿using Data.Enum;
+
+namespace Data.Entities
 {
     public class Skill
     {
@@ -11,5 +13,7 @@
         public Type Type { get; set; }
         public List<BuilderSkill>? BuilderSkills { get; set; }
         public List<ContractorPostSkill>? ContractorPostSkills { get; set; }
+        public Status? Status { get; set; }
+
     }
 }

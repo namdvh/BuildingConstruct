@@ -24,17 +24,18 @@ namespace Application.System.Bill
             _accessor = accessor;
         }
 
-        public async Task<BaseResponse<string>> CreateBill(List<BillDTO> requests)
+        public async Task<BaseResponse<List<string>>> CreateBill(List<BillDTO> requests)
         {
             bool flag = false;
-            BaseResponse<string> response = new();
+            BaseResponse<List<string>> response = new();
             Claim identifierClaim = _accessor.HttpContext.User.FindFirst("UserID");
             var usID = identifierClaim.Value;
             var contracID = _context.Users.Where(x => x.Id.ToString().Equals(usID)).FirstOrDefault().ContractorId;
+            List<string>data = new();
 
 
             //Checking quantities for product before create bill 
-
+            response.Data = new();
             foreach (var item in requests)
             {
                 foreach (var billdetail in item.ProductBillDetail)
@@ -47,7 +48,7 @@ namespace Application.System.Bill
                         {
                             if (billdetail.Quantity > checkingProduct.UnitInStock)
                             {
-                                response.Data = checkingProduct.Id.ToString();
+                                response.Data.Add(checkingProduct.Id.ToString());
                                 response.Code = BaseCode.ERROR;
                                 response.Message = checkingProduct.Name+" Không đủ số lượng";
                                 return response;
@@ -62,7 +63,7 @@ namespace Application.System.Bill
                         {
                             if (billdetail.Quantity > checkingProductType.Quantity)
                             {
-                                response.Data = checkingProduct.Id.ToString();
+                                response.Data.Add(checkingProduct.Id.ToString());
                                 response.Code = BaseCode.ERROR;
                                 response.Message = checkingProduct.Name + " Không đủ số lượng";
                                 return response;
@@ -87,7 +88,7 @@ namespace Application.System.Bill
                 var rs = await _context.SaveChangesAsync();
                 if (rs > 0)
                 {
-
+                    data.Add(bill.Id.ToString());
                     foreach (var item in r.ProductBillDetail)
                     {
                         var billDetail = new BillDetail();
@@ -108,6 +109,11 @@ namespace Application.System.Bill
                             {
                                 pType.Quantity -= item.Quantity;
                                 product.SoldQuantities += item.Quantity;
+                            }
+                            else
+                            {
+                                product.SoldQuantities+=item.Quantity;
+                                _context.Products.Update(product);
                             }
 
                             await _context.SaveChangesAsync();
@@ -143,7 +149,7 @@ namespace Application.System.Bill
                     await _context.SaveChangesAsync();
 
                 }
-                response.Data = null;
+                response.Data = data;
                 response.Code = BaseCode.SUCCESS;
                 response.Message = "Đặt hàng thành công";
             }

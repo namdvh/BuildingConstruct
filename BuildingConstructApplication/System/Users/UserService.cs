@@ -47,8 +47,19 @@ namespace Application.System.Users
             if (users != null)
             {
                 users.PhoneNumber = request.Phone;
-                _context.Update(users);
-                await _context.SaveChangesAsync();
+                var query =await _context.Users.Where(x => x.PhoneNumber.Equals(request.Phone)).FirstOrDefaultAsync();
+                if (query != null)
+                {
+                    response.Data = null;
+                    response.Code = "201";
+                    response.Message = "Số điện thoại này đã được đăng kí trong hệ thống";
+                    return response;
+                }
+                else
+                {
+                    _context.Update(users);
+                    await _context.SaveChangesAsync();
+                }
             }
 
             var roleNames = await _context.Roles.Where(x => x.Id.ToString().Equals(request.RoleId)).Select(x => x.Name).SingleOrDefaultAsync();
@@ -556,7 +567,7 @@ namespace Application.System.Users
                     return response;
                 }
                 response.Code = "202";
-                response.Messages = "Username already exists ";
+                response.Messages = "PhoneNumber already exists ";
 
                 return response;
             }

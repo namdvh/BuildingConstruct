@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace ViewModels.ContractorPost
 {
-    public class TypeModels
+    public class TypeAdmins
     {
         public Guid? id { get; set; }
         public string? name { get; set; }
-        public List<SkillArr> SkillArr { get; set; }        
+        public List<SkillArr> SkillArr { get; set; }
+        public Status Status { get; set; }
     }
 }

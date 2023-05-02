@@ -21,16 +21,28 @@ namespace BuildingConstructApi.Controllers
             var rs =await _typeService.GetAllTypeAndSkills();
             return Ok(rs);
         }
+        [HttpGet("getAllTypeAndSkillAdmin")]
+        public async Task<IActionResult> GetAllTypeAndSkillForAdmin()
+        {
+            var rs = await _typeService.GetAllTypeAndSkillsAdmin();
+            return Ok(rs);
+        }
         [HttpPost]
         public async Task<IActionResult> CreateType(TypeRequest type)
         {
             var rs = await _typeService.CreateType(type);
             return Ok(rs);
         }
-        [HttpPut("delete")]
+        [HttpPut("deactive")]
         public async Task<IActionResult> DeleteType (string typeId)
         {
             var rs = await _typeService.DeleteType(typeId);
+            return Ok(rs);
+        }
+        [HttpPut("active")]
+        public async Task<IActionResult> ActiveType(string typeId)
+        {
+            var rs = await _typeService.ActiveType(typeId);
             return Ok(rs);
         }
         [HttpPut("update")]

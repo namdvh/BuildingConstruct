@@ -41,48 +41,54 @@ namespace BuildingConstructApi.Controllers
             var rs = await _billServices.CreateBill(request);
 
 
-                foreach (var item in request)
+            foreach (var item in request)
+            {
+                var contractorID = await _context.Users.Where(x => x.Id.Equals(Guid.Parse(userID))).Select(x => x.ContractorId).FirstOrDefaultAsync();
+                var author = await _context.Users.Where(x => x.MaterialStoreID.Equals(item.StoreID)).FirstOrDefaultAsync();
+
+
+                foreach (var i in rs.Data)
                 {
-                    var contractorID = await _context.Users.Where(x => x.Id.Equals(Guid.Parse(userID))).Select(x => x.ContractorId).FirstOrDefaultAsync();
-                    var author = await _context.Users.Where(x => x.MaterialStoreID.Equals(item.StoreID)).FirstOrDefaultAsync();
-                    var newestBill = await _context.Bills.Where(x => x.StoreID.Equals(item.StoreID) && x.ContractorId == contractorID).Select(x => x.Id).FirstOrDefaultAsync();
-
-                    var store = await _context.Users.Where(x => x.MaterialStoreID == item.StoreID).FirstOrDefaultAsync();
-
+                    var store = await _context.Bills.Include(x => x.MaterialStore).Where(x => x.Id == int.Parse(i)).Select(x => x.StoreID).FirstOrDefaultAsync();
+                    var storeId = await _context.Users.Where(x => x.MaterialStoreID == store).Select(x => x.Id).FirstOrDefaultAsync();
                     NotificateAuthor notiAuthor = new()
-                    {
-                        Avatar = author.Avatar,
-                        FirstName = "Bạn",
-                        LastName = "có",
-                    };
-
-                    NotificationModels noti = new()
-                    {
-                        LastModifiedAt = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok")),
-                        CreateBy = Guid.Parse(userID),
-                        NavigateId = newestBill,
-                        UserId = store.Id,
-                        Message = NotificationMessage.CREATE_BILL,
-                        NotificationType = NotificationType.BILL_NOTIFICATION,
-                        Author = notiAuthor,
-                    };
-
-                    var check = await _userConnectionManager.SaveNotification(noti);
-                    var connections = _userConnectionManager.GetUserConnections(store.Id.ToString());
-                    if (connections != null && connections.Count > 0)
-                    {
-                        foreach (var connectionId in connections)
                         {
+                            Avatar = author.Avatar,
+                            FirstName = "Bạn",
+                            LastName = "có",
+                        };
 
-                            if (check != null)
+                        NotificationModels noti = new()
+                        {
+                            LastModifiedAt = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok")),
+                            CreateBy = Guid.Parse(userID),
+                            NavigateId = int.Parse(i),
+                            UserId = storeId,
+                            Message = NotificationMessage.CREATE_BILL,
+                            NotificationType = NotificationType.BILL_NOTIFICATION,
+                            Author = notiAuthor,
+                        };
+
+                        var check = await _userConnectionManager.SaveNotification(noti);
+                        var connections = _userConnectionManager.GetUserConnections(storeId.ToString());
+                        if (connections != null && connections.Count > 0)
+                        {
+                            foreach (var connectionId in connections)
                             {
-                                noti.Id = check.Data.Id;
-                                await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("sendToUser", noti);
 
+                                if (check != null)
+                                {
+                                    noti.Id = check.Data.Id;
+                                    await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("sendToUser", noti);
+
+                                }
                             }
                         }
                     }
+
+
                 }
+
             return Ok(rs);
         }
         [HttpPost("getAll")]
