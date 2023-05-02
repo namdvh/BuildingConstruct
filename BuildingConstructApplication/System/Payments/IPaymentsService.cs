@@ -7,7 +7,7 @@ namespace Application.System.Payments
 {
     public interface IPaymentsService
     {
-        Task<BaseResponse<RefundDTO>> CheckRefundPayment(string UserId,string endDate);
+        Task<BaseResponse<RefundDTO>> CheckRefundPayment();
         Task<BaseResponse<bool>> UpdateIsRefund();
         Task<BasePagination<List<PaymentDTO>>> PaymentList();
         Task<BasePagination<List<UserPaymentDTO>>> GetTop5PaymentContractor();

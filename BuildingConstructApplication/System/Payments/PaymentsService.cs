@@ -26,10 +26,11 @@ namespace Application.System.Payments
             _accessor = accessor;
         }
 
-        public async Task<BaseResponse<RefundDTO>> CheckRefundPayment(string userID,string endDate)
+        public async Task<BaseResponse<RefundDTO>> CheckRefundPayment()
         {
             BaseResponse<RefundDTO> response = new();
-            var query = await _context.Payments.Where(x => x.UserId.ToString().Equals(userID) && x.ExpireationDate == DateTime.Parse(endDate)).ToListAsync();
+            var userId = _accessor.HttpContext?.User?.FindFirst("UserID")?.Value.ToString();
+            var query = await _context.Payments.Where(x => x.UserId.ToString().Equals(userId) && x.ExpireationDate.Month >= DateTime.Now.Month - 1).OrderByDescending(x => x.ExpireationDate).ToListAsync();
             var viewCheck = await _context.ContractorPosts.Where(x => x.CreateBy.ToString().Equals(userID)).ToListAsync();
             var n = await _context.Users.Where(x => x.BuilderId != null).CountAsync();
             var number = n * 0.2M;
@@ -385,7 +386,7 @@ namespace Application.System.Payments
             var query = await _context.Payments.Where(x => x.PaymentId.Equals(PaymentId)).FirstOrDefaultAsync();
             if (query != null)
             {
-                query.IsRefund = true;
+                query.IsRefund = false;
                 _context.Update(query);
                 var rs=await _context.SaveChangesAsync();
                 if(rs>0)

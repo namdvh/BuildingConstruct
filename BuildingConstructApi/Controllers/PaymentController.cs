@@ -28,9 +28,9 @@ namespace BuildingConstructApi.Controllers
             _context = context;
         }
         [HttpPost("checkRefund")]
-        public async Task<IActionResult> CheckPayment(string UserId,string endDate)
+        public async Task<IActionResult> CheckPayment()
         {
-            var result = await _paymentService.CheckRefundPayment(UserId,endDate);
+            var result = await _paymentService.CheckRefundPayment();
             return Ok(result);
         }
         [HttpGet]
