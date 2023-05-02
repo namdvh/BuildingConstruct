@@ -19,6 +19,8 @@ namespace ViewModels.Commitment
         public string? Salaries { get; set; }
 
         public string? Description { get; set; }
+        public string? Benefit { get; set; }
+        public string? Required { get; set; }
         public string? OptionalTerm { get; set; }
 
         public string? PostSalaries { get; set; }

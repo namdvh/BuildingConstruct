@@ -291,7 +291,7 @@ namespace Application.System.ContractorPosts
             switch (post.PostCategories)
             {
                 case PostCategories.CO_DIEN:
-                    keyword = "Cổ điển ";
+                    keyword = "Cổ điển";
                     break;
                 case PostCategories.HIEN_DAI:
                     keyword = "Hiện đại";
