@@ -2121,8 +2121,8 @@ namespace Application.System.ContractorPosts
             var lastCommitment = await _context.PostCommitments.CountAsync(x => x.StartDate.Month == lastMonth);
             var bill = await _context.Bills.CountAsync(x=>x.LastModifiedAt.Month==currentMonth);
             var lastBill = await _context.Bills.CountAsync(x => x.LastModifiedAt.Month == lastMonth);
-            var apply = await _context.AppliedPosts.CountAsync(x=>x.AppliedDate.Month==currentMonth);
-            var lastApply = await _context.AppliedPosts.CountAsync(x=>x.AppliedDate.Month==lastMonth);
+            var report = await _context.Reports.CountAsync(x=>x.LastModifiedAt.Month==currentMonth);
+            var lastReport = await _context.Reports.CountAsync(x=>x.LastModifiedAt.Month==lastMonth);
             var post = await _context.ContractorPosts.CountAsync(x=>x.LastModifiedAt.Month==currentMonth);
             var lastPost = await _context.ContractorPosts.CountAsync(x=>x.LastModifiedAt.Month==lastMonth);
 
@@ -2130,9 +2130,9 @@ namespace Application.System.ContractorPosts
             {
                 Commitment = commitment,
                 Bill = bill,
-                Apply = apply,
+                Report = report,
                 Post = post,
-                LastApply = lastApply,
+                LastReport = lastReport,
                 LastPost = lastPost,
                 LastBill = lastBill,
                 LastCommitment=lastCommitment
