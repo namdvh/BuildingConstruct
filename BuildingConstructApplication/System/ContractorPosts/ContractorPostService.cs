@@ -205,10 +205,10 @@ namespace Application.System.ContractorPosts
             var builder = await _context.Builders.Where(x => x.User.Id.ToString().Equals(userID)).FirstOrDefaultAsync();
             dynamic c = null;
             dynamic commitment = null;
-            PostCommitment? hasCommitmentPost=null;
+            PostCommitment? hasCommitmentPost = null;
             if (builder != null)
             {
-                hasCommitmentPost = await _context.PostCommitments.FirstOrDefaultAsync(x => x.PostID == post.Id && x.BuilderID == builder.Id );
+                hasCommitmentPost = await _context.PostCommitments.FirstOrDefaultAsync(x => x.PostID == post.Id && x.BuilderID == builder.Id);
                 var check = await _context.AppliedPosts.Where(x => x.BuilderID == builder.Id && x.ContractorPosts.Id == post.Id).FirstOrDefaultAsync();
                 c = check;
                 if (check != null)
@@ -278,11 +278,11 @@ namespace Application.System.ContractorPosts
             //checking hasAppliedQuiz 
             if (builder != null)
             {
-            var appliedQuiz =await _context.UserAnswers.Where(x => x.BuilderId == builder.Id && listQuiz.Contains(x.Answer.Question.Quiz)).ToListAsync();
-            if (appliedQuiz.Any())
-            {
-                postDTO.IsQuizAnswer = true;
-            }
+                var appliedQuiz = await _context.UserAnswers.Where(x => x.BuilderId == builder.Id && listQuiz.Contains(x.Answer.Question.Quiz)).ToListAsync();
+                if (appliedQuiz.Any())
+                {
+                    postDTO.IsQuizAnswer = true;
+                }
 
             }
 
@@ -291,7 +291,7 @@ namespace Application.System.ContractorPosts
             switch (post.PostCategories)
             {
                 case PostCategories.CO_DIEN:
-                    keyword = "Cổ điển ";
+                    keyword = "Cổ điển";
                     break;
                 case PostCategories.HIEN_DAI:
                     keyword = "Hiện đại";
@@ -400,7 +400,8 @@ namespace Application.System.ContractorPosts
                             id = i.SkillID,
                             name = i.Skills.Name,
                             fromSystem = i.Skills.FromSystem,
-                            TypeId = i.Skills.TypeId                        };
+                            TypeId = i.Skills.TypeId
+                        };
                         type.SkillArr.Add(skillArr);
                     }
                 }
@@ -1285,9 +1286,9 @@ namespace Application.System.ContractorPosts
         {
             List<AppliedPostAll> result = new();
 
-            var userId = _context.Users.Where(x => x.BuilderId == builderID).Select(x=>x.Id).FirstOrDefault();
+            var userId = _context.Users.Where(x => x.BuilderId == builderID).Select(x => x.Id).FirstOrDefault();
 
-        
+
 
 
             foreach (var item in list)
@@ -1332,7 +1333,7 @@ namespace Application.System.ContractorPosts
                     AppliedDate = item.AppliedDate,
                     WishSalary = item.WishSalary,
                     Video = item.Video,
-                    Status=item.ContractorPosts.Status,
+                    Status = item.ContractorPosts.Status,
                     Groups = ls.Any() ? ls : null,
 
                 };
@@ -2111,15 +2112,31 @@ namespace Application.System.ContractorPosts
         public async Task<BaseResponse<StatisticCount>> GetStatisticCount()
         {
             var response = new BaseResponse<StatisticCount>();
-            var commitment =await _context.PostCommitments.CountAsync();
-            var bill = await _context.Bills.CountAsync();
-            var apply = await _context.AppliedPosts.CountAsync();
-            var post = await _context.ContractorPosts.CountAsync();
-            response.Data = new();
-            response.Data.Commitment = commitment;
-            response.Data.Bill = bill;
-            response.Data.Apply = apply;
-            response.Data.Post = post;
+
+            var currentMonth = DateTime.Now.Month;
+            var lastMonth = DateTime.Now.AddMonths(-1).Month;
+
+
+            var commitment = await _context.PostCommitments.CountAsync(x=>x.StartDate.Month == currentMonth);
+            var lastCommitment = await _context.PostCommitments.CountAsync(x => x.StartDate.Month == lastMonth);
+            var bill = await _context.Bills.CountAsync(x=>x.LastModifiedAt.Month==currentMonth);
+            var lastBill = await _context.Bills.CountAsync(x => x.LastModifiedAt.Month == lastMonth);
+            var report = await _context.Reports.CountAsync(x=>x.LastModifiedAt.Month==currentMonth);
+            var lastReport = await _context.Reports.CountAsync(x=>x.LastModifiedAt.Month==lastMonth);
+            var post = await _context.ContractorPosts.CountAsync(x=>x.LastModifiedAt.Month==currentMonth);
+            var lastPost = await _context.ContractorPosts.CountAsync(x=>x.LastModifiedAt.Month==lastMonth);
+
+            response.Data = new()
+            {
+                Commitment = commitment,
+                Bill = bill,
+                Report = report,
+                Post = post,
+                LastReport = lastReport,
+                LastPost = lastPost,
+                LastBill = lastBill,
+                LastCommitment=lastCommitment
+            };
             response.Code = BaseCode.SUCCESS;
             response.Message = BaseCode.SUCCESS_MESSAGE;
             return response;

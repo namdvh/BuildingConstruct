@@ -625,7 +625,8 @@ namespace Application.System.MaterialStores
             {
                 return false;
             }
-            _context.Products.Remove(product);
+            product.Status = false;
+            _context.Products.Update(product);
             await _context.SaveChangesAsync();
             return true;
         }
