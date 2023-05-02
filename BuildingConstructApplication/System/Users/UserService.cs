@@ -2658,15 +2658,11 @@ namespace Application.System.Users
                     Count = item.Count
                 };
                 listUserMonth.Add(userMonth);
-
             }
 
             for (int i = 1; i <= 12; i++)
             {
-                UserMonth userMonth = new()
-                {
-                    Month = i
-                };
+                UserMonth userMonth = new();
 
                 if (!listUserMonth.Exists(x=>x.Month==i))
                 {
@@ -2676,13 +2672,7 @@ namespace Application.System.Users
                 }
             }
 
-            
-
-
             var finalList = listUserMonth.OrderBy(x => x.Month).ToList();
-
-
-
 
             response = new()
             {
