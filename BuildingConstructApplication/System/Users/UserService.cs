@@ -2290,9 +2290,6 @@ namespace Application.System.Users
                        .Include(x => x.Contractor)
                        .Include(x => x.MaterialStore)
                       .Where(x => !userAdminRole.Contains(x))
-                     .OrderBy(filter._sortBy + " " + orderBy)
-                     .Skip((filter.PageNumber - 1) * filter.PageSize)
-                     .Take(filter.PageSize)
                      .ToListAsync();
 
             totalRecord = await _context.Users.Where(x => !userAdminRole.Contains(x)).CountAsync();
