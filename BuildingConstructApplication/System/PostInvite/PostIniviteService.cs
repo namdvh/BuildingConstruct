@@ -286,6 +286,7 @@ namespace Application.System.PostInvite
                     IsRead = item.IsRead,
                     LastModifiedAt = item.LastModifiedAt,
                     ContractorName = item.Contractor.User.FirstName + " " + item.Contractor.User.LastName,
+                    Avatar= item.Contractor.User.Avatar,
                     ContractorPostId = item.ContractorPostId,
                     ContractorPostName = item.ContractorPost.ProjectName,
                     Id = item.Id,

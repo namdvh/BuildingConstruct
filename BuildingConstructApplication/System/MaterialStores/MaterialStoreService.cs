@@ -614,12 +614,7 @@ namespace Application.System.MaterialStores
 
         public async Task<bool> DeleteProduct(int productID)
         {
-            Claim identifierClaim = _accessor.HttpContext.User.FindFirst(ClaimTypes.Role);
-            var role = identifierClaim.Value.ToString();
-            if (!role.Equals("Store"))
-            {
-                return false;
-            }
+
             var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == productID);
             if (product == null)
             {

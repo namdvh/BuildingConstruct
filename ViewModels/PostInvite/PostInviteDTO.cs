@@ -14,6 +14,7 @@ namespace ViewModels.PostInvite
         public int? ContractorPostId { get; set; }
         public Place Places { get; set; }
         public string? Salaries { get; set; }
+        public string? Avatar { get; set; }
 
         public Status Status { get; set; }
 
