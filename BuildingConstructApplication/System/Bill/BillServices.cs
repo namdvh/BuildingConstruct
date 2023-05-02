@@ -355,7 +355,7 @@ namespace Application.System.Bill
 
         }
 
-        public async Task<BillDetailDTO> MapDetailDTO(List<BillDetail> list)
+        public static async Task<BillDetailDTO> MapDetailDTO(List<BillDetail> list)
         {
             List<ProductBillDetail> product = new();
 

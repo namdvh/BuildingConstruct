@@ -24,6 +24,13 @@ namespace Application.System.Skills
             var check = await _context.Skills.Where(x => x.Id == skillID).FirstOrDefaultAsync();
             if (check != null)
             {
+                var query = await _context.Types.Where(x => x.Id.ToString().Equals(check.TypeId.ToString())).FirstOrDefaultAsync();
+                if (query.Status == Status.Deactive)
+                {
+                    response.Code = BaseCode.ERROR;
+                    response.Message = BaseCode.ERROR_MESSAGE;
+                    return response;
+                }
                 check.Status = Status.Active;
                 _context.Skills.Update(check);
                 var rs = await _context.SaveChangesAsync();

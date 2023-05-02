@@ -28,8 +28,9 @@ namespace BuildingConstructApi.Controllers
             _context = context;
         }
         [HttpPost("checkRefund")]
-        public async Task<IActionResult> CheckPayment() {
-            var result = await _paymentService.CheckRefundPayment();
+        public async Task<IActionResult> CheckPayment(string UserId,string endDate)
+        {
+            var result = await _paymentService.CheckRefundPayment(UserId,endDate);
             return Ok(result);
         }
         [HttpGet]
@@ -68,11 +69,17 @@ namespace BuildingConstructApi.Controllers
         {
             string? id = User.FindFirst("UserID")?.Value;
 
-            if(id == null)
+            if (id == null)
             {
                 return Ok();
             }
             var result = await _paymentService.PaymentListByUser(Guid.Parse(id));
+            return Ok(result);
+        }
+        [HttpPut("ChangeIsRefund")]
+        public async Task<IActionResult> ChangeIsRefund(string PaymentId)
+        {
+            var result = await _paymentService.ChangeIsRefund(PaymentId);
             return Ok(result);
         }
     }

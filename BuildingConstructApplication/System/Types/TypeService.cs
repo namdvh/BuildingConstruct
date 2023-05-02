@@ -88,13 +88,28 @@ namespace Application.System.Types
             var check = await _context.Types.Include(x => x.Skill).Where(x => x.Id.ToString().Equals(typeId)).FirstOrDefaultAsync();
             if (check != null)
             {
+                var skill = await _context.Skills.Where(x => x.TypeId.ToString().Equals(check.Id.ToString())).ToListAsync();
                 check.Status = Status.Deactive;
                 _context.Types.Update(check);
                 var rs = await _context.SaveChangesAsync();
                 if (rs > 0)
                 {
-                    response.Code = BaseCode.SUCCESS;
-                    response.Message = BaseCode.SUCCESS_MESSAGE;
+                    foreach(var item in skill)
+                    {
+                        item.Status = Status.Deactive;
+                        _context.Skills.Update(item);
+                    }
+                    var result =await _context.SaveChangesAsync();
+                    if (result > 0)
+                    {
+                        response.Code = BaseCode.SUCCESS;
+                        response.Message = BaseCode.SUCCESS_MESSAGE;
+                    }
+                    else
+                    {
+                        response.Code = BaseCode.ERROR;
+                        response.Message = BaseCode.ERROR_MESSAGE;
+                    } 
                 }
                 else
                 {

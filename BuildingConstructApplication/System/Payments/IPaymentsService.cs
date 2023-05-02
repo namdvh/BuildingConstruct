@@ -7,12 +7,13 @@ namespace Application.System.Payments
 {
     public interface IPaymentsService
     {
-        Task<BaseResponse<RefundDTO>> CheckRefundPayment();
+        Task<BaseResponse<RefundDTO>> CheckRefundPayment(string UserId,string endDate);
         Task<BaseResponse<bool>> UpdateIsRefund();
         Task<BasePagination<List<PaymentDTO>>> PaymentList();
         Task<BasePagination<List<UserPaymentDTO>>> GetTop5PaymentContractor();
         Task<BasePagination<List<UserPaymentDTO>>> GetTop5PaymentStore();
         Task<BasePagination<List<StoreOrderStatistic>>> GetTop5OrderStore();
         Task<BasePagination<List<PaymentDTO>>> PaymentListByUser(Guid userId);
+        Task<BaseResponse<string>> ChangeIsRefund(string PaymentId);
     }
 }

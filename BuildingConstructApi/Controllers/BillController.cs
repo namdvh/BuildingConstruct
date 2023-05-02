@@ -41,20 +41,18 @@ namespace BuildingConstructApi.Controllers
             var rs = await _billServices.CreateBill(request);
 
 
-            foreach (var item in request)
-            {
 
                 if (rs.Code.Equals(BaseCode.SUCCESS))
                 {
-                    var author = await _context.Users.Where(x => x.MaterialStoreID.Equals(item.StoreID)).FirstOrDefaultAsync();
 
                     foreach (var i in rs.Data)
                     {
+
                         var store = await _context.Bills.Include(x => x.MaterialStore).Where(x => x.Id == int.Parse(i)).Select(x => x.StoreID).FirstOrDefaultAsync();
-                        var storeId = await _context.Users.Where(x => x.MaterialStoreID == store).Select(x => x.Id).FirstOrDefaultAsync();
+                        var storeId = await _context.Users.Where(x => x.MaterialStoreID == store).FirstOrDefaultAsync();
                         NotificateAuthor notiAuthor = new()
                         {
-                            Avatar = author.Avatar,
+                            Avatar = storeId.Avatar,
                             FirstName = "Bạn",
                             LastName = "có",
                         };
@@ -64,14 +62,14 @@ namespace BuildingConstructApi.Controllers
                             LastModifiedAt = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok")),
                             CreateBy = Guid.Parse(userID),
                             NavigateId = int.Parse(i),
-                            UserId = storeId,
+                            UserId = storeId.Id,
                             Message = NotificationMessage.CREATE_BILL,
                             NotificationType = NotificationType.BILL_NOTIFICATION,
                             Author = notiAuthor,
                         };
 
                         var check = await _userConnectionManager.SaveNotification(noti);
-                        var connections = _userConnectionManager.GetUserConnections(storeId.ToString());
+                        var connections = _userConnectionManager.GetUserConnections(storeId.Id.ToString());
                         if (connections != null && connections.Count > 0)
                         {
                             foreach (var connectionId in connections)
@@ -86,7 +84,6 @@ namespace BuildingConstructApi.Controllers
                             }
                         }
                     }
-                }
                 }
 
             return Ok(rs);
