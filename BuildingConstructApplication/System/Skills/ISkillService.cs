@@ -14,7 +14,7 @@ namespace Application.System.Skills
     public interface ISkillService
     {
         Task<BasePagination<List<Skill>>> GetAll(PaginationFilter filter);
-        Task<BasePagination<List<Skill>>> GetAllSkillForAdmin(PaginationFilter filter);
+        Task<BaseResponse<List<Skill>>> GetAllSkillForAdmin();
         Task<BaseResponse<string>> CreateSkill(SkillRequest skill);
         Task<BaseResponse<string>> DeleteSkill(int skillID);
         Task<BaseResponse<string>> ActiveSkill(int skillID);
