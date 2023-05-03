@@ -30,11 +30,12 @@ namespace Application.System.Payments
         {
             BaseResponse<RefundDTO> response = new();
             var userId = _accessor.HttpContext?.User?.FindFirst("UserID")?.Value.ToString();
-            var query = await _context.Payments.Where(x => x.UserId.ToString().Equals(userId) && x.ExpireationDate.Month >= DateTime.Now.Month - 1).OrderByDescending(x => x.ExpireationDate).ToListAsync();
+            var query = await _context.Payments.Where(x => x.UserId.ToString().Equals(userId)).OrderByDescending(x => x.ExpireationDate).FirstOrDefaultAsync();
             var viewCheck = await _context.ContractorPosts.Where(x => x.CreateBy.ToString().Equals(userId)).ToListAsync();
             var n = await _context.Users.Where(x => x.BuilderId != null).CountAsync();
             var number = n * 0.2M;
             var flag = false;
+
             foreach (var item in viewCheck)
             {
                 if (item.ViewCount < number)
@@ -58,49 +59,46 @@ namespace Application.System.Payments
                     }
                 }
             }
-            if (flag == false)
-            {
-                if (query.Count == 0 || query.Where(x => x.IsRefund == true).Any() || query.Where(x => x.ExtendDate != null && x.ExtendDate.Value <= DateTime.Now).Any())
-                {
-                    response.Code = BaseCode.SUCCESS;
-                    response.Message = BaseCode.SUCCESS_MESSAGE;
-                    response.Data = null;
-                }
-                else
-                {
-                    if (query.First().ExpireationDate >= DateTime.Now)
-                    {
-                        response.Code = BaseCode.SUCCESS;
-                        response.Message = BaseCode.SUCCESS_MESSAGE;
-                        response.Data = new();
-                        response.Data.IsOver = false;
-                        response.Data.EndDate = query.First().ExpireationDate.ToString();
-                    }
-                    //else if (query.First().ExpireationDate.Month >= DateTime.Now.Month-1)
-                    //{
-                    //    response.Code = BaseCode.SUCCESS;
-                    //    response.Message = BaseCode.SUCCESS_MESSAGE;
-                    //    response.Data = null;
-                    //}
-                    else
-                    {
-                        query.First().ExtendDate = DateTime.Now.AddMonths(1);
-                        _context.Payments.Update(query.First());
-                        await _context.SaveChangesAsync();
-                        response.Code = BaseCode.SUCCESS;
-                        response.Message = BaseCode.SUCCESS_MESSAGE;
-                        response.Data = new();
-                        response.Data.IsOver = true;
-                        response.Data.EndDate = query.First().ExpireationDate.ToString();
-                    }
-                }
-            }
-            else
+
+            if (query == null || query.IsRefund == true || (query.ExtendDate != null && query.ExtendDate.Value < DateTime.Now) || query.ExpireationDate < DateTime.Now)
             {
                 response.Code = BaseCode.SUCCESS;
                 response.Message = BaseCode.SUCCESS_MESSAGE;
                 response.Data = null;
             }
+
+            if ((query.ExtendDate != null && query.ExtendDate.Value >= DateTime.Now) || query.ExpireationDate >= DateTime.Now)
+            {
+                response.Code = BaseCode.SUCCESS;
+                response.Message = BaseCode.SUCCESS_MESSAGE;
+                response.Data = new();
+                response.Data.IsOver = false;
+                response.Data.EndDate = query.ExpireationDate.ToString();
+            }
+            else
+            {
+                if (flag == true)
+                {
+                    query.ExtendDate = DateTime.Now.AddMonths(1);
+                    _context.Payments.Update(query);
+                    await _context.SaveChangesAsync();
+                    response.Code = BaseCode.SUCCESS;
+                    response.Message = BaseCode.SUCCESS_MESSAGE;
+                    response.Data = new();
+                    response.Data.IsOver = true;
+                    response.Data.EndDate = query.ExpireationDate.ToString();
+                }
+                else
+                {
+                    response.Code = BaseCode.SUCCESS;
+                    response.Message = BaseCode.SUCCESS_MESSAGE;
+                    response.Data = null;
+                }
+
+            }
+
+
+
             return response;
         }
 
@@ -122,9 +120,9 @@ namespace Application.System.Payments
 
                 foreach (var user in query)
                 {
-                    var us = _context.MaterialStores.Include(x=>x.User).Where(x => x.Id == user.a).FirstOrDefault();
+                    var us = _context.MaterialStores.Include(x => x.User).Where(x => x.Id == user.a).FirstOrDefault();
                     var storeinfo = new StoreOrderStatistic();
-                    storeinfo.Name=us.User?.FirstName+" "+us.User?.LastName;
+                    storeinfo.Name = us.User?.FirstName + " " + us.User?.LastName;
                     storeinfo.Place = us.Place;
                     storeinfo.Experience = us.Experience;
                     storeinfo.Description = us.Description;
@@ -300,7 +298,7 @@ namespace Application.System.Payments
             return response;
         }
 
-      
+
 
         public async Task<BaseResponse<bool>> UpdateIsRefund()
         {
@@ -334,7 +332,7 @@ namespace Application.System.Payments
             double totalPages;
             var totalRecords = await _context.Payments
                 .Include(x => x.Users)
-                .Where(x=>x.UserId.Equals(userId))
+                .Where(x => x.UserId.Equals(userId))
                 .CountAsync();
             totalPages = totalRecords / (double)25;
 
@@ -388,8 +386,8 @@ namespace Application.System.Payments
             {
                 query.IsRefund = false;
                 _context.Update(query);
-                var rs=await _context.SaveChangesAsync();
-                if(rs>0)
+                var rs = await _context.SaveChangesAsync();
+                if (rs > 0)
                 {
                     response.Data = null;
                     response.Code = BaseCode.SUCCESS;
