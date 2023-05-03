@@ -48,7 +48,7 @@ namespace Application.System.Payments
                 var check = await _context.ContractorPosts.Include(x => x.AppliedPosts).Where(x => x.CreateBy.ToString().Equals(userId)).ToListAsync();
                 foreach (var i in check)
                 {
-                    if (i.AppliedPosts.Count() < 1)
+                    if (i.AppliedPosts.Count() == 0)
                     {
                         flag = true;
                     }
