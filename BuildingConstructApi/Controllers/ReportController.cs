@@ -57,7 +57,14 @@ namespace BuildingConstructApi.Controllers
             var rs = await _reportService.ReportProduct(request);
             NotificationModels noti = new();
             noti.NotificationType = NotificationType.CREATEREPORT;
-            noti.Message = NotificationMessage.REPORT_PRODUCT;
+            if (rs.Message.Equals("5"))
+            {
+                noti.Message = NotificationMessage.REPORT_PRODUCT;
+            }
+            else
+            {
+                noti.Message = NotificationMessage.REPORT_5_PRODUCT;
+            }
             var userID = User.FindFirst("UserID")?.Value;
             noti.CreateBy = Guid.Parse(userID.ToString());
             noti.UserId = Guid.Parse(rs.Data);
@@ -96,7 +103,14 @@ namespace BuildingConstructApi.Controllers
             var rs = await _reportService.ReportPost(request);
             NotificationModels noti = new();
             noti.NotificationType = NotificationType.CONTRACTOR_POST_NOTIFICATION;
-            noti.Message = NotificationMessage.REPORT_POST;
+            if (rs.Message.Equals("5"))
+            {
+                noti.Message = NotificationMessage.REPORT_PRODUCT;
+            }
+            else
+            {
+                noti.Message = NotificationMessage.REPORT_5_POST;
+            }
             var userID = User.FindFirst("UserID")?.Value;
             noti.CreateBy = Guid.Parse(userID.ToString());
             noti.UserId = Guid.Parse(rs.Data);

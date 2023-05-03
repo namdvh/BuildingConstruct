@@ -113,7 +113,6 @@ namespace Application.System.Notifies
                 if (user != null)
                 {
                     dto.Author = new();
-
                     if (item.Message != null && item.Message.Equals(NotificationMessage.COMMITMENTNOTI.ToString()))
                     {
                         dto.Author.FirstName = "Bạn có";
@@ -139,13 +138,21 @@ namespace Application.System.Notifies
                         dto.Author.FirstName = "Đơn hàng";
                         dto.Author.LastName = "của bạn";
                     }
+                    else if(item.Message!=null && item.Message.Equals(NotificationMessage.REPORT_5_PRODUCT.ToString()))
+                    {
+                        dto.Author.FirstName = "Sản ";
+                        dto.Author.LastName = "phẩm";
+                    }
+                    else if (item.Message != null && item.Message.Equals(NotificationMessage.REPORT_5_POST.ToString()))
+                    {
+                        dto.Author.FirstName = "Bài ";
+                        dto.Author.LastName = "viết";
+                    }
                     else
                     {
-
                         dto.Author.FirstName =user.FirstName;
                         dto.Author.LastName =user.LastName ;
                     }
-
                     dto.Author.Avatar = user.Avatar;
                 }
 
