@@ -125,7 +125,7 @@ namespace Application.System.Types
             BaseResponse<List<TypeModels>> response = new();
             response.Data = new();
             var lType = new List<TypeModels>();
-            var rs = await _context.Types.Include(x => x.Skill).Where(x => x.Status == Status.Active).ToListAsync();
+            var rs = await _context.Types.Include(x => x.Skill).Where(x => x.Status == Status.Active && x.Skill.Any(x=>x.Status==Status.Active)).ToListAsync();
             if (rs != null)
             {
                 response.Code = BaseCode.SUCCESS;

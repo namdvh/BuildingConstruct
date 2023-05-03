@@ -40,8 +40,8 @@ namespace Application.System.ContractorPosts
 
             var contractorPost = new ContractorPost
             {
-                Title = contractorPostDTO.Title,
-                ProjectName = contractorPostDTO.ProjectName,
+                Title = contractorPostDTO.Title.Trim(),
+                ProjectName = contractorPostDTO.ProjectName.Trim(),
                 Description = contractorPostDTO.Description,
                 StarDate = contractorPostDTO.StarDate,
                 EndDate = contractorPostDTO.EndDate,
