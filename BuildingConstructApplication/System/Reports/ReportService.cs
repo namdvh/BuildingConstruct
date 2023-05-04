@@ -415,14 +415,14 @@ namespace Application.System.Reports
                 {
                     response.Code = BaseCode.SUCCESS;
                     response.Message = "5";
-                    response.Data = author.ToString();
+                    response.Data = author.CreateBy.ToString();
                     response.NavigateId = report.ProductId;
                 }
                 else
                 {
                     response.Code = BaseCode.SUCCESS;
                     response.Message = "Report thành công";
-                    response.Data = author.ToString();
+                    response.Data = author.CreateBy.ToString();
                     response.NavigateId = report.ProductId;
                 }
             }
