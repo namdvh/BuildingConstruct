@@ -41,21 +41,9 @@ namespace BuildingConstructApi.Controllers
         }
         [HttpGet("getAllSkillAdmin")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetAllSkillAdmin([FromQuery] PaginationFilter request)
+        public async Task<IActionResult> GetAllSkillAdmin()
         {
-            dynamic validFilter;
-
-            if (request.FilterRequest == null)
-            {
-                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy);
-            }
-            else
-            {
-                validFilter = new PaginationFilter(request.PageNumber, request.PageSize, request._sortBy, request._orderBy, request.FilterRequest);
-
-            }
-
-            var result = await _skillService.GetAllSkillForAdmin(validFilter);
+            var result = await _skillService.GetAllSkillForAdmin();
             return Ok(result);
         }
         [HttpPost]

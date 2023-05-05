@@ -167,34 +167,18 @@ namespace Application.System.Skills
             return response;
         }
 
-        public async Task<BasePagination<List<Skill>>> GetAllSkillForAdmin(PaginationFilter filter)
+        public async Task<BaseResponse<List<Skill>>> GetAllSkillForAdmin()
         {
-            BasePagination<List<Skill>> response;
-            var orderBy = filter._orderBy.ToString();
-            int totalRecord;
-            orderBy = orderBy switch
-            {
-                "1" => "ascending",
-                "-1" => "descending",
-                _ => orderBy
-            };
-
-            if (string.IsNullOrEmpty(filter._sortBy))
-            {
-                filter._sortBy = "Id";
-            }
+            BaseResponse<List<Skill>> response;
+          
 
             var result = await _context.Skills
                 .AsNoTracking()
                      .Where(x => x.FromSystem == true)
-                     .OrderBy(filter._sortBy + " " + orderBy)
-                     .Skip((filter.PageNumber - 1) * filter.PageSize)
-                     .Take(filter.PageSize)
                      .ToListAsync();
 
 
 
-            totalRecord = await _context.Skills.Where(x => x.FromSystem == true).CountAsync();
 
             if (!result.Any())
             {
@@ -203,30 +187,15 @@ namespace Application.System.Skills
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.EMPTY_MESSAGE,
                     Data = new(),
-                    Pagination = null
                 };
             }
             else
             {
-                double totalPages;
-
-                totalPages = ((double)totalRecord / (double)filter.PageSize);
-
-                var roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
-                Pagination pagination = new()
-                {
-                    CurrentPage = filter.PageNumber,
-                    PageSize = filter.PageSize,
-                    TotalPages = roundedTotalPages,
-                    TotalRecords = totalRecord
-                };
-
                 response = new()
                 {
                     Code = BaseCode.SUCCESS,
                     Message = BaseCode.SUCCESS_MESSAGE,
-                    Data = result,
-                    Pagination = pagination
+                    Data = result
                 };
             }
             return response;

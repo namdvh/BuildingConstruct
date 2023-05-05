@@ -395,21 +395,36 @@ namespace Application.System.Reports
             };
             await _context.Reports.AddAsync(rp);
             var rs = await _context.SaveChangesAsync();
+            bool flag = false;
             var count = await _context.Reports.Where(x => x.ContractorPostId == report.ContractorPostId).CountAsync();
             if (count == 5)
             {
                 var pd = await _context.ContractorPosts.Where(x => x.Id == report.ContractorPostId).FirstOrDefaultAsync();
                 pd.Status = Status.DELEDTED;
                 _context.ContractorPosts.Update(pd);
-                await _context.SaveChangesAsync();
+                var x = await _context.SaveChangesAsync();
+                if (x > 0)
+                {
+                    flag = true;
+                }
             }
 
             if (rs > 0)
             {
-                response.Code = BaseCode.SUCCESS;
-                response.Message = "Report thành công";
-                response.Data = author.CreateBy.ToString();
-                response.NavigateId = report.ContractorPostId;
+                if (flag == true)
+                {
+                    response.Code = BaseCode.SUCCESS;
+                    response.Message = "5";
+                    response.Data = author.CreateBy.ToString();
+                    response.NavigateId = report.ProductId;
+                }
+                else
+                {
+                    response.Code = BaseCode.SUCCESS;
+                    response.Message = "Report thành công";
+                    response.Data = author.CreateBy.ToString();
+                    response.NavigateId = report.ProductId;
+                }
             }
             else
             {
@@ -445,21 +460,37 @@ namespace Application.System.Reports
             };
             await _context.Reports.AddAsync(rp);
             var rs = await _context.SaveChangesAsync();
+            bool flag = false;
             var count = await _context.Reports.Where(x => x.ProductId == report.ProductId).CountAsync();
             if (count == 5)
             {
                 var pd = await _context.Products.Where(x => x.Id == report.ProductId).FirstOrDefaultAsync();
                 pd.Status = false;
                 _context.Products.Update(pd);
-                await _context.SaveChangesAsync();
+                var x = await _context.SaveChangesAsync();
+                if (x > 0)
+                {
+                    flag = true;
+                }
             }
 
             if (rs > 0)
             {
-                response.Code = BaseCode.SUCCESS;
-                response.Message = "Report thành công";
-                response.Data = author.ToString();
-                response.NavigateId = report.ProductId;
+                if (flag == true)
+                {
+                    response.Code = BaseCode.SUCCESS;
+                    response.Message = "5";
+                    response.Data = author.ToString();
+                    response.NavigateId = report.ProductId;
+                }
+                else
+                {
+                    response.Code = BaseCode.SUCCESS;
+                    response.Message = "Report thành công";
+                    response.Data = author.ToString();
+                    response.NavigateId = report.ProductId;
+                }
+               
             }
             else
             {

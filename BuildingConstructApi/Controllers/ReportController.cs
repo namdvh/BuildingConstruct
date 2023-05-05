@@ -55,34 +55,44 @@ namespace BuildingConstructApi.Controllers
         public async Task<IActionResult> CreateReport([FromBody] ReportRequestDTO request)
         {
             var rs = await _reportService.ReportProduct(request);
-            NotificationModels noti = new();
-            noti.NotificationType = NotificationType.CREATEREPORT;
-            noti.Message = NotificationMessage.REPORT_PRODUCT;
-            var userID = User.FindFirst("UserID")?.Value;
-            noti.CreateBy = Guid.Parse(userID.ToString());
-            noti.UserId = Guid.Parse(rs.Data);
-            var author = await _context.Users.Where(x => x.Id.ToString().Equals(userID.ToString())).FirstOrDefaultAsync();
-            noti.Author = new();
-            noti.Author.FirstName = author.FirstName;
-            noti.Author.LastName = author.LastName;
-            noti.Author.Avatar = author.Avatar;
-            noti.LastModifiedAt = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok"));
-            noti.NavigateId = rs.NavigateId;
             if (rs.Data != null)
             {
-                var check = await _userConnectionManager.SaveNotification(noti);
-
-                var connections = _userConnectionManager.GetUserConnections(rs.Data);
-                if (connections != null && connections.Count > 0)
+                NotificationModels noti = new();
+                noti.NotificationType = NotificationType.CREATEREPORT;
+                if (rs.Message.Equals("5"))
                 {
-                    foreach (var connectionId in connections)
+                    noti.Message = NotificationMessage.REPORT_PRODUCT;
+                }
+                else
+                {
+                    noti.Message = NotificationMessage.REPORT_5_PRODUCT;
+                }
+                var userID = User.FindFirst("UserID")?.Value;
+                noti.CreateBy = Guid.Parse(userID.ToString());
+                noti.UserId = Guid.Parse(rs.Data);
+                var author = await _context.Users.Where(x => x.Id.ToString().Equals(userID.ToString())).FirstOrDefaultAsync();
+                noti.Author = new();
+                noti.Author.FirstName = author.FirstName;
+                noti.Author.LastName = author.LastName;
+                noti.Author.Avatar = author.Avatar;
+                noti.LastModifiedAt = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok"));
+                noti.NavigateId = rs.NavigateId;
+                if (rs.Data != null)
+                {
+                    var check = await _userConnectionManager.SaveNotification(noti);
+
+                    var connections = _userConnectionManager.GetUserConnections(rs.Data);
+                    if (connections != null && connections.Count > 0)
                     {
-
-                        if (check != null)
+                        foreach (var connectionId in connections)
                         {
-                            noti.Id = check.Data.Id;
-                            await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("sendToUser", noti);
 
+                            if (check != null)
+                            {
+                                noti.Id = check.Data.Id;
+                                await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("sendToUser", noti);
+
+                            }
                         }
                     }
                 }
@@ -94,37 +104,48 @@ namespace BuildingConstructApi.Controllers
         {
 
             var rs = await _reportService.ReportPost(request);
-            NotificationModels noti = new();
-            noti.NotificationType = NotificationType.CONTRACTOR_POST_NOTIFICATION;
-            noti.Message = NotificationMessage.REPORT_POST;
-            var userID = User.FindFirst("UserID")?.Value;
-            noti.CreateBy = Guid.Parse(userID.ToString());
-            noti.UserId = Guid.Parse(rs.Data);
-            var author = await _context.Users.Where(x => x.Id.ToString().Equals(userID.ToString())).FirstOrDefaultAsync();
-            noti.Author = new();
-            noti.Author.FirstName = author?.FirstName;
-            noti.Author.LastName = author?.LastName;
-            noti.Author.Avatar = author.Avatar;
-            noti.LastModifiedAt = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok"));
-            noti.NavigateId = rs.NavigateId;
             if (rs.Data != null)
             {
-                var check = await _userConnectionManager.SaveNotification(noti);
-                var connections = _userConnectionManager.GetUserConnections(rs.Data);
-                if (connections != null && connections.Count > 0)
+                NotificationModels noti = new();
+                noti.NotificationType = NotificationType.CONTRACTOR_POST_NOTIFICATION;
+                if (rs.Message.Equals("5"))
                 {
-                    foreach (var connectionId in connections)
+                    noti.Message = NotificationMessage.REPORT_PRODUCT;
+                }
+                else
+                {
+                    noti.Message = NotificationMessage.REPORT_5_POST;
+                }
+                var userID = User.FindFirst("UserID")?.Value;
+                noti.CreateBy = Guid.Parse(userID.ToString());
+                noti.UserId = Guid.Parse(rs.Data);
+                var author = await _context.Users.Where(x => x.Id.ToString().Equals(userID.ToString())).FirstOrDefaultAsync();
+                noti.Author = new();
+                noti.Author.FirstName = author?.FirstName;
+                noti.Author.LastName = author?.LastName;
+                noti.Author.Avatar = author.Avatar;
+                noti.LastModifiedAt = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok"));
+                noti.NavigateId = rs.NavigateId;
+                if (rs.Data != null)
+                {
+                    var check = await _userConnectionManager.SaveNotification(noti);
+                    var connections = _userConnectionManager.GetUserConnections(rs.Data);
+                    if (connections != null && connections.Count > 0)
                     {
-
-                        if (check != null)
+                        foreach (var connectionId in connections)
                         {
-                            noti.Id = check.Data.Id;
-                            await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("sendToUser", noti);
 
+                            if (check != null)
+                            {
+                                noti.Id = check.Data.Id;
+                                await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("sendToUser", noti);
+
+                            }
                         }
                     }
                 }
             }
+
             return Ok(rs);
         }
         [HttpPost("getAllPostReport")]
