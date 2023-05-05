@@ -547,7 +547,7 @@ namespace Application.System.Bill
 
 
                     Unit = item.Products.Unit,
-                    ProductType = listType.Any() ? types : null,
+                    ProductType = listType.Any() ? types : new List<CartProductType>(),
                     CartId = item.Bills.Status == Status.CANCEL ? cartID : null
                 };
                 if (item.ProductTypes?.Color?.Name != null)
