@@ -536,6 +536,7 @@ namespace Application.System.Bill
                     ProductDescription = item.Products.Description,
                     ProductName = item.Products.Name,
                     UnitPrice = item.Products.UnitPrice,
+                    UnitInStock=item.Products.UnitInStock,
                     BillDetailQuantity = item.Quantity,
                     BillDetailTotalPrice = item.Price,
                     TypeId = item.ProductTypeId,
