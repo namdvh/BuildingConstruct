@@ -431,13 +431,13 @@ namespace Application.System.Carts
                         Color = item.Color?.Name == "No Color" ? null : item.Color?.Name,
                         Size = item.Size?.Name == "No Size" ? null : item.Size?.Name,
                         Other = item.Other?.Name == "No Other" ? null : item.Other?.Name,
-                        ColorID = item.ColorId == 1 ? null : item.ColorId,
-                        SizeID = item.SizeID == 1 ? null : item.SizeID,
-                        OtherID = item.OtherID == 1 ? null : item.OtherID,
+                        ColorId = item.ColorId == 1 ? null : item.ColorId,
+                        SizeId= item.SizeID == 1 ? null : item.SizeID,
+                        OtherId = item.OtherID == 1 ? null : item.OtherID,
 
                     };
 
-                    if (tmp.OtherID == null)
+                    if (tmp.Other== null)
                     {
                         tmp.Image = item.Color?.Image ?? null;
                     }

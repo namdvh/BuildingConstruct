@@ -59,11 +59,11 @@ namespace ViewModels.Carts
 
         public int? Quantity { get; set; }
 
-        public int? ColorID { get; set; }
+        public int? ColorId { get; set; }
         public string? Color { get; set; }
-        public int? SizeID { get; set; }
+        public int? SizeId { get; set; }
         public string? Size { get; set; }
-        public int? OtherID { get; set; }
+        public int? OtherId{ get; set; }
         public string? Other { get; set; }
 
         public string? Image { get; set; }

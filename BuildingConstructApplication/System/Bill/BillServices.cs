@@ -499,16 +499,16 @@ namespace Application.System.Bill
                             Color = type.Color?.Name == "No Color" ? null : type.Color.Name,
                             Size = type.Size?.Name == "No Size" ? null : type.Size.Name,
                             Other = type.Other?.Name == "No Other" ? null : type.Other.Name,
-                            ColorID = type.ColorId == 1 ? null : type.ColorId,
-                            SizeID = type.SizeID == 1 ? null : type.SizeID,
-                            OtherID = type.OtherID == 1 ? null : type.OtherID,
+                            ColorId= type.ColorId == 1 ? null : type.ColorId,
+                            SizeId = type.SizeID == 1 ? null : type.SizeID,
+                            OtherId= type.OtherID == 1 ? null : type.OtherID,
                             //OtherImage = type.Other.Image == null ? null : type.Other.Image,
                             //ColorImage = type.Color.Image == null ? null : type.Color.Image,
 
 
                         };
 
-                        if (tmp.OtherID == null)
+                        if (tmp.OtherId== null)
                         {
                             tmp.Image = type.Color.Image != null ? type.Color.Image : null;
                         }
