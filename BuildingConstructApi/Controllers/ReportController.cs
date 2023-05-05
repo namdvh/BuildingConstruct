@@ -55,25 +55,29 @@ namespace BuildingConstructApi.Controllers
         public async Task<IActionResult> CreateReport([FromBody] ReportRequestDTO request)
         {
             var rs = await _reportService.ReportProduct(request);
+            var userID = User.FindFirst("UserID")?.Value;
+            var author = await _context.Users.Where(x => x.Id.ToString().Equals(userID.ToString())).FirstOrDefaultAsync();
+
             if (rs.Data != null)
             {
                 NotificationModels noti = new();
                 noti.NotificationType = NotificationType.CREATEREPORT;
+            
+                noti.CreateBy = Guid.Parse(userID.ToString());
+                noti.UserId = Guid.Parse(rs.Data);
+                noti.Author = new();
                 if (rs.Message.Equals("5"))
                 {
                     noti.Message = NotificationMessage.REPORT_5_PRODUCT;
+                    noti.Author.FirstName = "Sản";
+                    noti.Author.LastName = "phẩm";
                 }
                 else
                 {
                     noti.Message = NotificationMessage.REPORT_PRODUCT;
+                    noti.Author.FirstName = author?.FirstName;
+                    noti.Author.LastName = author?.LastName;
                 }
-                var userID = User.FindFirst("UserID")?.Value;
-                noti.CreateBy = Guid.Parse(userID.ToString());
-                noti.UserId = Guid.Parse(rs.Data);
-                var author = await _context.Users.Where(x => x.Id.ToString().Equals(userID.ToString())).FirstOrDefaultAsync();
-                noti.Author = new();
-                noti.Author.FirstName = author.FirstName;
-                noti.Author.LastName = author.LastName;
                 noti.Author.Avatar = author.Avatar;
                 noti.LastModifiedAt = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok"));
                 noti.NavigateId = rs.NavigateId;
@@ -108,21 +112,24 @@ namespace BuildingConstructApi.Controllers
             {
                 NotificationModels noti = new();
                 noti.NotificationType = NotificationType.CONTRACTOR_POST_NOTIFICATION;
-                if (rs.Message.Equals("5"))
-                {
-                    noti.Message = NotificationMessage.REPORT_5_POST;
-                }
-                else
-                {
-                    noti.Message = NotificationMessage.REPORT_POST;
-                }
+
                 var userID = User.FindFirst("UserID")?.Value;
                 noti.CreateBy = Guid.Parse(userID.ToString());
                 noti.UserId = Guid.Parse(rs.Data);
                 var author = await _context.Users.Where(x => x.Id.ToString().Equals(userID.ToString())).FirstOrDefaultAsync();
                 noti.Author = new();
-                noti.Author.FirstName = author?.FirstName;
-                noti.Author.LastName = author?.LastName;
+                if (rs.Message.Equals("5"))
+                {
+                    noti.Message = NotificationMessage.REPORT_5_POST;
+                    noti.Author.FirstName = "Bài";
+                    noti.Author.LastName = "viết";
+                }
+                else
+                {
+                    noti.Message = NotificationMessage.REPORT_POST;
+                    noti.Author.FirstName = author?.FirstName;
+                    noti.Author.LastName = author?.LastName;
+                }
                 noti.Author.Avatar = author.Avatar;
                 noti.LastModifiedAt = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok"));
                 noti.NavigateId = rs.NavigateId;
