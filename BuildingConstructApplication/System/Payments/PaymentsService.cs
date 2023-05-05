@@ -31,7 +31,7 @@ namespace Application.System.Payments
             BaseResponse<RefundDTO> response = new();
             var userId = _accessor.HttpContext?.User?.FindFirst("UserID")?.Value.ToString();
             var query = await _context.Payments.Where(x => x.UserId.ToString().Equals(userId)).OrderByDescending(x => x.ExpireationDate).FirstOrDefaultAsync();
-            var viewCheck = await _context.ContractorPosts.Where(x => x.CreateBy.ToString().Equals(userId) && x.LastModifiedAt<=query.ExpireationDate && x.LastModifiedAt>=query.PaymentDate && x.Status==Status.SUCCESS).ToListAsync();
+            var viewCheck = await _context.ContractorPosts.Where(x => x.CreateBy.ToString().Equals(userId) && x.LastModifiedAt <= query.ExpireationDate && x.LastModifiedAt >= query.PaymentDate && x.Status == Status.SUCCESS).ToListAsync();
             var n = await _context.Users.Where(x => x.BuilderId != null).CountAsync();
             var number = n * 0.2M;
             var flag = false;
@@ -67,21 +67,25 @@ namespace Application.System.Payments
                 response.Data = null;
                 return response;
             }
-            if ((query.ExtendDate != null && query.ExtendDate.Value >= DateTime.Now) || query.ExpireationDate >= DateTime.Now)
+            if ((query.ExtendDate != null && query.ExtendDate.Value >= DateTime.Now && query.ExpireationDate.AddDays(7) < DateTime.Now) || (query.ExpireationDate >= DateTime.Now && query.ExtendDate == null))
             {
                 response.Code = BaseCode.SUCCESS;
                 response.Message = BaseCode.SUCCESS_MESSAGE;
                 response.Data = new();
                 response.Data.IsOver = false;
-                response.Data.EndDate = query.ExpireationDate.ToString();
+                response.Data.EndDate = (query.ExtendDate != null && query.ExtendDate.Value >= DateTime.Now && query.ExpireationDate.AddDays(7) < DateTime.Now) ? query.ExtendDate.ToString() : query.ExpireationDate.ToString();
             }
             else
             {
                 if (flag == true)
                 {
-                    query.ExtendDate = DateTime.Now.AddMonths(1);
-                    _context.Payments.Update(query);
-                    await _context.SaveChangesAsync();
+                    if (query.ExtendDate == null)
+                    {
+                        query.ExtendDate = DateTime.Now.AddMonths(1);
+                        _context.Payments.Update(query);
+                        await _context.SaveChangesAsync();
+                    }
+
                     response.Code = BaseCode.SUCCESS;
                     response.Message = BaseCode.SUCCESS_MESSAGE;
                     response.Data = new();
