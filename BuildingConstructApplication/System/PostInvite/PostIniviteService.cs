@@ -328,6 +328,7 @@ namespace Application.System.PostInvite
                     CompanyName = contractor.Contractor.CompanyName,
                     ContractorId = contractor.ContractorId,
                     IsRead = false,
+                    Avatar=contractor.Avatar,
                     LastModifiedAt = item.LastModifiedAt,
                     ContractorName = contractor.FirstName + " " + contractor.LastName,
                     ContractorPostId = item.Id,
