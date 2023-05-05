@@ -14,7 +14,7 @@
         public static string UPDATE_BILL_CANCELED = "đã chuyển sang trạng thái hủy";
         public static string REPORT_PRODUCT = "đã báo cáo sản phẩm của bạn";
         public static string REPORT_POST = "đã báo cáo bài viết của bạn";
-        public static string REPORT_5_POST = "của bạn đã bị vô hiệu hóa";
+        public static string REPORT_5_POST = "của bạn đã bị vô hiệu hóa.";
         public static string REPORT_5_PRODUCT = "của bạn đã bị vô hiệu hóa";
 
 
