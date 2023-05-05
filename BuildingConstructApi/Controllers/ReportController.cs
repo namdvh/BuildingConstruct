@@ -61,11 +61,11 @@ namespace BuildingConstructApi.Controllers
                 noti.NotificationType = NotificationType.CREATEREPORT;
                 if (rs.Message.Equals("5"))
                 {
-                    noti.Message = NotificationMessage.REPORT_PRODUCT;
+                    noti.Message = NotificationMessage.REPORT_5_PRODUCT;
                 }
                 else
                 {
-                    noti.Message = NotificationMessage.REPORT_5_PRODUCT;
+                    noti.Message = NotificationMessage.REPORT_PRODUCT;
                 }
                 var userID = User.FindFirst("UserID")?.Value;
                 noti.CreateBy = Guid.Parse(userID.ToString());
@@ -110,11 +110,11 @@ namespace BuildingConstructApi.Controllers
                 noti.NotificationType = NotificationType.CONTRACTOR_POST_NOTIFICATION;
                 if (rs.Message.Equals("5"))
                 {
-                    noti.Message = NotificationMessage.REPORT_PRODUCT;
+                    noti.Message = NotificationMessage.REPORT_5_POST;
                 }
                 else
                 {
-                    noti.Message = NotificationMessage.REPORT_5_POST;
+                    noti.Message = NotificationMessage.REPORT_POST;
                 }
                 var userID = User.FindFirst("UserID")?.Value;
                 noti.CreateBy = Guid.Parse(userID.ToString());
