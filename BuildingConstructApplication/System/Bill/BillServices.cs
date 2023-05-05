@@ -445,6 +445,7 @@ namespace Application.System.Bill
 
             BuyerInfo buyerInfo = new()
             {
+                UserId = bill.Contractor?.User?.Id,
                 Address = bill.Contractor?.User?.Address,
                 Name = bill.Contractor?.User?.FirstName + " " + bill.Contractor?.User?.LastName,
                 Phone = bill.Contractor?.User?.PhoneNumber

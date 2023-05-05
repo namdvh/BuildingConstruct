@@ -140,12 +140,12 @@ namespace Application.System.Notifies
                     }
                     else if(item.Message!=null && item.Message.Equals(NotificationMessage.REPORT_5_PRODUCT.ToString()))
                     {
-                        dto.Author.FirstName = "Sản ";
+                        dto.Author.FirstName = "Sản";
                         dto.Author.LastName = "phẩm";
                     }
                     else if (item.Message != null && item.Message.Equals(NotificationMessage.REPORT_5_POST.ToString()))
                     {
-                        dto.Author.FirstName = "Bài ";
+                        dto.Author.FirstName = "Bài";
                         dto.Author.LastName = "viết";
                     }
                     else
